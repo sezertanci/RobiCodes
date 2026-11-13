@@ -15,6 +15,7 @@ abstract final class AppColors {
   static const blueDark = Color(0xFF2B7BD9);
   static const purpleDark = Color(0xFF7C4FE0);
   static const redDark = Color(0xFFD94848);
+  static const orangeDark = Color(0xFFE8781C);
 
   /// Düğme ve kartların altındaki yumuşak gölge.
   static const shadow = Color(0x261F2D4F);

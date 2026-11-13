@@ -33,9 +33,25 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   betiği `tool/make_launcher_icon.py`. Tablette denendi; MIUI başlatıcısı ikonu önbellekte tuttuğu
   için yeni ikon, başlatıcı yeniden başlatılınca (`adb shell am force-stop com.miui.home`) göründü.
 
+**3. aşama tamamlandı:** "Komutları Sırala" Flutter'a aktarıldı.
+
+- 20 seviye, adımlar, aşamalı (başlıklı kutu grupları) seviyeler, fazla kartlar ve ipuçları web
+  sürümüyle aynı (`lib/games/command_order/engine/command_order_levels.dart`).
+- Motor (`command_order_engine.dart`): kartları oluşturma, tohumla karıştırma (sıralı veya bir önceki
+  sırayla aynı sonuç vermez), ilk yanlış kutuyu bulma (erken / fazla kart) ve sıradaki ipucu.
+- Yıldızlar ortak kuralla: ipucu 1, yanlış kontrolden sonra 2, ilk denemede doğru 3. İlerleme
+  `command-order` paketinde ayrı tutulur.
+- Ortak düğme ve kesik çerçeve `lib/features/play/widgets/` altına taşındı (`ImageButton`,
+  `DashedFrame`). Görseller `assets/command-order/` altına kopyalandı.
+- `flutter analyze` temiz, 168 test geçiyor, debug APK derleniyor. Tablette denendi: dokunarak ve uzun
+  basıp sürükleyerek yerleştirme, yanlış kontrol uyarısı, doğru sıra ve sonuç paneli çalışıyor.
+- Web sürümünden farklar: ses, konfeti ve çözülünce kartların zıplama animasyonu yok; sürükleme uzun
+  basmayla başlıyor; karıştırma tam sayı aritmetiğiyle yapıldığı için aynı tohum web sürümüyle aynı
+  sırayı vermeyebilir (tohum zaten her açılışta rastgele).
+
 ## Ertelenen işler (unutulmayacak)
 
-2. aşamada web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
+2. ve 3. aşamada web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
 
 | Özellik | Durum | Karar |
 |---|---|---|
@@ -50,5 +66,5 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-3. aşamanın kapsamı henüz belirlenmedi; kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
+3. aşama raporu verildi; sıradaki oyun ve 4. aşamanın kapsamı için kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.

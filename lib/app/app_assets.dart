@@ -5,4 +5,7 @@ abstract final class AppAssets {
   static const starEmpty = 'assets/icons/star-empty.svg';
   static const lock = 'assets/icons/lock.svg';
   static const back = 'assets/ui/button-back.svg';
+  static const hintButton = 'assets/ui/button-hint.svg';
+  static const clearButton = 'assets/ui/button-clear.svg';
+  static const checkButton = 'assets/ui/button-check.svg';
 }

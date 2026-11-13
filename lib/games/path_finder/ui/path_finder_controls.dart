@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../app/app_theme.dart';
+import '../../../app/app_assets.dart';
+import '../../../features/play/widgets/image_button.dart';
 import '../engine/path_finder_board.dart';
 import '../path_finder_controller.dart';
 import '../path_finder_texts.dart';
@@ -29,29 +29,29 @@ final class PathFinderControls extends StatelessWidget {
 
   /// Alt alta düzenin [height] yüksekliğe sığması için düğme boyu.
   static double stackedButtonSizeFor(double height) =>
-      (height - _stackedGap) / _stackedRows - _ImageButton.padding * 2;
+      (height - _stackedGap) / _stackedRows - ImageButton.padding * 2;
 
   /// Alt alta düzenin verilen düğme boyundaki genişliği.
-  static double stackedWidth(double buttonSize) => (buttonSize + _ImageButton.padding * 2) * _stackedColumns;
+  static double stackedWidth(double buttonSize) => (buttonSize + ImageButton.padding * 2) * _stackedColumns;
 
   @override
   Widget build(BuildContext context) {
     final pad = _DirectionPad(controller: controller, buttonSize: buttonSize);
     final actions = [
-      _ImageButton(
+      ImageButton(
         asset: PathFinderAssets.run,
         label: PathFinderTexts.run,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.run,
       ),
-      _ImageButton(
-        asset: PathFinderAssets.hint,
+      ImageButton(
+        asset: AppAssets.hintButton,
         label: PathFinderTexts.hint,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.showHint,
       ),
-      _ImageButton(
-        asset: PathFinderAssets.clear,
+      ImageButton(
+        asset: AppAssets.clearButton,
         label: PathFinderTexts.clear,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.clear,
@@ -79,14 +79,14 @@ final class _DirectionPad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = !controller.isRunning && !controller.isFull;
-    Widget button(Direction direction) => _ImageButton(
+    Widget button(Direction direction) => ImageButton(
           asset: PathFinderAssets.arrow(direction),
           label: PathFinderTexts.addCommand(direction),
           size: buttonSize,
           highlighted: controller.hint?.direction == direction,
           onPressed: enabled ? () => controller.addCommand(direction) : null,
         );
-    final gap = SizedBox.square(dimension: buttonSize + _ImageButton.padding * 2);
+    final gap = SizedBox.square(dimension: buttonSize + ImageButton.padding * 2);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -98,53 +98,3 @@ final class _DirectionPad extends StatelessWidget {
   }
 }
 
-/// Görselli düğme. Pasifken soluk görünür; ipucunun önerdiği yön tuşu sarı ışıkla parlar.
-final class _ImageButton extends StatelessWidget {
-  const _ImageButton({
-    required this.asset,
-    required this.label,
-    required this.size,
-    required this.onPressed,
-    this.highlighted = false,
-  });
-
-  final String asset;
-  final String label;
-  final double size;
-  final VoidCallback? onPressed;
-  final bool highlighted;
-
-  static const padding = 2.0;
-  static const _disabledOpacity = 0.4;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(padding),
-        child: Tooltip(
-          message: label,
-          child: Semantics(
-            button: true,
-            enabled: onPressed != null,
-            label: label,
-            onTap: onPressed,
-            excludeSemantics: true,
-            child: GestureDetector(
-              onTap: onPressed,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(size / 3),
-                  boxShadow: highlighted ? const [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)] : null,
-                ),
-                child: Opacity(
-                  opacity: onPressed == null ? _disabledOpacity : 1,
-                  child: SvgPicture.asset(asset),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-}

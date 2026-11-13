@@ -7,8 +7,6 @@ abstract final class PathFinderAssets {
   static const water = 'assets/puzzles/tile-water.svg';
   static const coin = 'assets/icons/points.svg';
   static const run = 'assets/ui/button-play.svg';
-  static const hint = 'assets/ui/button-hint.svg';
-  static const clear = 'assets/ui/button-clear.svg';
 
   static String arrow(Direction direction) => 'assets/ui/button-arrow-${direction.name}.svg';
 }

@@ -1,0 +1,267 @@
+import 'command_order_level.dart';
+
+// "Komutları Sırala" oyununun 20 görevi. Veri web sürümündeki `levels.js` dosyasıyla aynıdır.
+// Görseller okumayı yeni öğrenen çocuk için eylemin kendisini anlatır.
+const commandOrderBaseLevels = [
+  // Kolay 1–5: 2–3 adımlı günlük işler
+  CommandOrderLevel(
+    title: 'Çiçeği sula',
+    icon: 'assets/command-order/flower-water.webp',
+    steps: [
+      CommandStep('Sulama kabını doldur', 'assets/command-order/flower-fill-can.webp'),
+      CommandStep('Çiçeği sula', 'assets/command-order/flower-water.webp'),
+    ],
+    hint: 'Çiçeği sulamak için önce kabın içinde su olmalı.',
+  ),
+  CommandOrderLevel(
+    title: 'Dişlerini fırçala',
+    icon: 'assets/command-order/teeth-brush.webp',
+    steps: [
+      CommandStep('Fırçaya macun sık', 'assets/command-order/teeth-paste.webp'),
+      CommandStep('Dişlerini fırçala', 'assets/command-order/teeth-brush.webp'),
+      CommandStep('Ağzını çalkala', 'assets/command-order/teeth-rinse.webp'),
+    ],
+    hint: 'Fırçalamaya başlamadan önce fırçanın üstünde macun olmalı.',
+  ),
+  CommandOrderLevel(
+    title: 'Ellerini yıka',
+    icon: 'assets/command-order/hands-soap.webp',
+    steps: [
+      CommandStep('Ellerini sabunla', 'assets/command-order/hands-soap.webp'),
+      CommandStep('Ellerini durula', 'assets/command-order/hands-rinse.webp'),
+      CommandStep('Ellerini kurula', 'assets/command-order/hands-dry.webp'),
+    ],
+    hint: 'Köpükler gitmeden elini kurulamak olmaz.',
+  ),
+  CommandOrderLevel(
+    title: 'Ayakkabını giy',
+    icon: 'assets/command-order/shoe-tie.webp',
+    steps: [
+      CommandStep('Çorabını giy', 'assets/command-order/shoe-sock.webp'),
+      CommandStep('Ayakkabını giy', 'assets/command-order/shoe-on.webp'),
+      CommandStep('Bağcığını bağla', 'assets/command-order/shoe-tie.webp'),
+    ],
+    hint: 'Ayakkabının içine girmeden önce ayağında ne olmalı?',
+  ),
+  CommandOrderLevel(
+    title: 'Resim yap',
+    icon: 'assets/command-order/draw-color.webp',
+    steps: [
+      CommandStep('Kâğıdı al', 'assets/command-order/draw-paper.webp'),
+      CommandStep('Resmini çiz', 'assets/command-order/draw-sketch.webp'),
+      CommandStep('Resmini boya', 'assets/command-order/draw-color.webp'),
+    ],
+    hint: 'Boyamak için önce çizilmiş bir resim gerekir.',
+  ),
+  // Orta 6–10: 4–5 adım
+  CommandOrderLevel(
+    title: 'Sandviç hazırla',
+    icon: 'assets/command-order/sandwich-close.webp',
+    steps: [
+      CommandStep('Tabağı masaya koy', 'assets/command-order/sandwich-plate.webp'),
+      CommandStep('Ekmeği tabağa koy', 'assets/command-order/sandwich-bread.webp'),
+      CommandStep('Üstüne peynir koy', 'assets/command-order/sandwich-cheese.webp'),
+      CommandStep('Üstünü ekmekle kapat', 'assets/command-order/sandwich-close.webp'),
+      CommandStep('Afiyetle ye', 'assets/command-order/sandwich-eat.webp'),
+    ],
+    hint: 'Ekmeği koyacak bir yer lazım. Masada ilk ne olmalı?',
+  ),
+  CommandOrderLevel(
+    title: 'Oyuncakları topla',
+    icon: 'assets/command-order/toys-in.svg',
+    steps: [
+      CommandStep('Kutuyu getir', 'assets/command-order/toys-box-bring.svg'),
+      CommandStep('Oyuncakları kutuya koy', 'assets/command-order/toys-in.svg'),
+      CommandStep('Kutunun kapağını kapat', 'assets/command-order/toys-lid.svg'),
+      CommandStep('Kutuyu rafa kaldır', 'assets/command-order/toys-shelf.svg'),
+    ],
+    hint: 'Oyuncakları koyacağın kutu yanında değilse ne yaparsın?',
+  ),
+  CommandOrderLevel(
+    title: 'Tohum ek',
+    icon: 'assets/command-order/seed-sprout.webp',
+    steps: [
+      CommandStep('Toprakta çukur kaz', 'assets/command-order/seed-dig.webp'),
+      CommandStep('Tohumu çukura koy', 'assets/command-order/seed-drop.webp'),
+      CommandStep('Üstünü toprakla ört', 'assets/command-order/seed-cover.webp'),
+      CommandStep('Tohumu sula', 'assets/command-order/seed-water.webp'),
+      CommandStep('Filizin çıkmasını bekle', 'assets/command-order/seed-sprout.webp'),
+    ],
+    hint: 'Tohumun gireceği bir çukur olmadan onu toprağa koyamazsın.',
+  ),
+  CommandOrderLevel(
+    title: 'Okula hazırlan',
+    icon: 'assets/command-order/school-bag.webp',
+    steps: [
+      CommandStep('Alarm çalınca uyan', 'assets/command-order/school-wake.webp'),
+      CommandStep('Okul kıyafetini giy', 'assets/command-order/school-dress.webp'),
+      CommandStep('Çantanı sırtına tak', 'assets/command-order/school-bag.webp'),
+      CommandStep('Servise bin', 'assets/command-order/school-bus.webp'),
+    ],
+    hint: 'Uyanmadan giyinmek olmaz. Sabah ilk ne olur?',
+  ),
+  CommandOrderLevel(
+    title: 'Mektup gönder',
+    icon: 'assets/command-order/letter-post.svg',
+    steps: [
+      CommandStep('Mektubu yaz', 'assets/command-order/letter-write.svg'),
+      CommandStep('Mektubu zarfa koy', 'assets/command-order/letter-in-envelope.svg'),
+      CommandStep('Zarfı kapat', 'assets/command-order/letter-seal.svg'),
+      CommandStep('Posta kutusuna at', 'assets/command-order/letter-post.svg'),
+    ],
+    hint: 'Zarfın içine koyacak bir mektup olmalı.',
+  ),
+  // Zor 11–15: 5–7 adım, ara hedefler
+  CommandOrderLevel(
+    title: 'Kek yap',
+    icon: 'assets/command-order/cake-slice.webp',
+    stages: [TaskStage('Hamuru hazırla', 3), TaskStage('Keki pişir', 3)],
+    steps: [
+      CommandStep('Malzemeleri masaya koy', 'assets/command-order/cake-ingredients.webp'),
+      CommandStep('Hepsini kapta karıştır', 'assets/command-order/cake-mix.webp'),
+      CommandStep('Hamuru kalıba dök', 'assets/command-order/cake-pour.webp'),
+      CommandStep('Kalıbı fırına koy', 'assets/command-order/cake-oven.webp'),
+      CommandStep('Pişmesini bekle', 'assets/command-order/cake-bake.webp'),
+      CommandStep('Keki dilimle', 'assets/command-order/cake-slice.webp'),
+    ],
+    hint: 'Hamur hazır olmadan fırına bir şey koyamazsın.',
+  ),
+  CommandOrderLevel(
+    title: 'Banyo yap',
+    icon: 'assets/command-order/bath-in.svg',
+    stages: [TaskStage('Banyoya hazırlan', 2), TaskStage('Yıkan', 2), TaskStage('Kurulan', 1)],
+    steps: [
+      CommandStep('Küveti suyla doldur', 'assets/command-order/bath-fill.svg'),
+      CommandStep('Küvete gir', 'assets/command-order/bath-in.svg'),
+      CommandStep('Saçını şampuanla', 'assets/command-order/bath-shampoo.svg'),
+      CommandStep('Köpükleri durula', 'assets/command-order/bath-rinse.svg'),
+      CommandStep('Havluyla kurulan', 'assets/command-order/bath-dry.svg'),
+    ],
+    hint: 'Boş küvete girersen yıkanamazsın.',
+  ),
+  CommandOrderLevel(
+    title: 'Bisiklet sür',
+    icon: 'assets/command-order/bike-pedal.svg',
+    stages: [TaskStage('Hazırlan', 2), TaskStage('Sür', 2), TaskStage('Bitir', 1)],
+    steps: [
+      CommandStep('Kaskını tak', 'assets/command-order/bike-helmet.svg'),
+      CommandStep('Bisiklete bin', 'assets/command-order/bike-mount.svg'),
+      CommandStep('Pedal çevir', 'assets/command-order/bike-pedal.svg'),
+      CommandStep('Fren yap', 'assets/command-order/bike-brake.svg'),
+      CommandStep('Bisikletten in', 'assets/command-order/bike-off.svg'),
+    ],
+    hint: 'Güvenlik önce gelir. Bisiklete binmeden ne takarsın?',
+  ),
+  CommandOrderLevel(
+    title: 'Kütüphaneden kitap al',
+    icon: 'assets/command-order/library-choose.svg',
+    stages: [TaskStage('Kütüphanede', 3), TaskStage('Evde', 2), TaskStage('Geri ver', 1)],
+    steps: [
+      CommandStep('Kütüphaneye git', 'assets/command-order/library-go.svg'),
+      CommandStep('Bir kitap seç', 'assets/command-order/library-choose.svg'),
+      CommandStep('Kitabı ödünç al', 'assets/command-order/library-borrow.svg'),
+      CommandStep('Kitabı eve getir', 'assets/command-order/library-home.svg'),
+      CommandStep('Kitabı oku', 'assets/command-order/library-read.svg'),
+      CommandStep('Kitabı geri götür', 'assets/command-order/library-return.svg'),
+    ],
+    hint: 'Kitap seçmek için önce kitapların olduğu yere gitmelisin.',
+  ),
+  CommandOrderLevel(
+    title: 'Çadır kur',
+    icon: 'assets/command-order/tent-light.svg',
+    stages: [TaskStage('Yeri hazırla', 2), TaskStage('Çadırı kur', 3), TaskStage('İçini hazırla', 2)],
+    steps: [
+      CommandStep('Düz bir yer bul', 'assets/command-order/tent-spot.svg'),
+      CommandStep('Çadırı yere ser', 'assets/command-order/tent-lay.svg'),
+      CommandStep('Direkleri tak', 'assets/command-order/tent-poles.svg'),
+      CommandStep('Çadırı kaldır', 'assets/command-order/tent-raise.svg'),
+      CommandStep('Kazıklarla sabitle', 'assets/command-order/tent-stake.svg'),
+      CommandStep('Uyku tulumunu içine koy', 'assets/command-order/tent-sleep.svg'),
+      CommandStep('Fenerini yak', 'assets/command-order/tent-light.svg'),
+    ],
+    hint: 'Çadırı sermek için önce uygun bir yer bulmalısın.',
+  ),
+  // Uzman 16–20: birden çok aşama, göreve ait olmayan kartlar
+  CommandOrderLevel(
+    title: 'Pizza yap',
+    icon: 'assets/command-order/pizza-slice.svg',
+    stages: [TaskStage('Hamur', 1), TaskStage('Malzemeler', 2), TaskStage('Pişirme', 3)],
+    steps: [
+      CommandStep('Hamuru aç', 'assets/command-order/pizza-roll.svg'),
+      CommandStep('Domates sosu sür', 'assets/command-order/pizza-sauce.svg'),
+      CommandStep('Peynir serp', 'assets/command-order/pizza-cheese.svg'),
+      CommandStep('Fırına koy', 'assets/command-order/pizza-oven.svg'),
+      CommandStep('Pişmesini bekle', 'assets/command-order/pizza-bake.svg'),
+      CommandStep('Dilimle', 'assets/command-order/pizza-slice.svg'),
+    ],
+    extras: [CommandStep('Televizyon aç', 'assets/command-order/tv-on.svg')],
+    hint: 'Her kart bu göreve ait değil. Pizza yaparken televizyona gerek var mı?',
+  ),
+  CommandOrderLevel(
+    title: 'Çamaşır yıka',
+    icon: 'assets/command-order/laundry-hang.svg',
+    stages: [TaskStage('Hazırlık', 3), TaskStage('Yıkama', 1), TaskStage('Kurutma', 2)],
+    steps: [
+      CommandStep('Kirlileri topla', 'assets/command-order/laundry-gather.svg'),
+      CommandStep('Makineye koy', 'assets/command-order/laundry-load.svg'),
+      CommandStep('Deterjanı ekle', 'assets/command-order/laundry-soap.svg'),
+      CommandStep('Makineyi çalıştır', 'assets/command-order/laundry-run.svg'),
+      CommandStep('Çamaşırları as', 'assets/command-order/laundry-hang.svg'),
+      CommandStep('Kuruyunca katla', 'assets/command-order/laundry-fold.svg'),
+    ],
+    extras: [CommandStep('Top oyna', 'assets/command-order/ball-play.svg')],
+    hint: 'Kirli çamaşırlar bir yere dağılmışsa önce ne yapmalısın?',
+  ),
+  CommandOrderLevel(
+    title: 'Trenle yolculuk',
+    icon: 'assets/command-order/train-board.svg',
+    stages: [TaskStage('İstasyonda', 3), TaskStage('Trende', 2), TaskStage('Varış', 1)],
+    steps: [
+      CommandStep('Bilet al', 'assets/command-order/train-ticket.svg'),
+      CommandStep('Perona git', 'assets/command-order/train-platform.svg'),
+      CommandStep('Treni bekle', 'assets/command-order/train-wait.svg'),
+      CommandStep('Trene bin', 'assets/command-order/train-board.svg'),
+      CommandStep('Koltuğuna otur', 'assets/command-order/train-seat.svg'),
+      CommandStep('Durağında in', 'assets/command-order/train-off.svg'),
+    ],
+    extras: [CommandStep('Uçağa bin', 'assets/command-order/plane-board.svg')],
+    hint: 'Trene binmek için yanında ne olmalı?',
+  ),
+  CommandOrderLevel(
+    title: 'Fidan yetiştir',
+    icon: 'assets/command-order/sapling-plant.svg',
+    stages: [TaskStage('Ek', 2), TaskStage('Bakım yap', 2), TaskStage('Büyüt', 2)],
+    steps: [
+      CommandStep('Saksıya toprak koy', 'assets/command-order/sapling-soil.svg'),
+      CommandStep('Tohumu ek', 'assets/command-order/sapling-seed.svg'),
+      CommandStep('Tohumu sula', 'assets/command-order/sapling-water.svg'),
+      CommandStep('Saksıyı güneşe koy', 'assets/command-order/sapling-sun.svg'),
+      CommandStep('Filizi bekle', 'assets/command-order/sapling-sprout.svg'),
+      CommandStep('Bahçeye dik', 'assets/command-order/sapling-plant.svg'),
+    ],
+    extras: [
+      CommandStep('Şemsiye aç', 'assets/command-order/umbrella-open.svg'),
+      CommandStep('Saksıyı karanlığa koy', 'assets/command-order/pot-dark.svg'),
+    ],
+    hint: 'Bitkiler büyümek için su ve güneş ister. Hangi kartlar onlara zarar verir?',
+  ),
+  CommandOrderLevel(
+    title: 'Kurabiye yap ve paylaş',
+    icon: 'assets/command-order/cookie-share.svg',
+    stages: [TaskStage('Hazırla', 3), TaskStage('Pişir', 2), TaskStage('Paylaş', 2)],
+    steps: [
+      CommandStep('Ellerini yıka', 'assets/command-order/hands-rinse.webp'),
+      CommandStep('Malzemeleri karıştır', 'assets/command-order/cake-mix.webp'),
+      CommandStep('Hamura şekil ver', 'assets/command-order/cookie-shape.svg'),
+      CommandStep('Fırında pişir', 'assets/command-order/cookie-bake.svg'),
+      CommandStep('Soğumasını bekle', 'assets/command-order/cookie-cool.svg'),
+      CommandStep('Kutuya koy', 'assets/command-order/cookie-box.svg'),
+      CommandStep('Arkadaşlarına ikram et', 'assets/command-order/cookie-share.svg'),
+    ],
+    extras: [
+      CommandStep('Oyuncak araba sür', 'assets/command-order/toy-car.svg'),
+      CommandStep('Uyumaya git', 'assets/command-order/sleep.svg'),
+    ],
+    hint: 'Mutfakta çalışmadan önce temizlik gerekir.',
+  ),
+];

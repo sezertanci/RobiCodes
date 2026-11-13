@@ -1,0 +1,209 @@
+import 'package:flutter/foundation.dart';
+
+import '../../features/play/widgets/speech_bubble.dart';
+import '../../features/progress/star_rule.dart';
+import 'command_order_texts.dart';
+import 'engine/command_order_engine.dart';
+import 'engine/command_order_level.dart';
+
+/// Kutudaki işaretin türü: yanlış kart (kırmızı) veya ipucu (sarı).
+enum SlotMarkKind { wrong, hint }
+
+/// Bir kutunun işareti. İpucunda parlayan kart da [cardId] ile gösterilir.
+typedef SlotMark = ({int slot, int? cardId, SlotMarkKind kind});
+
+/// Bir seviyenin oynanış durumu: kutulardaki kartlar, seçili kutu, işaretler ve sonuç.
+/// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
+final class CommandOrderController extends ChangeNotifier {
+  CommandOrderController({
+    required this.level,
+    required List<OrderCard> cards,
+    required this.onCompleted,
+    this.celebrateDuration = defaultCelebrateDuration,
+  }) : cards = List.unmodifiable(cards),
+       _slots = List<int?>.filled(level.steps.length, null),
+       _message = _introOf(level);
+
+  static const defaultCelebrateDuration = Duration(milliseconds: 900);
+
+  final CommandOrderLevel level;
+
+  /// Kartlar, ekranda gösterilen karışık sırayla.
+  final List<OrderCard> cards;
+  final ValueChanged<int> onCompleted;
+  final Duration celebrateDuration;
+
+  final List<int?> _slots;
+  int? _target;
+  SlotMark? _mark;
+  String _message;
+  RobotMood _mood = RobotMood.talk;
+  int _wrongCount = 0;
+  bool _hintUsed = false;
+  int _failedChecks = 0;
+  bool _done = false;
+  bool _disposed = false;
+
+  /// Her kutudaki kartın kimliği; boş kutu `null`.
+  List<int?> get slots => List.unmodifiable(_slots);
+  int? get target => _target;
+  SlotMark? get mark => _mark;
+  String get message => _message;
+  RobotMood get mood => _mood;
+
+  /// Her yanlış kontrolde artar; ekran yanlış kartı her seferinde yeniden sallar.
+  int get wrongCount => _wrongCount;
+  bool get hintUsed => _hintUsed;
+  bool get isDone => _done;
+  bool get isFull => !_slots.contains(null);
+
+  /// Henüz bir kutuya konmamış kartlar, karışık sırayla.
+  List<OrderCard> get poolCards => [
+    for (final card in cards)
+      if (!_slots.contains(card.id)) card,
+  ];
+
+  OrderCard cardOf(int cardId) => cards.firstWhere((card) => card.id == cardId);
+
+  /// Kartın karışık sıradaki yeri; ekran kart rengini buna göre seçer.
+  int positionOf(int cardId) => cards.indexWhere((card) => card.id == cardId);
+
+  /// Havuzdaki kartı seçili kutuya, seçili kutu yoksa ilk boş kutuya koyar.
+  void tapPoolCard(int cardId) {
+    if (_done) {
+      return;
+    }
+    final slot = _target ?? _slots.indexOf(null);
+    if (slot < 0) {
+      _say(CommandOrderTexts.full);
+      notifyListeners();
+      return;
+    }
+    _change(() {
+      _slots[slot] = cardId;
+      _target = null;
+    });
+  }
+
+  /// Kutudaki kartı havuza geri gönderir.
+  void returnToPool(int slot) {
+    if (_done || _slots[slot] == null) {
+      return;
+    }
+    _change(() => _slots[slot] = null);
+  }
+
+  /// Boş kutuyu hedef olarak seçer; seçili kutuya dokunulursa seçim kalkar.
+  void toggleTarget(int slot) {
+    if (_done) {
+      return;
+    }
+    _target = _target == slot ? null : slot;
+    notifyListeners();
+  }
+
+  /// Sürüklenen kartı [toSlot] kutusuna bırakır. Kart bir kutudan geldiyse ([fromSlot]) iki kutu
+  /// yer değiştirir; havuzdan geldiyse kutudaki eski kart havuza döner.
+  void dropOnSlot(int cardId, int? fromSlot, int toSlot) {
+    if (_done || toSlot == fromSlot) {
+      return;
+    }
+    _change(() {
+      if (fromSlot != null) {
+        _slots[fromSlot] = _slots[toSlot];
+      }
+      _slots[toSlot] = cardId;
+      _target = null;
+    });
+  }
+
+  /// Bütün kutuları boşaltır.
+  void clear() {
+    if (_done) {
+      return;
+    }
+    _say(_introOf(level));
+    _change(() {
+      _slots.fillRange(0, _slots.length, null);
+      _target = null;
+    });
+  }
+
+  /// Sırayı denetler. Doğruysa kutlamadan sonra yıldızları bildirir.
+  Future<void> check() async {
+    if (_done) {
+      return;
+    }
+    if (!isFull) {
+      _say(CommandOrderTexts.notFull);
+      notifyListeners();
+      return;
+    }
+    switch (CommandOrderEngine.checkOrder(_slots)) {
+      case OrderCorrect():
+        await _finish();
+      case final OrderWrong wrong:
+        _failedChecks++;
+        _wrongCount++;
+        _mark = (slot: wrong.slot, cardId: null, kind: SlotMarkKind.wrong);
+        _say(CommandOrderTexts.wrong(wrong, cardOf(_slots[wrong.slot]!).text), RobotMood.sad);
+        notifyListeners();
+    }
+  }
+
+  /// İpucu ister: ilk yanlış ya da boş kutu seçilir ve oraya gelecek kart parlar.
+  /// İpucu bir kez kullanılınca seviyeden en fazla 1 yıldız alınır.
+  void showHint() {
+    if (_done) {
+      return;
+    }
+    _hintUsed = true;
+    final hint = CommandOrderEngine.nextHint(_slots);
+    if (hint == null) {
+      _say(CommandOrderTexts.solved);
+    } else {
+      _mark = (slot: hint.slot, cardId: hint.cardId, kind: SlotMarkKind.hint);
+      // Kutu seçili kalır; parlayan karta dokununca kart oraya gider, kutudaki yanlış kart havuza döner.
+      _target = hint.slot;
+      _say(CommandOrderTexts.hintText(level.hint, cardOf(hint.cardId).text, hint.slot));
+    }
+    notifyListeners();
+  }
+
+  Future<void> _finish() async {
+    _done = true;
+    _target = null;
+    _mark = null;
+    _say(CommandOrderTexts.success, RobotMood.happy);
+    notifyListeners();
+    final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _failedChecks == 0);
+    await Future<void>.delayed(celebrateDuration);
+    if (!_disposed) {
+      onCompleted(stars);
+    }
+  }
+
+  /// Sıra değişince eski yanlış veya ipucu işareti ve ona ait mesaj silinir.
+  void _change(VoidCallback update) {
+    update();
+    if (_mark != null) {
+      _say(_introOf(level));
+    }
+    _mark = null;
+    notifyListeners();
+  }
+
+  static String _introOf(CommandOrderLevel level) =>
+      level.extras.isEmpty ? CommandOrderTexts.intro : CommandOrderTexts.extrasIntro;
+
+  void _say(String text, [RobotMood mood = RobotMood.talk]) {
+    _message = text;
+    _mood = mood;
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+}

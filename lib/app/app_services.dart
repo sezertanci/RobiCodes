@@ -10,6 +10,7 @@ import '../features/progress/unlock_policy.dart';
 import '../features/store/entitlement_service.dart';
 import '../features/store/offer_policy.dart';
 import '../features/store/purchase_gateway.dart';
+import '../games/command_order/command_order_module.dart';
 import '../games/game_registry.dart';
 import '../games/path_finder/path_finder_module.dart';
 
@@ -23,8 +24,8 @@ final class AppServices {
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
     CloudSaveGateway cloudSaveGateway = const NoCloudSaveGateway(),
     ParentalGate parentalGate = const LockedParentalGate(),
-  })  : progress = ProgressRepository(store),
-        protectedActions = ProtectedActionRunner(parentalGate) {
+  }) : progress = ProgressRepository(store),
+       protectedActions = ProtectedActionRunner(parentalGate) {
     unlockPolicy = UnlockPolicy(progress);
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
     offers = OfferPolicy(catalog, entitlements);
@@ -32,8 +33,11 @@ final class AppServices {
   }
 
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
-  factory AppServices.production(KeyValueStore store) =>
-      AppServices(catalog: buildContentCatalog(), games: GameRegistry([PathFinderModule()]), store: store);
+  factory AppServices.production(KeyValueStore store) => AppServices(
+    catalog: buildContentCatalog(),
+    games: GameRegistry([PathFinderModule(), CommandOrderModule()]),
+    store: store,
+  );
 
   final ContentCatalog catalog;
   final GameRegistry games;

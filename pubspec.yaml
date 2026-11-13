@@ -60,6 +60,7 @@ flutter:
   # Görseller web sürümünden (MiniCodingWorld/assets) değiştirilmeden kopyalandı.
   assets:
     - assets/characters/
+    - assets/command-order/
     - assets/icons/
     - assets/puzzles/
     - assets/ui/

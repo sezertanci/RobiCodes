@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 
-/// Kesik çizgili, köşeleri yuvarlak çerçeve. Başlangıç karesini ve ipucu karesini işaretler.
+/// Kesik çizgili, köşeleri yuvarlak çerçeve. Başlangıç karesi, ipucu karesi ve boş kutular için.
 final class DashedFrame extends StatelessWidget {
   const DashedFrame({required this.color, this.strokeWidth = 3, super.key});
 

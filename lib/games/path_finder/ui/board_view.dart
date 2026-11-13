@@ -7,7 +7,7 @@ import '../../../app/app_assets.dart';
 import '../../../app/app_theme.dart';
 import '../engine/path_finder_board.dart';
 import '../path_finder_controller.dart';
-import 'dashed_frame.dart';
+import '../../../features/play/widgets/dashed_frame.dart';
 import 'path_finder_assets.dart';
 
 /// Oyun alanı: çim kareler, engeller, altınlar, bayrak, robotun izi, ipucu karesi ve robot.

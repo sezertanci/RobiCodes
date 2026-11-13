@@ -19,6 +19,9 @@ void main() {
     expect(find.byType(GameCard), findsNWidgets(services.catalog.games.length));
     expect(find.text('Robotun Yolunu Bul'), findsOneWidget);
     expect(find.text('3 / 60'), findsOneWidget);
-    expect(find.text('Yakında'), findsNWidgets(services.catalog.games.length - 1));
+    expect(find.text('Komutları Sırala'), findsOneWidget);
+    final playable = services.catalog.games.where((game) => services.games.isPlayable(game.id)).length;
+    expect(playable, 2);
+    expect(find.text('Yakında'), findsNWidgets(services.catalog.games.length - playable));
   });
 }

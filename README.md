@@ -4,8 +4,8 @@
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
 kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` klasörü) referans olarak korunur ve bu projeden bağımsızdır.
 
-> **Durum — 2. aşama:** Temel mimari hazır. "Robotun Yolunu Bul" oyunu 20 seviyesiyle oynanabilir;
-> diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
+> **Durum — 3. aşama:** Temel mimari hazır. "Robotun Yolunu Bul" ve "Komutları Sırala" oyunları 20'şer
+> seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
 > ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
@@ -51,8 +51,12 @@ lib/
     path_finder/  Robotun Yolunu Bul
       engine/     Harita, seviye verisi (20 seviye) ve oyun kuralları; Flutter'dan bağımsız
       ui/         Harita, komut şeridi, yön tuşları ve duyarlı oyun ekranı
+    command_order/ Komutları Sırala
+      engine/     Seviye verisi (20 seviye), karıştırma, sıra kontrolü ve ipucu; Flutter'dan bağımsız
+      ui/         Görev kartı, numaralı kutular, kart havuzu, sürüklenebilir kartlar ve oyun ekranı
   features/
     play/         Bütün oyunların ortak seviye seçim, seviye ve sonuç ekranları
+      widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli
     progress/     Yıldız kuralı, ilerleme kaydı, grup ve seviye kilitleri
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
     cloud_save/   İsteğe bağlı bulut kaydı, kayıt birleştirme
@@ -78,6 +82,10 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   Tablette düğmeler, harita kareleri ve seviye kutuları ekranın kısa kenarına göre büyür
   (`app/screen_scale.dart`); telefondaki boyutlar değişmez. "Hareketi azalt" ayarı açıksa robot hızlı
   yürür ve tepki animasyonları oynatılmaz.
+- **Komutları Sırala ekranı:** Görev kartı geniş ekranda solda dikey, dar ekranda üstte şerit olarak
+  durur. Kartlar havuzdan numaralı kutulara dokunarak (önce kutu seçilebilir) veya uzun basıp
+  sürükleyerek yerleştirilir; kutular arasında sürükleme kartların yerini değiştirir. Kontrol et, İpucu
+  ve Temizle düğmeleri altta sabittir.
 - **Seviye seçimi:** Web sürümündeki gibi her zorluk grubu kendi renginde bir paneldir (Kolay yeşil, Orta
   mavi, Zor mor, Uzman kırmızı). Panelde başlık şeridi, tamamlanan seviye rozeti, kilitliyse uyarı ve hap
   biçimli seviye satırları bulunur; kilitli grup soluk görünür. Paneller ekran genişliğine göre bir
