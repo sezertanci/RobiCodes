@@ -25,6 +25,9 @@ final class RobotSprite extends StatefulWidget {
   /// Çarpmada robotun itildiği yön (ör. sağ için `Offset(1, 0)`).
   final Offset bumpDirection;
 
+  /// Robotun tepkilerde kendi boyunun en fazla ne kadar yukarı çıktığı (tek zıplama en yükseğidir).
+  static double maxRise(double size) => _RobotSpriteState._hopHeight * size;
+
   @override
   State<RobotSprite> createState() => _RobotSpriteState();
 }

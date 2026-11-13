@@ -14,13 +14,13 @@ abstract final class CommandOrderTexts {
   static const clear = 'Temizle';
 
   static String wrong(OrderWrong result, String cardText) => switch (result.reason) {
-    WrongReason.extra => '«$cardText» bu görev için gerekli değil. Onu kutudan çıkar.',
+    WrongReason.extra => '"$cardText" bu görev için gerekli değil. Onu kutudan çıkar.',
     WrongReason.tooEarly =>
-      '${result.slot + 1}. kutudaki «$cardText» için henüz erken. Ondan önce yapılması gereken bir adım var.',
+      '${result.slot + 1}. kutudaki "$cardText" için henüz erken. Ondan önce yapılması gereken bir adım var.',
   };
 
   static String hintText(String levelHint, String cardText, int slot) =>
-      '$levelHint Parlayan kart «$cardText» ${slot + 1}. kutuya gelmeli.';
+      '$levelHint Parlayan kart "$cardText" ${slot + 1}. kutuya gelmeli.';
 
   static String slotCard(int slot, String cardText) => '${slot + 1}. kutu: $cardText. Geri almak için dokun.';
 

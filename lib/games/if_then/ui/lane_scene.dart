@@ -61,8 +61,14 @@ final class _LaneSceneState extends State<LaneScene> {
   Widget build(BuildContext context) {
     _followRobot();
     final lane = _controller.lane;
+    final headroom = _headroom;
     return Container(
-      padding: const EdgeInsets.all(LaneScene.padding),
+      padding: EdgeInsets.fromLTRB(
+        LaneScene.padding,
+        max(0, LaneScene.padding - headroom),
+        LaneScene.padding,
+        LaneScene.padding,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(_radius),
@@ -76,17 +82,20 @@ final class _LaneSceneState extends State<LaneScene> {
           scrollDirection: Axis.horizontal,
           child: SizedBox(
             width: LaneScene.cellCount(_controller) * _cell,
-            height: _cell,
+            height: headroom + _cell,
             child: Stack(
               children: [
-                Row(
-                  children: [
-                    _tile(_startFrame()),
-                    for (var index = 0; index < lane.length; index++) _laneCell(index, lane[index]),
-                    _tile(_scaled(_objectScale, SvgPicture.asset(AppAssets.flag))),
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(top: headroom),
+                  child: Row(
+                    children: [
+                      _tile(_startFrame()),
+                      for (var index = 0; index < lane.length; index++) _laneCell(index, lane[index]),
+                      _tile(_scaled(_objectScale, SvgPicture.asset(AppAssets.flag))),
+                    ],
+                  ),
                 ),
-                _robot(),
+                _robot(headroom),
               ],
             ),
           ),
@@ -156,11 +165,15 @@ final class _LaneSceneState extends State<LaneScene> {
     return _tile(content, ground: object == LaneObject.water ? AppAssets.water : IfThenAssets.tilePath);
   }
 
-  Widget _robot() => AnimatedPositioned(
+  /// Zıplayan robot yolun kayan alanında kırpılmasın diye karelerin üstünde bırakılan boşluk:
+  /// robotun yükselişinden, karedeki kendi üst boşluğu çıkarılır.
+  double get _headroom => max(0, RobotSprite.maxRise(_cell * _robotScale) - _cell * (1 - _robotScale) / 2);
+
+  Widget _robot(double top) => AnimatedPositioned(
     duration: _controller.stepDuration * 0.85,
     curve: Curves.easeInOut,
     left: (_controller.robotCell + 1) * _cell,
-    top: 0,
+    top: top,
     width: _cell,
     height: _cell,
     child: _scaled(_robotScale, RobotSprite(reaction: _controller.reaction, reactionCount: _controller.reactionCount)),

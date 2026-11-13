@@ -9,7 +9,7 @@ abstract final class IfThenTexts {
   static const solved = 'Kuralların doğru! Yeşil Başlat tuşuna dokun.';
   static const noSlot = 'Bu blok için boş kutu yok. Değiştirmek istediğin kutuya dokunup onu boşalt.';
   static const lockedSlot = 'Bu kutu hazır geldi, değiştirilemez. Bloğu boş bir kutuya koy.';
-  static const wrongType = 'Bu blok oraya uymaz. Nesneler «Eğer» kutusuna, hareketler ok işaretinin yanına gider.';
+  static const wrongType = 'Bu blok oraya uymaz. Nesneler "Eğer" kutusuna, hareketler ok işaretinin yanına gider.';
 
   static const run = 'Başlat';
   static const hint = 'İpucu';
@@ -62,12 +62,12 @@ abstract final class IfThenTexts {
     LaneObject.star => 'Yıldızı almak için Topla bloğunu kullan.',
   };
 
-  static String _ruleName(int rule) => rule == IfThenEngine.elseRule ? '«Değilse» satırı' : '${rule + 1}. kural';
+  static String _ruleName(int rule) => rule == IfThenEngine.elseRule ? '"Değilse" satırı' : '${rule + 1}. kural';
 
   /// Yanlış harekette robotun söylediği cümle. Program tam olduğu için hareket her zaman doludur.
   static String wrong(LaneStep step) =>
       'Önünde ${_name(step.object)} vardı. ${_ruleName(step.rule)} çalıştı ve robot '
-      '«${actionLabel(step.action!)}» yaptı. ${_problem(step.object)} Kuralları değiştirip yeniden dene.';
+      '"${actionLabel(step.action!)}" yaptı. ${_problem(step.object)} Kuralları değiştirip yeniden dene.';
 
   static String hintText(LaneObject object) => 'Parlayan karede ${_name(object)} var. ${_advice(object)}';
 
