@@ -74,7 +74,8 @@ final class _PathFinderViewState extends State<PathFinderView> {
       builder: (context, _) => LayoutBuilder(
         builder: (context, constraints) {
           final wide =
-              constraints.maxWidth >= PathFinderView.wideMinWidth && constraints.maxHeight >= PathFinderView.wideMinHeight;
+              constraints.maxWidth >= PathFinderView.wideMinWidth &&
+              constraints.maxHeight >= PathFinderView.wideMinHeight;
           if (wide) {
             return _wideLayout(controller, scale);
           }
@@ -87,55 +88,55 @@ final class _PathFinderViewState extends State<PathFinderView> {
   }
 
   Widget _header(PathFinderController controller, double chipSize) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SpeechBubble(message: controller.message, mood: controller.mood),
-          const SizedBox(height: _gap),
-          CommandStrip(controller: controller, chipSize: chipSize),
-          const SizedBox(height: _gap),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      SpeechBubble(message: controller.message, mood: controller.mood),
+      const SizedBox(height: _gap),
+      CommandStrip(controller: controller, chipSize: chipSize),
+      const SizedBox(height: _gap),
+    ],
+  );
 
   Widget _narrowControls(PathFinderController controller, ScreenScale scale) => PathFinderControls(
-        controller: controller,
-        buttonSize: scale.size(_narrowButton, max: _maxButton),
-        stacked: false,
-      );
+    controller: controller,
+    buttonSize: scale.size(_narrowButton, max: _maxButton),
+    stacked: false,
+  );
 
   Widget _narrowLayout(PathFinderController controller, ScreenScale scale) => Padding(
-        padding: const EdgeInsets.all(_padding),
-        child: Column(
-          children: [
-            _header(controller, scale.size(_narrowChip, max: _maxChip)),
-            Expanded(child: _fittedBoard(controller, scale)),
-            const SizedBox(height: _gap),
-            _narrowControls(controller, scale),
-          ],
-        ),
-      );
+    padding: const EdgeInsets.all(_padding),
+    child: Column(
+      children: [
+        _header(controller, scale.size(_narrowChip, max: _maxChip)),
+        Expanded(child: _fittedBoard(controller, scale)),
+        const SizedBox(height: _gap),
+        _narrowControls(controller, scale),
+      ],
+    ),
+  );
 
   Widget _scrollLayout(PathFinderController controller, ScreenScale scale, double width) => SingleChildScrollView(
-        padding: const EdgeInsets.all(_padding),
-        child: Column(
-          children: [
-            _header(controller, scale.size(_narrowChip, max: _maxChip)),
-            BoardView(controller: controller, tileSize: _tileSize(scale, width - _padding * 2, double.infinity)),
-            const SizedBox(height: _gap * 2),
-            _narrowControls(controller, scale),
-          ],
-        ),
-      );
+    padding: const EdgeInsets.all(_padding),
+    child: Column(
+      children: [
+        _header(controller, scale.size(_narrowChip, max: _maxChip)),
+        BoardView(controller: controller, tileSize: _tileSize(scale, width - _padding * 2, double.infinity)),
+        const SizedBox(height: _gap * 2),
+        _narrowControls(controller, scale),
+      ],
+    ),
+  );
 
   Widget _wideLayout(PathFinderController controller, ScreenScale scale) => Padding(
-        padding: const EdgeInsets.all(_padding),
-        child: Column(
-          children: [
-            _header(controller, scale.size(_wideChip, max: _maxChip)),
-            Expanded(child: LayoutBuilder(builder: (context, area) => _wideBody(controller, scale, area))),
-          ],
-        ),
-      );
+    padding: const EdgeInsets.all(_padding),
+    child: Column(
+      children: [
+        _header(controller, scale.size(_wideChip, max: _maxChip)),
+        Expanded(child: LayoutBuilder(builder: (context, area) => _wideBody(controller, scale, area))),
+      ],
+    ),
+  );
 
   /// Harita ve kontroller ortalanmış tek bir grup olarak yan yana durur. Düğmeler alanın
   /// yüksekliğine sığacak kadar büyür; harita kalan genişliği doldurur.
@@ -163,16 +164,20 @@ final class _PathFinderViewState extends State<PathFinderView> {
 
   /// Haritayı verilen alana sığdırır. Alan çok küçükse harita en küçük boyda çizilip kaydırılır.
   Widget _fittedBoard(PathFinderController controller, ScreenScale scale) => LayoutBuilder(
-        builder: (context, area) {
-          final tileSize = _tileSize(scale, area.maxWidth, area.maxHeight);
-          if (tileSize >= _minTileSize) {
-            return Center(child: BoardView(controller: controller, tileSize: tileSize));
-          }
-          return SingleChildScrollView(
-            child: Center(child: BoardView(controller: controller, tileSize: _minTileSize)),
-          );
-        },
+    builder: (context, area) {
+      final tileSize = _tileSize(scale, area.maxWidth, area.maxHeight);
+      if (tileSize >= _minTileSize) {
+        return Center(
+          child: BoardView(controller: controller, tileSize: tileSize),
+        );
+      }
+      return SingleChildScrollView(
+        child: Center(
+          child: BoardView(controller: controller, tileSize: _minTileSize),
+        ),
       );
+    },
+  );
 
   /// Haritanın verilen alana sığacağı kare boyu. Üst sınır [BoardView.maxTileSize] tabanından
   /// ekrana göre büyütülür; böylece harita tablette de alanı doldurur.

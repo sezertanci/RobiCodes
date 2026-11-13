@@ -30,12 +30,12 @@ final class ProgressSnapshot {
   }
 
   String toJson() => jsonEncode({
-        _versionField: _formatVersion,
-        _packsField: {
-          for (final MapEntry(key: packId, value: levels) in stars.entries)
-            packId: {for (final MapEntry(key: level, value: count) in levels.entries) '$level': count},
-        },
-      });
+    _versionField: _formatVersion,
+    _packsField: {
+      for (final MapEntry(key: packId, value: levels) in stars.entries)
+        packId: {for (final MapEntry(key: level, value: count) in levels.entries) '$level': count},
+    },
+  });
 
   /// Kayıttan okur. Bozuk veya beklenmeyen değerler atlanır; kayıt hiç okunamazsa boş ilerleme döner.
   static ProgressSnapshot fromJson(String? raw) {
@@ -53,8 +53,7 @@ final class ProgressSnapshot {
   }
 
   static Map<int, int> _readLevels(Map<String, Object?> levels) => {
-        for (final MapEntry(key: key, value: value) in levels.entries)
-          if (int.tryParse(key) case final level? when level > 0 && value is int && StarRule.isValid(value))
-            level: value,
-      };
+    for (final MapEntry(key: key, value: value) in levels.entries)
+      if (int.tryParse(key) case final level? when level > 0 && value is int && StarRule.isValid(value)) level: value,
+  };
 }

@@ -32,10 +32,10 @@ final class OfferPolicy {
 
   /// Avantajlı paketin, kullanıcıda olmayan paketlerini tek başına satan ürünler.
   List<StoreProduct> missingPartsOf(StoreProduct bundle) => [
-        for (final packId in bundle.packIds)
-          if (!_entitlements.canPlayPack(packId))
-            ..._catalog.productsGranting(packId).where(
-                  (product) => !product.isBundle && statusOf(product) == OfferStatus.available,
-                ),
-      ];
+    for (final packId in bundle.packIds)
+      if (!_entitlements.canPlayPack(packId))
+        ..._catalog
+            .productsGranting(packId)
+            .where((product) => !product.isBundle && statusOf(product) == OfferStatus.available),
+  ];
 }

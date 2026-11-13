@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/play/play_timings.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
 import 'command_order_texts.dart';
@@ -24,7 +25,7 @@ final class CommandOrderController extends ChangeNotifier {
        _slots = List<int?>.filled(level.steps.length, null),
        _message = _introOf(level);
 
-  static const defaultCelebrateDuration = Duration(milliseconds: 900);
+  static const defaultCelebrateDuration = PlayTimings.celebrate;
 
   final CommandOrderLevel level;
 

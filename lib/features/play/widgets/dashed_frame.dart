@@ -10,8 +10,10 @@ final class DashedFrame extends StatelessWidget {
   final double strokeWidth;
 
   @override
-  Widget build(BuildContext context) =>
-      CustomPaint(painter: _DashedFramePainter(color: color, strokeWidth: strokeWidth), child: const SizedBox.expand());
+  Widget build(BuildContext context) => CustomPaint(
+    painter: _DashedFramePainter(color: color, strokeWidth: strokeWidth),
+    child: const SizedBox.expand(),
+  );
 }
 
 final class _DashedFramePainter extends CustomPainter {

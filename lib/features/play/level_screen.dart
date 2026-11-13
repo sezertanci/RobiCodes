@@ -33,9 +33,9 @@ final class _LevelScreenState extends State<LevelScreen> {
   bool _isOpen(int level) => _services.unlockPolicy.isLevelUnlocked(widget.pack, level);
 
   void _goTo(int level) => setState(() {
-        _level = level;
-        _resultStars = null;
-      });
+    _level = level;
+    _resultStars = null;
+  });
 
   Future<void> _complete(int stars) async {
     await _services.progress.completeLevel(widget.pack.id, _level, stars);
@@ -77,9 +77,8 @@ final class _LevelScreenState extends State<LevelScreen> {
             child: SafeArea(
               child: KeyedSubtree(
                 key: ValueKey(_level),
-                child: module?.buildLevel(
-                      LevelSession(packId: widget.pack.id, level: _level, onCompleted: _complete),
-                    ) ??
+                child:
+                    module?.buildLevel(LevelSession(packId: widget.pack.id, level: _level, onCompleted: _complete)) ??
                     const SizedBox.shrink(),
               ),
             ),

@@ -2,13 +2,7 @@ import 'package:flutter/widgets.dart';
 
 /// Ebeveyn doğrulaması gerektiren işlemler. Yeni bir korumalı işlem buraya eklenir;
 /// hangi işlemin korunduğu tek bir yerden görülür.
-enum ParentalAction {
-  purchase,
-  linkAccount,
-  enableCloudSync,
-  signOut,
-  switchAccount,
-}
+enum ParentalAction { purchase, linkAccount, enableCloudSync, signOut, switchAccount }
 
 /// Ebeveyn doğrulaması. Doğrulamanın nasıl yapılacağı (soru, basılı tutma vb.) henüz
 /// belirlenmedi; seçilen yöntem bu arayüzü uygulayan bir sınıfla eklenir.

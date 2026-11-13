@@ -6,11 +6,7 @@ import 'models/store_product.dart';
 /// Yeni oyun, paket veya ürün eklemek için yalnızca katalog verisine kayıt eklenir;
 /// ilerleme, kilit ve erişim kuralları sabit oyun veya seviye sayısı varsaymaz.
 final class ContentCatalog {
-  ContentCatalog({
-    required this.games,
-    required this.packs,
-    required this.products,
-  });
+  ContentCatalog({required this.games, required this.packs, required this.products});
 
   final List<GameDefinition> games;
   final List<LevelPack> packs;
@@ -35,25 +31,25 @@ final class ContentCatalog {
   /// Katalog verisindeki hataları listeler (tekrarlanan kimlik, bulunmayan oyun veya paket,
   /// seviyesiz paket). Testler kataloğun hatasız olduğunu denetler.
   List<String> validate() => [
-        ..._duplicates('Oyun', games.map((game) => game.id)),
-        ..._duplicates('Paket', packs.map((pack) => pack.id)),
-        ..._duplicates('Ürün', products.map((product) => product.id)),
-        for (final pack in packs) ..._validatePack(pack),
-        for (final product in products) ..._validateProduct(product),
-      ];
+    ..._duplicates('Oyun', games.map((game) => game.id)),
+    ..._duplicates('Paket', packs.map((pack) => pack.id)),
+    ..._duplicates('Ürün', products.map((product) => product.id)),
+    for (final pack in packs) ..._validatePack(pack),
+    for (final product in products) ..._validateProduct(product),
+  ];
 
   List<String> _validatePack(LevelPack pack) => [
-        if (findGame(pack.gameId) == null) '${pack.id}: bilinmeyen oyun ${pack.gameId}',
-        if (pack.groups.any((group) => group.levelCount < 1)) '${pack.id}: seviyesiz grup var',
-        if (pack.groups.isEmpty) '${pack.id}: grup yok',
-      ];
+    if (findGame(pack.gameId) == null) '${pack.id}: bilinmeyen oyun ${pack.gameId}',
+    if (pack.groups.any((group) => group.levelCount < 1)) '${pack.id}: seviyesiz grup var',
+    if (pack.groups.isEmpty) '${pack.id}: grup yok',
+  ];
 
   List<String> _validateProduct(StoreProduct product) => [
-        if (product.packIds.isEmpty) '${product.id}: paket içermiyor',
-        ..._duplicates('${product.id} içindeki paket', product.packIds),
-        for (final packId in product.packIds)
-          if (findPack(packId) == null) '${product.id}: bilinmeyen paket $packId',
-      ];
+    if (product.packIds.isEmpty) '${product.id}: paket içermiyor',
+    ..._duplicates('${product.id} içindeki paket', product.packIds),
+    for (final packId in product.packIds)
+      if (findPack(packId) == null) '${product.id}: bilinmeyen paket $packId',
+  ];
 
   static List<String> _duplicates(String label, Iterable<String> ids) {
     final seen = <String>{};

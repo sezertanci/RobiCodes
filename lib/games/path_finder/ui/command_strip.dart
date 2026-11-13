@@ -48,8 +48,10 @@ final class _CommandStripState extends State<CommandStrip> {
       }
       final position = _scroll.position;
       final itemStart = focus * (widget.chipSize + CommandStrip._gap);
-      final target = (itemStart - (position.viewportDimension - widget.chipSize) / 2)
-          .clamp(position.minScrollExtent, position.maxScrollExtent);
+      final target = (itemStart - (position.viewportDimension - widget.chipSize) / 2).clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
       _scroll.jumpTo(target);
     });
   }
@@ -70,7 +72,9 @@ final class _CommandStripState extends State<CommandStrip> {
             children: [
               Row(
                 children: [
-                  Expanded(child: SizedBox(height: widget.chipSize + 8, child: _list(commands))),
+                  Expanded(
+                    child: SizedBox(height: widget.chipSize + 8, child: _list(commands)),
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     '${commands.length} / ${_controller.commandLimit}',
@@ -159,41 +163,41 @@ final class _CommandChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        button: true,
-        selected: selected,
-        label: PathFinderTexts.commandChip(index, direction),
-        excludeSemantics: true,
-        onTap: onTap,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                width: size,
-                height: size,
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: active ? AppColors.yellow : Colors.white,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: _borderColor, width: 3),
-                ),
-                child: SvgPicture.asset(PathFinderAssets.arrow(direction)),
-              ),
-              Positioned(
-                left: -6,
-                top: -8,
-                child: CircleAvatar(
-                  radius: 10,
-                  backgroundColor: AppColors.navy,
-                  child: Text('${index + 1}', style: const TextStyle(fontSize: 11, color: Colors.white)),
-                ),
-              ),
-            ],
+    button: true,
+    selected: selected,
+    label: PathFinderTexts.commandChip(index, direction),
+    excludeSemantics: true,
+    onTap: onTap,
+    child: GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: size,
+            height: size,
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: active ? AppColors.yellow : Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: _borderColor, width: 3),
+            ),
+            child: SvgPicture.asset(PathFinderAssets.arrow(direction)),
           ),
-        ),
-      );
+          Positioned(
+            left: -6,
+            top: -8,
+            child: CircleAvatar(
+              radius: 10,
+              backgroundColor: AppColors.navy,
+              child: Text('${index + 1}', style: const TextStyle(fontSize: 11, color: Colors.white)),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 /// Seçili komutun düzenleme düğmeleri: sola taşı, sağa taşı ve sil.
@@ -242,14 +246,13 @@ final class _EditBar extends StatelessWidget {
     required IconData icon,
     required VoidCallback? onPressed,
     Color? color,
-  }) =>
-      Tooltip(
-        message: label,
-        child: FilledButton.tonalIcon(
-          onPressed: onPressed,
-          icon: Icon(icon),
-          label: Text(text),
-          style: color == null ? null : FilledButton.styleFrom(foregroundColor: color),
-        ),
-      );
+  }) => Tooltip(
+    message: label,
+    child: FilledButton.tonalIcon(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      label: Text(text),
+      style: color == null ? null : FilledButton.styleFrom(foregroundColor: color),
+    ),
+  );
 }

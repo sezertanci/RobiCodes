@@ -23,8 +23,7 @@ final class ProgressRepository extends ChangeNotifier {
   int completedCount(String packId) => _snapshot.stars[packId]?.length ?? 0;
 
   /// Seviyeyi kaydeder. Daha önce daha çok yıldız alındıysa en iyi sonuç korunur.
-  Future<void> completeLevel(String packId, int level, int stars) =>
-      replace(_snapshot.withBest(packId, level, stars));
+  Future<void> completeLevel(String packId, int level, int stars) => replace(_snapshot.withBest(packId, level, stars));
 
   /// Kaydın tamamını değiştirir (ör. bulut kaydıyla birleştirildikten sonra).
   Future<void> replace(ProgressSnapshot snapshot) async {

@@ -4,8 +4,8 @@
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
 kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` klasörü) referans olarak korunur ve bu projeden bağımsızdır.
 
-> **Durum — 3. aşama:** Temel mimari hazır. "Robotun Yolunu Bul" ve "Komutları Sırala" oyunları 20'şer
-> seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
+> **Durum — 4. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala" ve "Eğer Böyleyse"
+> oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
 > ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
@@ -54,9 +54,13 @@ lib/
     command_order/ Komutları Sırala
       engine/     Seviye verisi (20 seviye), karıştırma, sıra kontrolü ve ipucu; Flutter'dan bağımsız
       ui/         Görev kartı, numaralı kutular, kart havuzu, sürüklenebilir kartlar ve oyun ekranı
+    if_then/      Eğer Böyleyse
+      engine/     Seviye verisi (20 seviye), yol ayrıştırma, kural seçimi, çalıştırma ve ipucu; Flutter'dan bağımsız
+      ui/         Robotun yolu, kural tahtası, blok paleti, sürüklenebilir bloklar ve oyun ekranı
   features/
     play/         Bütün oyunların ortak seviye seçim, seviye ve sonuç ekranları
-      widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli
+      widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli,
+                  robot görüntüsü, ipucu ve yanlış işaretleri, nabız gibi atan ipucu çerçevesi
     progress/     Yıldız kuralı, ilerleme kaydı, grup ve seviye kilitleri
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
     cloud_save/   İsteğe bağlı bulut kaydı, kayıt birleştirme

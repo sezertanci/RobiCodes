@@ -20,12 +20,7 @@ final class DifficultyGroup {
 
 /// Paket içindeki bir grubun seviye aralığı (sınırlar dahil, 1'den başlar).
 final class GroupRange {
-  const GroupRange({
-    required this.index,
-    required this.group,
-    required this.firstLevel,
-    required this.lastLevel,
-  });
+  const GroupRange({required this.index, required this.group, required this.firstLevel, required this.lastLevel});
 
   final int index;
   final DifficultyGroup group;
@@ -43,12 +38,7 @@ final class GroupRange {
 /// Paketin ücretli olup olmadığı burada yazılmaz: paketi açan bir mağaza ürünü varsa ücretlidir,
 /// yoksa ücretsizdir (bkz. `ContentCatalog.isFree`). Böylece aynı bilgi iki yerde tutulmaz.
 final class LevelPack {
-  const LevelPack({
-    required this.id,
-    required this.gameId,
-    required this.title,
-    required this.groups,
-  });
+  const LevelPack({required this.id, required this.gameId, required this.title, required this.groups});
 
   /// Kalıcı kimlik. İlerleme kaydı bu kimlikle tutulur; yayından sonra değiştirilmez.
   final String id;

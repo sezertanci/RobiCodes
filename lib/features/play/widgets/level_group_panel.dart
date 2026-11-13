@@ -57,10 +57,7 @@ final class LevelGroupPanel extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (final (index, level) in levels.indexed) ...[
-                  if (index > 0) const SizedBox(height: _rowGap),
-                  level,
-                ],
+                for (final (index, level) in levels.indexed) ...[if (index > 0) const SizedBox(height: _rowGap), level],
               ],
             ),
           ),
@@ -97,7 +94,12 @@ final class _Header extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(fontSize: _titleFont, fontWeight: FontWeight.w900, color: Colors.white, shadows: shadow),
+                style: TextStyle(
+                  fontSize: _titleFont,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  shadows: shadow,
+                ),
               ),
             ),
             if (badge case final badge?)
@@ -134,13 +136,13 @@ final class _Hint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        margin: const EdgeInsets.fromLTRB(14, 12, 14, 0),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(_radius)),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: _font, fontWeight: FontWeight.w800, color: tone.dark),
-        ),
-      );
+    margin: const EdgeInsets.fromLTRB(14, 12, 14, 0),
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(_radius)),
+    child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: _font, fontWeight: FontWeight.w800, color: tone.dark),
+    ),
+  );
 }

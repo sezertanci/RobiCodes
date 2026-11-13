@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
-import 'card_metrics.dart';
 
-/// İpucu işareti: kutu veya kartın çevresinde nabız gibi atan sarı halka.
+/// İpucu işareti: kutu, kart veya bloğun çevresinde nabız gibi atan sarı halka.
 /// "Hareketi azalt" ayarı açıksa halka sabit durur.
 final class HintGlow extends StatefulWidget {
-  const HintGlow({required this.child, super.key});
+  const HintGlow({required this.radius, required this.child, super.key});
 
+  /// Halkanın köşe yarıçapı; işaretlenen öğeninkiyle aynı olmalı.
+  final double radius;
   final Widget child;
 
   static const ring = 8.0;
@@ -46,7 +47,7 @@ final class _HintGlowState extends State<HintGlow> with SingleTickerProviderStat
       animation: _pulse,
       builder: (context, child) => DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(CardMetrics.radius),
+          borderRadius: BorderRadius.circular(widget.radius),
           boxShadow: [
             BoxShadow(color: AppColors.yellow, spreadRadius: still ? _staticRing : HintGlow.ring * _pulse.value),
           ],
@@ -58,11 +59,14 @@ final class _HintGlowState extends State<HintGlow> with SingleTickerProviderStat
   }
 }
 
-/// Yanlış kart işareti: kırmızı halka ve [trigger] her değiştiğinde bir kez yana sallanma.
+/// Yanlış kart veya kutu işareti: kırmızı halka ve [trigger] her değiştiğinde bir kez yana sallanma.
 final class WrongShake extends StatefulWidget {
-  const WrongShake({required this.trigger, required this.child, super.key});
+  const WrongShake({required this.trigger, required this.radius, required this.child, super.key});
 
   final int trigger;
+
+  /// Halkanın köşe yarıçapı; işaretlenen öğeninkiyle aynı olmalı.
+  final double radius;
   final Widget child;
 
   @override
@@ -108,7 +112,7 @@ final class _WrongShakeState extends State<WrongShake> with SingleTickerProvider
         Transform.translate(offset: Offset(sin(_shake.value * 2 * pi) * -_distance, 0), child: child),
     child: DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(CardMetrics.radius),
+        borderRadius: BorderRadius.circular(widget.radius),
         boxShadow: const [BoxShadow(color: AppColors.red, spreadRadius: _ring)],
       ),
       child: widget.child,

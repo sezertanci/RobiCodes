@@ -8,4 +8,8 @@ abstract final class AppAssets {
   static const hintButton = 'assets/ui/button-hint.svg';
   static const clearButton = 'assets/ui/button-clear.svg';
   static const checkButton = 'assets/ui/button-check.svg';
+  static const runButton = 'assets/ui/button-play.svg';
+  static const flag = 'assets/puzzles/goal-flag.svg';
+  static const rock = 'assets/puzzles/rock.svg';
+  static const water = 'assets/puzzles/tile-water.svg';
 }

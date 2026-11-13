@@ -8,11 +8,11 @@ final class GroupTone {
   const GroupTone(this.color, this.dark);
 
   factory GroupTone.of(Difficulty difficulty) => switch (difficulty) {
-        Difficulty.easy => const GroupTone(AppColors.green, AppColors.greenDark),
-        Difficulty.medium => const GroupTone(AppColors.blue, AppColors.blueDark),
-        Difficulty.hard => const GroupTone(AppColors.purple, AppColors.purpleDark),
-        Difficulty.expert => const GroupTone(AppColors.red, AppColors.redDark),
-      };
+    Difficulty.easy => const GroupTone(AppColors.green, AppColors.greenDark),
+    Difficulty.medium => const GroupTone(AppColors.blue, AppColors.blueDark),
+    Difficulty.hard => const GroupTone(AppColors.purple, AppColors.purpleDark),
+    Difficulty.expert => const GroupTone(AppColors.red, AppColors.redDark),
+  };
 
   final Color color;
   final Color dark;

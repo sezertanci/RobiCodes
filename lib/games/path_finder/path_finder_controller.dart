@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/play/play_timings.dart';
+import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
 import 'engine/path_finder_board.dart';
 import 'engine/path_finder_engine.dart';
 import 'engine/path_finder_level.dart';
 import 'path_finder_texts.dart';
-
-/// Robotun tek seferlik hareketi. Ekran her yeni tepkide animasyonu baştan oynatır.
-enum RobotReaction { none, bump, celebrate, shake }
 
 /// Bir seviyenin oynanış durumu: komut listesi, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
@@ -18,15 +17,15 @@ final class PathFinderController extends ChangeNotifier {
     required this.onCompleted,
     this.stepDuration = defaultStepDuration,
     this.celebrateDuration = defaultCelebrateDuration,
-  })  : board = level.board,
-        _message = _introOf(level) {
+  }) : board = level.board,
+       _message = _introOf(level) {
     optimalLength = PathFinderEngine.optimalLength(board);
     _robot = board.start;
   }
 
   static const defaultStepDuration = Duration(milliseconds: 450);
-  static const reducedStepDuration = Duration(milliseconds: 150);
-  static const defaultCelebrateDuration = Duration(milliseconds: 900);
+  static const reducedStepDuration = PlayTimings.reducedStep;
+  static const defaultCelebrateDuration = PlayTimings.celebrate;
 
   final PathFinderLevel level;
   final PathFinderBoard board;
@@ -228,8 +227,9 @@ final class PathFinderController extends ChangeNotifier {
         _say(PathFinderTexts.blocked(result.obstacle!, index), RobotMood.sad);
       case RunOutcome.missedGoal || RunOutcome.missingCoins:
         _react(RobotReaction.shake);
-        final text =
-            result.outcome == RunOutcome.missingCoins ? PathFinderTexts.missingCoins : PathFinderTexts.missedGoal;
+        final text = result.outcome == RunOutcome.missingCoins
+            ? PathFinderTexts.missingCoins
+            : PathFinderTexts.missedGoal;
         _say(text, RobotMood.sad);
     }
     _running = false;

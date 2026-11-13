@@ -22,17 +22,17 @@ abstract final class PathFinderTexts {
   static const moveRight = 'Seçili komutu bir sağa taşı';
 
   static String label(Direction direction) => switch (direction) {
-        Direction.up => 'Yukarı',
-        Direction.down => 'Aşağı',
-        Direction.left => 'Sola',
-        Direction.right => 'Sağa',
-      };
+    Direction.up => 'Yukarı',
+    Direction.down => 'Aşağı',
+    Direction.left => 'Sola',
+    Direction.right => 'Sağa',
+  };
 
   static String _obstacleName(Obstacle obstacle) => switch (obstacle) {
-        Obstacle.rock => 'taşa',
-        Obstacle.water => 'suya',
-        Obstacle.edge => 'harita kenarına',
-      };
+    Obstacle.rock => 'taşa',
+    Obstacle.water => 'suya',
+    Obstacle.edge => 'harita kenarına',
+  };
 
   static String blocked(Obstacle obstacle, int index) =>
       'Robot ${_obstacleName(obstacle)} çarptı. ${index + 1}. komutu değiştirmeyi dene.';

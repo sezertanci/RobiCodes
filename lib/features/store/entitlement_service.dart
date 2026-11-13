@@ -16,12 +16,9 @@ import 'purchase_gateway.dart';
 /// - Sahip olunan ürünler cihazda ayrı bir kayıtta önbelleğe alınır; böylece satın alınan içerik
 ///   internet olmadan da oynanır. Bu kayıt ilerleme kaydından bağımsızdır.
 final class EntitlementService extends ChangeNotifier {
-  EntitlementService({
-    required this._catalog,
-    required this._gateway,
-    required KeyValueStore store,
-  })  : _store = store,
-        _ownedProductIds = _readCache(store);
+  EntitlementService({required this._catalog, required this._gateway, required KeyValueStore store})
+    : _store = store,
+      _ownedProductIds = _readCache(store);
 
   final ContentCatalog _catalog;
   final PurchaseGateway _gateway;

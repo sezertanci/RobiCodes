@@ -4,11 +4,7 @@ import 'package:flutter/widgets.dart';
 /// Oyun yalnızca kendi mekaniğini bilir; yıldızın kaydedilmesi, kilitlerin açılması ve
 /// ödüller uygulamanın işidir.
 final class LevelSession {
-  const LevelSession({
-    required this.packId,
-    required this.level,
-    required this.onCompleted,
-  });
+  const LevelSession({required this.packId, required this.level, required this.onCompleted});
 
   final String packId;
   final int level;

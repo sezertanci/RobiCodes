@@ -26,12 +26,9 @@ enum CloudSyncResult {
 /// Açma kararı ebeveyn doğrulamasının arkasındadır (bkz. `ProtectedActionRunner`);
 /// bu servis yalnızca bayrağı ve eşitlemeyi yönetir.
 final class CloudSyncService extends ChangeNotifier {
-  CloudSyncService({
-    required this._gateway,
-    required this._progress,
-    required KeyValueStore store,
-  })  : _store = store,
-        _enabled = store.read(StorageKeys.cloudSync) == _enabledValue;
+  CloudSyncService({required this._gateway, required this._progress, required KeyValueStore store})
+    : _store = store,
+      _enabled = store.read(StorageKeys.cloudSync) == _enabledValue;
 
   static const _enabledValue = 'on';
 

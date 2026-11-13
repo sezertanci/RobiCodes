@@ -36,28 +36,16 @@ const _games = [
     title: 'Robotun Yolunu Bul',
     description: 'Yön komutlarıyla robotu hedefe ulaştır.',
   ),
-  GameDefinition(
-    id: GameIds.commandOrder,
-    title: 'Komutları Sırala',
-    description: 'Adımları doğru sıraya diz.',
-  ),
-  GameDefinition(
-    id: GameIds.ifThen,
-    title: 'Eğer Böyleyse',
-    description: 'Duruma göre doğru komutu seç.',
-  ),
-  GameDefinition(
-    id: GameIds.repeat,
-    title: 'Tekrar Et',
-    description: 'Tekrarlanan hareketleri tek blokla yap.',
-  ),
+  GameDefinition(id: GameIds.commandOrder, title: 'Komutları Sırala', description: 'Adımları doğru sıraya diz.'),
+  GameDefinition(id: GameIds.ifThen, title: 'Eğer Böyleyse', description: 'Duruma göre doğru komutu seç.'),
+  GameDefinition(id: GameIds.repeat, title: 'Tekrar Et', description: 'Tekrarlanan hareketleri tek blokla yap.'),
 ];
 
 /// Uygulamanın içerik kataloğu. Şu an dört oyunun ücretsiz temel paketleri vardır.
 /// Ücretli paketler ve avantajlı paketler Play Console'da ürün açıldığında `products`
 /// listesine eklenir.
 ContentCatalog buildContentCatalog() => ContentCatalog(
-      games: _games,
-      packs: [for (final game in _games) _basePack(game.id)],
-      products: const <StoreProduct>[],
-    );
+  games: _games,
+  packs: [for (final game in _games) _basePack(game.id)],
+  products: const <StoreProduct>[],
+);

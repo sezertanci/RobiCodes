@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../features/play/widgets/mark_effects.dart';
 import '../command_order_controller.dart';
 import '../command_order_texts.dart';
 import 'card_metrics.dart';
-import 'mark_effects.dart';
 import 'order_card_tile.dart';
 
 /// Sürüklenen kart ve geldiği kutu (havuzdan geldiyse `null`).
@@ -44,7 +44,7 @@ final class DraggableOrderCard extends StatelessWidget {
     );
     final mark = controller.mark;
     final hinted = slot == null && mark?.kind == SlotMarkKind.hint && mark?.cardId == cardId;
-    final shown = hinted ? HintGlow(child: tile) : tile;
+    final shown = hinted ? HintGlow(radius: CardMetrics.radius, child: tile) : tile;
     if (controller.isDone) {
       return shown;
     }

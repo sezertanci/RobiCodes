@@ -20,8 +20,9 @@ void main() {
     expect(find.text('Robotun Yolunu Bul'), findsOneWidget);
     expect(find.text('3 / 60'), findsOneWidget);
     expect(find.text('Komutları Sırala'), findsOneWidget);
+    expect(find.text('Eğer Böyleyse'), findsOneWidget);
     final playable = services.catalog.games.where((game) => services.games.isPlayable(game.id)).length;
-    expect(playable, 2);
+    expect(playable, 3);
     expect(find.text('Yakında'), findsNWidgets(services.catalog.games.length - playable));
   });
 }

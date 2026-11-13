@@ -22,36 +22,42 @@ final class ImageButton extends StatelessWidget {
   final bool highlighted;
 
   static const padding = 2.0;
+
+  /// Düğme görsellerinde (128 birimlik SVG) düğmenin kenarı ile görselin kenarı arasındaki şeffaf pay.
+  static const _artInsetRatio = 6 / 128;
+
+  /// [size] boyutundaki düğmenin görünen kenarının, widget'ın kenarından ne kadar içeride olduğu.
+  /// Düğmeyi başka öğelerle aynı çizgiye hizalamak için kullanılır.
+  static double visibleInset(double size) => padding + size * _artInsetRatio;
   static const _disabledOpacity = 0.4;
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(padding),
-        child: Tooltip(
-          message: label,
-          child: Semantics(
-            button: true,
-            enabled: onPressed != null,
-            label: label,
-            onTap: onPressed,
-            excludeSemantics: true,
-            child: GestureDetector(
-              onTap: onPressed,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(size / 3),
-                  boxShadow: highlighted ? const [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)] : null,
-                ),
-                child: Opacity(
-                  opacity: onPressed == null ? _disabledOpacity : 1,
-                  child: SvgPicture.asset(asset),
-                ),
-              ),
+    padding: const EdgeInsets.all(padding),
+    child: Tooltip(
+      message: label,
+      child: Semantics(
+        button: true,
+        enabled: onPressed != null,
+        label: label,
+        onTap: onPressed,
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: onPressed,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(size / 3),
+              boxShadow: highlighted
+                  ? const [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)]
+                  : null,
             ),
+            child: Opacity(opacity: onPressed == null ? _disabledOpacity : 1, child: SvgPicture.asset(asset)),
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

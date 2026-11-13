@@ -28,8 +28,7 @@ final class PathFinderControls extends StatelessWidget {
   static const _stackedColumns = 3;
 
   /// Alt alta düzenin [height] yüksekliğe sığması için düğme boyu.
-  static double stackedButtonSizeFor(double height) =>
-      (height - _stackedGap) / _stackedRows - ImageButton.padding * 2;
+  static double stackedButtonSizeFor(double height) => (height - _stackedGap) / _stackedRows - ImageButton.padding * 2;
 
   /// Alt alta düzenin verilen düğme boyundaki genişliği.
   static double stackedWidth(double buttonSize) => (buttonSize + ImageButton.padding * 2) * _stackedColumns;
@@ -39,7 +38,7 @@ final class PathFinderControls extends StatelessWidget {
     final pad = _DirectionPad(controller: controller, buttonSize: buttonSize);
     final actions = [
       ImageButton(
-        asset: PathFinderAssets.run,
+        asset: AppAssets.runButton,
         label: PathFinderTexts.run,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.run,
@@ -60,12 +59,20 @@ final class PathFinderControls extends StatelessWidget {
     if (stacked) {
       return Column(
         mainAxisSize: MainAxisSize.min,
-        children: [pad, const SizedBox(height: _stackedGap), Row(mainAxisSize: MainAxisSize.min, children: actions)],
+        children: [
+          pad,
+          const SizedBox(height: _stackedGap),
+          Row(mainAxisSize: MainAxisSize.min, children: actions),
+        ],
       );
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [pad, const SizedBox(width: _rowGap), Column(mainAxisSize: MainAxisSize.min, children: actions)],
+      children: [
+        pad,
+        const SizedBox(width: _rowGap),
+        Column(mainAxisSize: MainAxisSize.min, children: actions),
+      ],
     );
   }
 }
@@ -80,12 +87,12 @@ final class _DirectionPad extends StatelessWidget {
   Widget build(BuildContext context) {
     final enabled = !controller.isRunning && !controller.isFull;
     Widget button(Direction direction) => ImageButton(
-          asset: PathFinderAssets.arrow(direction),
-          label: PathFinderTexts.addCommand(direction),
-          size: buttonSize,
-          highlighted: controller.hint?.direction == direction,
-          onPressed: enabled ? () => controller.addCommand(direction) : null,
-        );
+      asset: PathFinderAssets.arrow(direction),
+      label: PathFinderTexts.addCommand(direction),
+      size: buttonSize,
+      highlighted: controller.hint?.direction == direction,
+      onPressed: enabled ? () => controller.addCommand(direction) : null,
+    );
     final gap = SizedBox.square(dimension: buttonSize + ImageButton.padding * 2);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -97,4 +104,3 @@ final class _DirectionPad extends StatelessWidget {
     );
   }
 }
-

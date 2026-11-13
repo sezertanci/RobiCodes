@@ -16,22 +16,18 @@ final class StarRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        label: '$stars yıldız',
-        excludeSemantics: true,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var index = 0; index < StarRule.perfect; index++)
-              AnimatedScale(
-                scale: index < visibleCount ? 1 : 0,
-                duration: const Duration(milliseconds: 250),
-                child: SvgPicture.asset(
-                  index < stars ? AppAssets.star : AppAssets.starEmpty,
-                  width: size,
-                  height: size,
-                ),
-              ),
-          ],
-        ),
-      );
+    label: '$stars yıldız',
+    excludeSemantics: true,
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var index = 0; index < StarRule.perfect; index++)
+          AnimatedScale(
+            scale: index < visibleCount ? 1 : 0,
+            duration: const Duration(milliseconds: 250),
+            child: SvgPicture.asset(index < stars ? AppAssets.star : AppAssets.starEmpty, width: size, height: size),
+          ),
+      ],
+    ),
+  );
 }

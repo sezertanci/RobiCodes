@@ -46,7 +46,9 @@ final class GameCard extends StatelessWidget {
             children: [
               Text(title, style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
-              Expanded(child: Text(description, style: textTheme.bodyMedium, overflow: TextOverflow.fade)),
+              Expanded(
+                child: Text(description, style: textTheme.bodyMedium, overflow: TextOverflow.fade),
+              ),
               _Footer(stars: stars, maxStars: maxStars, isPlayable: isPlayable),
             ],
           ),
@@ -65,19 +67,19 @@ final class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Wrap(
-        spacing: 8,
-        runSpacing: 4,
-        crossAxisAlignment: WrapCrossAlignment.center,
+    spacing: 8,
+    runSpacing: 4,
+    crossAxisAlignment: WrapCrossAlignment.center,
+    children: [
+      Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.star_rounded, color: AppColors.yellow),
-              const SizedBox(width: 4),
-              Text('$stars / $maxStars'),
-            ],
-          ),
-          if (!isPlayable) const Chip(label: Text(GameCard._comingSoonLabel)),
+          const Icon(Icons.star_rounded, color: AppColors.yellow),
+          const SizedBox(width: 4),
+          Text('$stars / $maxStars'),
         ],
-      );
+      ),
+      if (!isPlayable) const Chip(label: Text(GameCard._comingSoonLabel)),
+    ],
+  );
 }

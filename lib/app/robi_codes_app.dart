@@ -14,12 +14,12 @@ final class RobiCodesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppScope(
-        services: services,
-        child: MaterialApp(
-          title: title,
-          debugShowCheckedModeBanner: false,
-          theme: buildAppTheme(),
-          home: const HomeScreen(),
-        ),
-      );
+    services: services,
+    child: MaterialApp(
+      title: title,
+      debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(),
+      home: const HomeScreen(),
+    ),
+  );
 }

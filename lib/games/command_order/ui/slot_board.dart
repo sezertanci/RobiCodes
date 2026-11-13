@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/dashed_frame.dart';
+import '../../../features/play/widgets/mark_effects.dart';
 import '../command_order_controller.dart';
 import '../command_order_texts.dart';
 import 'card_metrics.dart';
 import 'draggable_order_card.dart';
-import 'mark_effects.dart';
 
 /// Numaralı kutular. Zor ve Uzman seviyelerinde kutular aşama başlıklarıyla gruplanır.
 final class SlotBoard extends StatelessWidget {
@@ -101,8 +101,8 @@ final class _Slot extends StatelessWidget {
       return content;
     }
     return switch (mark.kind) {
-      SlotMarkKind.wrong => WrongShake(trigger: controller.wrongCount, child: content),
-      SlotMarkKind.hint => HintGlow(child: content),
+      SlotMarkKind.wrong => WrongShake(trigger: controller.wrongCount, radius: CardMetrics.radius, child: content),
+      SlotMarkKind.hint => HintGlow(radius: CardMetrics.radius, child: content),
     };
   }
 }

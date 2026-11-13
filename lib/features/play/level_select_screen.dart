@@ -31,10 +31,10 @@ final class LevelSelectScreen extends StatelessWidget {
 
   /// Verilen genişlikte kaç sütun panel dizileceği.
   static int columnsFor(double width) => switch (width) {
-        >= _fourColumnMinWidth => 4,
-        >= _twoColumnMinWidth => 2,
-        _ => 1,
-      };
+    >= _fourColumnMinWidth => 4,
+    >= _twoColumnMinWidth => 2,
+    _ => 1,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -82,20 +82,20 @@ final class LevelSelectScreen extends StatelessWidget {
 
 /// Panelleri satır satır, her satırda [columns] eşit genişlikte sütun olacak şekilde dizer.
 List<Widget> _grid(List<Widget> panels, int columns) => [
-      for (var start = 0; start < panels.length; start += columns)
-        Padding(
-          padding: const EdgeInsets.only(bottom: LevelSelectScreen._gap),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var column = 0; column < columns; column++) ...[
-                if (column > 0) const SizedBox(width: LevelSelectScreen._gap),
-                Expanded(child: start + column < panels.length ? panels[start + column] : const SizedBox.shrink()),
-              ],
-            ],
-          ),
-        ),
-    ];
+  for (var start = 0; start < panels.length; start += columns)
+    Padding(
+      padding: const EdgeInsets.only(bottom: LevelSelectScreen._gap),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var column = 0; column < columns; column++) ...[
+            if (column > 0) const SizedBox(width: LevelSelectScreen._gap),
+            Expanded(child: start + column < panels.length ? panels[start + column] : const SizedBox.shrink()),
+          ],
+        ],
+      ),
+    ),
+];
 
 final class _StarCounter extends StatelessWidget {
   const _StarCounter({required this.stars});
@@ -104,15 +104,15 @@ final class _StarCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            SvgPicture.asset(AppAssets.star, width: 24, height: 24),
-            const SizedBox(width: 4),
-            Text('$stars', style: Theme.of(context).textTheme.titleMedium),
-          ],
-        ),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Row(
+      children: [
+        SvgPicture.asset(AppAssets.star, width: 24, height: 24),
+        const SizedBox(width: 4),
+        Text('$stars', style: Theme.of(context).textTheme.titleMedium),
+      ],
+    ),
+  );
 }
 
 /// Bir zorluk grubunun verisini panele bağlar.

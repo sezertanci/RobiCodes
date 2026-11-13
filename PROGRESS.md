@@ -49,9 +49,32 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   basmayla başlıyor; karıştırma tam sayı aritmetiğiyle yapıldığı için aynı tohum web sürümüyle aynı
   sırayı vermeyebilir (tohum zaten her açılışta rastgele).
 
+**4. aşama tamamlandı:** "Eğer Böyleyse" Flutter'a aktarıldı.
+
+- 20 seviye, yollar, hazır gelen ve açık kutular, fazla bloklar ve açılış mesajları web sürümüyle aynı
+  (`lib/games/if_then/engine/if_then_levels.dart`). Her seviyenin palet bloklarıyla çözülebildiği
+  testle doğrulanıyor.
+- Motor (`if_then_engine.dart`): yolu ayrıştırma, ilk uyan kuralı seçme ("Değilse" son çare),
+  çalıştırıp ilk yanlış kareyi bulma ve ipucu (yanlış kare, kural ve gereken hareket).
+- Bloklar dokunarak (ilk boş uygun kutuya veya seçilen kutuya) ya da uzun basıp sürükleyerek
+  yerleştirilir; dolu kutuya dokunmak onu boşaltır, hazır kutular kilitlidir.
+- Yıldızlar ortak kuralla verilir; ilerleme `if-then` paketinde ayrı tutulur.
+- Ortak parçalar: path_finder'daki nabız gibi atan ipucu çerçevesi `PulsingHintFrame` olarak
+  `features/play/widgets/` altına taşındı; robot görüntüsü, işaret efektleri ve adım süreleri de ortak.
+- Dar ekranda yol kareleri küçülür, sığmazsa yatay kayar ve robot görünür tutulur; hareket azaltma
+  açıkken animasyonlar kapanır.
+- Geniş ekranda (tablet) kurallar solda, bloklar ve düğmeler sağdadır; düğmeler alt satırda değil
+  blokların altında, onlarla aynı hizada sola yaslı durduğu için kurallar ekranın alt kenarına kadar uzanır.
+- Zıplamada robot taşın üstüne inmez: taşın önünde bekler, sonraki hareketle taşın üstünden atlayıp
+  taştan sonraki kareye (ya da bayrağa) iner (web sürümündeki gibi).
+- `flutter analyze` temiz, 210 test geçiyor, debug APK derleniyor. Tablette iki yönde denendi: dokunarak
+  ve uzun basıp sürükleyerek blok yerleştirme (koşul ve hareket), yanlış kare ve kural işareti, ipucu,
+  köprü kurma, kapı açma, yıldız toplama, yıldız kaydı ve sonuç paneli çalışıyor.
+- Web sürümünden farklar: ses ve konfeti yok; sürükleme uzun basmayla başlıyor.
+
 ## Ertelenen işler (unutulmayacak)
 
-2. ve 3. aşamada web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
+2., 3. ve 4. aşamada web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
 
 | Özellik | Durum | Karar |
 |---|---|---|
@@ -66,5 +89,5 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-3. aşama raporu verildi; sıradaki oyun ve 4. aşamanın kapsamı için kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
+4. aşama raporu verildi; sıradaki oyun ve 5. aşamanın kapsamı için kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.

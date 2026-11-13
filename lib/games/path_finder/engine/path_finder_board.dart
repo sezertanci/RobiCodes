@@ -20,8 +20,9 @@ enum Direction {
   GridPoint from(GridPoint point) => (x: point.x + dx, y: point.y + dy);
 
   /// "URR" gibi bir çözüm metnini komut listesine çevirir.
-  static List<Direction> parseSolution(String text) =>
-      [for (final letter in text.split('')) values.firstWhere((direction) => direction.code == letter)];
+  static List<Direction> parseSolution(String text) => [
+    for (final letter in text.split('')) values.firstWhere((direction) => direction.code == letter),
+  ];
 }
 
 /// Robotun geçemediği engeller.

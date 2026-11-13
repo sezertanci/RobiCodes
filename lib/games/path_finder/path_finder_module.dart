@@ -10,7 +10,7 @@ import 'ui/path_finder_view.dart';
 /// eklemek için yalnızca seviye verisi ve katalog kaydı gerekir.
 final class PathFinderModule implements GameModule {
   PathFinderModule({Map<String, List<PathFinderLevel>>? packs})
-      : packs = packs ?? {basePackId(GameIds.pathFinder): pathFinderBaseLevels};
+    : packs = packs ?? {basePackId(GameIds.pathFinder): pathFinderBaseLevels};
 
   /// Paket kimliği → seviyeler (1. seviye listenin ilk elemanıdır).
   final Map<String, List<PathFinderLevel>> packs;

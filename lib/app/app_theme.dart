@@ -16,6 +16,7 @@ abstract final class AppColors {
   static const purpleDark = Color(0xFF7C4FE0);
   static const redDark = Color(0xFFD94848);
   static const orangeDark = Color(0xFFE8781C);
+  static const yellowDark = Color(0xFFE8A920);
 
   /// Düğme ve kartların altındaki yumuşak gölge.
   static const shadow = Color(0x261F2D4F);
@@ -25,12 +26,12 @@ abstract final class AppColors {
 }
 
 ThemeData buildAppTheme() => ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.blue,
-        primary: AppColors.blue,
-        secondary: AppColors.yellow,
-        error: AppColors.red,
-      ),
-      scaffoldBackgroundColor: const Color(0xFFFFF8E7),
-      textTheme: ThemeData.light().textTheme.apply(bodyColor: AppColors.navy, displayColor: AppColors.navy),
-    );
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: AppColors.blue,
+    primary: AppColors.blue,
+    secondary: AppColors.yellow,
+    error: AppColors.red,
+  ),
+  scaffoldBackgroundColor: const Color(0xFFFFF8E7),
+  textTheme: ThemeData.light().textTheme.apply(bodyColor: AppColors.navy, displayColor: AppColors.navy),
+);
