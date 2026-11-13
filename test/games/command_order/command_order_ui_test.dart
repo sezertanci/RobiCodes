@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/app/app_services.dart';
 import 'package:robi_codes/app/robi_codes_app.dart';
 import 'package:robi_codes/content/catalog_data.dart';
-import 'package:robi_codes/features/play/level_select_screen.dart';
 import 'package:robi_codes/features/play/result_panel.dart';
 import 'package:robi_codes/games/command_order/command_order_texts.dart';
 import 'package:robi_codes/games/command_order/engine/command_order_engine.dart';
@@ -14,24 +13,9 @@ import 'package:robi_codes/games/command_order/ui/command_order_view.dart';
 import 'package:robi_codes/games/command_order/ui/slot_board.dart';
 
 import '../../support/fakes.dart';
-
-/// Denenen ekran boyutları: küçük bir telefon (telefon dikeye sabitlenir), yatay tablet ve test tabletinin
-/// (2560x1600, yoğunluk 360) iki yöndeki mantıksal boyutu.
-const _screens = {
-  'phone': Size(360, 690),
-  'tablet': Size(1024, 768),
-  'tabletPortrait': Size(711, 1138),
-  'tabletLandscape': Size(1138, 711),
-};
+import '../../support/ui_test_helpers.dart';
 
 const _gameTitle = 'Komutları Sırala';
-
-void _useScreen(WidgetTester tester, Size size) {
-  tester.view
-    ..physicalSize = size
-    ..devicePixelRatio = 1;
-  addTearDown(tester.view.reset);
-}
 
 /// Kartları ters sırayla veren tek seviyelik oyun ekranı.
 Future<void> _pumpLevel(WidgetTester tester, CommandOrderLevel level, {ValueChanged<int>? onCompleted}) async {
@@ -50,31 +34,10 @@ Future<void> _pumpLevel(WidgetTester tester, CommandOrderLevel level, {ValueChan
   await tester.pump();
 }
 
-/// Yazısı [text] olan dokunulabilir kart veya kutu. Görev adı bir adımla aynı olabildiği için
-/// yalnızca düğmeler aranır.
-Finder _button(String text) => find.byWidgetPredicate(
-  (widget) => widget is Semantics && widget.properties.button == true && widget.properties.label == text,
-);
-
-/// Öğe ekran dışındaysa önce görünür hale getirilir, sonra dokunulur.
-Future<void> _tap(WidgetTester tester, Finder finder) async {
-  await tester.ensureVisible(finder);
-  await tester.pump();
-  await tester.tap(finder);
-  await tester.pump();
-}
-
-/// Kutlama ve sonuç paneli animasyonlarının bitmesi için yeterli süre.
-Future<void> _waitForResult(WidgetTester tester) async {
-  for (var i = 0; i < 15; i++) {
-    await tester.pump(const Duration(milliseconds: 200));
-  }
-}
-
 void main() {
-  for (final MapEntry(key: name, value: size) in _screens.entries) {
+  for (final MapEntry(key: name, value: size) in TestScreens.all.entries) {
     testWidgets('CommandOrderView_AllLevelsOn${name}_RenderWithoutOverflow', (tester) async {
-      _useScreen(tester, size);
+      useScreen(tester, size);
 
       for (final level in commandOrderBaseLevels) {
         await _pumpLevel(tester, level);
@@ -88,23 +51,19 @@ void main() {
 
     testWidgets('PlayFlow_FirstLevelOn${name}_SavesThreeStarsAndShowsResult', (tester) async {
       // Arrange
-      _useScreen(tester, size);
+      useScreen(tester, size);
       final services = AppServices.production(InMemoryKeyValueStore());
       final packId = basePackId(GameIds.commandOrder);
       await tester.pumpWidget(RobiCodesApp(services: services));
 
       // Act: ana ekran → seviye seçimi → 1. seviye → kartları sırayla yerleştir → kontrol et
-      await tester.ensureVisible(find.text(_gameTitle));
-      await tester.tap(find.text(_gameTitle));
-      await tester.pumpAndSettle();
-      expect(find.byType(LevelSelectScreen), findsOneWidget);
-      await tester.tap(find.bySemanticsLabel('Seviye 1'));
-      await tester.pumpAndSettle();
+      await openLevelSelect(tester, _gameTitle);
+      await openLevel(tester, 1);
       for (final step in commandOrderBaseLevels.first.steps) {
-        await _tap(tester, _button(step.text));
+        await tapVisible(tester, findButton(step.text));
       }
-      await _tap(tester, find.byTooltip(CommandOrderTexts.check));
-      await _waitForResult(tester);
+      await tapVisible(tester, find.byTooltip(CommandOrderTexts.check));
+      await waitForAnimations(tester);
 
       // Assert
       expect(tester.takeException(), isNull);
@@ -114,8 +73,8 @@ void main() {
   }
 
   testWidgets('CommandOrderView_PortraitPhone_ButtonsVisibleWithoutScrolling', (tester) async {
-    final screen = _screens['phone']!;
-    _useScreen(tester, screen);
+    final screen = TestScreens.phone;
+    useScreen(tester, screen);
 
     for (final level in commandOrderBaseLevels) {
       await _pumpLevel(tester, level);
@@ -127,15 +86,15 @@ void main() {
   });
 
   testWidgets('CommandOrderView_WrongOrderChecked_ShowsWrongMessage', (tester) async {
-    _useScreen(tester, _screens['tablet']!);
+    useScreen(tester, TestScreens.tablet);
     final level = commandOrderBaseLevels.first;
     await _pumpLevel(tester, level);
 
     // Kartlar havuzda ters sırada; havuz sırasıyla dokunmak yanlış sıra oluşturur.
     for (final step in level.steps.reversed) {
-      await _tap(tester, _button(step.text));
+      await tapVisible(tester, findButton(step.text));
     }
-    await _tap(tester, find.byTooltip(CommandOrderTexts.check));
+    await tapVisible(tester, find.byTooltip(CommandOrderTexts.check));
     await tester.pump(const Duration(milliseconds: 500));
 
     final wrong = CommandOrderEngine.checkOrder([for (var i = level.steps.length - 1; i >= 0; i--) i]) as OrderWrong;
@@ -144,11 +103,11 @@ void main() {
   });
 
   testWidgets('CommandOrderView_CardDraggedToSlot_PlacesCard', (tester) async {
-    _useScreen(tester, _screens['tablet']!);
+    useScreen(tester, TestScreens.tablet);
     final level = commandOrderBaseLevels.first;
     await _pumpLevel(tester, level);
-    final card = _button(level.steps.first.text);
-    final slot = _button(CommandOrderTexts.emptySlot(1));
+    final card = findButton(level.steps.first.text);
+    final slot = findButton(CommandOrderTexts.emptySlot(1));
 
     final gesture = await tester.startGesture(tester.getCenter(card));
     await tester.pump(const Duration(seconds: 1));
@@ -157,16 +116,16 @@ void main() {
     await gesture.up();
     await tester.pump();
 
-    expect(_button(CommandOrderTexts.slotCard(1, level.steps.first.text)), findsOneWidget);
+    expect(findButton(CommandOrderTexts.slotCard(1, level.steps.first.text)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('CommandOrderView_HintPressed_ShowsHintMessage', (tester) async {
-    _useScreen(tester, _screens['phone']!);
+    useScreen(tester, TestScreens.phone);
     final level = commandOrderBaseLevels.first;
     await _pumpLevel(tester, level);
 
-    await _tap(tester, find.byTooltip(CommandOrderTexts.hint));
+    await tapVisible(tester, find.byTooltip(CommandOrderTexts.hint));
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text(CommandOrderTexts.hintText(level.hint, level.steps.first.text, 0)), findsOneWidget);
