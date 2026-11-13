@@ -15,14 +15,13 @@ import 'package:robi_codes/games/command_order/ui/slot_board.dart';
 
 import '../../support/fakes.dart';
 
-/// Denenen ekran boyutları: küçük bir telefon, yatay telefon, yatay tablet ve test tabletinin
+/// Denenen ekran boyutları: küçük bir telefon (telefon dikeye sabitlenir), yatay tablet ve test tabletinin
 /// (2560x1600, yoğunluk 360) iki yöndeki mantıksal boyutu.
 const _screens = {
-  'telefon': Size(360, 690),
-  'yatayTelefon': Size(690, 360),
+  'phone': Size(360, 690),
   'tablet': Size(1024, 768),
-  'dikeyTablet': Size(711, 1138),
-  'yatayTablet': Size(1138, 711),
+  'tabletPortrait': Size(711, 1138),
+  'tabletLandscape': Size(1138, 711),
 };
 
 const _gameTitle = 'Komutları Sırala';
@@ -115,7 +114,7 @@ void main() {
   }
 
   testWidgets('CommandOrderView_PortraitPhone_ButtonsVisibleWithoutScrolling', (tester) async {
-    final screen = _screens['telefon']!;
+    final screen = _screens['phone']!;
     _useScreen(tester, screen);
 
     for (final level in commandOrderBaseLevels) {
@@ -163,7 +162,7 @@ void main() {
   });
 
   testWidgets('CommandOrderView_HintPressed_ShowsHintMessage', (tester) async {
-    _useScreen(tester, _screens['telefon']!);
+    _useScreen(tester, _screens['phone']!);
     final level = commandOrderBaseLevels.first;
     await _pumpLevel(tester, level);
 

@@ -90,6 +90,17 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   düğme olarak değil, şeridin sağında sayacın altında simgeli düğme olarak duruyor (dar telefonda balon
   haritayı ve kontrolleri aşağı itip taşmaya yol açıyordu). Web sürümünde de bloklar sürüklenmiyor.
 
+**5. aşama sonrası düzeltmeler:**
+
+- Telefon dikeye sabitlendi (yatayda oyunlar sıkışıyordu); kısa kenarı 600 dp'nin altındaki cihazlar telefon
+  sayılır, tablette iki yön serbest. Kısıt ilk önce Dart'ta konmuştu; telefon yatay tutulurken açılınca
+  ekran önce yatay görünüp sonra dönüyordu. Bu yüzden pencere çizilmeden uygulansın diye `MainActivity.kt`
+  içine taşındı. Emülatörde denendi: yatay tutulurken açılınca doğrudan dikey açılıyor, açıkken döndürülse de
+  dikey kalıyor. Testlerden yatay telefon boyutu çıkarıldı.
+- Testlerdeki Türkçe ekran anahtarları (`telefon`, `dikeyTablet` …) ve bir test grubu adı İngilizceye çevrildi.
+- "Eğer Böyleyse"de zıplayan robotun üstten kırpılması giderildi; metinlerdeki « » işaretleri düz tırnak oldu.
+- `flutter analyze` temiz, 283 test geçiyor, debug APK derleniyor.
+
 ## Ertelenen işler (unutulmayacak)
 
 2.–5. aşamalarda web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.

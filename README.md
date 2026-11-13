@@ -89,6 +89,9 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   Tablette düğmeler, harita kareleri ve seviye kutuları ekranın kısa kenarına göre büyür
   (`app/screen_scale.dart`); telefondaki boyutlar değişmez. "Hareketi azalt" ayarı açıksa robot hızlı
   yürür ve tepki animasyonları oynatılmaz.
+- **Ekran yönü:** Kısa kenarı 600 dp'nin altındaki cihazlar (telefon) açılışta dikeye sabitlenir;
+  tablette iki yön de serbesttir. Kısıt pencere çizilmeden konsun diye Android tarafında
+  (`MainActivity.kt`) uygulanır; telefon yatay tutulurken açılsa bile önce yatay görünmez.
 - **Komutları Sırala ekranı:** Görev kartı geniş ekranda solda dikey, dar ekranda üstte şerit olarak
   durur. Kartlar havuzdan numaralı kutulara dokunarak (önce kutu seçilebilir) veya uzun basıp
   sürükleyerek yerleştirilir; kutular arasında sürükleme kartların yerini değiştirir. Kontrol et, İpucu

@@ -98,7 +98,7 @@ void main() {
     });
   });
 
-  group('Çalıştırma ve yıldızlar', () {
+  group('Run and stars', () {
     test('run_EmptyProgram_AsksForCommand', () async {
       final controller = create(_straight);
 

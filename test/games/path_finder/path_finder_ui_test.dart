@@ -14,14 +14,13 @@ import 'package:robi_codes/games/path_finder/ui/path_finder_view.dart';
 
 import '../../support/fakes.dart';
 
-/// Denenen ekran boyutları: küçük bir telefon, yatay telefon, yatay tablet ve test tabletinin
+/// Denenen ekran boyutları: küçük bir telefon (telefon dikeye sabitlenir), yatay tablet ve test tabletinin
 /// (2560x1600, yoğunluk 360) iki yöndeki mantıksal boyutu.
 const _screens = {
-  'telefon': Size(360, 690),
-  'yatayTelefon': Size(690, 360),
+  'phone': Size(360, 690),
   'tablet': Size(1024, 768),
-  'dikeyTablet': Size(711, 1138),
-  'yatayTablet': Size(1138, 711),
+  'tabletPortrait': Size(711, 1138),
+  'tabletLandscape': Size(1138, 711),
 };
 
 /// Tek seviyelik oyun ekranı; ölçüm testleri için.
@@ -115,7 +114,7 @@ void main() {
   }
 
   testWidgets('PathFinderView_AllLevelsOnPortraitPhone_ControlsVisibleWithoutScrolling', (tester) async {
-    final screen = _screens['telefon']!;
+    final screen = _screens['phone']!;
     _useScreen(tester, screen);
 
     for (final level in pathFinderBaseLevels) {
@@ -143,7 +142,7 @@ void main() {
   });
 
   testWidgets('PathFinderView_LeavesMap_ShowsEdgeMessage', (tester) async {
-    _useScreen(tester, _screens['telefon']!);
+    _useScreen(tester, _screens['phone']!);
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -160,9 +159,9 @@ void main() {
     expect(find.text(PathFinderTexts.blocked(Obstacle.edge, 0)), findsOneWidget);
   });
 
-  for (final name in ['dikeyTablet', 'yatayTablet']) {
+  for (final name in ['tabletPortrait', 'tabletLandscape']) {
     testWidgets('PathFinderView_On${name}_UsesLargerButtonsAndBoardThanPhone', (tester) async {
-      await _pumpLevel(tester, _screens['telefon']!);
+      await _pumpLevel(tester, _screens['phone']!);
       final phoneButton = tester.getSize(find.byTooltip(PathFinderTexts.run));
       final phoneBoard = tester.getSize(find.byType(BoardView));
 
@@ -177,11 +176,11 @@ void main() {
   }
 
   testWidgets('PathFinderView_OnLandscapeTablet_ControlsSitNextToBoard', (tester) async {
-    await _pumpLevel(tester, _screens['yatayTablet']!);
+    await _pumpLevel(tester, _screens['tabletLandscape']!);
 
     final board = tester.getRect(find.byType(BoardView));
     final controls = tester.getRect(find.byType(PathFinderControls));
-    final screenWidth = _screens['yatayTablet']!.width;
+    final screenWidth = _screens['tabletLandscape']!.width;
 
     // Harita ile kontroller ortalanmış bir grup: sol ve sağ boşluklar birbirine yakın.
     expect(board.left - 16, closeTo(screenWidth - 16 - controls.right, 8));
@@ -202,7 +201,7 @@ void main() {
   }
 
   testWidgets('LevelSelectScreen_OnLandscapeTablet_ShowsGroupsInFourColumns', (tester) async {
-    final [easy, medium, hard, expert] = await openLevelSelect(tester, _screens['yatayTablet']!);
+    final [easy, medium, hard, expert] = await openLevelSelect(tester, _screens['tabletLandscape']!);
 
     // Bütün gruplar yan yana durur; kilitli gruplarda uyarı olduğu için satırları biraz aşağıda başlar.
     for (final (left, right) in [(easy, medium), (medium, hard), (hard, expert)]) {
@@ -210,12 +209,12 @@ void main() {
     }
     expect(hard.top, medium.top);
     expect(expert.top, medium.top);
-    expect(medium.top, lessThan(_screens['yatayTablet']!.height / 2));
+    expect(medium.top, lessThan(_screens['tabletLandscape']!.height / 2));
     expect(easy.height, greaterThan(64));
   });
 
   testWidgets('LevelSelectScreen_OnPortraitTablet_ShowsGroupsInTwoColumns', (tester) async {
-    final [easy, medium, hard, _] = await openLevelSelect(tester, _screens['dikeyTablet']!);
+    final [easy, medium, hard, _] = await openLevelSelect(tester, _screens['tabletPortrait']!);
 
     expect(medium.top, lessThan(easy.bottom));
     expect(medium.left, greaterThan(easy.right));
@@ -224,7 +223,7 @@ void main() {
   });
 
   testWidgets('LevelSelectScreen_OnPhone_ShowsGroupsInOneColumn', (tester) async {
-    final [easy, medium] = await openLevelSelect(tester, _screens['telefon']!, groups: 2);
+    final [easy, medium] = await openLevelSelect(tester, _screens['phone']!, groups: 2);
 
     expect(medium.left, easy.left);
     expect(medium.top, greaterThan(easy.bottom));
