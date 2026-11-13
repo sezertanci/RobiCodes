@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../app/app_assets.dart';
 import '../../../app/app_theme.dart';
 import '../engine/path_finder_board.dart';
-import '../path_finder_controller.dart';
+import '../board_scene.dart';
 import '../../../features/play/widgets/dashed_frame.dart';
 import '../../../features/play/widgets/pulsing_hint_frame.dart';
 import '../../../features/play/widgets/robot_sprite.dart';
@@ -15,7 +15,7 @@ import 'path_finder_assets.dart';
 final class BoardView extends StatelessWidget {
   const BoardView({required this.controller, required this.tileSize, super.key});
 
-  final PathFinderController controller;
+  final BoardScene controller;
   final double tileSize;
 
   /// Telefondaki en büyük kare boyu; tablette ekran ölçeğiyle büyütülür.

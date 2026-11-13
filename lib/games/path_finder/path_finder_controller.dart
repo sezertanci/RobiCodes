@@ -4,6 +4,7 @@ import '../../features/play/play_timings.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import 'board_scene.dart';
 import 'engine/path_finder_board.dart';
 import 'engine/path_finder_engine.dart';
 import 'engine/path_finder_level.dart';
@@ -11,7 +12,7 @@ import 'path_finder_texts.dart';
 
 /// Bir seviyenin oynanış durumu: komut listesi, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
-final class PathFinderController extends ChangeNotifier {
+final class PathFinderController extends ChangeNotifier implements BoardScene {
   PathFinderController({
     required this.level,
     required this.onCompleted,
@@ -28,8 +29,10 @@ final class PathFinderController extends ChangeNotifier {
   static const defaultCelebrateDuration = PlayTimings.celebrate;
 
   final PathFinderLevel level;
+  @override
   final PathFinderBoard board;
   final ValueChanged<int> onCompleted;
+  @override
   final Duration stepDuration;
   final Duration celebrateDuration;
   late final int optimalLength;
@@ -54,21 +57,26 @@ final class PathFinderController extends ChangeNotifier {
   List<Direction> get commands => List.unmodifiable(_commands);
   int get commandLimit => level.commandLimit;
   bool get isFull => _commands.length >= commandLimit;
+  @override
   GridPoint get robot => _robot;
+  @override
   Set<int> get collectedCoins => Set.unmodifiable(_collected);
 
-  /// Robotun ayrıldığı kareler ve o karelerden çıktığı son yön.
+  @override
   Map<GridPoint, Direction> get trail => Map.unmodifiable(_trail);
   String get message => _message;
   RobotMood get mood => _mood;
+  @override
   RobotReaction get reaction => _reaction;
+  @override
   Direction? get bumpDirection => _bumpDirection;
 
-  /// Her tepkide artar; ekran aynı tepki art arda gelse de animasyonu yeniden başlatır.
+  @override
   int get reactionCount => _reactionCount;
   int? get selectedIndex => _selected;
   int? get activeIndex => _activeIndex;
   int? get wrongIndex => _wrongIndex;
+  @override
   NextMoveHint? get hint => _hint;
   bool get hintUsed => _hintUsed;
   bool get isRunning => _running;

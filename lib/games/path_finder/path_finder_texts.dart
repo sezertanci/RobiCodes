@@ -28,14 +28,14 @@ abstract final class PathFinderTexts {
     Direction.right => 'Sağa',
   };
 
-  static String _obstacleName(Obstacle obstacle) => switch (obstacle) {
+  static String obstacleName(Obstacle obstacle) => switch (obstacle) {
     Obstacle.rock => 'taşa',
     Obstacle.water => 'suya',
     Obstacle.edge => 'harita kenarına',
   };
 
   static String blocked(Obstacle obstacle, int index) =>
-      'Robot ${_obstacleName(obstacle)} çarptı. ${index + 1}. komutu değiştirmeyi dene.';
+      'Robot ${obstacleName(obstacle)} çarptı. ${index + 1}. komutu değiştirmeyi dene.';
 
   static String fixCommand(int index) =>
       '${index + 1}. komut robotu yoldan çıkarıyor. Onu senin için seçtim; silebilir ya da yerini değiştirebilirsin.';

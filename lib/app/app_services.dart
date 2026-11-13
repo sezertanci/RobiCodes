@@ -14,6 +14,7 @@ import '../games/command_order/command_order_module.dart';
 import '../games/game_registry.dart';
 import '../games/if_then/if_then_module.dart';
 import '../games/path_finder/path_finder_module.dart';
+import '../games/repeat/repeat_module.dart';
 
 /// Uygulamanın bütün servisleri tek yerde kurulur (bileşim kökü). Servisler birbirini
 /// arayüzler üzerinden alır; testlerde aynı kurucuya sahte uygulamalar verilir.
@@ -36,7 +37,7 @@ final class AppServices {
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
   factory AppServices.production(KeyValueStore store) => AppServices(
     catalog: buildContentCatalog(),
-    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule()]),
+    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
     store: store,
   );
 

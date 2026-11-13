@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_theme.dart';
 import '../engine/path_finder_board.dart';
 import '../path_finder_controller.dart';
 import '../path_finder_texts.dart';
-import 'path_finder_assets.dart';
+import 'command_chip.dart';
 
 /// Komut şeridi: eklenen komutlar sırayla görünür. Komuta dokunmak onu seçer; seçili komut
 /// sola/sağa taşınabilir ya da silinebilir. Komuta basılı tutup sürükleyerek de yeri değişir.
@@ -109,8 +108,9 @@ final class _CommandStripState extends State<CommandStrip> {
   }
 
   Widget _draggableChip(int index, Direction direction) {
-    final chip = _CommandChip(
-      index: index,
+    final chip = CommandChip(
+      label: PathFinderTexts.commandChip(index, direction),
+      number: index + 1,
       direction: direction,
       size: widget.chipSize,
       selected: index == _controller.selectedIndex,
@@ -133,71 +133,6 @@ final class _CommandStripState extends State<CommandStrip> {
       ),
     );
   }
-}
-
-final class _CommandChip extends StatelessWidget {
-  const _CommandChip({
-    required this.index,
-    required this.direction,
-    required this.size,
-    required this.selected,
-    required this.active,
-    required this.wrong,
-    required this.onTap,
-  });
-
-  final int index;
-  final Direction direction;
-  final double size;
-  final bool selected;
-  final bool active;
-  final bool wrong;
-  final VoidCallback? onTap;
-
-  Color get _borderColor {
-    if (wrong) {
-      return AppColors.red;
-    }
-    return selected ? AppColors.navy : Colors.transparent;
-  }
-
-  @override
-  Widget build(BuildContext context) => Semantics(
-    button: true,
-    selected: selected,
-    label: PathFinderTexts.commandChip(index, direction),
-    excludeSemantics: true,
-    onTap: onTap,
-    child: GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            width: size,
-            height: size,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: active ? AppColors.yellow : Colors.white,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: _borderColor, width: 3),
-            ),
-            child: SvgPicture.asset(PathFinderAssets.arrow(direction)),
-          ),
-          Positioned(
-            left: -6,
-            top: -8,
-            child: CircleAvatar(
-              radius: 10,
-              backgroundColor: AppColors.navy,
-              child: Text('${index + 1}', style: const TextStyle(fontSize: 11, color: Colors.white)),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 /// Seçili komutun düzenleme düğmeleri: sola taşı, sağa taşı ve sil.

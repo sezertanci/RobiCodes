@@ -1,0 +1,122 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/games/path_finder/engine/path_finder_board.dart';
+import 'package:robi_codes/games/path_finder/engine/path_finder_engine.dart';
+import 'package:robi_codes/games/repeat/engine/repeat_engine.dart';
+import 'package:robi_codes/games/repeat/engine/repeat_levels.dart';
+import 'package:robi_codes/games/repeat/engine/repeat_program.dart';
+
+const _right = Direction.right;
+const _down = Direction.down;
+const _up = Direction.up;
+
+/// Başlangıçtan üç kare sağda bayrak bulunan düz yol.
+final _line = PathFinderBoard.parse(['S..G']);
+
+void main() {
+  test('parseSolution_RepeatAndMoves_ReturnsBlocks', () {
+    expect(RepeatEngine.parseSolution('3(RD) U'), [
+      const RepeatBlock(3, [_right, _down]),
+      const MoveBlock(_up),
+    ]);
+  });
+
+  test('countBlocks_RepeatWithBody_CountsBlockAndInnerMoves', () {
+    expect(RepeatEngine.countBlocks(RepeatEngine.parseSolution('3(RD) U')), 4);
+    expect(RepeatEngine.countBlocks(const []), 0);
+  });
+
+  test('expand_RepeatBlock_ListsEveryRoundWithPlace', () {
+    final steps = RepeatEngine.expand(const [
+      RepeatBlock(2, [_right, _down]),
+      MoveBlock(_up),
+    ]);
+
+    expect(steps, [
+      (direction: _right, block: 0, inner: 0, round: 0),
+      (direction: _down, block: 0, inner: 1, round: 0),
+      (direction: _right, block: 0, inner: 0, round: 1),
+      (direction: _down, block: 0, inner: 1, round: 1),
+      (direction: _up, block: 1, inner: Places.topLevel, round: 0),
+    ]);
+  });
+
+  test('findEmptyRepeat_EmptyBlock_ReturnsItsIndex', () {
+    expect(RepeatEngine.findEmptyRepeat(const [MoveBlock(_right), RepeatBlock(2, [])]), 1);
+    expect(
+      RepeatEngine.findEmptyRepeat(const [
+        RepeatBlock(2, [_right]),
+      ]),
+      isNull,
+    );
+  });
+
+  test('run_TooManyRounds_BlockedAtEdgeInLastRound', () {
+    final run = RepeatEngine.run(_line, const [
+      RepeatBlock(4, [_right]),
+    ]);
+
+    expect(run.result.outcome, RunOutcome.blocked);
+    expect(run.result.obstacle, Obstacle.edge);
+    expect(run.trace[run.result.failedIndex!], (direction: _right, block: 0, inner: 0, round: 3));
+  });
+
+  test('run_RightRounds_Succeeds', () {
+    final run = RepeatEngine.run(_line, const [
+      RepeatBlock(3, [_right]),
+    ]);
+
+    expect(run.result.outcome, RunOutcome.success);
+    expect(run.result.steps, hasLength(3));
+  });
+
+  test('hint_EmptyRepeat_PointsToBlock', () {
+    final hint = RepeatEngine.hint(_line, const [MoveBlock(_right), RepeatBlock(2, [])]);
+
+    expect(hint, isA<EmptyRepeatHint>().having((hint) => hint.block, 'block', 1));
+  });
+
+  test('hint_WrongMove_PointsToStep', () {
+    final hint = RepeatEngine.hint(_line, const [
+      RepeatBlock(2, [_up]),
+    ]);
+
+    expect(
+      hint,
+      isA<FixPlaceHint>().having((hint) => hint.step, 'step', (direction: _up, block: 0, inner: 0, round: 0)),
+    );
+  });
+
+  test('hint_ShortProgram_SuggestsNextMove', () {
+    final hint = RepeatEngine.hint(_line, const [
+      RepeatBlock(2, [_right]),
+    ]);
+
+    expect(hint, isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _right));
+  });
+
+  test('hint_SolvedProgram_ReportsSolved', () {
+    expect(
+      RepeatEngine.hint(_line, const [
+        RepeatBlock(3, [_right]),
+      ]),
+      isA<RepeatSolvedHint>(),
+    );
+  });
+
+  test('repeatBaseLevels_Length_IsTwenty', () {
+    expect(repeatBaseLevels, hasLength(20));
+  });
+
+  for (final (index, level) in repeatBaseLevels.indexed) {
+    test('solution_Level${index + 1}_SucceedsInsideBlockLimitWithShortestPath', () {
+      final board = level.board;
+      final solution = RepeatEngine.parseSolution(level.solution);
+
+      final run = RepeatEngine.run(board, solution);
+
+      expect(run.result.outcome, RunOutcome.success);
+      expect(RepeatEngine.countBlocks(solution), lessThanOrEqualTo(level.maxBlocks));
+      expect(run.trace, hasLength(PathFinderEngine.optimalLength(board)));
+    });
+  }
+}

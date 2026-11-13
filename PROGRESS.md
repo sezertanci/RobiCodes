@@ -1,6 +1,6 @@
 # İlerleme
 
-## Durum (13.11.2026)
+## Durum (14.11.2026)
 
 **1. aşama tamamlandı:** Temel mimari, içerik kataloğu, ilerleme, mağaza, bulut kaydı ve ebeveyn
 kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, debug APK derleniyor.
@@ -72,9 +72,27 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   köprü kurma, kapı açma, yıldız toplama, yıldız kaydı ve sonuç paneli çalışıyor.
 - Web sürümünden farklar: ses ve konfeti yok; sürükleme uzun basmayla başlıyor.
 
+**5. aşama tamamlandı:** "Tekrar Et" Flutter'a aktarıldı.
+
+- 20 seviye, haritalar, çözümler, blok sınırları, ipuçları ve açılış mesajları web sürümüyle aynı
+  (`lib/games/repeat/engine/repeat_levels.dart`). Her seviyenin çözümünün sınır içinde kaldığı ve en
+  kısa yolu verdiği testle doğrulanıyor.
+- Motor (`repeat_engine.dart`): çözüm metnini ayrıştırma (`3(RD) U`), blok sayma, programı turlara
+  açma, çalıştırma (çarpma, altın, bayrak) ve ipucu (boş blok, yanlış yer, sıradaki ok, çözüldü).
+  Çalıştırma "Robotun Yolunu Bul" motorunu kullanır.
+- Ortak parçalar: path_finder'daki harita sahnesi arayüzü (`BoardScene`), yön tuşları (`DirectionPad`)
+  ve komut kutusu (`CommandChip`) ayrı dosyalara alındı; path_finder'da yalnızca import ve çağrılar değişti.
+- Yıldızlar ortak kuralla verilir; ilerleme `repeat` paketinde ayrı tutulur.
+- `flutter analyze` temiz, 292 test geçiyor, debug APK derleniyor. Tablette iki yönde denendi: Tekrarla
+  bloğu, içine ok ekleme, Bloktan çık, tekrar sayısını değiştirme, seçim ve düzenleme düğmeleri, eksik
+  turda "bayrağa ulaşamadı" uyarısı, başarı, yıldız kaydı ve sonuç paneli çalışıyor.
+- Web sürümünden farklar: ses ve konfeti yok; sil ve dışarı çıkar düğmeleri açılır bir balonda yazılı
+  düğme olarak değil, şeridin sağında sayacın altında simgeli düğme olarak duruyor (dar telefonda balon
+  haritayı ve kontrolleri aşağı itip taşmaya yol açıyordu). Web sürümünde de bloklar sürüklenmiyor.
+
 ## Ertelenen işler (unutulmayacak)
 
-2., 3. ve 4. aşamada web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
+2.–5. aşamalarda web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
 
 | Özellik | Durum | Karar |
 |---|---|---|
@@ -89,5 +107,5 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-4. aşama raporu verildi; sıradaki oyun ve 5. aşamanın kapsamı için kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
+5. aşama raporu verildi; sıradaki oyun ve 6. aşamanın kapsamı için kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.

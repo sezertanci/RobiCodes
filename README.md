@@ -4,8 +4,8 @@
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
 kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` klasörü) referans olarak korunur ve bu projeden bağımsızdır.
 
-> **Durum — 4. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala" ve "Eğer Böyleyse"
-> oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
+> **Durum — 5. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
+> "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
 > ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
@@ -57,6 +57,9 @@ lib/
     if_then/      Eğer Böyleyse
       engine/     Seviye verisi (20 seviye), yol ayrıştırma, kural seçimi, çalıştırma ve ipucu; Flutter'dan bağımsız
       ui/         Robotun yolu, kural tahtası, blok paleti, sürüklenebilir bloklar ve oyun ekranı
+    repeat/       Tekrar Et
+      engine/     Blok programı, seviye verisi (20 seviye), açma, çalıştırma ve ipucu; Flutter'dan bağımsız
+      ui/         Blok şeridi, turuncu tekrar blokları, Tekrarla düğmesi ve oyun ekranı (harita ortak)
   features/
     play/         Bütün oyunların ortak seviye seçim, seviye ve sonuç ekranları
       widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli,
@@ -90,6 +93,12 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   durur. Kartlar havuzdan numaralı kutulara dokunarak (önce kutu seçilebilir) veya uzun basıp
   sürükleyerek yerleştirilir; kutular arasında sürükleme kartların yerini değiştirir. Kontrol et, İpucu
   ve Temizle düğmeleri altta sabittir.
+- **Tekrar Et ekranı:** Düzen "Robotun Yolunu Bul" ile aynıdır; harita, yön tuşları ve komut kutuları
+  onunla ortaktır. Tekrarla düğmesi turuncu bir blok açar; blok açıkken eklenen oklar onun içine girer ve
+  düğme lacivert "Bloktan çık" olur. Tekrar sayısı bloğun üstündeki − ve + ile 2–6 arasında değişir. Bir
+  bloğa dokunmak onu seçer; sil ve (bloğun içindeki ok için) dışarı çıkar düğmeleri şeridin sağında,
+  sayacın altında çıkar, böylece seçim yapınca ekranın düzeni değişmez. Çalışırken bloğun tur rozeti
+  hangi turda olunduğunu gösterir.
 - **Seviye seçimi:** Web sürümündeki gibi her zorluk grubu kendi renginde bir paneldir (Kolay yeşil, Orta
   mavi, Zor mor, Uzman kırmızı). Panelde başlık şeridi, tamamlanan seviye rozeti, kilitliyse uyarı ve hap
   biçimli seviye satırları bulunur; kilitli grup soluk görünür. Paneller ekran genişliğine göre bir
