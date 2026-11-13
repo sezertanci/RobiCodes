@@ -8,7 +8,7 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 - Proje klasörü `MiniCodingWorldApp` iken `RobiCodes` olarak yeniden adlandırıldı.
 - Uygulama adı "Robi Kodluyor", paket adı `com.sezertanci.robicodes`, Dart paketi `robi_codes`.
 - Referans web sürümü: `..\MiniCodingWorld` (dokunulmaz).
-- Git deposu henüz açılmadı.
+- Git deposu: `git@github.com:sezertanci/RobiCodes.git` (`main` dalı).
 
 **2. aşama tamamlandı:** "Robotun Yolunu Bul" Flutter'a aktarıldı.
 
@@ -28,6 +28,21 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   altında `LevelGroupPanel`, `LevelButton`, `GroupTone`); paneller 1, 2 veya 4 sütun olur.
   Web sürümündeki nabız animasyonu ve giriş animasyonu alınmadı; sıradaki seviye sabit sarı halkayla
   gösteriliyor. `flutter analyze` temiz, 122 test geçiyor.
+- Uygulama ikonu Flutter'ın varsayılan ikonundan lacivert zeminde Robi'ye çevrildi; solunda ışıklı
+  yukarı ok, sarı ampul ve ışıklı sağa ok var (uyarlanabilir ikon ve eski sürümler için PNG). Üretim
+  betiği `tool/make_launcher_icon.py`. Tablette denendi; MIUI başlatıcısı ikonu önbellekte tuttuğu
+  için yeni ikon, başlatıcı yeniden başlatılınca (`adb shell am force-stop com.miui.home`) göründü.
+
+## Ertelenen işler (unutulmayacak)
+
+2. aşamada web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
+
+| Özellik | Durum | Karar |
+|---|---|---|
+| Ses efektleri | Yok | Ortak ses aşamasında eklenecek. |
+| Konfeti | Yok | Ortak görsel efekt aşamasında eklenecek. |
+| Karakter seçimi | Yok | Web sürümünde var (`js/core/characters.js`, `js/screens/character-dialog.js`, `assets/characters/` altında robotun farklı görünümleri). Vazgeçilmeyecek; eski sürümle karşılaştırılıp geri eklenmesi değerlendirilecek. |
+| Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
 
 ## Kararlar
 

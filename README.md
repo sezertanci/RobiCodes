@@ -59,6 +59,7 @@ lib/
     parental_gate/ Ebeveyn doğrulaması ve korumalı işlem çalıştırıcı
     home/         Ana ekran
 assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon)
+tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py)
 ```
 
 - **İçerik ile mekanik ayrıdır.** Oyunlar, paketler ve ürünler `content/catalog_data.dart` içindeki
@@ -81,6 +82,12 @@ assets/           Web sürümünden değiştirilmeden kopyalanan görseller (rob
   mavi, Zor mor, Uzman kırmızı). Panelde başlık şeridi, tamamlanan seviye rozeti, kilitliyse uyarı ve hap
   biçimli seviye satırları bulunur; kilitli grup soluk görünür. Paneller ekran genişliğine göre bir
   (telefon), iki (560 dp ve üstü) veya dört (960 dp ve üstü) sütuna dizilir.
+
+- **Uygulama ikonu:** Lacivert zeminde Robi (`assets/characters/robot.webp` görselinin üst kısmı); solunda
+  yukarıdan aşağıya ışıklı yukarı ok, sarı ampul ve ışıklı sağa ok. Oklar ve ampul Robi'nin renkleriyle
+  çizilir. Android 8 ve sonrası için uyarlanabilir ikon (zemin ve ön plan katmanı), eski sürümler için hazır
+  PNG'ler `android/app/src/main/res` altında. Görsel değişirse ikonlar Pillow ile yeniden üretilir:
+  `python tool/make_launcher_icon.py assets/characters/robot.webp android/app/src/main/res onizleme.png`
 
 ### Kurallar (web sürümünden aynen alındı)
 
