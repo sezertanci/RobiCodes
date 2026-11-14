@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:robi_codes/app/app_assets.dart';
 import 'package:robi_codes/app/app_theme.dart';
@@ -73,22 +75,76 @@ final class RecordingGameFeedback implements GameFeedback {
 
 /// Sonuçları testte ayarlanan mağaza.
 final class FakePurchaseGateway implements PurchaseGateway {
-  /// `null` ise mağazaya ulaşılamıyor gibi davranır.
+  /// `null` ise mağazaya ulaşılamıyor gibi davranır ([unreachable] hatasıyla).
   Set<String>? owned = {};
+  StoreError unreachable = StoreError.unavailable;
+
+  /// Henüz onaylanmamış (acknowledge edilmemiş) sahip olunan ürünler.
+  Set<String> unacknowledged = {};
+
+  /// Play'deki fiyatlar; burada olmayan ürün Play'de bulunmuyor sayılır.
+  Map<String, String> prices = {};
+  StoreError? listingsError;
+
   PurchaseOutcome nextOutcome = PurchaseOutcome.purchased;
+  bool acknowledgeSucceeds = true;
   final List<String> purchaseRequests = [];
+  final List<String> acknowledgeRequests = [];
+  final List<Set<String>> listingRequests = [];
+  final StreamController<void> changes = StreamController<void>.broadcast();
+
+  static String tokenOf(String productId) => 'token-$productId';
 
   @override
-  Future<Set<String>?> queryOwnedProductIds() async => owned == null ? null : {...owned!};
+  Stream<void> get purchasesChanged => changes.stream;
 
   @override
-  Future<PurchaseOutcome> purchase(String productId) async {
-    purchaseRequests.add(productId);
-    if (nextOutcome == PurchaseOutcome.purchased) {
-      owned = {...?owned, productId};
+  Future<StoreQuery<Map<String, StoreListing>>> queryListings(Set<String> productIds) async {
+    listingRequests.add(productIds);
+    final error = listingsError;
+    if (error != null) {
+      return StoreFailure(error);
     }
-    return nextOutcome;
+    return StoreSuccess({
+      for (final id in productIds)
+        if (prices[id] case final price?) id: StoreListing(productId: id, price: price),
+    });
   }
+
+  @override
+  Future<StoreQuery<List<OwnedPurchase>>> queryOwnedPurchases() async {
+    final products = owned;
+    if (products == null) {
+      return StoreFailure(unreachable);
+    }
+    return StoreSuccess([for (final id in products) _purchaseOf(id)]);
+  }
+
+  @override
+  Future<PurchaseResult> purchase(String productId) async {
+    purchaseRequests.add(productId);
+    if (nextOutcome != PurchaseOutcome.purchased) {
+      return PurchaseResult(nextOutcome);
+    }
+    owned = {...?owned, productId};
+    unacknowledged.add(productId);
+    return PurchaseResult(nextOutcome, purchase: _purchaseOf(productId));
+  }
+
+  @override
+  Future<bool> acknowledge(OwnedPurchase purchase) async {
+    acknowledgeRequests.add(purchase.token);
+    if (acknowledgeSucceeds) {
+      unacknowledged.remove(purchase.productId);
+    }
+    return acknowledgeSucceeds;
+  }
+
+  OwnedPurchase _purchaseOf(String productId) => OwnedPurchase(
+    productId: productId,
+    token: tokenOf(productId),
+    isAcknowledged: !unacknowledged.contains(productId),
+  );
 }
 
 /// Bellekte çalışan bulut kaydı.
@@ -153,9 +209,9 @@ abstract final class TestCatalog {
       for (final id in [freePack, packA, packB]) _pack(id),
     ],
     products: const [
-      StoreProduct(id: productA, packIds: [packA]),
-      StoreProduct(id: productB, packIds: [packB]),
-      StoreProduct(id: bundle, packIds: [packA, packB]),
+      StoreProduct(id: productA, title: 'Paket A', packIds: [packA]),
+      StoreProduct(id: productB, title: 'Paket B', packIds: [packB]),
+      StoreProduct(id: bundle, title: 'A ve B', packIds: [packA, packB]),
     ],
   );
 

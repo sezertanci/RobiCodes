@@ -37,7 +37,7 @@ void main() {
       final refreshed = await service.refresh();
 
       // Assert
-      expect(refreshed, isTrue);
+      expect(refreshed, isNull);
       expect(service.canPlayPack(TestCatalog.packA), isTrue);
       expect(service.canPlayPack(TestCatalog.packB), isTrue);
     });
@@ -53,7 +53,7 @@ void main() {
       final refreshed = await service.refresh();
 
       // Assert
-      expect(refreshed, isFalse);
+      expect(refreshed, StoreError.unavailable);
       expect(service.canPlayPack(TestCatalog.packA), isTrue);
     });
 
@@ -97,6 +97,221 @@ void main() {
 
       // Assert
       expect(service.canPlayPack(TestCatalog.packB), isFalse);
+    });
+
+    test('purchase_Completed_AcknowledgesOnce', () async {
+      // Arrange
+      final service = createService();
+
+      // Act
+      await service.purchase(TestCatalog.productB, approval: await grantApproval(ParentalAction.purchase));
+      await service.refresh();
+
+      // Assert
+      expect(gateway.acknowledgeRequests, [FakePurchaseGateway.tokenOf(TestCatalog.productB)]);
+    });
+
+    for (final outcome in [
+      PurchaseOutcome.pending,
+      PurchaseOutcome.failed,
+      PurchaseOutcome.offline,
+      PurchaseOutcome.unavailable,
+      PurchaseOutcome.productNotFound,
+      PurchaseOutcome.cancelled,
+    ]) {
+      test('purchase_${outcome.name}_DoesNotOpenPackOrAcknowledge', () async {
+        // Arrange
+        gateway.nextOutcome = outcome;
+        final service = createService();
+
+        // Act
+        final result = await service.purchase(
+          TestCatalog.productB,
+          approval: await grantApproval(ParentalAction.purchase),
+        );
+
+        // Assert
+        expect(result, outcome);
+        expect(service.canPlayPack(TestCatalog.packB), isFalse);
+        expect(gateway.acknowledgeRequests, isEmpty);
+        expect(store.values.containsKey(StorageKeys.ownedProducts), isFalse);
+      });
+    }
+
+    test('purchase_PendingPaymentCompletesLater_OpensPackAndAcknowledges', () async {
+      // Arrange: ödeme beklemede kalır, sonra Play tamamlandığını bildirir.
+      gateway.nextOutcome = PurchaseOutcome.pending;
+      final service = createService();
+      await service.purchase(TestCatalog.productB, approval: await grantApproval(ParentalAction.purchase));
+      gateway.owned = {TestCatalog.productB};
+      gateway.unacknowledged = {TestCatalog.productB};
+
+      // Act
+      gateway.changes.add(null);
+      await pumpEventQueue();
+
+      // Assert
+      expect(service.canPlayPack(TestCatalog.packB), isTrue);
+      expect(gateway.acknowledgeRequests, [FakePurchaseGateway.tokenOf(TestCatalog.productB)]);
+    });
+
+    test('purchase_PacksAlreadyOpen_DoesNotReachStore', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.bundle};
+      final service = createService();
+      await service.refresh();
+
+      // Act
+      final outcome = await service.purchase(
+        TestCatalog.productA,
+        approval: await grantApproval(ParentalAction.purchase),
+      );
+
+      // Assert
+      expect(outcome, PurchaseOutcome.alreadyOwned);
+      expect(gateway.purchaseRequests, isEmpty);
+    });
+
+    test('purchase_StoreReportsAlreadyOwned_RefreshesOwnership', () async {
+      // Arrange: cihazdaki önbellek eski; ürün Play'de zaten kullanıcıya ait.
+      gateway.nextOutcome = PurchaseOutcome.alreadyOwned;
+      gateway.owned = {TestCatalog.productB};
+      final service = createService();
+
+      // Act
+      final outcome = await service.purchase(
+        TestCatalog.productB,
+        approval: await grantApproval(ParentalAction.purchase),
+      );
+
+      // Assert
+      expect(outcome, PurchaseOutcome.alreadyOwned);
+      expect(service.canPlayPack(TestCatalog.packB), isTrue);
+    });
+
+    test('purchase_UnknownProduct_ReturnsProductNotFound', () async {
+      // Act
+      final outcome = await createService().purchase('unknown', approval: await grantApproval(ParentalAction.purchase));
+
+      // Assert
+      expect(outcome, PurchaseOutcome.productNotFound);
+      expect(gateway.purchaseRequests, isEmpty);
+    });
+
+    test('refresh_UnacknowledgedPurchase_AcknowledgesIt', () async {
+      // Arrange: uygulama satın alma sırasında kapanmış, onaylama yapılamamış.
+      gateway.owned = {TestCatalog.productA};
+      gateway.unacknowledged = {TestCatalog.productA};
+      final service = createService();
+
+      // Act
+      await service.refresh();
+
+      // Assert
+      expect(service.canPlayPack(TestCatalog.packA), isTrue);
+      expect(gateway.unacknowledged, isEmpty);
+    });
+
+    test('refresh_CalledConcurrently_AcknowledgesOnce', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.productA};
+      gateway.unacknowledged = {TestCatalog.productA};
+      final service = createService();
+
+      // Act
+      await Future.wait([service.refresh(), service.refresh()]);
+
+      // Assert
+      expect(gateway.acknowledgeRequests, hasLength(1));
+    });
+
+    test('refresh_AcknowledgeFailed_RetriesOnNextRefresh', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.productA};
+      gateway.unacknowledged = {TestCatalog.productA};
+      gateway.acknowledgeSucceeds = false;
+      final service = createService();
+      await service.refresh();
+      gateway.acknowledgeSucceeds = true;
+
+      // Act
+      await service.refresh();
+
+      // Assert
+      expect(gateway.acknowledgeRequests, hasLength(2));
+      expect(gateway.unacknowledged, isEmpty);
+      expect(service.canPlayPack(TestCatalog.packA), isTrue);
+    });
+
+    test('refresh_Offline_ReturnsOfflineAndKeepsCache', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.productA};
+      await createService().refresh();
+      gateway
+        ..owned = null
+        ..unreachable = StoreError.offline;
+      final service = createService();
+
+      // Act
+      final error = await service.refresh();
+
+      // Assert
+      expect(error, StoreError.offline);
+      expect(service.canPlayPack(TestCatalog.packA), isTrue);
+    });
+
+    test('refresh_SamePurchaseSeenTwice_KeepsSingleEntitlement', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.productA};
+      final service = createService();
+      await service.refresh();
+
+      // Act
+      await service.refresh();
+
+      // Assert
+      expect(service.ownedProductIds, {TestCatalog.productA});
+      expect(store.values[StorageKeys.ownedProducts], '["${TestCatalog.productA}"]');
+    });
+
+    test('purchasesChanged_PromoCodeRedeemedOutsideApp_OpensPack', () async {
+      // Arrange: kod Play Store'da kullanıldı; uygulama ön plana dönünce sahiplik yeniden okunur.
+      final service = createService();
+      gateway.owned = {TestCatalog.bundle};
+
+      // Act
+      gateway.changes.add(null);
+      await pumpEventQueue();
+
+      // Assert
+      expect(service.canPlayPack(TestCatalog.packA), isTrue);
+      expect(service.canPlayPack(TestCatalog.packB), isTrue);
+    });
+
+    test('refresh_CorruptCache_RebuildsFromStore', () async {
+      // Arrange
+      store.values[StorageKeys.ownedProducts] = 'bozuk';
+      gateway.owned = {TestCatalog.productB};
+      final service = createService();
+
+      // Act
+      await service.refresh();
+
+      // Assert
+      expect(store.values[StorageKeys.ownedProducts], '["${TestCatalog.productB}"]');
+    });
+
+    test('refresh_Restore_DoesNotTouchProgress', () async {
+      // Arrange
+      const progress = '{"saved":true}';
+      store.values[StorageKeys.progress] = progress;
+      gateway.owned = {TestCatalog.productA};
+
+      // Act
+      await createService().refresh();
+
+      // Assert
+      expect(store.values[StorageKeys.progress], progress);
     });
 
     test('playablePacksOf_OnePackOwned_ReturnsFreeAndOwnedPacksInOrder', () async {

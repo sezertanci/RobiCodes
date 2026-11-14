@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -18,16 +19,26 @@ import 'purchase_gateway.dart';
 ///   paket) biri kullanıcıya aitse açıktır. Ürünün satın alma veya promosyon koduyla kazanılması
 ///   fark etmez.
 /// - Sahip olunan ürünler cihazda ayrı bir kayıtta önbelleğe alınır; böylece satın alınan içerik
-///   internet olmadan da oynanır. Bu kayıt ilerleme kaydından bağımsızdır.
+///   internet olmadan da oynanır. Bu kayıt ilerleme kaydından bağımsızdır ve yalnızca Google Play'den
+///   gelen sahiplikle yazılır. Kayıt bozulursa boş okunur ve ilk sahiplik sorgusuyla yeniden oluşur.
+/// - Sahiplik bir ürün kimliği kümesidir; aynı satın almanın tekrar işlenmesi yeni bir hak oluşturmaz.
+/// - Onaylama (acknowledge) satın alma anahtarına göre tekilleştirilir; aynı anda gelen yenileme ve
+///   satın alma sonucu aynı satın almayı iki kez onaylamaz.
 final class EntitlementService extends ChangeNotifier {
   EntitlementService({required this._catalog, required this._gateway, required KeyValueStore store})
     : _store = store,
-      _ownedProductIds = _readCache(store);
+      _ownedProductIds = _readCache(store) {
+    _changes = _gateway.purchasesChanged.listen((_) => unawaited(refresh()));
+  }
 
   final ContentCatalog _catalog;
   final PurchaseGateway _gateway;
   final KeyValueStore _store;
   Set<String> _ownedProductIds;
+  late final StreamSubscription<void> _changes;
+
+  /// Satın alma anahtarına göre süren veya başarıyla biten onaylamalar.
+  final Map<String, Future<bool>> _acknowledgements = {};
 
   Set<String> get ownedProductIds => Set.unmodifiable(_ownedProductIds);
 
@@ -43,28 +54,65 @@ final class EntitlementService extends ChangeNotifier {
   ];
 
   /// Sahipliği mağazadan yeniden okur (uygulama açılışı, ön plana dönüş, "Satın alımları geri yükle").
-  /// Mağazaya ulaşılamazsa önbellek olduğu gibi kalır ve `false` döner.
-  Future<bool> refresh() async {
-    final owned = await _gateway.queryOwnedProductIds();
-    if (owned == null) {
-      return false;
+  /// Önce erişim verilir, sonra onaylanmamış satın almalar onaylanır. Mağazaya ulaşılamazsa önbellek
+  /// olduğu gibi kalır ve hatanın türü döner; başarılıysa `null` döner.
+  Future<StoreError?> refresh() async {
+    switch (await _gateway.queryOwnedPurchases()) {
+      case StoreFailure(:final error):
+        return error;
+      case StoreSuccess(value: final purchases):
+        await _updateCache({for (final purchase in purchases) purchase.productId});
+        for (final purchase in purchases.where((purchase) => !purchase.isAcknowledged)) {
+          await _acknowledge(purchase);
+        }
+        return null;
     }
-    await _updateCache(owned);
-    return true;
   }
 
   /// Satın almayı başlatır. Yalnızca `ProtectedActionRunner`'ın verdiği, satın alma için geçerli ve
   /// kullanılmamış bir [approval] ile mağazaya gidilir; aksi halde [PurchaseOutcome.notApproved] döner.
   /// Google Play'in kendi satın alma onayı (ör. aile grubu onayı) bundan ayrıca uygulanır.
+  /// Ürünün açtığı bütün paketlere zaten erişim varsa mağazaya gidilmez.
   Future<PurchaseOutcome> purchase(String productId, {required ParentalApproval approval}) async {
     if (!approval.consume(ParentalAction.purchase)) {
       return PurchaseOutcome.notApproved;
     }
-    final outcome = await _gateway.purchase(productId);
-    if (outcome == PurchaseOutcome.purchased || outcome == PurchaseOutcome.alreadyOwned) {
-      await refresh();
+    final product = _catalog.findProduct(productId);
+    if (product == null) {
+      return PurchaseOutcome.productNotFound;
     }
-    return outcome;
+    if (product.packIds.every(canPlayPack)) {
+      return PurchaseOutcome.alreadyOwned;
+    }
+    final result = await _gateway.purchase(productId);
+    switch (result) {
+      case PurchaseResult(outcome: PurchaseOutcome.purchased, :final purchase?):
+        await _updateCache({..._ownedProductIds, purchase.productId});
+        await _acknowledge(purchase);
+      case PurchaseResult(outcome: PurchaseOutcome.purchased || PurchaseOutcome.alreadyOwned):
+        await refresh();
+      case _:
+        break;
+    }
+    return result.outcome;
+  }
+
+  @override
+  void dispose() {
+    unawaited(_changes.cancel());
+    super.dispose();
+  }
+
+  /// Satın almayı bir kez onaylar. Aynı anahtar için süren veya biten onaylama varsa onu kullanır; başarısız
+  /// onaylama bir sonraki yenilemede yeniden denenir (Google Play 3 gün tanır).
+  Future<void> _acknowledge(OwnedPurchase purchase) async {
+    if (purchase.isAcknowledged) {
+      return;
+    }
+    final acknowledged = await (_acknowledgements[purchase.token] ??= _gateway.acknowledge(purchase));
+    if (!acknowledged) {
+      _acknowledgements.removeWhere((token, _) => token == purchase.token);
+    }
   }
 
   Future<void> _updateCache(Set<String> owned) async {

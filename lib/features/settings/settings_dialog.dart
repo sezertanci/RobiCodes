@@ -5,8 +5,10 @@ import '../../app/app_texts.dart';
 import '../parental_gate/parental_gate_trial.dart';
 import '../parental_gate/protected_action_runner.dart';
 import '../sound/sound_service.dart';
+import '../store/store_screen.dart';
+import '../store/store_texts.dart';
 
-/// Ayarlar penceresi: sesi açıp kapatma. Ayar hemen kaydedilir; pencere kapatılınca da geçerli kalır.
+/// Ayarlar penceresi: sesi açıp kapatma ve paket mağazasına giriş. Ayar hemen kaydedilir; pencere kapatılınca da geçerli kalır.
 /// Debug derlemelerinde ayrıca ebeveyn doğrulamasını deneme girişi gösterilir.
 final class SettingsDialog extends StatelessWidget {
   const SettingsDialog({required this.sound, required this.protectedActions, super.key});
@@ -39,6 +41,11 @@ final class SettingsDialog extends StatelessWidget {
               value: sound.isEnabled,
               onChanged: sound.setEnabled,
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.storefront_rounded),
+            title: const Text(StoreTexts.title),
+            onTap: () => StoreScreen.open(context),
           ),
           // Release derlemesinde `kDebugMode` sabit `false` olduğundan bu giriş derlemeden çıkarılır.
           if (kDebugMode) ParentalGateTrial(runner: protectedActions),

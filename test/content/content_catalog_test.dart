@@ -74,7 +74,7 @@ void main() {
           LevelPack(id: 'p', gameId: 'missing', title: 'P', groups: [DifficultyGroup(Difficulty.easy, 0)]),
         ],
         products: const [
-          StoreProduct(id: 'x', packIds: ['p', 'p', 'unknown']),
+          StoreProduct(id: 'x', title: 'X', packIds: ['p', 'p', 'unknown']),
         ],
       );
 

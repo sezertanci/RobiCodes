@@ -17,6 +17,7 @@ import '../features/progress/unlock_policy.dart';
 import '../features/sound/sound_player.dart';
 import '../features/sound/sound_service.dart';
 import '../features/store/entitlement_service.dart';
+import '../features/store/listing_service.dart';
 import '../features/store/offer_policy.dart';
 import '../features/store/purchase_gateway.dart';
 import '../games/command_order/command_order_module.dart';
@@ -42,6 +43,7 @@ final class AppServices {
        protectedActions = ProtectedActionRunner(parentalGate) {
     unlockPolicy = UnlockPolicy(progress);
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
+    listings = ListingService(catalog: catalog, gateway: purchaseGateway);
     offers = OfferPolicy(catalog, entitlements);
     cloudSync = CloudSyncService(gateway: cloudSaveGateway, progress: progress, store: store);
     achievements = AchievementService(store: store, catalog: catalog, games: games, progress: progress);
@@ -50,15 +52,20 @@ final class AppServices {
 
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
   /// Korumalı işlemler, her seferinde yeni bir matematik sorusu soran ebeveyn kapısından geçer.
-  /// Testlerde ses çalınmaz; uygulama gerçek ses altyapısını [soundPlayer] ile verir.
-  factory AppServices.production(KeyValueStore store, {SoundPlayer soundPlayer = const SilentSoundPlayer()}) =>
-      AppServices(
-        catalog: buildContentCatalog(),
-        games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
-        store: store,
-        parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
-        soundPlayer: soundPlayer,
-      );
+  /// Testlerde ses çalınmaz ve Google Play'e bağlanılmaz; uygulama gerçek ses altyapısını
+  /// [soundPlayer], Google Play Billing'i [purchaseGateway] ile verir.
+  factory AppServices.production(
+    KeyValueStore store, {
+    SoundPlayer soundPlayer = const SilentSoundPlayer(),
+    PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
+  }) => AppServices(
+    catalog: buildContentCatalog(),
+    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
+    store: store,
+    parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
+    soundPlayer: soundPlayer,
+    purchaseGateway: purchaseGateway,
+  );
 
   final ContentCatalog catalog;
   final GameRegistry games;
@@ -68,6 +75,7 @@ final class AppServices {
   final ProtectedActionRunner protectedActions;
   late final UnlockPolicy unlockPolicy;
   late final EntitlementService entitlements;
+  late final ListingService listings;
   late final OfferPolicy offers;
   late final CloudSyncService cloudSync;
   late final AchievementService achievements;
