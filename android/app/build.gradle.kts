@@ -1,8 +1,27 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+
+// Release imza bilgileri repoda tutulmaz: keystore yolu ve alias git dışı `android/key.properties`
+// dosyasından, parola ortam değişkeninden okunur. Bilgiler eksikse release debug anahtarıyla imzalanır
+// (yerel `flutter run --release` için); böyle bir AAB'yi Google Play kabul etmez.
+val releaseSigningName = "release"
+val keystorePasswordVariable = "ROBICODES_KEYSTORE_PASSWORD"
+val keystoreProperties =
+    Properties().apply {
+        val file = rootProject.file("key.properties")
+        if (file.exists()) {
+            file.inputStream().use { load(it) }
+        }
+    }
+val keystoreFile: String? = keystoreProperties.getProperty("storeFile")
+val keystoreAlias: String? = keystoreProperties.getProperty("keyAlias")
+val keystorePassword: String? = System.getenv(keystorePasswordVariable)
+val hasReleaseKey = keystoreFile != null && keystoreAlias != null && !keystorePassword.isNullOrEmpty()
 
 android {
     namespace = "com.sezertanci.robicodes"
@@ -29,11 +48,30 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (hasReleaseKey) {
+            create(releaseSigningName) {
+                storeFile = file(keystoreFile!!)
+                keyAlias = keystoreAlias
+                // PKCS12 keystore'da mağaza ve anahtar parolası aynıdır.
+                storePassword = keystorePassword
+                keyPassword = keystorePassword
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig =
+                if (hasReleaseKey) {
+                    signingConfigs.getByName(releaseSigningName)
+                } else {
+                    logger.warn(
+                        "Release imza bilgisi yok (key.properties veya $keystorePasswordVariable); " +
+                            "debug anahtarı kullanılıyor.",
+                    )
+                    signingConfigs.getByName("debug")
+                }
         }
     }
 }
