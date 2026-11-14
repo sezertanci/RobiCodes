@@ -39,16 +39,13 @@ final class LevelSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final services = AppScope.of(context);
-    final packs = [
-      for (final pack in services.catalog.packsOf(game.id))
-        if (services.entitlements.canPlayPack(pack.id)) pack,
-    ];
+    final packs = services.entitlements.playablePacksOf(game.id);
     return ListenableBuilder(
       listenable: services.progress,
       builder: (context, _) => Scaffold(
         appBar: AppBar(
           title: Text(game.title),
-          actions: [_StarCounter(stars: packs.fold(0, (sum, pack) => sum + services.progress.totalStars(pack.id)))],
+          actions: [_StarCounter(stars: services.progress.starsIn(packs))],
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {

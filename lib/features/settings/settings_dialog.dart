@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_texts.dart';
 import '../sound/sound_service.dart';
 
 /// Ayarlar penceresi: sesi açıp kapatma. Ayar hemen kaydedilir; pencere kapatılınca da geçerli kalır.
@@ -10,7 +11,7 @@ final class SettingsDialog extends StatelessWidget {
 
   static const title = 'Ayarlar';
   static const soundLabel = 'Ses';
-  static const closeLabel = 'Kapat';
+  static const closeLabel = AppTexts.close;
 
   static Future<void> show(BuildContext context, SoundService sound) => showDialog<void>(
     context: context,

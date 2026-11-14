@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
 import 'character.dart';
 import 'character_service.dart';
@@ -15,7 +16,7 @@ final class CharacterDialog extends StatelessWidget {
   final CharacterService characters;
 
   static const title = 'Karakterini seç';
-  static const closeLabel = 'Kapat';
+  static const closeLabel = AppTexts.close;
 
   /// Bu genişliğin altındaki ekranlarda iki, üstündekilerde üç sütun kullanılır (web ile aynı).
   static const _narrowWidth = 560.0;

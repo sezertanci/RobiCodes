@@ -43,6 +43,17 @@ void main() {
       expect(catalog.isFree(TestCatalog.freePack), isTrue);
     });
 
+    test('freePacksOf_GameWithPaidPacks_ReturnsOnlyFreePack', () {
+      // Arrange
+      final catalog = TestCatalog.build();
+
+      // Act
+      final ids = catalog.freePacksOf(TestCatalog.gameId).map((pack) => pack.id);
+
+      // Assert
+      expect(ids, [TestCatalog.freePack]);
+    });
+
     test('productsGranting_PackInBundle_ReturnsOwnProductAndBundle', () {
       // Arrange
       final catalog = TestCatalog.build();

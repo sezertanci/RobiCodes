@@ -26,13 +26,7 @@ final class CommandOrderModule implements GameModule {
   @override
   String get gameId => GameIds.commandOrder;
 
-  CommandOrderLevel levelOf(String packId, int level) {
-    final levels = packs[packId];
-    if (levels == null || level < 1 || level > levels.length) {
-      throw ArgumentError('Bilinmeyen seviye: $packId / $level');
-    }
-    return levels[level - 1];
-  }
+  CommandOrderLevel levelOf(String packId, int level) => levelFrom(packs, packId, level);
 
   /// Seviyenin kartlarını karıştırır; bir önceki açılıştaki sıradan kaçınır.
   List<OrderCard> shuffledCards(String packId, int level) {

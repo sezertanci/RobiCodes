@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../content/models/level_pack.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../core/storage/storage_keys.dart';
 import 'progress_snapshot.dart';
@@ -19,6 +20,9 @@ final class ProgressRepository extends ChangeNotifier {
   bool isCompleted(String packId, int level) => starsOf(packId, level) > 0;
 
   int totalStars(String packId) => _snapshot.stars[packId]?.values.fold<int>(0, (sum, value) => sum + value) ?? 0;
+
+  /// [packs] paketlerinde kazanılan yıldızların toplamı.
+  int starsIn(Iterable<LevelPack> packs) => packs.fold(0, (sum, pack) => sum + totalStars(pack.id));
 
   int completedCount(String packId) => _snapshot.stars[packId]?.length ?? 0;
 

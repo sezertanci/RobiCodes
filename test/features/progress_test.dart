@@ -77,6 +77,20 @@ void main() {
       expect(store.values, contains(StorageKeys.progress));
     });
 
+    test('starsIn_SeveralPacks_ReturnsSumOfAllPacks', () async {
+      // Arrange
+      final repository = ProgressRepository(InMemoryKeyValueStore());
+      final catalog = TestCatalog.build();
+      await repository.completeLevel(TestCatalog.freePack, 1, 2);
+      await repository.completeLevel(TestCatalog.packA, 1, 3);
+
+      // Act
+      final stars = repository.starsIn(catalog.packs);
+
+      // Assert
+      expect(stars, 5);
+    });
+
     test('totalStars_TwoLevels_ReturnsSum', () async {
       // Arrange
       final repository = ProgressRepository(InMemoryKeyValueStore());

@@ -17,13 +17,7 @@ final class RepeatModule implements GameModule {
   @override
   String get gameId => GameIds.repeat;
 
-  RepeatLevel levelOf(String packId, int level) {
-    final levels = packs[packId];
-    if (levels == null || level < 1 || level > levels.length) {
-      throw ArgumentError('Bilinmeyen seviye: $packId / $level');
-    }
-    return levels[level - 1];
-  }
+  RepeatLevel levelOf(String packId, int level) => levelFrom(packs, packId, level);
 
   @override
   Widget buildLevel(LevelSession session) => RepeatView(

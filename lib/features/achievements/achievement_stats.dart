@@ -40,11 +40,11 @@ final class AchievementStats {
     required List<GameDefinition> games,
     required ProgressRepository progress,
   }) {
-    final freePacks = [for (final game in games) ...catalog.packsOf(game.id).where((pack) => catalog.isFree(pack.id))];
+    final freePacks = [for (final game in games) ...catalog.freePacksOf(game.id)];
     final freeStars = [for (final pack in freePacks) ..._starsOf(pack, progress)];
     return AchievementStats(
       games: [for (final game in games) _gameStats(game, freePacks, progress)],
-      totalStars: catalog.packs.fold(0, (sum, pack) => sum + progress.totalStars(pack.id)),
+      totalStars: progress.starsIn(catalog.packs),
       perfectCount: freeStars.where((stars) => stars == StarRule.perfect).length,
       // İpucu kullanılan seviye en fazla 1 yıldız alır; 2 ve üstü ipucusuz bitmiş demektir.
       noHintCount: freeStars.where((stars) => stars >= StarRule.noHint).length,
@@ -71,14 +71,7 @@ final class AchievementStats {
   /// Bitmesine en az seviye kalan oyun; sayılacak oyun yoksa `null`.
   GameStats? get closestToFinish => games.isEmpty ? null : games.reduce((a, b) => b.remaining < a.remaining ? b : a);
 
-  GameStats? of(String gameId) {
-    for (final game in games) {
-      if (game.game.id == gameId) {
-        return game;
-      }
-    }
-    return null;
-  }
+  GameStats? of(String gameId) => games.where((game) => game.game.id == gameId).firstOrNull;
 
   static GameStats _gameStats(GameDefinition game, List<LevelPack> freePacks, ProgressRepository progress) {
     final packs = freePacks.where((pack) => pack.gameId == game.id).toList();

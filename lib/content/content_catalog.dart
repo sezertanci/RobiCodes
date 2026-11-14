@@ -12,14 +12,17 @@ final class ContentCatalog {
   final List<LevelPack> packs;
   final List<StoreProduct> products;
 
-  GameDefinition? findGame(String id) => _firstOrNull(games, (game) => game.id == id);
+  GameDefinition? findGame(String id) => games.where((game) => game.id == id).firstOrNull;
 
-  LevelPack? findPack(String id) => _firstOrNull(packs, (pack) => pack.id == id);
+  LevelPack? findPack(String id) => packs.where((pack) => pack.id == id).firstOrNull;
 
-  StoreProduct? findProduct(String id) => _firstOrNull(products, (product) => product.id == id);
+  StoreProduct? findProduct(String id) => products.where((product) => product.id == id).firstOrNull;
 
   /// Oyunun paketleri, katalogdaki sırayla.
   List<LevelPack> packsOf(String gameId) => packs.where((pack) => pack.gameId == gameId).toList();
+
+  /// Oyunun ücretsiz paketleri, katalogdaki sırayla.
+  List<LevelPack> freePacksOf(String gameId) => packsOf(gameId).where((pack) => isFree(pack.id)).toList();
 
   /// Paketi açan ürünler: paketin kendi ürünü ve paketi içeren avantajlı paketler.
   List<StoreProduct> productsGranting(String packId) =>
@@ -57,14 +60,5 @@ final class ContentCatalog {
       for (final id in ids)
         if (!seen.add(id)) '$label kimliği tekrarlanıyor: $id',
     ];
-  }
-
-  static T? _firstOrNull<T>(Iterable<T> items, bool Function(T) test) {
-    for (final item in items) {
-      if (test(item)) {
-        return item;
-      }
-    }
-    return null;
   }
 }

@@ -94,6 +94,25 @@ void main() {
       expect(service.canPlayPack(TestCatalog.packB), isFalse);
     });
 
+    test('playablePacksOf_OnePackOwned_ReturnsFreeAndOwnedPacksInOrder', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.productB};
+      final service = createService();
+      await service.refresh();
+
+      // Act
+      final ids = service.playablePacksOf(TestCatalog.gameId).map((pack) => pack.id);
+
+      // Assert
+      expect(ids, [TestCatalog.freePack, TestCatalog.packB]);
+    });
+
+    test('constructor_CachedProducts_ReadsOnlyProductIds', () {
+      store.values[StorageKeys.ownedProducts] = '["${TestCatalog.productA}", 1]';
+
+      expect(createService().ownedProductIds, {TestCatalog.productA});
+    });
+
     test('constructor_CorruptCache_StartsEmpty', () {
       store.values[StorageKeys.ownedProducts] = 'bozuk';
 

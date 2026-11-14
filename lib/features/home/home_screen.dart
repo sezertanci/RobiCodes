@@ -62,12 +62,12 @@ final class HomeScreen extends StatelessWidget {
   /// Kartta oyunun yalnızca oynanabilir (ücretsiz veya sahip olunan) paketlerinin yıldızları sayılır.
   Widget _buildCard(BuildContext context, AppServices services, GameDefinition game) {
     final isPlayable = services.games.isPlayable(game.id);
-    final packs = services.catalog.packsOf(game.id).where((pack) => services.entitlements.canPlayPack(pack.id));
+    final packs = services.entitlements.playablePacksOf(game.id);
     return GameCard(
       title: game.title,
       description: game.description,
       accent: game.tone.base,
-      stars: packs.fold(0, (sum, pack) => sum + services.progress.totalStars(pack.id)),
+      stars: services.progress.starsIn(packs),
       maxStars: packs.fold(0, (sum, pack) => sum + pack.levelCount * StarRule.perfect),
       isPlayable: isPlayable,
       onTap: isPlayable

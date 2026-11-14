@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
 import '../progress/star_rule.dart';
 import 'game_feedback.dart';
@@ -28,7 +29,7 @@ final class ResultPanel extends StatefulWidget {
 
   static const title = 'Harika! Seviye tamamlandı.';
   static const backLabel = 'Seviyelere dön';
-  static const nextLabel = 'Sonraki seviye';
+  static const nextLabel = AppTexts.nextLevel;
 
   static const firstStarDelay = Duration(milliseconds: 750);
   static const starInterval = Duration(milliseconds: 380);

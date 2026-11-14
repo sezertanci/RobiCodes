@@ -26,3 +26,14 @@ abstract interface class GameModule {
 
   Widget buildLevel(LevelSession session);
 }
+
+/// [packs] içinden paketin [level]. seviyesini döndürür (1. seviye listenin ilk elemanıdır).
+/// Paket veya seviye yoksa `ArgumentError` fırlatır; bu, katalog ile modül verisinin uyuşmadığı
+/// bir programlama hatasıdır.
+T levelFrom<T>(Map<String, List<T>> packs, String packId, int level) {
+  final levels = packs[packId];
+  if (levels == null || level < 1 || level > levels.length) {
+    throw ArgumentError('Bilinmeyen seviye: $packId / $level');
+  }
+  return levels[level - 1];
+}

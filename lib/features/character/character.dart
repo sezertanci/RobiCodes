@@ -28,12 +28,5 @@ abstract final class CharacterRoster {
   static const defaultCharacter = robi;
 
   /// Kimliği [id] olan karakter; bulunamazsa `null`.
-  static Character? find(String id) {
-    for (final character in all) {
-      if (character.id == id) {
-        return character;
-      }
-    }
-    return null;
-  }
+  static Character? find(String id) => all.where((character) => character.id == id).firstOrNull;
 }

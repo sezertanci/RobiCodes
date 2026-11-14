@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../../content/content_catalog.dart';
+import '../../content/models/level_pack.dart';
+import '../../core/json_utils.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../core/storage/storage_keys.dart';
 import 'purchase_gateway.dart';
@@ -32,6 +34,12 @@ final class EntitlementService extends ChangeNotifier {
   bool canPlayPack(String packId) =>
       _catalog.isFree(packId) || _catalog.productsGranting(packId).any((product) => ownsProduct(product.id));
 
+  /// Oyunun oynanabilir (ücretsiz veya sahip olunan) paketleri, katalogdaki sırayla.
+  List<LevelPack> playablePacksOf(String gameId) => [
+    for (final pack in _catalog.packsOf(gameId))
+      if (canPlayPack(pack.id)) pack,
+  ];
+
   /// Sahipliği mağazadan yeniden okur (uygulama açılışı, ön plana dönüş, "Satın alımları geri yükle").
   /// Mağazaya ulaşılamazsa önbellek olduğu gibi kalır ve `false` döner.
   Future<bool> refresh() async {
@@ -60,16 +68,6 @@ final class EntitlementService extends ChangeNotifier {
     await _store.write(StorageKeys.ownedProducts, jsonEncode(owned.toList()..sort()));
   }
 
-  static Set<String> _readCache(KeyValueStore store) {
-    final raw = store.read(StorageKeys.ownedProducts);
-    if (raw == null) {
-      return {};
-    }
-    try {
-      final decoded = jsonDecode(raw);
-      return decoded is List<Object?> ? decoded.whereType<String>().toSet() : {};
-    } on FormatException {
-      return {};
-    }
-  }
+  static Set<String> _readCache(KeyValueStore store) =>
+      decodeJsonList(store.read(StorageKeys.ownedProducts))?.whereType<String>().toSet() ?? {};
 }

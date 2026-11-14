@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
+import '../../app/app_texts.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
 import '../../games/game_module.dart';
@@ -19,7 +20,7 @@ final class LevelScreen extends StatefulWidget {
   final int initialLevel;
 
   static const previousLabel = 'Önceki seviye';
-  static const nextLabel = 'Sonraki seviye';
+  static const nextLabel = AppTexts.nextLevel;
 
   @override
   State<LevelScreen> createState() => _LevelScreenState();

@@ -91,6 +91,6 @@ final class AchievementService extends ChangeNotifier {
   /// Ödüllerde sayılan oyunlar: modülü eklenmiş (oynanabilir) ve ücretsiz paketi olan oyunlar.
   static List<GameDefinition> _countedGames(ContentCatalog catalog, GameRegistry games) => [
     for (final game in catalog.games)
-      if (games.isPlayable(game.id) && catalog.packsOf(game.id).any((pack) => catalog.isFree(pack.id))) game,
+      if (games.isPlayable(game.id) && catalog.freePacksOf(game.id).isNotEmpty) game,
   ];
 }
