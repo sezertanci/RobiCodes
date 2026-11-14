@@ -4,6 +4,7 @@ abstract final class AppAssets {
   static const starEmpty = 'assets/icons/star-empty.svg';
   static const lock = 'assets/icons/lock.svg';
   static const back = 'assets/ui/button-back.svg';
+  static const home = 'assets/ui/button-home.svg';
   static const settings = 'assets/ui/button-settings.svg';
   static const levelPrevious = 'assets/ui/button-level-previous.svg';
   static const levelNext = 'assets/ui/button-level-next.svg';

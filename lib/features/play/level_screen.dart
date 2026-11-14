@@ -72,8 +72,10 @@ final class _LevelScreenState extends State<LevelScreen> {
           children: [
             TopBar(
               title: widget.game.title,
+              icon: widget.game.icon,
               backLabel: AppTexts.backToLevels,
               dense: true,
+              showHome: true,
               actions: [
                 ImageButton(
                   asset: AppAssets.levelPrevious,

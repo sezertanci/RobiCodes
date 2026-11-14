@@ -154,6 +154,34 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
   });
 
+  testWidgets('TopBar_HomePressedOnLevel_ReturnsToHomeScreen', (tester) async {
+    // Arrange
+    await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
+    await openLevelSelect(tester, PathFinderTexts.title);
+    await tapVisible(tester, find.byType(LevelButton).first);
+    await tester.pumpAndSettle();
+
+    // Act
+    await tester.tap(findButton(AppTexts.backToHome));
+    await tester.pumpAndSettle();
+
+    // Assert
+    expect(find.byType(LevelScreen), findsNothing);
+    expect(find.byType(LevelSelectScreen), findsNothing);
+    expect(find.byType(HomeScreen), findsOneWidget);
+  });
+
+  testWidgets('TopBar_LevelSelect_HasNoSeparateHomeButton', (tester) async {
+    // Arrange
+    await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
+
+    // Act
+    await openLevelSelect(tester, PathFinderTexts.title);
+
+    // Assert
+    expect(findButton(AppTexts.backToHome), findsOneWidget);
+  });
+
   testWidgets('TopBar_LongTitleOnPhone_ShortensTitleWithoutOverflow', (tester) async {
     // Arrange
     useScreen(tester, TestScreens.phone);
