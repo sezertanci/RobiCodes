@@ -113,7 +113,9 @@ final class _TopBarLayout extends MultiChildLayoutDelegate {
   bool shouldRelayout(_TopBarLayout oldDelegate) => oldDelegate.gap != gap || oldDelegate.centered != centered;
 }
 
-/// Beyaz panelde ikon ve başlık (web sürümündeki `.top-bar-title`).
+/// Beyaz panelde ikon ve başlık (web sürümündeki `.top-bar-title`). Dar ekranda oyun ekranının sıkı
+/// çubuğunda başlığa yer kalmadığı için yalnızca ikon görünür; başlık ekran okuyucuya yine okunur.
+/// Diğer dar ekranlarda başlık küçülür. Başlık tek satıra sığmazsa küçük yazıyla iki satıra bölünür.
 final class _TitlePanel extends StatelessWidget {
   const _TitlePanel({required this.title, required this.icon, required this.dense, required this.narrow});
 
@@ -127,25 +129,29 @@ final class _TitlePanel extends StatelessWidget {
   static const _narrowIconSize = 32.0;
   static const _gap = 10.0;
   static const _narrowGap = 6.0;
-  static const _narrowDenseFontSize = 18.0;
   static const _radius = BorderRadius.all(Radius.circular(AppMetrics.mediumRadius));
 
   double get _iconExtent => narrow ? _narrowIconSize : (dense ? _denseIconSize : _iconSize);
 
+  /// Dar ekranda oyun ekranının çubuğunda yalnızca ikon gösterilir.
+  bool get _iconOnly => dense && narrow && icon != null;
+
   EdgeInsets get _padding =>
       EdgeInsets.symmetric(horizontal: narrow ? 12 : (dense ? 18 : 24), vertical: dense ? 4 : (narrow ? 6 : 8));
 
-  /// Panelin ikonla birlikte yüksekliği; çubuğun yüksekliği buna göre seçilir.
-  double get height => _iconExtent + _padding.vertical;
+  /// Panelin ikon ve başlıkla birlikte yüksekliği; çubuğun yüksekliği buna göre seçilir. Tek satırlık
+  /// başlık ikondan alçak kalır; bu yüzden yalnızca iki satıra bölünmüş başlık hesaba katılır.
+  double get height {
+    final lines = _iconOnly ? 0.0 : _TitleText.wrappedHeight;
+    return max(_iconExtent, lines) + _padding.vertical;
+  }
 
   @override
   Widget build(BuildContext context) {
     final icon = this.icon;
-    final fontSize = switch ((dense, narrow)) {
-      (true, true) => _narrowDenseFontSize,
-      (true, false) => ScreenScale.fluid(context, 20, 0.03, 28),
-      _ => ScreenScale.fluid(context, 22, 0.04, 34),
-    };
+    final fontSize = narrow
+        ? _TitleText.compactFontSize
+        : (dense ? ScreenScale.fluid(context, 20, 0.03, 28) : ScreenScale.fluid(context, 22, 0.04, 34));
     return CustomPaint(
       painter: const _LipPainter(),
       child: Container(
@@ -155,25 +161,72 @@ final class _TitlePanel extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (icon != null) ...[
-              SvgPicture.asset(icon, width: _iconExtent, height: _iconExtent),
-              SizedBox(width: narrow ? _narrowGap : _gap),
-            ],
-            Flexible(
-              child: Semantics(
-                header: true,
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: AppColors.navy, fontSize: fontSize, fontWeight: FontWeight.w900),
+            if (icon != null)
+              Semantics(
+                label: _iconOnly ? title : null,
+                header: _iconOnly,
+                child: SvgPicture.asset(icon, width: _iconExtent, height: _iconExtent),
+              ),
+            if (!_iconOnly) ...[
+              if (icon != null) SizedBox(width: narrow ? _narrowGap : _gap),
+              Flexible(
+                child: Semantics(
+                  header: true,
+                  child: _TitleText(title: title, fontSize: fontSize),
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
+  }
+}
+
+/// Başlık metni. Verilen boyutta tek satıra sığmazsa küçük yazıyla en fazla iki satıra bölünür.
+final class _TitleText extends StatelessWidget {
+  const _TitleText({required this.title, required this.fontSize});
+
+  final String title;
+  final double fontSize;
+
+  /// Dar ekrandaki ve iki satıra bölünen başlığın yazı boyutu.
+  static const compactFontSize = 18.0;
+  static const _wrappedLines = 2;
+  static const _lineHeight = 1.1;
+
+  /// İki satıra bölünmüş başlığın yüksekliği.
+  static const wrappedHeight = _wrappedLines * compactFontSize * _lineHeight;
+
+  static const _style = TextStyle(color: AppColors.navy, fontWeight: FontWeight.w900);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final style = _style.copyWith(fontSize: fontSize);
+        final wraps = !_fitsOneLine(context, style, constraints.maxWidth);
+        return Text(
+          title,
+          maxLines: wraps ? _wrappedLines : 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: wraps ? style.copyWith(fontSize: compactFontSize, height: _lineHeight) : style,
+        );
+      },
+    );
+  }
+
+  bool _fitsOneLine(BuildContext context, TextStyle style, double maxWidth) {
+    final painter = TextPainter(
+      text: TextSpan(text: title, style: DefaultTextStyle.of(context).style.merge(style)),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout(maxWidth: maxWidth);
+    final fits = !painter.didExceedMaxLines;
+    painter.dispose();
+    return fits;
   }
 }
 

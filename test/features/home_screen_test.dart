@@ -140,6 +140,71 @@ void main() {
     });
   }
 
+  testWidgets('TopBar_LevelOnPhone_ShowsOnlyIconAndKeepsTitleForScreenReader', (tester) async {
+    // Arrange
+    useScreen(tester, TestScreens.phone);
+    await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
+    await openLevelSelect(tester, PathFinderTexts.title);
+
+    // Act
+    await tapVisible(tester, find.byType(LevelButton).first);
+    await settle(tester);
+
+    // Assert
+    final inTopBar = find.descendant(of: find.byType(TopBar), matching: find.text(PathFinderTexts.title));
+    expect(inTopBar, findsNothing);
+    expect(find.bySemanticsLabel(PathFinderTexts.title), findsOneWidget);
+  });
+
+  testWidgets('TopBar_LevelOnTablet_ShowsTitleText', (tester) async {
+    // Arrange
+    useScreen(tester, TestScreens.tabletPortrait);
+    await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
+    await openLevelSelect(tester, PathFinderTexts.title);
+
+    // Act
+    await tapVisible(tester, find.byType(LevelButton).first);
+    await settle(tester);
+
+    // Assert
+    final inTopBar = find.descendant(of: find.byType(TopBar), matching: find.text(PathFinderTexts.title));
+    expect(inTopBar, findsOneWidget);
+  });
+
+  testWidgets('TopBar_LevelOnSmallTablet_WrapsTitleToTwoLines', (tester) async {
+    // Arrange
+    useScreen(tester, TestScreens.smallTablet);
+    await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
+    await openLevelSelect(tester, PathFinderTexts.title);
+
+    // Act
+    await tapVisible(tester, find.byType(LevelButton).first);
+    await settle(tester);
+
+    // Assert
+    final title = find.descendant(of: find.byType(TopBar), matching: find.text(PathFinderTexts.title));
+    expect(tester.widget<Text>(title).maxLines, 2);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('TopBar_ShortTitleOnSmallTablet_KeepsTitleOnOneLine', (tester) async {
+    // Arrange
+    const shortTitle = 'Yol';
+    useScreen(tester, TestScreens.smallTablet);
+
+    // Act
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: TopBar(title: shortTitle, icon: AppAssets.gamePath, backLabel: AppTexts.backToHome, dense: true),
+        ),
+      ),
+    );
+
+    // Assert
+    expect(tester.widget<Text>(find.text(shortTitle)).maxLines, 1);
+  });
+
   testWidgets('TopBar_BackPressed_ReturnsToPreviousScreen', (tester) async {
     // Arrange
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));

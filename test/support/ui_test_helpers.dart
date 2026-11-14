@@ -10,6 +10,9 @@ abstract final class TestScreens {
   static const tabletPortrait = Size(711, 1138);
   static const tabletLandscape = Size(1138, 711);
 
+  /// 7 inç dikey tablet; dar düzenin hemen üstünde, başlığa en az yer kalan tablet boyutu.
+  static const smallTablet = Size(600, 960);
+
   /// Her boyutta tekrarlanan testler için ad ve boyut; ad test adına girer.
   static const all = {
     'Phone': phone,

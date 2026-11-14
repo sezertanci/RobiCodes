@@ -3,10 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../app/app_assets.dart';
 import '../../app/app_theme.dart';
+import '../../app/screen_scale.dart';
 
 /// Ana ekrandaki tek bir oyunun kartı: oyunun renginde zemin, beyaz daire içinde ikon, başlık,
 /// açıklama, ilerleme çubuğu, tamamlanan seviye ve yıldız sayısı. Görünüm web sürümündeki
-/// `home.css` dosyasıyla aynıdır. Kart yalnızca kendisine verilen değerleri gösterir.
+/// `home.css` dosyasıyla aynıdır. Dar ekranda ikon ve açıklama küçülür, açıklama üç satıra kadar uzayabilir.
+/// Kart yalnızca kendisine verilen değerleri gösterir.
 final class GameCard extends StatelessWidget {
   const GameCard({
     required this.title,
@@ -43,9 +45,14 @@ final class GameCard extends StatelessWidget {
   static const _shine = Color(0x2EFFFFFF);
   static const _padding = EdgeInsets.fromLTRB(16, 18, 16, 16);
   static const _gap = 6.0;
+  static const _descriptionSize = 16.0;
+  static const _narrowDescriptionSize = 14.0;
+  static const _descriptionLines = 2;
+  static const _narrowDescriptionLines = 3;
 
   @override
   Widget build(BuildContext context) {
+    final narrow = ScreenScale.isNarrow(context);
     final radius = BorderRadius.circular(AppMetrics.largeRadius);
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -73,7 +80,7 @@ final class GameCard extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _IconBadge(icon: icon, tone: tone),
+                  _IconBadge(icon: icon, tone: tone, narrow: narrow),
                   const SizedBox(height: _gap),
                   Text(
                     title,
@@ -85,9 +92,12 @@ final class GameCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       description,
-                      maxLines: 2,
+                      maxLines: narrow ? _narrowDescriptionLines : _descriptionLines,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: narrow ? _narrowDescriptionSize : _descriptionSize,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   _Progress(
@@ -108,27 +118,34 @@ final class GameCard extends StatelessWidget {
 
 /// Beyaz daire içinde oyunun ikonu.
 final class _IconBadge extends StatelessWidget {
-  const _IconBadge({required this.icon, required this.tone});
+  const _IconBadge({required this.icon, required this.tone, required this.narrow});
 
   final String icon;
   final ColorTone tone;
+  final bool narrow;
 
   static const _size = 84.0;
   static const _iconSize = 64.0;
+  static const _narrowSize = 68.0;
+  static const _narrowIconSize = 52.0;
   static const _lip = 4.0;
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: _size,
-    height: _size,
-    alignment: Alignment.center,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      shape: BoxShape.circle,
-      boxShadow: [BoxShadow(color: tone.dark, offset: const Offset(0, _lip))],
-    ),
-    child: SvgPicture.asset(icon, width: _iconSize, height: _iconSize),
-  );
+  Widget build(BuildContext context) {
+    final size = narrow ? _narrowSize : _size;
+    final iconSize = narrow ? _narrowIconSize : _iconSize;
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [BoxShadow(color: tone.dark, offset: const Offset(0, _lip))],
+      ),
+      child: SvgPicture.asset(icon, width: iconSize, height: iconSize),
+    );
+  }
 }
 
 /// Beyaz ilerleme çubuğu, altında seviye metni ve yıldız sayısı.
