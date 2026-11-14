@@ -19,8 +19,11 @@ abstract final class CharacterRoster {
   static const all = [
     robi,
     Character(id: 'fiyo', name: 'Fiyo', image: 'assets/characters/robot-bow.webp'),
+    Character(id: 'pervane', name: 'Pervane', image: 'assets/characters/robot-propeller.webp'),
     Character(id: 'isil', name: 'Işıl', image: 'assets/characters/robot-lamp.webp'),
+    Character(id: 'kahraman', name: 'Kahraman', image: 'assets/characters/robot-hero.webp'),
     Character(id: 'pembe', name: 'Pembe', image: 'assets/characters/robot-ribbon.webp'),
+    Character(id: 'sovalye', name: 'Şövalye', image: 'assets/characters/robot-knight.webp'),
     Character(id: 'piril', name: 'Pırıl', image: 'assets/characters/robot-cape.webp'),
   ];
 
