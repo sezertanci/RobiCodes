@@ -14,6 +14,9 @@ enum PurchaseOutcome {
 
   /// Mağazaya ulaşılamadı (internet yok, Play Store yok veya entegrasyon henüz yapılmadı).
   unavailable,
+
+  /// Geçerli bir ebeveyn onayı yoktu; mağazaya hiç gidilmedi.
+  notApproved,
 }
 
 /// Mağazayla konuşan katman. Uygulamanın geri kalanı Google Play Billing'i doğrudan tanımaz;

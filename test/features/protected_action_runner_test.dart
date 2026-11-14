@@ -17,7 +17,7 @@ void main() {
     final context = await pumpContext(tester);
 
     // Act
-    final result = await ProtectedActionRunner(gate).run(context, ParentalAction.purchase, () async => 42);
+    final result = await ProtectedActionRunner(gate).run(context, ParentalAction.purchase, (_) async => 42);
 
     // Assert
     expect(result, 42);
@@ -31,7 +31,7 @@ void main() {
 
     // Act
     final result = await ProtectedActionRunner(FakeParentalGate(approves: false))
-        .run(context, ParentalAction.enableCloudSync, () async => ran = true);
+        .run(context, ParentalAction.enableCloudSync, (_) async => ran = true);
 
     // Assert
     expect(result, isNull);
@@ -44,7 +44,7 @@ void main() {
     const runner = ProtectedActionRunner(LockedParentalGate());
 
     // Act
-    final results = [for (final action in ParentalAction.values) await runner.run(context, action, () async => true)];
+    final results = [for (final action in ParentalAction.values) await runner.run(context, action, (_) async => true)];
 
     // Assert
     expect(results, everyElement(isNull));

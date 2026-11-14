@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/core/storage/storage_keys.dart';
+import 'package:robi_codes/features/parental_gate/parental_gate.dart';
 import 'package:robi_codes/features/store/entitlement_service.dart';
 import 'package:robi_codes/features/store/offer_policy.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
 
 import '../support/fakes.dart';
+import '../support/parental_approvals.dart';
 
 void main() {
   final catalog = TestCatalog.build();
@@ -74,7 +76,10 @@ void main() {
       final service = createService();
 
       // Act
-      final outcome = await service.purchase(TestCatalog.productB);
+      final outcome = await service.purchase(
+        TestCatalog.productB,
+        approval: await grantApproval(ParentalAction.purchase),
+      );
 
       // Assert
       expect(outcome, PurchaseOutcome.purchased);
@@ -88,7 +93,7 @@ void main() {
       final service = createService();
 
       // Act
-      await service.purchase(TestCatalog.productB);
+      await service.purchase(TestCatalog.productB, approval: await grantApproval(ParentalAction.purchase));
 
       // Assert
       expect(service.canPlayPack(TestCatalog.packB), isFalse);

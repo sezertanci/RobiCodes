@@ -7,6 +7,8 @@ import '../../content/models/level_pack.dart';
 import '../../core/json_utils.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../core/storage/storage_keys.dart';
+import '../parental_gate/parental_gate.dart';
+import '../parental_gate/protected_action_runner.dart';
 import 'purchase_gateway.dart';
 
 /// Hangi paketlere erişim olduğunu bilen servis.
@@ -51,7 +53,13 @@ final class EntitlementService extends ChangeNotifier {
     return true;
   }
 
-  Future<PurchaseOutcome> purchase(String productId) async {
+  /// Satın almayı başlatır. Yalnızca `ProtectedActionRunner`'ın verdiği, satın alma için geçerli ve
+  /// kullanılmamış bir [approval] ile mağazaya gidilir; aksi halde [PurchaseOutcome.notApproved] döner.
+  /// Google Play'in kendi satın alma onayı (ör. aile grubu onayı) bundan ayrıca uygulanır.
+  Future<PurchaseOutcome> purchase(String productId, {required ParentalApproval approval}) async {
+    if (!approval.consume(ParentalAction.purchase)) {
+      return PurchaseOutcome.notApproved;
+    }
     final outcome = await _gateway.purchase(productId);
     if (outcome == PurchaseOutcome.purchased || outcome == PurchaseOutcome.alreadyOwned) {
       await refresh();

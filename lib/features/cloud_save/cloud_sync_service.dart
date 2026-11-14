@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import '../../core/storage/key_value_store.dart';
 import '../../core/storage/storage_keys.dart';
+import '../parental_gate/parental_gate.dart';
+import '../parental_gate/protected_action_runner.dart';
 import '../progress/progress_repository.dart';
 import '../progress/progress_snapshot.dart';
 import 'cloud_save_gateway.dart';
@@ -23,7 +25,7 @@ enum CloudSyncResult {
 }
 
 /// İsteğe bağlı bulut eşitlemesi. Kapalıyken uygulama yalnızca cihazdaki kayıtla çalışır.
-/// Açma kararı ebeveyn doğrulamasının arkasındadır (bkz. `ProtectedActionRunner`);
+/// Açma ve kapatma kararı ebeveyn doğrulamasının arkasındadır (bkz. `ProtectedActionRunner`);
 /// bu servis yalnızca bayrağı ve eşitlemeyi yönetir.
 final class CloudSyncService extends ChangeNotifier {
   CloudSyncService({required this._gateway, required this._progress, required KeyValueStore store})
@@ -39,13 +41,19 @@ final class CloudSyncService extends ChangeNotifier {
 
   bool get isEnabled => _enabled;
 
-  Future<void> setEnabled({required bool enabled}) async {
+  /// Eşitlemeyi açar veya kapatır. [approval], istenen yön için (açma veya kapatma) geçerli ve
+  /// kullanılmamış bir ebeveyn onayı olmalıdır; değilse hiçbir şey değişmez ve `false` döner.
+  Future<bool> setEnabled({required bool enabled, required ParentalApproval approval}) async {
+    if (!approval.consume(enabled ? ParentalAction.enableCloudSync : ParentalAction.disableCloudSync)) {
+      return false;
+    }
     if (_enabled == enabled) {
-      return;
+      return true;
     }
     _enabled = enabled;
     notifyListeners();
     await (enabled ? _store.write(StorageKeys.cloudSync, _enabledValue) : _store.remove(StorageKeys.cloudSync));
+    return true;
   }
 
   /// Buluttaki kaydı okur, cihazdakiyle birleştirir ve sonucu iki yere de yazar.

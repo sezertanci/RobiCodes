@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../content/catalog_data.dart';
 import '../content/content_catalog.dart';
 import '../core/storage/key_value_store.dart';
@@ -6,7 +8,9 @@ import '../features/achievements/achievement_service.dart';
 import '../features/cloud_save/cloud_save_gateway.dart';
 import '../features/character/character_service.dart';
 import '../features/cloud_save/cloud_sync_service.dart';
+import '../features/parental_gate/dialog_parental_gate.dart';
 import '../features/parental_gate/parental_gate.dart';
+import '../features/parental_gate/parental_question.dart';
 import '../features/parental_gate/protected_action_runner.dart';
 import '../features/progress/progress_repository.dart';
 import '../features/progress/unlock_policy.dart';
@@ -45,12 +49,14 @@ final class AppServices {
   }
 
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
+  /// Korumalı işlemler, her seferinde yeni bir matematik sorusu soran ebeveyn kapısından geçer.
   /// Testlerde ses çalınmaz; uygulama gerçek ses altyapısını [soundPlayer] ile verir.
   factory AppServices.production(KeyValueStore store, {SoundPlayer soundPlayer = const SilentSoundPlayer()}) =>
       AppServices(
         catalog: buildContentCatalog(),
         games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
         store: store,
+        parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
         soundPlayer: soundPlayer,
       );
 

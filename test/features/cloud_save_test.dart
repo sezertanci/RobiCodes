@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/features/cloud_save/cloud_sync_service.dart';
 import 'package:robi_codes/features/cloud_save/progress_merger.dart';
+import 'package:robi_codes/features/parental_gate/parental_gate.dart';
 import 'package:robi_codes/features/progress/progress_repository.dart';
 import 'package:robi_codes/features/progress/progress_snapshot.dart';
 
 import '../support/fakes.dart';
+import '../support/parental_approvals.dart';
 
 void main() {
   group('ProgressMerger', () {
@@ -52,7 +54,7 @@ void main() {
 
     test('setEnabled_True_PersistsFlag', () async {
       // Act
-      await createService().setEnabled(enabled: true);
+      await createService().setEnabled(enabled: true, approval: await grantApproval(ParentalAction.enableCloudSync));
 
       // Assert
       expect(createService().isEnabled, isTrue);
@@ -62,7 +64,7 @@ void main() {
       // Arrange
       gateway.signedIn = false;
       final service = createService();
-      await service.setEnabled(enabled: true);
+      await service.setEnabled(enabled: true, approval: await grantApproval(ParentalAction.enableCloudSync));
 
       // Act & Assert
       expect(await service.sync(), CloudSyncResult.notSignedIn);
@@ -73,7 +75,7 @@ void main() {
       await progress.completeLevel('a', 1, 1);
       gateway.stored = ProgressSnapshot.empty.withBest('a', 1, 3).withBest('a', 2, 2).toJson();
       final service = createService();
-      await service.setEnabled(enabled: true);
+      await service.setEnabled(enabled: true, approval: await grantApproval(ParentalAction.enableCloudSync));
 
       // Act
       final result = await service.sync();
@@ -92,7 +94,7 @@ void main() {
       await progress.completeLevel('a', 1, 2);
       gateway.reachable = false;
       final service = createService();
-      await service.setEnabled(enabled: true);
+      await service.setEnabled(enabled: true, approval: await grantApproval(ParentalAction.enableCloudSync));
 
       // Act
       final result = await service.sync();

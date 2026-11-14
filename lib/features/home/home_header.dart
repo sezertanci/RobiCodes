@@ -49,7 +49,7 @@ final class HomeHeader extends StatelessWidget {
                 asset: AppAssets.settings,
                 label: SettingsDialog.title,
                 size: narrow ? AppMetrics.compactTouch : AppMetrics.touch,
-                onPressed: () => SettingsDialog.show(context, services.sound),
+                onPressed: () => SettingsDialog.show(context, services.sound, services.protectedActions),
               ),
             ],
           ),
