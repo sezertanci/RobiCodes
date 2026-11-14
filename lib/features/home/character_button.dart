@@ -5,8 +5,9 @@ import '../../app/app_theme.dart';
 import '../../app/screen_scale.dart';
 import '../character/character_dialog.dart';
 import '../character/character_scope.dart';
+import '../play/widgets/idle_sway.dart';
 
-/// Ana ekrandaki seçili karakter. Dokununca karakter seçme penceresi açılır; seçilen karakter hemen görünür.
+/// Ana ekrandaki seçili karakter; beklerken hafifçe sallanır. Dokununca karakter seçme penceresi açılır; seçilen karakter hemen görünür.
 final class CharacterButton extends StatelessWidget {
   const CharacterButton({super.key});
 
@@ -33,7 +34,7 @@ final class CharacterButton extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(character.image, height: height, fit: BoxFit.contain),
+              IdleSway(child: Image.asset(character.image, height: height, fit: BoxFit.contain)),
               const SizedBox(height: 4),
               DecoratedBox(
                 decoration: const ShapeDecoration(color: Colors.white, shape: StadiumBorder()),

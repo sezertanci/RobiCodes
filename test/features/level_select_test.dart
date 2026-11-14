@@ -26,7 +26,7 @@ void main() {
     // Act
     gateway.owned = {TestCatalog.productA};
     await services.entitlements.refresh();
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     // Assert
     await tester.scrollUntilVisible(find.text(paidPackTitle), 300, scrollable: find.byType(Scrollable).last);

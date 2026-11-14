@@ -56,7 +56,7 @@ void main() {
 
       // Act
       await tester.pumpWidget(RobiCodesApp(services: services));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Assert
       for (final game in services.catalog.games) {
@@ -131,7 +131,7 @@ void main() {
 
       // Act
       await tapVisible(tester, find.byType(LevelButton).first);
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Assert
       expect(find.byType(LevelScreen), findsOneWidget);
@@ -147,7 +147,7 @@ void main() {
 
     // Act
     await tester.tap(findButton(AppTexts.backToHome));
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     // Assert
     expect(find.byType(LevelSelectScreen), findsNothing);
@@ -159,11 +159,11 @@ void main() {
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
     await openLevelSelect(tester, PathFinderTexts.title);
     await tapVisible(tester, find.byType(LevelButton).first);
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     // Act
     await tester.tap(findButton(AppTexts.backToHome));
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     // Assert
     expect(find.byType(LevelScreen), findsNothing);

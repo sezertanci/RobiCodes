@@ -5,4 +5,7 @@ abstract final class PlayTimings {
 
   /// "Hareketi azalt" ayarı açıkken robotun bir adımı.
   static const reducedStep = Duration(milliseconds: 150);
+
+  /// Robotun beklerken bir kez sağa sola sallanma süresi.
+  static const robotIdle = Duration(milliseconds: 3200);
 }

@@ -71,7 +71,7 @@ void main() {
       expect(find.text(ResultPanel.nextLabel), findsOneWidget);
 
       await tester.tap(find.text(ResultPanel.backLabel));
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(find.bySemanticsLabel('Seviye 1, 3 yıldız'), findsOneWidget);
       expect(find.bySemanticsLabel('Seviye 2'), findsOneWidget);
     });

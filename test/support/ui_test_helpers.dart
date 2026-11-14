@@ -53,14 +53,22 @@ Future<void> waitForAnimations(WidgetTester tester, {int steps = 50}) async {
 Future<void> openLevelSelect(WidgetTester tester, String gameTitle) async {
   await tester.scrollUntilVisible(find.text(gameTitle), 200, scrollable: find.byType(Scrollable).first);
   await tester.ensureVisible(find.text(gameTitle));
-  await tester.pumpAndSettle();
+  await settle(tester);
   await tester.tap(find.text(gameTitle));
-  await tester.pumpAndSettle();
+  await settle(tester);
   expect(find.byType(LevelSelectScreen), findsOneWidget);
 }
 
 /// Seviye seçim ekranında [number]. seviyeyi açar.
 Future<void> openLevel(WidgetTester tester, int number) async {
   await tester.tap(find.bySemanticsLabel('Seviye $number'));
-  await tester.pumpAndSettle();
+  await settle(tester);
 }
+
+/// Sayfa geçişi veya pencere açılıp kapanması gibi kısa animasyonların bitmesini bekler. Robotlar
+/// beklerken hep sallandığı için ekran hiç durulmaz ve `pumpAndSettle` zaman aşımına uğrar; onun
+/// yerine bu kısa animasyonların süresi kadar beklenir.
+Future<void> settle(WidgetTester tester) => waitForAnimations(tester, steps: _settleSteps);
+
+/// Sayfa geçişi (300 ms) ve sonuç paneli (450 ms) gibi kısa animasyonlara yeten `waitForAnimations` adımı.
+const _settleSteps = 5;

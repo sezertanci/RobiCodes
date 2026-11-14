@@ -103,7 +103,7 @@ void main() {
 
         // Act
         await tester.tap(find.byType(CharacterButton));
-        await tester.pumpAndSettle();
+        await settle(tester);
         expect(find.text(CharacterDialog.title), findsOneWidget);
         expect(tester.takeException(), isNull);
         for (final character in CharacterRoster.all) {
@@ -116,7 +116,7 @@ void main() {
         };
         expect(rowTops, hasLength(1), reason: 'İlk $columns karakter aynı satırda olmalı.');
         await tester.tap(find.bySemanticsLabel(fiyo.name));
-        await tester.pumpAndSettle();
+        await settle(tester);
 
         // Assert
         expect(find.byType(CharacterDialog), findsNothing);
@@ -134,11 +134,11 @@ void main() {
       final services = AppServices.production(InMemoryKeyValueStore());
       await tester.pumpWidget(RobiCodesApp(services: services));
       await tester.tap(find.byType(CharacterButton));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Act
       await tester.tap(find.text(CharacterDialog.closeLabel));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Assert
       expect(find.byType(CharacterDialog), findsNothing);

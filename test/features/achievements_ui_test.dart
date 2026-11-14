@@ -56,7 +56,7 @@ void main() {
 
       // Act
       await tester.tap(find.byType(AchievementsButton));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Assert
       expect(find.byType(AchievementsScreen), findsOneWidget);

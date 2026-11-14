@@ -13,6 +13,7 @@ import 'package:robi_codes/features/sound/sound_effect.dart';
 import 'package:robi_codes/features/sound/sound_service.dart';
 
 import '../support/fakes.dart';
+import '../support/ui_test_helpers.dart';
 
 void main() {
   late InMemoryKeyValueStore store;
@@ -146,13 +147,13 @@ void main() {
       final services = AppServices.production(store, soundPlayer: player);
       await tester.pumpWidget(RobiCodesApp(services: services));
       await tester.tap(find.byTooltip(SettingsDialog.title));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Act
       await tester.tap(find.byType(Switch));
-      await tester.pumpAndSettle();
+      await settle(tester);
       await tester.tap(find.text(SettingsDialog.closeLabel));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       // Assert
       expect(services.sound.isEnabled, isFalse);

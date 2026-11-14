@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
 import '../../character/character_scope.dart';
+import 'idle_sway.dart';
 
 /// Robotun konuşma balonundaki duygu.
 enum RobotMood { talk, happy, sad }
@@ -24,7 +25,9 @@ final class SpeechBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      Image.asset(CharacterScope.of(context).image, width: _robotSize, height: _robotSize),
+      IdleSway(
+        child: Image.asset(CharacterScope.of(context).image, width: _robotSize, height: _robotSize),
+      ),
       const SizedBox(width: 8),
       Expanded(
         child: AnimatedContainer(
