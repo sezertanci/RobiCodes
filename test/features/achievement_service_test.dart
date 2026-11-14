@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/app/app_assets.dart';
 import 'package:robi_codes/app/app_services.dart';
@@ -12,21 +11,9 @@ import 'package:robi_codes/features/achievements/achievement.dart';
 import 'package:robi_codes/features/achievements/achievement_catalog.dart';
 import 'package:robi_codes/features/achievements/achievement_service.dart';
 import 'package:robi_codes/features/progress/progress_repository.dart';
-import 'package:robi_codes/games/game_module.dart';
 import 'package:robi_codes/games/game_registry.dart';
 
 import '../support/fakes.dart';
-
-/// Örnek katalogdaki oyunu oynanabilir yapan boş modül.
-final class _FakeModule implements GameModule {
-  const _FakeModule(this.gameId);
-
-  @override
-  final String gameId;
-
-  @override
-  Widget buildLevel(LevelSession session) => const SizedBox();
-}
 
 /// Örnek kataloğa modülü olmayan ("Yakında" görünen) bir oyun eklenir.
 const _soonGameId = 'soon';
@@ -57,7 +44,7 @@ void main() {
   AchievementService createService() => AchievementService(
     store: store,
     catalog: _catalogWithComingSoonGame(),
-    games: GameRegistry([const _FakeModule(TestCatalog.gameId)]),
+    games: GameRegistry([const FakeGameModule(TestCatalog.gameId)]),
     progress: progress,
   );
 

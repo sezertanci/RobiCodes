@@ -12,6 +12,18 @@ import 'package:robi_codes/features/play/game_feedback.dart';
 import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
 import 'package:robi_codes/features/sound/sound_player.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
+import 'package:robi_codes/games/game_module.dart';
+
+/// Katalogdaki bir oyunu oynanabilir yapan, ekranı boş sahte modül.
+final class FakeGameModule implements GameModule {
+  const FakeGameModule(this.gameId);
+
+  @override
+  final String gameId;
+
+  @override
+  Widget buildLevel(LevelSession session) => const SizedBox();
+}
 
 /// Bellekte çalışan depo.
 final class InMemoryKeyValueStore implements KeyValueStore {

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../app/app_assets.dart';
 import '../../app/app_scope.dart';
+import '../../app/app_services.dart';
 import '../../app/screen_scale.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
@@ -16,6 +17,7 @@ import 'widgets/level_group_panel.dart';
 /// Bir oyunun seviye seçim ekranı. Yalnızca oynanabilir (ücretsiz veya sahip olunan) paketler
 /// gösterilir; her paketin seviyeleri zorluk gruplarının renkli panellerinde durur. Paneller ekran
 /// genişliğine göre bir, iki veya dört sütuna dizilir (web sürümündeki kırılma noktaları).
+/// İlerleme veya paket sahipliği değişince (ör. mağaza açılışta geç cevap verirse) ekran yenilenir.
 final class LevelSelectScreen extends StatelessWidget {
   const LevelSelectScreen({required this.game, super.key});
 
@@ -39,41 +41,58 @@ final class LevelSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final services = AppScope.of(context);
-    final packs = services.entitlements.playablePacksOf(game.id);
     return ListenableBuilder(
-      listenable: services.progress,
-      builder: (context, _) => Scaffold(
-        appBar: AppBar(
-          title: Text(game.title),
-          actions: [_StarCounter(stars: services.progress.starsIn(packs))],
-        ),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final columns = columnsFor(constraints.maxWidth);
-            final ratio = ScreenScale.of(context).size(1, max: _maxRowGrowth);
-            return ListView(
-              padding: const EdgeInsets.all(_padding),
-              children: [
-                for (final pack in packs) ...[
-                  if (packs.length > 1) Text(pack.title, style: Theme.of(context).textTheme.headlineSmall),
-                  ..._grid([
-                    for (final range in pack.groupRanges)
-                      _GroupPanel(
-                        game: game,
-                        pack: pack,
-                        range: range,
-                        progress: services.progress,
-                        policy: services.unlockPolicy,
-                        ratio: ratio,
-                      ),
-                  ], columns),
+      listenable: Listenable.merge([services.progress, services.entitlements]),
+      builder: (context, _) {
+        final packs = services.entitlements.playablePacksOf(game.id);
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(game.title),
+            actions: [_StarCounter(stars: services.progress.starsIn(packs))],
+          ),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = columnsFor(constraints.maxWidth);
+              final ratio = ScreenScale.of(context).size(1, max: _maxRowGrowth);
+              return ListView(
+                padding: const EdgeInsets.all(_padding),
+                children: [
+                  for (final pack in packs)
+                    ..._packSection(context, services, pack, columns, ratio, titled: packs.length > 1),
                 ],
-              ],
-            );
-          },
-        ),
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
+  }
+
+  /// Bir paketin başlığı (birden çok paket varsa) ve grup panelleri. Sıradaki seviye paket başına bir kez bulunur.
+  List<Widget> _packSection(
+    BuildContext context,
+    AppServices services,
+    LevelPack pack,
+    int columns,
+    double ratio, {
+    required bool titled,
+  }) {
+    final nextLevel = services.unlockPolicy.nextLevel(pack);
+    return [
+      if (titled) Text(pack.title, style: Theme.of(context).textTheme.headlineSmall),
+      ..._grid([
+        for (final range in pack.groupRanges)
+          _GroupPanel(
+            game: game,
+            pack: pack,
+            range: range,
+            nextLevel: nextLevel,
+            progress: services.progress,
+            policy: services.unlockPolicy,
+            ratio: ratio,
+          ),
+      ], columns),
+    ];
   }
 }
 
@@ -118,6 +137,7 @@ final class _GroupPanel extends StatelessWidget {
     required this.game,
     required this.pack,
     required this.range,
+    required this.nextLevel,
     required this.progress,
     required this.policy,
     required this.ratio,
@@ -126,6 +146,9 @@ final class _GroupPanel extends StatelessWidget {
   final GameDefinition game;
   final LevelPack pack;
   final GroupRange range;
+
+  /// Paketteki sıradaki oynanacak seviye; hepsi bittiyse `null`.
+  final int? nextLevel;
   final ProgressRepository progress;
   final UnlockPolicy policy;
   final double ratio;
@@ -133,7 +156,6 @@ final class _GroupPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unlocked = policy.isGroupUnlocked(pack, range);
-    final nextLevel = policy.nextLevel(pack);
     final tone = GroupTone.of(range.group.difficulty);
     return LevelGroupPanel(
       title: range.group.difficulty.title,
