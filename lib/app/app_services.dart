@@ -2,6 +2,7 @@ import '../content/catalog_data.dart';
 import '../content/content_catalog.dart';
 import '../core/storage/key_value_store.dart';
 import '../features/cloud_save/cloud_save_gateway.dart';
+import '../features/character/character_service.dart';
 import '../features/cloud_save/cloud_sync_service.dart';
 import '../features/parental_gate/parental_gate.dart';
 import '../features/parental_gate/protected_action_runner.dart';
@@ -31,6 +32,7 @@ final class AppServices {
     SoundPlayer soundPlayer = const SilentSoundPlayer(),
   }) : progress = ProgressRepository(store),
        sound = SoundService(store: store, player: soundPlayer),
+       character = CharacterService(store),
        protectedActions = ProtectedActionRunner(parentalGate) {
     unlockPolicy = UnlockPolicy(progress);
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
@@ -52,6 +54,7 @@ final class AppServices {
   final GameRegistry games;
   final ProgressRepository progress;
   final SoundService sound;
+  final CharacterService character;
   final ProtectedActionRunner protectedActions;
   late final UnlockPolicy unlockPolicy;
   late final EntitlementService entitlements;

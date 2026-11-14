@@ -125,6 +125,24 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   kupa penceresindeki sürekli yağan konfeti de o zaman eklenecek.
 - `flutter analyze` temiz, 299 test geçiyor, debug APK derleniyor. Emülatörde denendi: konfeti panelin
   üstünden ekranın altına yağıp bitiyor; animasyonlar kapatılınca hiç görünmüyor. Tablette henüz denenmedi.
+- Kullanıcı onaylayıp commit istedi (`8e92541`).
+
+**6. aşama — 3. alt adım (karakter seçimi) tamamlandı, onay bekliyor:**
+
+- Web'de seçilebilen karakter 5 tanedir (`js/core/characters.js`: Robi, Fiyo, Işıl, Pembe, Pırıl); dördünün
+  görseli `assets/characters/` altına değiştirilmeden kopyalandı. Web klasöründeki diğer robot görselleri
+  (`robot-head`, `robot-small`, `robot-wave`, `robot.svg`) seçim listesinde yoktur ve aktarılmadı.
+- `CharacterService` seçimi `character.v1` anahtarında saklar; kayıt yoksa, bozuksa veya artık olmayan bir
+  karakteri gösteriyorsa Robi ile başlanır. `CharacterScope` seçili karakteri ağaca verir; konuşma balonu ve
+  robot görüntüsü (harita ve yol) buradan okur, oyun ekranlarına parametre eklenmedi.
+- Ana ekranın üstüne karakter ve "Değiştir" düğmesi eklendi; pencere web'deki gibi telefonda iki, tablette üç
+  sütun, seçili karakter sarı çerçeveli. Web'deki ana ekran robotunun sürekli el sallama animasyonu eklenmedi
+  (Ertelenen işler → Animasyonlar).
+- Ana ekranda kartlar karakter yüzünden aşağı kaydığı için test yardımcısı `openLevelSelect` kartı tamamen
+  görünür yapıp dokunacak şekilde düzeltildi.
+- `flutter analyze` temiz, 311 test geçiyor, debug APK derleniyor. Telefonda (emülatör) ve tablette denendi:
+  pencere iki/üç sütun açıldı, seçilen karakter ana ekranda, konuşma balonunda, haritada ve yolda göründü,
+  uygulama yeniden başlatılınca seçim korundu.
 
 ## Ertelenen işler (unutulmayacak)
 
@@ -135,8 +153,8 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 | Ses efektleri | Eklendi (6. aşama) | Rozet ve kupa sesleri hazır; rozet alt adımında bağlanacak. |
 | Rozet ve kupalar | Yok | 6. aşamanın 4. alt adımı. Yalnızca dört oyuna özel ve sabit sayılarla yazılmayacak, yeni oyunları da kapsayacak genel bir yapı olacak. Kazanılanlar yerel kayıtta saklanacak, bulut kayıt aşamasında senkronizasyona dahil edilecek. Kazanılmış ödül tekrar kazanılmış gibi gösterilmeyecek. |
 | Konfeti | Sonuç panelinde eklendi (6. aşama) | Kupa penceresindeki sürekli yağan konfeti rozet alt adımında eklenecek. |
-| Karakter seçimi | Yok | Web sürümünde var (`js/core/characters.js`, `js/screens/character-dialog.js`, `assets/characters/` altında robotun farklı görünümleri). Vazgeçilmeyecek; eski sürümle karşılaştırılıp geri eklenmesi değerlendirilecek. |
-| Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
+| Karakter seçimi | Eklendi (6. aşama) | Web'deki 5 karakter ve seçim penceresi aktarıldı. |
+| Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları, ana ekran robotunun el sallaması gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
 
 ## Kararlar
 
@@ -144,6 +162,6 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-6. aşamanın kutlama ve konfeti alt adımı raporlandı; kullanıcı onaylayınca 3. alt adıma (karakter seçimi)
+6. aşamanın karakter seçimi alt adımı raporlandı; kullanıcı onaylayınca 4. alt adıma (rozet ve kupalar)
 geçilecek. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.

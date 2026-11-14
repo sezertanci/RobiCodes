@@ -49,9 +49,11 @@ Future<void> waitForAnimations(WidgetTester tester, {int steps = 50}) async {
 }
 
 /// Ana ekrandan [gameTitle] oyununun seviye seçim ekranını açar. Ana ekrandaki ızgara yalnızca
-/// görünen kartları kurduğu için kart aşağıdaysa önce kaydırılır.
+/// görünen kartları kurduğu için kart aşağıdaysa önce kaydırılır ve tamamen görünür hale getirilir.
 Future<void> openLevelSelect(WidgetTester tester, String gameTitle) async {
   await tester.scrollUntilVisible(find.text(gameTitle), 200, scrollable: find.byType(Scrollable).first);
+  await tester.ensureVisible(find.text(gameTitle));
+  await tester.pumpAndSettle();
   await tester.tap(find.text(gameTitle));
   await tester.pumpAndSettle();
   expect(find.byType(LevelSelectScreen), findsOneWidget);

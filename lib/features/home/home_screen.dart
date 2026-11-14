@@ -8,9 +8,10 @@ import '../../content/models/game_definition.dart';
 import '../play/level_select_screen.dart';
 import '../progress/star_rule.dart';
 import '../settings/settings_dialog.dart';
+import 'character_button.dart';
 import 'game_card.dart';
 
-/// Ana ekran: katalogdaki oyunları ilerlemeleriyle birlikte gösterir.
+/// Ana ekran: seçili karakteri ve katalogdaki oyunları ilerlemeleriyle birlikte gösterir.
 /// Oyun sayısı katalogdan gelir; ekran sabit bir sayı varsaymaz.
 final class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -34,16 +35,26 @@ final class HomeScreen extends StatelessWidget {
       ),
       body: ListenableBuilder(
         listenable: Listenable.merge([services.progress, services.entitlements]),
-        builder: (context, _) => GridView(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: _maxCardWidth,
-            mainAxisExtent: _cardHeight,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-          ),
-          padding: const EdgeInsets.all(16),
-          children: [
-            for (final (index, game) in services.catalog.games.indexed) _buildCard(context, services, game, index),
+        builder: (context, _) => CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(
+              child: Padding(padding: EdgeInsets.only(top: 16), child: CharacterButton()),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverGrid.list(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: _maxCardWidth,
+                  mainAxisExtent: _cardHeight,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                ),
+                children: [
+                  for (final (index, game) in services.catalog.games.indexed)
+                    _buildCard(context, services, game, index),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../app/app_assets.dart';
+import '../../character/character_scope.dart';
 
 /// Robotun tek seferlik hareketi. Ekran her yeni tepkide animasyonu baştan oynatır.
 enum RobotReaction { none, bump, celebrate, shake, hop }
@@ -67,7 +67,7 @@ final class _RobotSpriteState extends State<RobotSprite> with SingleTickerProvid
         transform: _transform(_animation.value, constraints.maxWidth),
         child: child,
       ),
-      child: Image.asset(AppAssets.robot),
+      child: Image.asset(CharacterScope.of(context).image),
     ),
   );
 

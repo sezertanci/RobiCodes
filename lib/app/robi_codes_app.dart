@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../features/character/character_scope.dart';
 import '../features/home/home_screen.dart';
 import 'app_scope.dart';
 import 'app_services.dart';
@@ -15,11 +16,15 @@ final class RobiCodesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppScope(
     services: services,
-    child: MaterialApp(
-      title: title,
-      debugShowCheckedModeBanner: false,
-      theme: buildAppTheme(),
-      home: const HomeScreen(),
+    child: ListenableBuilder(
+      listenable: services.character,
+      builder: (context, child) => CharacterScope(character: services.character.current, child: child!),
+      child: MaterialApp(
+        title: title,
+        debugShowCheckedModeBanner: false,
+        theme: buildAppTheme(),
+        home: const HomeScreen(),
+      ),
     ),
   );
 }

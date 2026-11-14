@@ -6,7 +6,7 @@ kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` k
 
 > **Durum — 6. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
-> Ses efektleri, ses ayarı ve sonuç panelindeki konfeti eklendi; karakter seçimi ve rozetler sırada. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
+> Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi eklendi; rozetler sırada. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
 > ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
@@ -66,12 +66,13 @@ lib/
       widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli,
                   robot görüntüsü, ipucu ve yanlış işaretleri, nabız gibi atan ipucu çerçevesi, konfeti
     progress/     Yıldız kuralı, ilerleme kaydı, grup ve seviye kilitleri
+    character/    Seçilebilen karakterler, seçimi saklayan servis ve karakter seçme penceresi
     sound/        Ses efektleri, ses servisi (açık/kapalı ayarı) ve ses çalıcı
     settings/     Ayarlar penceresi
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
     cloud_save/   İsteğe bağlı bulut kaydı, kayıt birleştirme
     parental_gate/ Ebeveyn doğrulaması ve korumalı işlem çalıştırıcı
-    home/         Ana ekran
+    home/         Ana ekran ve karakter düğmesi
 assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon) ve
                   sounds/ altında ses efektleri
 tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py, sesleri üreten
@@ -101,6 +102,11 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   Tablette düğmeler, harita kareleri ve seviye kutuları ekranın kısa kenarına göre büyür
   (`app/screen_scale.dart`); telefondaki boyutlar değişmez. "Hareketi azalt" ayarı açıksa robot hızlı
   yürür, tepki animasyonları oynatılmaz, konfeti gösterilmez ve sonuç paneli büyüyerek değil doğrudan açılır.
+- **Karakter seçimi:** Web sürümündeki 5 karakter (Robi, Fiyo, Işıl, Pembe, Pırıl) aynı görsellerle
+  aktarıldı (`features/character/`). Ana ekranın üstündeki karaktere dokununca seçim penceresi açılır
+  (telefonda iki, tablette üç sütun); seçilen karakter `character.v1` anahtarında saklanır ve konuşma
+  balonunda, haritada ve yolda hemen görünür. Robot çizen widget'lar karakteri `CharacterScope`'tan okur;
+  ağaçta yoksa (tek ekranı deneyen testler) varsayılan karakter Robi kullanılır.
 - **Konfeti:** Seviye bitince sonuç panelinin üstüne bir kez yağar (`features/play/widgets/confetti.dart`).
   Web sürümündeki gibi 28 parça; konumları, gecikmeleri, renkleri ve dönüşleri aynı formülle sıradan
   hesaplanır ve 3,2 saniyede ekranın altına iner. Paket kullanılmaz, parçalar `CustomPainter` ile çizilir;
