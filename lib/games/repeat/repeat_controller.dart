@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 
 import '../../features/play/game_feedback.dart';
+import '../../features/play/level_lifecycle.dart';
+import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import '../path_finder/board_run.dart';
 import '../path_finder/board_scene.dart';
 import '../path_finder/engine/path_finder_board.dart';
 import '../path_finder/engine/path_finder_engine.dart';
@@ -15,18 +18,16 @@ import 'repeat_texts.dart';
 
 /// Bir seviyenin oynanış durumu: bloklar, açık tekrar bloğu, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
-final class RepeatController extends ChangeNotifier implements BoardScene {
+final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRunScene {
   RepeatController({
     required this.level,
     required this.onCompleted,
     this.feedback = const SilentGameFeedback(),
     this.stepDuration = defaultStepDuration,
     this.celebrateDuration = defaultCelebrateDuration,
-  }) : board = level.board,
-       targetBlocks = RepeatEngine.countBlocks(RepeatEngine.parseSolution(level.solution)),
-       _message = _introOf(level) {
-    _robot = board.start;
-  }
+  }) : boardRun = BoardRun(level.board),
+       voice = RobotVoice(feedback: feedback, intro: _introOf(level)),
+       targetBlocks = RepeatEngine.countBlocks(RepeatEngine.parseSolution(level.solution));
 
   static const defaultStepDuration = PathFinderController.defaultStepDuration;
   static const reducedStepDuration = PathFinderController.reducedStepDuration;
@@ -36,8 +37,6 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
   static const repeatWithMove = 2;
 
   final RepeatLevel level;
-  @override
-  final PathFinderBoard board;
   final ValueChanged<int> onCompleted;
 
   /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
@@ -48,24 +47,18 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
 
   /// 3 yıldız için en fazla blok sayısı: önerilen çözümün blok sayısı.
   final int targetBlocks;
+  @override
+  final BoardRun boardRun;
+  @override
+  final RobotVoice voice;
 
   final List<ProgramBlock> _program = [];
-  final Set<int> _collected = {};
-  final Map<GridPoint, Direction> _trail = {};
-  late GridPoint _robot;
-  String _message;
-  RobotMood _mood = RobotMood.talk;
-  RobotReaction _reaction = RobotReaction.none;
-  Direction? _bumpDirection;
-  int _reactionCount = 0;
   int? _target;
   ProgramPlace? _selected;
   ProgramStep? _activeStep;
   ProgramPlace? _wrongPlace;
-  NextMoveHint? _hint;
   bool _hintUsed = false;
   bool _running = false;
-  bool _disposed = false;
 
   List<ProgramBlock> get program => List.unmodifiable(_program);
   int get blockCount => RepeatEngine.countBlocks(_program);
@@ -89,22 +82,8 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
   /// Tekrarla düğmesi blok açıkken bloktan çıkarır; kapalıyken ancak blok ve içine bir ok sığıyorsa ekler.
   bool get canUseRepeatButton => !_running && (_target != null || blockCount + repeatWithMove <= maxBlocks);
 
-  @override
-  GridPoint get robot => _robot;
-  @override
-  Set<int> get collectedCoins => Set.unmodifiable(_collected);
-  @override
-  Map<GridPoint, Direction> get trail => Map.unmodifiable(_trail);
-  String get message => _message;
-  RobotMood get mood => _mood;
-  @override
-  RobotReaction get reaction => _reaction;
-  @override
-  Direction? get bumpDirection => _bumpDirection;
-  @override
-  int get reactionCount => _reactionCount;
-  @override
-  NextMoveHint? get hint => _hint;
+  String get message => voice.message;
+  RobotMood get mood => voice.mood;
 
   /// Oku açık tekrar bloğunun içine, yoksa programın sonuna ekler.
   void addMove(Direction direction) {
@@ -121,7 +100,7 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
       }
     });
     if (isFull) {
-      _say(RepeatTexts.full);
+      voice.say(RepeatTexts.full);
     }
     notifyListeners();
   }
@@ -133,13 +112,13 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
     }
     if (_target != null) {
       _target = null;
-      _say(RepeatTexts.outsideRepeat);
+      voice.say(RepeatTexts.outsideRepeat);
       notifyListeners();
       return;
     }
     _changeProgram(() => _program.add(const RepeatBlock(RepeatBlock.defaultTimes, [])));
     _target = _program.length - 1;
-    _say(isFull ? RepeatTexts.full : RepeatTexts.insideRepeat);
+    voice.say(isFull ? RepeatTexts.full : RepeatTexts.insideRepeat);
     notifyListeners();
   }
 
@@ -162,7 +141,7 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
     final leaving = _target == index;
     _target = leaving ? null : index;
     _selected = leaving ? null : Places.top(index);
-    _say(leaving ? RepeatTexts.outsideRepeat : RepeatTexts.insideRepeat);
+    voice.say(leaving ? RepeatTexts.outsideRepeat : RepeatTexts.insideRepeat);
     notifyListeners();
   }
 
@@ -214,7 +193,7 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
       _program.insert(place.block + 1, MoveBlock(block.body[place.inner]));
       _target = null;
     });
-    _say(RepeatTexts.movedOut);
+    voice.say(RepeatTexts.movedOut);
     notifyListeners();
   }
 
@@ -226,7 +205,7 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
       _program.clear();
       _target = null;
     });
-    _say(_introOf(level));
+    voice.say(_introOf(level));
     notifyListeners();
   }
 
@@ -236,26 +215,26 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
       return;
     }
     _hintUsed = true;
-    _hint = null;
+    boardRun.hint = null;
     switch (RepeatEngine.hint(board, _program)) {
       case EmptyRepeatHint(:final block):
         _target = block;
         _selected = null;
-        _say(RepeatTexts.emptyRepeat);
+        voice.say(RepeatTexts.emptyRepeat);
       case FixPlaceHint(:final step):
         _selected = Places.of(step);
         _wrongPlace = Places.of(step);
-        _say(RepeatTexts.fixHint(step));
+        voice.say(RepeatTexts.fixHint(step));
       case NextStepHint(:final move):
         // Blok sınırı doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
         if (isFull) {
-          _say(RepeatTexts.fullLevelHint(level.hint));
+          voice.say(RepeatTexts.fullLevelHint(level.hint));
         } else {
-          _hint = move;
-          _say(RepeatTexts.nextMoveHint(level.hint, move.direction));
+          boardRun.hint = move;
+          voice.say(RepeatTexts.nextMoveHint(level.hint, move.direction));
         }
       case RepeatSolvedHint():
-        _say(RepeatTexts.solved);
+        voice.say(RepeatTexts.solved);
     }
     notifyListeners();
   }
@@ -266,13 +245,13 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
       return;
     }
     if (_program.isEmpty) {
-      _say(RepeatTexts.empty);
+      voice.say(RepeatTexts.empty);
       notifyListeners();
       return;
     }
     if (RepeatEngine.findEmptyRepeat(_program) case final empty?) {
       _target = empty;
-      _say(RepeatTexts.emptyRepeat);
+      voice.say(RepeatTexts.emptyRepeat);
       notifyListeners();
       return;
     }
@@ -280,31 +259,20 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
     _target = null;
     _selected = null;
     _resetBoard();
-    _say(RepeatTexts.running);
+    voice.say(RepeatTexts.running);
     notifyListeners();
     final run = RepeatEngine.run(board, _program);
-    if (await _playSteps(run)) {
+    final played = await boardRun.play(
+      run.result,
+      directions: [for (final step in run.trace) step.direction],
+      stepDuration: stepDuration,
+      onStep: (index) => _activeStep = run.trace[index],
+      notify: notifyListeners,
+      isStopped: () => isDisposed,
+    );
+    if (played) {
       await _finish(run);
     }
-  }
-
-  /// Adımları sırayla oynatır. Ekran kapanırsa `false` döner.
-  Future<bool> _playSteps(RepeatRun run) async {
-    for (final (index, step) in run.result.steps.indexed) {
-      _activeStep = run.trace[index];
-      _trail[_robot] = run.trace[index].direction;
-      _robot = step.position;
-      notifyListeners();
-      await Future<void>.delayed(stepDuration);
-      if (_disposed) {
-        return false;
-      }
-      if (step.coin case final coin?) {
-        _collected.add(coin);
-        notifyListeners();
-      }
-    }
-    return true;
   }
 
   Future<void> _finish(RepeatRun run) async {
@@ -312,25 +280,22 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
     final result = run.result;
     switch (result.outcome) {
       case RunOutcome.success:
-        _say(RepeatTexts.success, RobotMood.happy);
-        _react(RobotReaction.celebrate);
+        voice.say(RepeatTexts.success, RobotMood.happy);
+        voice.react(RobotReaction.celebrate);
         notifyListeners();
         final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: blockCount <= targetBlocks);
-        await Future<void>.delayed(celebrateDuration);
-        if (!_disposed) {
-          onCompleted(stars);
-        }
+        await completeAfter(celebrateDuration, onCompleted, stars);
         return;
       case RunOutcome.blocked:
         final step = run.trace[result.failedIndex!];
         _wrongPlace = Places.of(step);
-        _bumpDirection = step.direction;
-        _react(RobotReaction.bump);
-        _say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
+        boardRun.bumpDirection = step.direction;
+        voice.react(RobotReaction.bump);
+        voice.say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
       case RunOutcome.missedGoal || RunOutcome.missingCoins:
-        _react(RobotReaction.shake);
+        voice.react(RobotReaction.shake);
         final text = result.outcome == RunOutcome.missingCoins ? RepeatTexts.missingCoins : RepeatTexts.missedGoal;
-        _say(text, RobotMood.sad);
+        voice.say(text, RobotMood.sad);
     }
     _running = false;
     notifyListeners();
@@ -344,33 +309,13 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
   }
 
   void _resetBoard() {
-    _robot = board.start;
-    _collected.clear();
-    _trail.clear();
+    boardRun.reset();
     _activeStep = null;
     _wrongPlace = null;
-    _hint = null;
-    _reaction = RobotReaction.none;
+    voice.calm();
   }
 
   /// Açılış mesajı: seviyenin kendi mesajı, yoksa altın olup olmamasına göre genel mesaj.
   static String _introOf(RepeatLevel level) =>
       level.intro ?? (level.board.coins.isEmpty ? RepeatTexts.intro : RepeatTexts.coinIntro);
-
-  void _react(RobotReaction reaction) {
-    _reaction = reaction;
-    _reactionCount++;
-  }
-
-  void _say(String text, [RobotMood mood = RobotMood.talk]) {
-    _message = text;
-    _mood = mood;
-    feedback.react(mood);
-  }
-
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
-  }
 }

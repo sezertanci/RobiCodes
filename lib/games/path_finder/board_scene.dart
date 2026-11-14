@@ -1,4 +1,6 @@
+import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
+import 'board_run.dart';
 import 'engine/path_finder_board.dart';
 import 'engine/path_finder_engine.dart';
 
@@ -20,4 +22,28 @@ abstract interface class BoardScene {
   /// Her tepkide artar; ekran aynı tepki art arda gelse de animasyonu yeniden başlatır.
   int get reactionCount;
   Direction? get bumpDirection;
+}
+
+/// [BoardScene]'i yolculuk ([boardRun]) ve robotun sesi ([voice]) üzerinden sağlar. Denetleyici
+/// yalnızca bu ikisini ve adım süresini verir.
+mixin BoardRunScene implements BoardScene {
+  BoardRun get boardRun;
+  RobotVoice get voice;
+
+  @override
+  PathFinderBoard get board => boardRun.board;
+  @override
+  GridPoint get robot => boardRun.robot;
+  @override
+  Map<GridPoint, Direction> get trail => boardRun.trail;
+  @override
+  Set<int> get collectedCoins => boardRun.collectedCoins;
+  @override
+  NextMoveHint? get hint => boardRun.hint;
+  @override
+  Direction? get bumpDirection => boardRun.bumpDirection;
+  @override
+  RobotReaction get reaction => voice.reaction;
+  @override
+  int get reactionCount => voice.reactionCount;
 }

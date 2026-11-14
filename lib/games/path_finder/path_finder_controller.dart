@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 
 import '../../features/play/game_feedback.dart';
+import '../../features/play/level_lifecycle.dart';
 import '../../features/play/play_timings.dart';
+import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import 'board_run.dart';
 import 'board_scene.dart';
 import 'engine/path_finder_board.dart';
 import 'engine/path_finder_engine.dart';
@@ -13,17 +16,16 @@ import 'path_finder_texts.dart';
 
 /// Bir seviyenin oynanış durumu: komut listesi, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
-final class PathFinderController extends ChangeNotifier implements BoardScene {
+final class PathFinderController extends ChangeNotifier with LevelLifecycle, BoardRunScene {
   PathFinderController({
     required this.level,
     required this.onCompleted,
     this.feedback = const SilentGameFeedback(),
     this.stepDuration = defaultStepDuration,
     this.celebrateDuration = defaultCelebrateDuration,
-  }) : board = level.board,
-       _message = _introOf(level) {
+  }) : boardRun = BoardRun(level.board),
+       voice = RobotVoice(feedback: feedback, intro: _introOf(level)) {
     optimalLength = PathFinderEngine.optimalLength(board);
-    _robot = board.start;
   }
 
   static const defaultStepDuration = Duration(milliseconds: 450);
@@ -31,8 +33,6 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
   static const defaultCelebrateDuration = PlayTimings.celebrate;
 
   final PathFinderLevel level;
-  @override
-  final PathFinderBoard board;
   final ValueChanged<int> onCompleted;
 
   /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
@@ -41,48 +41,26 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
   final Duration stepDuration;
   final Duration celebrateDuration;
   late final int optimalLength;
+  @override
+  final BoardRun boardRun;
+  @override
+  final RobotVoice voice;
 
   final List<Direction> _commands = [];
-  final Set<int> _collected = {};
-  final Map<GridPoint, Direction> _trail = {};
-  late GridPoint _robot;
-  String _message;
-  RobotMood _mood = RobotMood.talk;
-  RobotReaction _reaction = RobotReaction.none;
-  Direction? _bumpDirection;
-  int _reactionCount = 0;
   int? _selected;
   int? _activeIndex;
   int? _wrongIndex;
-  NextMoveHint? _hint;
   bool _hintUsed = false;
   bool _running = false;
-  bool _disposed = false;
 
   List<Direction> get commands => List.unmodifiable(_commands);
   int get commandLimit => level.commandLimit;
   bool get isFull => _commands.length >= commandLimit;
-  @override
-  GridPoint get robot => _robot;
-  @override
-  Set<int> get collectedCoins => Set.unmodifiable(_collected);
-
-  @override
-  Map<GridPoint, Direction> get trail => Map.unmodifiable(_trail);
-  String get message => _message;
-  RobotMood get mood => _mood;
-  @override
-  RobotReaction get reaction => _reaction;
-  @override
-  Direction? get bumpDirection => _bumpDirection;
-
-  @override
-  int get reactionCount => _reactionCount;
+  String get message => voice.message;
+  RobotMood get mood => voice.mood;
   int? get selectedIndex => _selected;
   int? get activeIndex => _activeIndex;
   int? get wrongIndex => _wrongIndex;
-  @override
-  NextMoveHint? get hint => _hint;
   bool get hintUsed => _hintUsed;
   bool get isRunning => _running;
 
@@ -92,7 +70,7 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
     }
     _changeProgram(() => _commands.add(direction));
     if (isFull) {
-      _say(PathFinderTexts.full);
+      voice.say(PathFinderTexts.full);
     }
     notifyListeners();
   }
@@ -152,7 +130,7 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
       return;
     }
     _changeProgram(_commands.clear);
-    _say(_introOf(level));
+    voice.say(_introOf(level));
     notifyListeners();
   }
 
@@ -162,19 +140,19 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
       return;
     }
     _hintUsed = true;
-    _hint = null;
+    boardRun.hint = null;
     switch (PathFinderEngine.hint(board, _commands, commandLimit)) {
       case final NextMoveHint next:
-        _hint = next;
-        _say(PathFinderTexts.nextMove(next.direction));
+        boardRun.hint = next;
+        voice.say(PathFinderTexts.nextMove(next.direction));
       case FixCommandHint(:final index):
         _selected = index;
         _wrongIndex = index;
-        _say(PathFinderTexts.fixCommand(index));
+        voice.say(PathFinderTexts.fixCommand(index));
       case TooManyCommandsHint():
-        _say(PathFinderTexts.tooMany);
+        voice.say(PathFinderTexts.tooMany);
       case SolvedHint():
-        _say(PathFinderTexts.solved);
+        voice.say(PathFinderTexts.solved);
     }
     notifyListeners();
   }
@@ -185,65 +163,51 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
       return;
     }
     if (_commands.isEmpty) {
-      _say(PathFinderTexts.empty);
+      voice.say(PathFinderTexts.empty);
       notifyListeners();
       return;
     }
     _running = true;
     _selected = null;
     _resetBoard();
-    _say(PathFinderTexts.running);
+    voice.say(PathFinderTexts.running);
     notifyListeners();
     final result = PathFinderEngine.run(board, _commands);
-    if (await _playSteps(result)) {
+    final played = await boardRun.play(
+      result,
+      directions: _commands,
+      stepDuration: stepDuration,
+      onStep: (index) => _activeIndex = index,
+      notify: notifyListeners,
+      isStopped: () => isDisposed,
+    );
+    if (played) {
       await _finish(result);
     }
-  }
-
-  /// Adımları sırayla oynatır. Ekran kapanırsa `false` döner.
-  Future<bool> _playSteps(RunResult result) async {
-    for (final (index, step) in result.steps.indexed) {
-      _activeIndex = index;
-      _trail[_robot] = _commands[index];
-      _robot = step.position;
-      notifyListeners();
-      await Future<void>.delayed(stepDuration);
-      if (_disposed) {
-        return false;
-      }
-      if (step.coin case final coin?) {
-        _collected.add(coin);
-        notifyListeners();
-      }
-    }
-    return true;
   }
 
   Future<void> _finish(RunResult result) async {
     _activeIndex = null;
     switch (result.outcome) {
       case RunOutcome.success:
-        _say(PathFinderTexts.success, RobotMood.happy);
-        _react(RobotReaction.celebrate);
+        voice.say(PathFinderTexts.success, RobotMood.happy);
+        voice.react(RobotReaction.celebrate);
         notifyListeners();
         final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _commands.length <= optimalLength);
-        await Future<void>.delayed(celebrateDuration);
-        if (!_disposed) {
-          onCompleted(stars);
-        }
+        await completeAfter(celebrateDuration, onCompleted, stars);
         return;
       case RunOutcome.blocked:
         final index = result.failedIndex!;
         _wrongIndex = index;
-        _bumpDirection = _commands[index];
-        _react(RobotReaction.bump);
-        _say(PathFinderTexts.blocked(result.obstacle!, index), RobotMood.sad);
+        boardRun.bumpDirection = _commands[index];
+        voice.react(RobotReaction.bump);
+        voice.say(PathFinderTexts.blocked(result.obstacle!, index), RobotMood.sad);
       case RunOutcome.missedGoal || RunOutcome.missingCoins:
-        _react(RobotReaction.shake);
+        voice.react(RobotReaction.shake);
         final text = result.outcome == RunOutcome.missingCoins
             ? PathFinderTexts.missingCoins
             : PathFinderTexts.missedGoal;
-        _say(text, RobotMood.sad);
+        voice.say(text, RobotMood.sad);
     }
     _running = false;
     notifyListeners();
@@ -257,33 +221,13 @@ final class PathFinderController extends ChangeNotifier implements BoardScene {
   }
 
   void _resetBoard() {
-    _robot = board.start;
-    _collected.clear();
-    _trail.clear();
+    boardRun.reset();
     _activeIndex = null;
     _wrongIndex = null;
-    _hint = null;
-    _reaction = RobotReaction.none;
+    voice.calm();
   }
 
   /// Açılış mesajı: seviyenin kendi mesajı, yoksa altın olup olmamasına göre genel mesaj.
   static String _introOf(PathFinderLevel level) =>
       level.intro ?? (level.board.coins.isEmpty ? PathFinderTexts.intro : PathFinderTexts.coinIntro);
-
-  void _react(RobotReaction reaction) {
-    _reaction = reaction;
-    _reactionCount++;
-  }
-
-  void _say(String text, [RobotMood mood = RobotMood.talk]) {
-    _message = text;
-    _mood = mood;
-    feedback.react(mood);
-  }
-
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
-  }
 }

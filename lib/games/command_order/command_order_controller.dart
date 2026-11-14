@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 import '../../features/play/game_feedback.dart';
+import '../../features/play/level_lifecycle.dart';
 import '../../features/play/play_timings.dart';
+import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
 import 'command_order_texts.dart';
@@ -16,7 +18,7 @@ typedef SlotMark = ({int slot, int? cardId, SlotMarkKind kind});
 
 /// Bir seviyenin oynanış durumu: kutulardaki kartlar, seçili kutu, işaretler ve sonuç.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
-final class CommandOrderController extends ChangeNotifier {
+final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
   CommandOrderController({
     required this.level,
     required List<OrderCard> cards,
@@ -25,7 +27,7 @@ final class CommandOrderController extends ChangeNotifier {
     this.celebrateDuration = defaultCelebrateDuration,
   }) : cards = List.unmodifiable(cards),
        _slots = List<int?>.filled(level.steps.length, null),
-       _message = _introOf(level);
+       _voice = RobotVoice(feedback: feedback, intro: _introOf(level));
 
   static const defaultCelebrateDuration = PlayTimings.celebrate;
 
@@ -40,22 +42,20 @@ final class CommandOrderController extends ChangeNotifier {
   final Duration celebrateDuration;
 
   final List<int?> _slots;
+  final RobotVoice _voice;
   int? _target;
   SlotMark? _mark;
-  String _message;
-  RobotMood _mood = RobotMood.talk;
   int _wrongCount = 0;
   bool _hintUsed = false;
   int _failedChecks = 0;
   bool _done = false;
-  bool _disposed = false;
 
   /// Her kutudaki kartın kimliği; boş kutu `null`.
   List<int?> get slots => List.unmodifiable(_slots);
   int? get target => _target;
   SlotMark? get mark => _mark;
-  String get message => _message;
-  RobotMood get mood => _mood;
+  String get message => _voice.message;
+  RobotMood get mood => _voice.mood;
 
   /// Her yanlış kontrolde artar; ekran yanlış kartı her seferinde yeniden sallar.
   int get wrongCount => _wrongCount;
@@ -81,7 +81,7 @@ final class CommandOrderController extends ChangeNotifier {
     }
     final slot = _target ?? _slots.indexOf(null);
     if (slot < 0) {
-      _say(CommandOrderTexts.full);
+      _voice.say(CommandOrderTexts.full);
       notifyListeners();
       return;
     }
@@ -128,7 +128,7 @@ final class CommandOrderController extends ChangeNotifier {
     if (_done) {
       return;
     }
-    _say(_introOf(level));
+    _voice.say(_introOf(level));
     _change(() {
       _slots.fillRange(0, _slots.length, null);
       _target = null;
@@ -141,7 +141,7 @@ final class CommandOrderController extends ChangeNotifier {
       return;
     }
     if (!isFull) {
-      _say(CommandOrderTexts.notFull);
+      _voice.say(CommandOrderTexts.notFull);
       notifyListeners();
       return;
     }
@@ -152,7 +152,7 @@ final class CommandOrderController extends ChangeNotifier {
         _failedChecks++;
         _wrongCount++;
         _mark = (slot: wrong.slot, cardId: null, kind: SlotMarkKind.wrong);
-        _say(CommandOrderTexts.wrong(wrong, cardOf(_slots[wrong.slot]!).text), RobotMood.sad);
+        _voice.say(CommandOrderTexts.wrong(wrong, cardOf(_slots[wrong.slot]!).text), RobotMood.sad);
         notifyListeners();
     }
   }
@@ -166,12 +166,12 @@ final class CommandOrderController extends ChangeNotifier {
     _hintUsed = true;
     final hint = CommandOrderEngine.nextHint(_slots);
     if (hint == null) {
-      _say(CommandOrderTexts.solved);
+      _voice.say(CommandOrderTexts.solved);
     } else {
       _mark = (slot: hint.slot, cardId: hint.cardId, kind: SlotMarkKind.hint);
       // Kutu seçili kalır; parlayan karta dokununca kart oraya gider, kutudaki yanlış kart havuza döner.
       _target = hint.slot;
-      _say(CommandOrderTexts.hintText(level.hint, cardOf(hint.cardId).text, hint.slot));
+      _voice.say(CommandOrderTexts.hintText(level.hint, cardOf(hint.cardId).text, hint.slot));
     }
     notifyListeners();
   }
@@ -180,20 +180,17 @@ final class CommandOrderController extends ChangeNotifier {
     _done = true;
     _target = null;
     _mark = null;
-    _say(CommandOrderTexts.success, RobotMood.happy);
+    _voice.say(CommandOrderTexts.success, RobotMood.happy);
     notifyListeners();
     final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _failedChecks == 0);
-    await Future<void>.delayed(celebrateDuration);
-    if (!_disposed) {
-      onCompleted(stars);
-    }
+    await completeAfter(celebrateDuration, onCompleted, stars);
   }
 
   /// Sıra değişince eski yanlış veya ipucu işareti ve ona ait mesaj silinir.
   void _change(VoidCallback update) {
     update();
     if (_mark != null) {
-      _say(_introOf(level));
+      _voice.say(_introOf(level));
     }
     _mark = null;
     notifyListeners();
@@ -201,16 +198,4 @@ final class CommandOrderController extends ChangeNotifier {
 
   static String _introOf(CommandOrderLevel level) =>
       level.extras.isEmpty ? CommandOrderTexts.intro : CommandOrderTexts.extrasIntro;
-
-  void _say(String text, [RobotMood mood = RobotMood.talk]) {
-    _message = text;
-    _mood = mood;
-    feedback.react(mood);
-  }
-
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
-  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 import '../../features/play/game_feedback.dart';
+import '../../features/play/level_lifecycle.dart';
 import '../../features/play/play_timings.dart';
+import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
@@ -17,7 +19,7 @@ typedef SlotRef = ({int rule, SlotPart part});
 
 /// Bir seviyenin oynanış durumu: kutulardaki bloklar, seçili kutu, işaretler ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
-final class IfThenController extends ChangeNotifier {
+final class IfThenController extends ChangeNotifier with LevelLifecycle {
   IfThenController({
     required this.level,
     required this.onCompleted,
@@ -29,7 +31,7 @@ final class IfThenController extends ChangeNotifier {
        _conditions = [for (final rule in level.rules) rule.condition],
        _actions = [for (final rule in level.rules) rule.action],
        _otherwise = level.otherwise,
-       _message = level.intro;
+       _voice = RobotVoice(feedback: feedback, intro: level.intro);
 
   static const defaultStepDuration = Duration(milliseconds: 650);
   static const reducedStepDuration = PlayTimings.reducedStep;
@@ -50,10 +52,9 @@ final class IfThenController extends ChangeNotifier {
 
   final List<LaneObject?> _conditions;
   final List<LaneAction?> _actions;
+  final RobotVoice _voice;
   LaneAction? _otherwise;
   SlotRef? _target;
-  String _message;
-  RobotMood _mood = RobotMood.talk;
   int _robotCell = startCell;
   bool _jumpPending = false;
   int? _activeRule;
@@ -61,16 +62,13 @@ final class IfThenController extends ChangeNotifier {
   int? _wrongRule;
   int _wrongCount = 0;
   LaneHint? _hint;
-  RobotReaction _reaction = RobotReaction.none;
-  int _reactionCount = 0;
   int _runs = 0;
   bool _hintUsed = false;
   bool _running = false;
   bool _done = false;
-  bool _disposed = false;
 
-  String get message => _message;
-  RobotMood get mood => _mood;
+  String get message => _voice.message;
+  RobotMood get mood => _voice.mood;
   SlotRef? get target => _target;
 
   /// Robotun durduğu kare: [startCell] başlangıç, `lane.length` bayrak. Robotun geçtiği kareler
@@ -85,8 +83,8 @@ final class IfThenController extends ChangeNotifier {
   /// Her yanlış denemede artar; ekran yanlış kuralı her seferinde yeniden sallar.
   int get wrongCount => _wrongCount;
   LaneHint? get hint => _hint;
-  RobotReaction get reaction => _reaction;
-  int get reactionCount => _reactionCount;
+  RobotReaction get reaction => _voice.reaction;
+  int get reactionCount => _voice.reactionCount;
   bool get hintUsed => _hintUsed;
   bool get isRunning => _running;
   bool get isDone => _done;
@@ -237,7 +235,7 @@ final class IfThenController extends ChangeNotifier {
       }
       notifyListeners();
       await Future<void>.delayed(jump ? stepDuration ~/ 2 : stepDuration);
-      if (_disposed) {
+      if (isDisposed) {
         return false;
       }
     }
@@ -247,7 +245,7 @@ final class IfThenController extends ChangeNotifier {
   /// Robotu [cell] karesine götürür; bekleyen bir zıplama varsa bu geçiş zıplayarak yapılır.
   void _moveRobot(int cell) {
     if (_jumpPending) {
-      _react(RobotReaction.hop);
+      _voice.react(RobotReaction.hop);
       _jumpPending = false;
     }
     _robotCell = cell;
@@ -259,7 +257,7 @@ final class IfThenController extends ChangeNotifier {
     _wrongCell = step.index;
     _wrongRule = step.rule;
     _wrongCount++;
-    _react(RobotReaction.bump);
+    _voice.react(RobotReaction.bump);
     _running = false;
     _sayNow(IfThenTexts.wrong(step), RobotMood.sad);
   }
@@ -269,18 +267,15 @@ final class IfThenController extends ChangeNotifier {
     _moveRobot(lane.length);
     notifyListeners();
     await Future<void>.delayed(stepDuration);
-    if (_disposed) {
+    if (isDisposed) {
       return;
     }
     _running = false;
     _done = true;
-    _react(RobotReaction.celebrate);
+    _voice.react(RobotReaction.celebrate);
     _sayNow(IfThenTexts.success, RobotMood.happy);
     final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _runs == 1);
-    await Future<void>.delayed(celebrateDuration);
-    if (!_disposed) {
-      onCompleted(stars);
-    }
+    await completeAfter(celebrateDuration, onCompleted, stars);
   }
 
   static bool _fits(SlotRef slot, Enum block) =>
@@ -313,7 +308,7 @@ final class IfThenController extends ChangeNotifier {
     update();
     _target = null;
     if (_hasMarks) {
-      _say(level.intro);
+      _voice.say(level.intro);
     }
     _resetScene();
     notifyListeners();
@@ -328,28 +323,11 @@ final class IfThenController extends ChangeNotifier {
     _wrongCell = null;
     _wrongRule = null;
     _hint = null;
-    _reaction = RobotReaction.none;
-  }
-
-  void _react(RobotReaction reaction) {
-    _reaction = reaction;
-    _reactionCount++;
-  }
-
-  void _say(String text, [RobotMood mood = RobotMood.talk]) {
-    _message = text;
-    _mood = mood;
-    feedback.react(mood);
+    _voice.calm();
   }
 
   void _sayNow(String text, [RobotMood mood = RobotMood.talk]) {
-    _say(text, mood);
+    _voice.say(text, mood);
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
   }
 }
