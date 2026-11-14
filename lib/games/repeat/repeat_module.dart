@@ -26,6 +26,9 @@ final class RepeatModule implements GameModule {
   }
 
   @override
-  Widget buildLevel(LevelSession session) =>
-      RepeatView(level: levelOf(session.packId, session.level), onCompleted: session.onCompleted);
+  Widget buildLevel(LevelSession session) => RepeatView(
+    level: levelOf(session.packId, session.level),
+    onCompleted: session.onCompleted,
+    feedback: session.feedback,
+  );
 }

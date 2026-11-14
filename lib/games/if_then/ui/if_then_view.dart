@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/screen_scale.dart';
+import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/image_button.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../engine/if_then_level.dart';
@@ -17,10 +18,18 @@ import 'rule_board.dart';
 /// uzanır. Dar ekranda bloklar kuralların altında, düğmeler altta sabit durur; ekran bunun için fazla
 /// kısaysa (ör. yatay telefon) bütün içerik kaydırılır.
 final class IfThenView extends StatefulWidget {
-  const IfThenView({required this.level, required this.onCompleted, super.key});
+  const IfThenView({
+    required this.level,
+    required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
+    super.key,
+  });
 
   final IfThenLevel level;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
 
   static const wideMinWidth = ScreenScale.wideMinWidth;
   static const wideMinHeight = 520.0;
@@ -51,6 +60,7 @@ final class _IfThenViewState extends State<IfThenView> {
     _controller ??= IfThenController(
       level: widget.level,
       onCompleted: widget.onCompleted,
+      feedback: widget.feedback,
       stepDuration: MediaQuery.disableAnimationsOf(context)
           ? IfThenController.reducedStepDuration
           : IfThenController.defaultStepDuration,

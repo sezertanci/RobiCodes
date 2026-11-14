@@ -7,6 +7,8 @@ import '../features/parental_gate/parental_gate.dart';
 import '../features/parental_gate/protected_action_runner.dart';
 import '../features/progress/progress_repository.dart';
 import '../features/progress/unlock_policy.dart';
+import '../features/sound/sound_player.dart';
+import '../features/sound/sound_service.dart';
 import '../features/store/entitlement_service.dart';
 import '../features/store/offer_policy.dart';
 import '../features/store/purchase_gateway.dart';
@@ -26,7 +28,9 @@ final class AppServices {
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
     CloudSaveGateway cloudSaveGateway = const NoCloudSaveGateway(),
     ParentalGate parentalGate = const LockedParentalGate(),
+    SoundPlayer soundPlayer = const SilentSoundPlayer(),
   }) : progress = ProgressRepository(store),
+       sound = SoundService(store: store, player: soundPlayer),
        protectedActions = ProtectedActionRunner(parentalGate) {
     unlockPolicy = UnlockPolicy(progress);
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
@@ -35,15 +39,19 @@ final class AppServices {
   }
 
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
-  factory AppServices.production(KeyValueStore store) => AppServices(
-    catalog: buildContentCatalog(),
-    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
-    store: store,
-  );
+  /// Testlerde ses çalınmaz; uygulama gerçek ses altyapısını [soundPlayer] ile verir.
+  factory AppServices.production(KeyValueStore store, {SoundPlayer soundPlayer = const SilentSoundPlayer()}) =>
+      AppServices(
+        catalog: buildContentCatalog(),
+        games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
+        store: store,
+        soundPlayer: soundPlayer,
+      );
 
   final ContentCatalog catalog;
   final GameRegistry games;
   final ProgressRepository progress;
+  final SoundService sound;
   final ProtectedActionRunner protectedActions;
   late final UnlockPolicy unlockPolicy;
   late final EntitlementService entitlements;

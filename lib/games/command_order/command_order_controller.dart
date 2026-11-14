@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/play/game_feedback.dart';
 import '../../features/play/play_timings.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
@@ -20,6 +21,7 @@ final class CommandOrderController extends ChangeNotifier {
     required this.level,
     required List<OrderCard> cards,
     required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
     this.celebrateDuration = defaultCelebrateDuration,
   }) : cards = List.unmodifiable(cards),
        _slots = List<int?>.filled(level.steps.length, null),
@@ -32,6 +34,9 @@ final class CommandOrderController extends ChangeNotifier {
   /// Kartlar, ekranda gösterilen karışık sırayla.
   final List<OrderCard> cards;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
   final Duration celebrateDuration;
 
   final List<int?> _slots;
@@ -200,6 +205,7 @@ final class CommandOrderController extends ChangeNotifier {
   void _say(String text, [RobotMood mood = RobotMood.talk]) {
     _message = text;
     _mood = mood;
+    feedback.react(mood);
   }
 
   @override

@@ -6,6 +6,8 @@ import 'package:robi_codes/games/path_finder/engine/path_finder_level.dart';
 import 'package:robi_codes/games/path_finder/path_finder_controller.dart';
 import 'package:robi_codes/games/path_finder/path_finder_texts.dart';
 
+import '../../support/fakes.dart';
+
 const _up = Direction.up;
 const _down = Direction.down;
 const _right = Direction.right;
@@ -18,15 +20,20 @@ const _rock = PathFinderLevel(map: ['...', 'S#G', '...'], solution: 'URRD');
 
 void main() {
   late List<int> completed;
+  late RecordingGameFeedback feedback;
 
   PathFinderController create(PathFinderLevel level) => PathFinderController(
     level: level,
     onCompleted: completed.add,
+    feedback: feedback,
     stepDuration: Duration.zero,
     celebrateDuration: Duration.zero,
   );
 
-  setUp(() => completed = []);
+  setUp(() {
+    completed = [];
+    feedback = RecordingGameFeedback();
+  });
 
   group('Komut listesi', () {
     test('addCommand_UntilLimit_StopsAtLimitAndWarns', () {
@@ -115,6 +122,7 @@ void main() {
 
       expect(controller.robot, controller.board.goal);
       expect(controller.mood, RobotMood.happy);
+      expect(feedback.audibleMoods, [RobotMood.happy]);
       expect(completed, [3]);
     });
 
@@ -151,6 +159,7 @@ void main() {
       expect(controller.wrongIndex, 2);
       expect(controller.reaction, RobotReaction.bump);
       expect(controller.message, PathFinderTexts.blocked(Obstacle.rock, 2));
+      expect(feedback.audibleMoods, [RobotMood.sad]);
       expect(controller.isRunning, isFalse);
       expect(completed, isEmpty);
     });

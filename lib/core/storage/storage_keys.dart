@@ -5,4 +5,5 @@ abstract final class StorageKeys {
   static const progress = 'progress.v1';
   static const ownedProducts = 'owned-products.v1';
   static const cloudSync = 'cloud-sync.v1';
+  static const sound = 'sound.v1';
 }

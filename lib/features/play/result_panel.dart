@@ -4,13 +4,23 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_theme.dart';
 import '../progress/star_rule.dart';
+import 'game_feedback.dart';
+import 'widgets/confetti.dart';
 import 'widgets/star_row.dart';
 
-/// Seviye bitince açılan sonuç paneli. Yıldızlar web sürümündeki gibi sırayla belirir.
+/// Seviye bitince açılan sonuç paneli. Panel açılınca seviye sonu sesi çalar; yıldızlar web sürümündeki
+/// gibi sırayla belirir ve kazanılan her yıldızda tonu yükselen yıldız sesi çalar.
 final class ResultPanel extends StatefulWidget {
-  const ResultPanel({required this.stars, required this.onBackToLevels, this.onNextLevel, super.key});
+  const ResultPanel({
+    required this.stars,
+    required this.feedback,
+    required this.onBackToLevels,
+    this.onNextLevel,
+    super.key,
+  });
 
   final int stars;
+  final GameFeedback feedback;
   final VoidCallback onBackToLevels;
 
   /// Sonraki seviye açıksa dolu; değilse "Sonraki seviye" düğmesi gösterilmez.
@@ -34,6 +44,7 @@ final class _ResultPanelState extends State<ResultPanel> {
   @override
   void initState() {
     super.initState();
+    widget.feedback.levelComplete();
     _timer = Timer(ResultPanel.firstStarDelay, _revealNext);
   }
 
@@ -42,6 +53,9 @@ final class _ResultPanelState extends State<ResultPanel> {
       return;
     }
     setState(() => _visible++);
+    if (_visible <= widget.stars) {
+      widget.feedback.star(_visible - 1);
+    }
     _timer = Timer(ResultPanel.starInterval, _revealNext);
   }
 
@@ -51,15 +65,19 @@ final class _ResultPanelState extends State<ResultPanel> {
     super.dispose();
   }
 
+  /// Panel ve üstünde bir kez yağan konfeti (web sürümündeki gibi). "Hareketi azalt" açıksa konfeti
+  /// gösterilmez ve panel büyüyerek değil, doğrudan açılır.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Stack(fit: StackFit.expand, children: [_panel(context), const Confetti()]);
+
+  Widget _panel(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return ColoredBox(
       color: Colors.black45,
       child: Center(
         child: TweenAnimationBuilder<double>(
           tween: Tween(begin: 0.6, end: 1),
-          duration: const Duration(milliseconds: 450),
+          duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 450),
           curve: Curves.easeOutBack,
           builder: (context, scale, child) => Transform.scale(scale: scale, child: child),
           child: Card(

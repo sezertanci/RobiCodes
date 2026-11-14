@@ -1,9 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/features/play/game_feedback.dart';
 import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
 import 'package:robi_codes/games/command_order/command_order_controller.dart';
 import 'package:robi_codes/games/command_order/command_order_texts.dart';
 import 'package:robi_codes/games/command_order/engine/command_order_engine.dart';
 import 'package:robi_codes/games/command_order/engine/command_order_level.dart';
+
+import '../../support/fakes.dart';
 
 const _level = CommandOrderLevel(
   title: 'Görev',
@@ -21,10 +24,15 @@ const _levelWithExtra = CommandOrderLevel(
 );
 
 /// Kartlar ters sırayla verilir; böylece havuzdaki sıra testte bellidir.
-CommandOrderController _controller(List<int> stars, {CommandOrderLevel level = _level}) => CommandOrderController(
+CommandOrderController _controller(
+  List<int> stars, {
+  CommandOrderLevel level = _level,
+  GameFeedback feedback = const SilentGameFeedback(),
+}) => CommandOrderController(
   level: level,
   cards: CommandOrderEngine.buildCards(level).reversed.toList(),
   onCompleted: stars.add,
+  feedback: feedback,
   celebrateDuration: Duration.zero,
 );
 
@@ -120,7 +128,8 @@ void main() {
   });
 
   test('check_WrongOrder_MarksFirstWrongSlotAndIsSad', () async {
-    final controller = _controller([]);
+    final feedback = RecordingGameFeedback();
+    final controller = _controller([], feedback: feedback);
     for (final id in [0, 2, 1]) {
       controller.tapPoolCard(id);
     }
@@ -129,6 +138,7 @@ void main() {
 
     expect(controller.mark, (slot: 1, cardId: null, kind: SlotMarkKind.wrong));
     expect(controller.mood, RobotMood.sad);
+    expect(feedback.audibleMoods, [RobotMood.sad]);
     expect(controller.wrongCount, 1);
     expect(controller.message, CommandOrderTexts.wrong(const OrderWrong(1, WrongReason.tooEarly), 'Üç'));
   });
@@ -148,13 +158,15 @@ void main() {
 
   test('check_CorrectFirstTry_CompletesWithThreeStars', () async {
     final stars = <int>[];
-    final controller = _controller(stars);
+    final feedback = RecordingGameFeedback();
+    final controller = _controller(stars, feedback: feedback);
     _fillInOrder(controller);
 
     await controller.check();
 
     expect(controller.isDone, isTrue);
     expect(controller.mood, RobotMood.happy);
+    expect(feedback.audibleMoods, [RobotMood.happy]);
     expect(stars, [3]);
   });
 

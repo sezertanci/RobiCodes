@@ -6,6 +6,9 @@ import 'package:robi_codes/content/content_catalog.dart';
 import 'package:robi_codes/core/storage/key_value_store.dart';
 import 'package:robi_codes/features/cloud_save/cloud_save_gateway.dart';
 import 'package:robi_codes/features/parental_gate/parental_gate.dart';
+import 'package:robi_codes/features/play/game_feedback.dart';
+import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
+import 'package:robi_codes/features/sound/sound_player.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
 
 /// Bellekte çalışan depo.
@@ -22,6 +25,36 @@ final class InMemoryKeyValueStore implements KeyValueStore {
 
   @override
   Future<void> remove(String key) async => values.remove(key);
+}
+
+/// Çalınması istenen ses dosyalarını sırayla kaydeder.
+final class RecordingSoundPlayer implements SoundPlayer {
+  final List<String> played = [];
+
+  @override
+  Future<void> play(String asset) async => played.add(asset);
+}
+
+/// Oyunların ve sonuç panelinin bildirdiği anları sırayla kaydeder.
+final class RecordingGameFeedback implements GameFeedback {
+  final List<RobotMood> moods = [];
+  final List<int> stars = [];
+  int levelCompleteCount = 0;
+
+  /// Ses çalınan anlar: robotun konuştuğu anlarda ses çalınmaz.
+  List<RobotMood> get audibleMoods => [
+    for (final mood in moods)
+      if (mood != RobotMood.talk) mood,
+  ];
+
+  @override
+  void react(RobotMood mood) => moods.add(mood);
+
+  @override
+  void star(int index) => stars.add(index);
+
+  @override
+  void levelComplete() => levelCompleteCount++;
 }
 
 /// Sonuçları testte ayarlanan mağaza.

@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  audioplayers: ^6.8.1
   flutter:
     sdk: flutter
   flutter_svg: ^2.4.0
@@ -57,12 +58,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # Görseller web sürümünden (MiniCodingWorld/assets) değiştirilmeden kopyalandı.
+  # Görseller web sürümünden (MiniCodingWorld/assets) değiştirilmeden kopyalandı. Sesler web sürümündeki
+  # notalardan tool/make_sounds.py ile üretildi.
   assets:
     - assets/characters/
     - assets/command-order/
     - assets/icons/
     - assets/puzzles/
+    - assets/sounds/
     - assets/ui/
 
   # To add assets to your application, add an assets section, like this:

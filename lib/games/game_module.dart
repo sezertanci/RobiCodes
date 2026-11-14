@@ -1,16 +1,21 @@
 import 'package:flutter/widgets.dart';
 
+import '../features/play/game_feedback.dart';
+
 /// Oynanan seviyenin bilgileri ve bitince çağrılacak geri bildirim.
 /// Oyun yalnızca kendi mekaniğini bilir; yıldızın kaydedilmesi, kilitlerin açılması ve
 /// ödüller uygulamanın işidir.
 final class LevelSession {
-  const LevelSession({required this.packId, required this.level, required this.onCompleted});
+  const LevelSession({required this.packId, required this.level, required this.onCompleted, required this.feedback});
 
   final String packId;
   final int level;
 
   /// Seviye bitince kazanılan yıldızla çağrılır (bkz. `StarRule`).
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses.
+  final GameFeedback feedback;
 }
 
 /// Bir oyunun mekaniği. Her oyun bu arayüzü uygulayan bir sınıfla eklenir ve

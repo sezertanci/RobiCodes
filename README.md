@@ -4,8 +4,9 @@
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
 kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` klasörü) referans olarak korunur ve bu projeden bağımsızdır.
 
-> **Durum — 5. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
-> "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür. Ses henüz yok. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
+> **Durum — 6. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
+> "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
+> Ses efektleri, ses ayarı ve sonuç panelindeki konfeti eklendi; karakter seçimi ve rozetler sırada. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
 > ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
@@ -63,14 +64,18 @@ lib/
   features/
     play/         Bütün oyunların ortak seviye seçim, seviye ve sonuç ekranları
       widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli,
-                  robot görüntüsü, ipucu ve yanlış işaretleri, nabız gibi atan ipucu çerçevesi
+                  robot görüntüsü, ipucu ve yanlış işaretleri, nabız gibi atan ipucu çerçevesi, konfeti
     progress/     Yıldız kuralı, ilerleme kaydı, grup ve seviye kilitleri
+    sound/        Ses efektleri, ses servisi (açık/kapalı ayarı) ve ses çalıcı
+    settings/     Ayarlar penceresi
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
     cloud_save/   İsteğe bağlı bulut kaydı, kayıt birleştirme
     parental_gate/ Ebeveyn doğrulaması ve korumalı işlem çalıştırıcı
     home/         Ana ekran
-assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon)
-tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py)
+assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon) ve
+                  sounds/ altında ses efektleri
+tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py, sesleri üreten
+                  make_sounds.py)
 ```
 
 - **İçerik ile mekanik ayrıdır.** Oyunlar, paketler ve ürünler `content/catalog_data.dart` içindeki
@@ -81,14 +86,25 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
 - **Ücretsiz / ücretli:** Bir paketi açan mağaza ürünü yoksa paket ücretsizdir. Bu bilgi ayrıca yazılmaz.
 - **Bağımlılıklar** arayüzler üzerinden alınır ve `AppServices` içinde elle kurulur. Durum yönetimi için
   ek paket kullanılmaz; servisler `ChangeNotifier`'dır.
-- **Dış bağımlılıklar:** `shared_preferences` (cihazda kayıt) ve `flutter_svg` (web sürümünün SVG
-  görsellerini göstermek için; Flutter SVG'yi kendisi çizemez).
+- **Dış bağımlılıklar:** `shared_preferences` (cihazda kayıt), `flutter_svg` (web sürümünün SVG
+  görsellerini göstermek için; Flutter SVG'yi kendisi çizemez) ve `audioplayers` (ses efektleri).
+- **Ses:** Web sürümü sesleri tarayıcıda notalardan anlık üretiyordu. Aynı notalar, süreler ve ses zarfı
+  `tool/make_sounds.py` ile WAV dosyalarına çevrildi (`assets/sounds/`). Doğru ve yanlış sesi robot
+  sevinince veya üzülünce, seviye sonu sesi sonuç paneli açılınca, yıldız sesi ise her kazanılan yıldız
+  belirdiğinde (tonu her yıldızda yükselerek) çalar. Rozet ve kupa sesleri hazırdır; rozet aşamasında
+  kullanılacak. Sesler diğer uygulamaların sesini kesmez. Ana ekrandaki ayarlar düğmesinden ses açılıp
+  kapatılır; ayar cihazda saklanır ve ilk açılışta ses açıktır. Notalar değişirse dosyalar yeniden üretilir
+  (yalnızca Python standart kütüphanesi gerekir): `python tool/make_sounds.py assets/sounds`
 - **Oyun ekranı:** Genişliği 760 ve yüksekliği 520 pikselden büyük ekranlarda (tablet) harita solda,
   kontroller sağdadır; ikisi ekranda ortalanmış bir grup oluşturur. Telefonda kontroller altta sabit
   durur ve harita aradaki alana sığdırılır; ekran çok kısaysa (yatay telefon) bütün içerik kaydırılır.
   Tablette düğmeler, harita kareleri ve seviye kutuları ekranın kısa kenarına göre büyür
   (`app/screen_scale.dart`); telefondaki boyutlar değişmez. "Hareketi azalt" ayarı açıksa robot hızlı
-  yürür ve tepki animasyonları oynatılmaz.
+  yürür, tepki animasyonları oynatılmaz, konfeti gösterilmez ve sonuç paneli büyüyerek değil doğrudan açılır.
+- **Konfeti:** Seviye bitince sonuç panelinin üstüne bir kez yağar (`features/play/widgets/confetti.dart`).
+  Web sürümündeki gibi 28 parça; konumları, gecikmeleri, renkleri ve dönüşleri aynı formülle sıradan
+  hesaplanır ve 3,2 saniyede ekranın altına iner. Paket kullanılmaz, parçalar `CustomPainter` ile çizilir;
+  dokunmaları engellemez.
 - **Ekran yönü:** Kısa kenarı 600 dp'nin altındaki cihazlar (telefon) açılışta dikeye sabitlenir;
   tablette iki yön de serbesttir. Kısıt pencere çizilmeden konsun diye Android tarafında
   (`MainActivity.kt`) uygulanır; telefon yatay tutulurken açılsa bile önce yatay görünmez.

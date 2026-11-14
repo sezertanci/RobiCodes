@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../app/screen_scale.dart';
+import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../../path_finder/ui/board_view.dart';
 import '../engine/repeat_level.dart';
@@ -15,10 +16,18 @@ import 'repeat_controls.dart';
 /// aradaki alana sığdırılır. Ekran bunun için fazla kısaysa (ör. yatay telefon) bütün içerik kaydırılır.
 /// Düzen "Robotun Yolunu Bul" ekranıyla aynıdır; harita da onunla ortaktır.
 final class RepeatView extends StatefulWidget {
-  const RepeatView({required this.level, required this.onCompleted, super.key});
+  const RepeatView({
+    required this.level,
+    required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
+    super.key,
+  });
 
   final RepeatLevel level;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
 
   static const wideMinWidth = ScreenScale.wideMinWidth;
   static const wideMinHeight = 520.0;
@@ -56,6 +65,7 @@ final class _RepeatViewState extends State<RepeatView> {
     _controller ??= RepeatController(
       level: widget.level,
       onCompleted: widget.onCompleted,
+      feedback: widget.feedback,
       stepDuration: MediaQuery.disableAnimationsOf(context)
           ? RepeatController.reducedStepDuration
           : RepeatController.defaultStepDuration,

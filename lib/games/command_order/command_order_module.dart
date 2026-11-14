@@ -52,5 +52,6 @@ final class CommandOrderModule implements GameModule {
     // Kartlar ekran açılırken bir kez karıştırılır; ekranın yeniden çizilmesi sırayı değiştirmez.
     shuffle: () => shuffledCards(session.packId, session.level),
     onCompleted: session.onCompleted,
+    feedback: session.feedback,
   );
 }

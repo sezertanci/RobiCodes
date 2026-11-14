@@ -7,6 +7,7 @@ import '../../app/robi_codes_app.dart';
 import '../../content/models/game_definition.dart';
 import '../play/level_select_screen.dart';
 import '../progress/star_rule.dart';
+import '../settings/settings_dialog.dart';
 import 'game_card.dart';
 
 /// Ana ekran: katalogdaki oyunları ilerlemeleriyle birlikte gösterir.
@@ -21,7 +22,16 @@ final class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final services = AppScope.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text(RobiCodesApp.title)),
+      appBar: AppBar(
+        title: const Text(RobiCodesApp.title),
+        actions: [
+          IconButton(
+            tooltip: SettingsDialog.title,
+            onPressed: () => SettingsDialog.show(context, services.sound),
+            icon: const Icon(Icons.settings_rounded),
+          ),
+        ],
+      ),
       body: ListenableBuilder(
         listenable: Listenable.merge([services.progress, services.entitlements]),
         builder: (context, _) => GridView(

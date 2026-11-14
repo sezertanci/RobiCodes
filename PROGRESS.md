@@ -101,14 +101,40 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 - "Eğer Böyleyse"de zıplayan robotun üstten kırpılması giderildi; metinlerdeki « » işaretleri düz tırnak oldu.
 - `flutter analyze` temiz, 283 test geçiyor, debug APK derleniyor.
 
+**6. aşama — 1. alt adım (ses) tamamlandı, kullanıcı onayladı:**
+
+- Kullanıcının 6. aşama kararları ve sırası: 1) ses, 2) kutlama ve konfeti (özel çizim; hareket azaltma açıksa
+  gösterilmez), 3) karakter seçimi (6 görünüm ve seçim penceresi doğrudan aktarılır), 4) rozet ve kupalar.
+  Her alt adım sonunda telefonda ve tablette denenir, rapor verilip onay beklenir.
+- Web'deki 6 ses (`js/core/sound.js`) aynı notalarla `tool/make_sounds.py` ile WAV'a çevrildi
+  (`assets/sounds/`, yıldız sesi 3 tonda: `star-0..2`). `audioplayers` eklendi.
+- `SoundService` sesi çalar ve açık/kapalı ayarını `sound.v1` anahtarında saklar. Oyunlar sesi
+  `GameFeedback` üzerinden bildirir (robot sevinince doğru, üzülünce yanlış sesi); sonuç paneli seviye sonu
+  ve yalnızca kazanılan yıldızlar için yıldız sesi çalar. Ana ekrana ayarlar düğmesi ve penceresi eklendi.
+- `flutter analyze` temiz, 293 test geçiyor, debug APK derleniyor. Emülatörde denendi: yanlış, doğru, seviye
+  sonu ve 3 yıldız sesi web'deki sırayla ve aralıklarla çaldı; ses kapatılınca hiç ses çalmadı; ayar yeniden
+  başlatmada korundu. Tablet bağlı olmadığı için tablette henüz denenmedi.
+- Sayfa geçişlerindeki "tık" sesi Android'in dokunma sesidir (sistem ayarı); kullanıcı olduğu gibi kalmasını istedi.
+
+**6. aşama — 2. alt adım (kutlama ve konfeti) tamamlandı, onay bekliyor:**
+
+- Web'deki konfeti (`components.js` `confetti()`, `animations.css`) `CustomPainter` ile aynı formülle çizildi:
+  28 parça, 3,2 saniyelik düşüş, sırayla gecikme, renk ve dönüş. Sonuç panelinin üstüne bir kez yağar.
+- "Hareketi azalt" açıksa konfeti gösterilmez ve sonuç paneli büyüme animasyonu olmadan açılır (web'de de böyle).
+- Rozet bildirimi ve kupa penceresi (`celebration.js`) ödüllere bağlı olduğu için 4. alt adımda yapılacak;
+  kupa penceresindeki sürekli yağan konfeti de o zaman eklenecek.
+- `flutter analyze` temiz, 299 test geçiyor, debug APK derleniyor. Emülatörde denendi: konfeti panelin
+  üstünden ekranın altına yağıp bitiyor; animasyonlar kapatılınca hiç görünmüyor. Tablette henüz denenmedi.
+
 ## Ertelenen işler (unutulmayacak)
 
 2.–5. aşamalarda web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
 
 | Özellik | Durum | Karar |
 |---|---|---|
-| Ses efektleri | Yok | Ortak ses aşamasında eklenecek. |
-| Konfeti | Yok | Ortak görsel efekt aşamasında eklenecek. |
+| Ses efektleri | Eklendi (6. aşama) | Rozet ve kupa sesleri hazır; rozet alt adımında bağlanacak. |
+| Rozet ve kupalar | Yok | 6. aşamanın 4. alt adımı. Yalnızca dört oyuna özel ve sabit sayılarla yazılmayacak, yeni oyunları da kapsayacak genel bir yapı olacak. Kazanılanlar yerel kayıtta saklanacak, bulut kayıt aşamasında senkronizasyona dahil edilecek. Kazanılmış ödül tekrar kazanılmış gibi gösterilmeyecek. |
+| Konfeti | Sonuç panelinde eklendi (6. aşama) | Kupa penceresindeki sürekli yağan konfeti rozet alt adımında eklenecek. |
 | Karakter seçimi | Yok | Web sürümünde var (`js/core/characters.js`, `js/screens/character-dialog.js`, `assets/characters/` altında robotun farklı görünümleri). Vazgeçilmeyecek; eski sürümle karşılaştırılıp geri eklenmesi değerlendirilecek. |
 | Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
 
@@ -118,5 +144,6 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-5. aşama raporu verildi; sıradaki oyun ve 6. aşamanın kapsamı için kullanıcı onayı bekleniyor. Her aşamada yalnızca o aşamanın
+6. aşamanın kutlama ve konfeti alt adımı raporlandı; kullanıcı onaylayınca 3. alt adıma (karakter seçimi)
+geçilecek. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.

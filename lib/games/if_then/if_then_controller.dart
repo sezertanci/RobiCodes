@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/play/game_feedback.dart';
 import '../../features/play/play_timings.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
@@ -20,6 +21,7 @@ final class IfThenController extends ChangeNotifier {
   IfThenController({
     required this.level,
     required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
     this.stepDuration = defaultStepDuration,
     this.celebrateDuration = defaultCelebrateDuration,
   }) : lane = IfThenEngine.parseLane(level.lane),
@@ -40,6 +42,9 @@ final class IfThenController extends ChangeNotifier {
   final List<LaneObject> lane;
   final ({List<LaneObject> conditions, List<LaneAction> actions}) palette;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
   final Duration stepDuration;
   final Duration celebrateDuration;
 
@@ -334,6 +339,7 @@ final class IfThenController extends ChangeNotifier {
   void _say(String text, [RobotMood mood = RobotMood.talk]) {
     _message = text;
     _mood = mood;
+    feedback.react(mood);
   }
 
   void _sayNow(String text, [RobotMood mood = RobotMood.talk]) {

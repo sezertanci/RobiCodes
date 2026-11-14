@@ -1,10 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/features/play/game_feedback.dart';
 import 'package:robi_codes/features/play/widgets/robot_sprite.dart';
 import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
 import 'package:robi_codes/games/if_then/engine/if_then_engine.dart';
 import 'package:robi_codes/games/if_then/engine/if_then_level.dart';
 import 'package:robi_codes/games/if_then/if_then_controller.dart';
 import 'package:robi_codes/games/if_then/if_then_texts.dart';
+
+import '../../support/fakes.dart';
 
 const _intro = 'Başla.';
 
@@ -23,9 +26,14 @@ const _rockAction = (rule: 0, part: SlotPart.action);
 const _rockCondition = (rule: 0, part: SlotPart.condition);
 const _elseAction = (rule: IfThenEngine.elseRule, part: SlotPart.action);
 
-IfThenController _controller(List<int> stars, {IfThenLevel level = _easy}) => IfThenController(
+IfThenController _controller(
+  List<int> stars, {
+  IfThenLevel level = _easy,
+  GameFeedback feedback = const SilentGameFeedback(),
+}) => IfThenController(
   level: level,
   onCompleted: stars.add,
+  feedback: feedback,
   stepDuration: Duration.zero,
   celebrateDuration: Duration.zero,
 );
@@ -128,7 +136,8 @@ void main() {
 
   test('run_CorrectFirstTry_WalksToFlagAndGivesThreeStars', () async {
     final stars = <int>[];
-    final controller = _controller(stars);
+    final feedback = RecordingGameFeedback();
+    final controller = _controller(stars, feedback: feedback);
     controller.tapBlock(LaneAction.jump);
 
     await controller.run();
@@ -137,6 +146,7 @@ void main() {
     expect(controller.robotCell, controller.lane.length);
     expect(controller.reaction, RobotReaction.celebrate);
     expect(controller.mood, RobotMood.happy);
+    expect(feedback.audibleMoods, [RobotMood.happy]);
     expect(controller.message, IfThenTexts.success);
     expect(stars, [3]);
   });
@@ -155,7 +165,8 @@ void main() {
 
   test('run_WrongAction_StopsBeforeWrongCellAndMarksRule', () async {
     final stars = <int>[];
-    final controller = _controller(stars);
+    final feedback = RecordingGameFeedback();
+    final controller = _controller(stars, feedback: feedback);
     controller.tapBlock(LaneAction.forward);
 
     await controller.run();
@@ -167,6 +178,7 @@ void main() {
     expect(controller.wrongCount, 1);
     expect(controller.reaction, RobotReaction.bump);
     expect(controller.mood, RobotMood.sad);
+    expect(feedback.audibleMoods, [RobotMood.sad]);
     expect(controller.message, IfThenTexts.wrong(step));
     expect(controller.isEditable, isTrue);
     expect(stars, isEmpty);

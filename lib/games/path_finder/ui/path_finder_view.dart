@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../app/screen_scale.dart';
+import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../engine/path_finder_level.dart';
 import '../path_finder_controller.dart';
@@ -15,10 +16,18 @@ import 'path_finder_controls.dart';
 /// Ekran bunun için fazla kısaysa (ör. yatay telefon) bütün içerik kaydırılabilir olur.
 /// Düğme, komut kutusu ve harita boyları [ScreenScale] ile tablette büyür.
 final class PathFinderView extends StatefulWidget {
-  const PathFinderView({required this.level, required this.onCompleted, super.key});
+  const PathFinderView({
+    required this.level,
+    required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
+    super.key,
+  });
 
   final PathFinderLevel level;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
 
   /// Bu genişlik ve yükseklikten büyük ekranlarda kontroller haritanın yanına geçer.
   static const wideMinWidth = ScreenScale.wideMinWidth;
@@ -53,6 +62,7 @@ final class _PathFinderViewState extends State<PathFinderView> {
     _controller ??= PathFinderController(
       level: widget.level,
       onCompleted: widget.onCompleted,
+      feedback: widget.feedback,
       stepDuration: MediaQuery.disableAnimationsOf(context)
           ? PathFinderController.reducedStepDuration
           : PathFinderController.defaultStepDuration,

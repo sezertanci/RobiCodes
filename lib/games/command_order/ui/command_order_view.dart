@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/screen_scale.dart';
+import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/image_button.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../command_order_controller.dart';
@@ -17,13 +18,22 @@ import 'task_card.dart';
 /// havuzu sağdadır; dar ekranda görev kartı üstte bir şerittir. Düğmeler altta sabit durur;
 /// ekran bunun için fazla kısaysa (ör. yatay telefon) bütün içerik kaydırılır.
 final class CommandOrderView extends StatefulWidget {
-  const CommandOrderView({required this.level, required this.shuffle, required this.onCompleted, super.key});
+  const CommandOrderView({
+    required this.level,
+    required this.shuffle,
+    required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
+    super.key,
+  });
 
   final CommandOrderLevel level;
 
   /// Kartları karıştırır; ekran açılırken yalnızca bir kez çağrılır.
   final List<OrderCard> Function() shuffle;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
 
   static const wideMinWidth = ScreenScale.wideMinWidth;
   static const wideMinHeight = 520.0;
@@ -40,6 +50,7 @@ final class _CommandOrderViewState extends State<CommandOrderView> {
     level: widget.level,
     cards: widget.shuffle(),
     onCompleted: widget.onCompleted,
+    feedback: widget.feedback,
   );
 
   static const _padding = 16.0;

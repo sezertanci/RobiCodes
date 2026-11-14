@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/features/play/game_feedback.dart';
 import 'package:robi_codes/features/play/widgets/robot_sprite.dart';
 import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
 import 'package:robi_codes/games/path_finder/engine/path_finder_board.dart';
@@ -6,6 +7,8 @@ import 'package:robi_codes/games/repeat/engine/repeat_level.dart';
 import 'package:robi_codes/games/repeat/engine/repeat_program.dart';
 import 'package:robi_codes/games/repeat/repeat_controller.dart';
 import 'package:robi_codes/games/repeat/repeat_texts.dart';
+
+import '../../support/fakes.dart';
 
 const _intro = 'Başla.';
 const _levelHint = 'Sağa git.';
@@ -18,9 +21,14 @@ const _roomy = RepeatLevel(map: ['S..G'], solution: '3(R)', maxBlocks: 6, hint: 
 
 const _right = Direction.right;
 
-RepeatController _controller(List<int> stars, {RepeatLevel level = _tight}) => RepeatController(
+RepeatController _controller(
+  List<int> stars, {
+  RepeatLevel level = _tight,
+  GameFeedback feedback = const SilentGameFeedback(),
+}) => RepeatController(
   level: level,
   onCompleted: stars.add,
+  feedback: feedback,
   stepDuration: Duration.zero,
   celebrateDuration: Duration.zero,
 );
@@ -222,7 +230,8 @@ void main() {
 
   test('run_ShortestFirstTry_ReachesGoalAndGivesThreeStars', () async {
     final stars = <int>[];
-    final controller = _controller(stars);
+    final feedback = RecordingGameFeedback();
+    final controller = _controller(stars, feedback: feedback);
     _addRepeatRight(controller);
 
     await controller.run();
@@ -230,6 +239,7 @@ void main() {
     expect(controller.robot, controller.board.goal);
     expect(controller.reaction, RobotReaction.celebrate);
     expect(controller.mood, RobotMood.happy);
+    expect(feedback.audibleMoods, [RobotMood.happy]);
     expect(controller.message, RepeatTexts.success);
     expect(stars, [3]);
   });
@@ -264,7 +274,8 @@ void main() {
 
   test('run_TooManyRounds_BumpsAndMarksBlock', () async {
     final stars = <int>[];
-    final controller = _controller(stars);
+    final feedback = RecordingGameFeedback();
+    final controller = _controller(stars, feedback: feedback);
     _addRepeatRight(controller, times: 4);
 
     await controller.run();
@@ -275,6 +286,7 @@ void main() {
     expect(controller.wrongPlace, (block: 0, inner: 0));
     expect(controller.message, RepeatTexts.blocked(Obstacle.edge, step));
     expect(controller.mood, RobotMood.sad);
+    expect(feedback.audibleMoods, [RobotMood.sad]);
     expect(controller.isRunning, isFalse);
     expect(stars, isEmpty);
   });

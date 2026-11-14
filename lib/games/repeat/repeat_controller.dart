@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/play/game_feedback.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
@@ -18,6 +19,7 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
   RepeatController({
     required this.level,
     required this.onCompleted,
+    this.feedback = const SilentGameFeedback(),
     this.stepDuration = defaultStepDuration,
     this.celebrateDuration = defaultCelebrateDuration,
   }) : board = level.board,
@@ -37,6 +39,9 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
   @override
   final PathFinderBoard board;
   final ValueChanged<int> onCompleted;
+
+  /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  final GameFeedback feedback;
   @override
   final Duration stepDuration;
   final Duration celebrateDuration;
@@ -360,6 +365,7 @@ final class RepeatController extends ChangeNotifier implements BoardScene {
   void _say(String text, [RobotMood mood = RobotMood.talk]) {
     _message = text;
     _mood = mood;
+    feedback.react(mood);
   }
 
   @override

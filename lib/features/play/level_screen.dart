@@ -5,6 +5,7 @@ import '../../app/app_services.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
 import '../../games/game_module.dart';
+import 'game_feedback.dart';
 import 'result_panel.dart';
 
 /// Bir seviyenin oynandığı ekran. Oyunu `GameModule`'den alır; seviye bitince sonucu
@@ -47,6 +48,7 @@ final class _LevelScreenState extends State<LevelScreen> {
   @override
   Widget build(BuildContext context) {
     final module = _services.games.moduleFor(widget.game.id);
+    final feedback = SoundGameFeedback(_services.sound);
     final group = widget.pack.groupRanges.firstWhere((range) => range.contains(_level)).group;
     final previous = _level - 1;
     final next = _level + 1;
@@ -78,7 +80,9 @@ final class _LevelScreenState extends State<LevelScreen> {
               child: KeyedSubtree(
                 key: ValueKey(_level),
                 child:
-                    module?.buildLevel(LevelSession(packId: widget.pack.id, level: _level, onCompleted: _complete)) ??
+                    module?.buildLevel(
+                      LevelSession(packId: widget.pack.id, level: _level, onCompleted: _complete, feedback: feedback),
+                    ) ??
                     const SizedBox.shrink(),
               ),
             ),
@@ -87,6 +91,7 @@ final class _LevelScreenState extends State<LevelScreen> {
             Positioned.fill(
               child: ResultPanel(
                 stars: stars,
+                feedback: feedback,
                 onBackToLevels: () => Navigator.of(context).pop(),
                 onNextLevel: _isOpen(next) ? () => _goTo(next) : null,
               ),
