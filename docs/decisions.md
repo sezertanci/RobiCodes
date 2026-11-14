@@ -41,3 +41,12 @@
   ayarlarından yönetilir.
 - Daha önce eklenen ve hiçbir ekrana bağlı olmayan taslak bulut kodu (`cloud_save`) ile hesap ve
   bulut işlemlerine ait ebeveyn onayı eylemleri kaldırıldı.
+
+## Reklam (15.11.2026)
+
+- Uygulamada reklam **yoktur**; gelir yalnızca tek seferlik paket satışından gelir. Reklam izleyerek bölüm
+  açma da yapılmaz.
+- Gerekçe: Aileler politikası yalnızca Aileler için onaylı SDK'lara ve kişiselleştirilmemiş reklama izin
+  verir, ödüllü reklamın da 5 saniyede kapatılabilmesini ister; gelir düşük kalır. Reklam, gizlilik
+  politikasındaki "veri toplamaz" taahhüdünü bozar, mağazada "Reklam içerir" etiketi getirir ve çocuğun
+  ebeveyn doğrulamasını aşarak içerik açmasına yol açar.

@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Çocuk verisi cihaz dışına çıkmasın diye Android'in bulut yedeklemesi kapalıdır;
+         gizlilik politikası buna dayanır. -->
     <application
         android:label="Robi Kodluyor"
+        android:allowBackup="false"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round">

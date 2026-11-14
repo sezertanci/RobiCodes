@@ -81,6 +81,8 @@ lib/
     home/         Ana ekran, karakter ve Başarılarım düğmeleri
 assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon) ve
                   sounds/ altında ses efektleri
+store/robi-codes/ Google Play için yayın sayfaları: gizlilik politikası (privacy.html). Değişiklik burada
+                  yapılır ve sezertanci.github.io reposundaki robi-codes/ klasörüne kopyalanır
 tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py, sesleri üreten
                   make_sounds.py)
 ```
