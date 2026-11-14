@@ -13,6 +13,8 @@ import 'widgets/trophy_celebration.dart';
 final class AchievementCelebration {
   AchievementCelebration({required this._sound});
 
+  static const _errorLibrary = 'achievements';
+
   final SoundService _sound;
   Future<void> _queue = Future.value();
 
@@ -20,7 +22,24 @@ final class AchievementCelebration {
   /// böylece seviye ekranından çıkılsa da yarıda kalmaz.
   void show(NavigatorState navigator, List<AchievementStatus> achievements) {
     for (final status in achievements) {
-      _queue = _queue.then((_) => navigator.mounted ? _present(navigator, status) : null);
+      _queue = _queue.then((_) => navigator.mounted ? _presentSafely(navigator, status) : null);
+    }
+  }
+
+  /// Bir kutlama hata verirse hata raporlanır ve kuyruk sonraki ödülle sürer; aksi halde zincir hatalı
+  /// kalır ve uygulama yeniden açılana kadar hiçbir kutlama gösterilmezdi.
+  Future<void> _presentSafely(NavigatorState navigator, AchievementStatus status) async {
+    try {
+      await _present(navigator, status);
+    } on Object catch (error, stack) {
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: error,
+          stack: stack,
+          library: _errorLibrary,
+          context: ErrorDescription(status.achievement.id),
+        ),
+      );
     }
   }
 

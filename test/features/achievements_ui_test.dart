@@ -10,6 +10,7 @@ import 'package:robi_codes/features/achievements/widgets/trophy_celebration.dart
 import 'package:robi_codes/features/home/achievements_button.dart';
 import 'package:robi_codes/features/play/widgets/confetti.dart';
 import 'package:robi_codes/features/sound/sound_effect.dart';
+import 'package:robi_codes/features/sound/sound_player.dart';
 
 import '../support/fakes.dart';
 import '../support/ui_test_helpers.dart';
@@ -23,6 +24,20 @@ Future<AppServices> _servicesWithFirstLevelDone(RecordingSoundPlayer player) asy
 
 AchievementStatus _statusOf(AppServices services, AchievementKind kind) =>
     services.achievements.statuses().firstWhere((status) => status.achievement.kind == kind);
+
+/// İlk çağrıda hata fırlatan, sonra sesleri kaydeden çalıcı; kutlama kuyruğunun hatadan sonra sürdüğünü dener.
+final class _FailingOnceSoundPlayer implements SoundPlayer {
+  bool _failed = false;
+
+  @override
+  Future<void> play(String asset) {
+    if (!_failed) {
+      _failed = true;
+      throw StateError('ses çalınamadı');
+    }
+    return Future.value();
+  }
+}
 
 NavigatorState _navigator(WidgetTester tester) => tester.state<NavigatorState>(find.byType(Navigator).first);
 
@@ -185,5 +200,22 @@ void main() {
 
     // Assert
     expect(find.descendant(of: find.byType(Confetti), matching: find.byType(CustomPaint)), findsOneWidget);
+  });
+
+  testWidgets('Celebration_FirstRewardFails_ReportsErrorAndShowsNextReward', (tester) async {
+    // Arrange
+    final services = AppServices.production(InMemoryKeyValueStore(), soundPlayer: _FailingOnceSoundPlayer());
+    await services.progress.completeLevel(services.catalog.packs.first.id, 1, 3);
+    await tester.pumpWidget(RobiCodesApp(services: services));
+    final trophy = _statusOf(services, AchievementKind.trophy);
+
+    // Act
+    services.celebration.show(_navigator(tester), [_statusOf(services, AchievementKind.badge), trophy]);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    // Assert
+    expect(tester.takeException(), isA<StateError>());
+    expect(find.byType(TrophyCelebration), findsOneWidget);
   });
 }
