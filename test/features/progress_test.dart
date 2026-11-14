@@ -140,6 +140,32 @@ void main() {
       expect(repository.snapshot.stars, isEmpty);
       expect(store.values, isEmpty);
     });
+
+    test('completeLevel_WorseReplayAfterRestart_KeepsBestStars', () async {
+      // Arrange
+      final store = InMemoryKeyValueStore();
+      await ProgressRepository(store).completeLevel(TestCatalog.freePack, 1, 3);
+
+      // Act
+      await ProgressRepository(store).completeLevel(TestCatalog.freePack, 1, 1);
+
+      // Assert
+      expect(ProgressRepository(store).starsOf(TestCatalog.freePack, 1), 3);
+    });
+
+    test('reset_WithCachedPurchases_KeepsPurchaseRecord', () async {
+      // Arrange: satın alma önbelleği ilerlemeden ayrı anahtarda durur.
+      const owned = '["${TestCatalog.productA}"]';
+      final store = InMemoryKeyValueStore({StorageKeys.ownedProducts: owned});
+      final repository = ProgressRepository(store);
+      await repository.completeLevel(TestCatalog.freePack, 1, 3);
+
+      // Act
+      await repository.reset();
+
+      // Assert
+      expect(store.values, {StorageKeys.ownedProducts: owned});
+    });
   });
 
   group('UnlockPolicy', () {
