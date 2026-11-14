@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/content/models/level_pack.dart';
 import 'package:robi_codes/core/storage/storage_keys.dart';
 import 'package:robi_codes/features/progress/progress_repository.dart';
 import 'package:robi_codes/features/progress/progress_snapshot.dart';
@@ -89,6 +90,30 @@ void main() {
 
       // Assert
       expect(stars, 5);
+    });
+
+    test('completedIn_SeveralPacks_ReturnsSumOfAllPacks', () async {
+      // Arrange
+      final repository = ProgressRepository(InMemoryKeyValueStore());
+      final catalog = TestCatalog.build();
+      await repository.completeLevel(TestCatalog.freePack, 1, 2);
+      await repository.completeLevel(TestCatalog.freePack, 2, 1);
+      await repository.completeLevel(TestCatalog.packA, 1, 3);
+
+      // Act
+      final completed = repository.completedIn(catalog.packs);
+
+      // Assert
+      expect(completed, 3);
+    });
+
+    test('levelCount_SeveralPacks_ReturnsSumOfAllPacks', () {
+      // Arrange
+      final packs = TestCatalog.build().packs;
+
+      // Act & Assert
+      expect(packs.levelCount, packs.fold(0, (sum, pack) => sum + pack.levelCount));
+      expect(packs.take(0).levelCount, 0);
     });
 
     test('totalStars_TwoLevels_ReturnsSum', () async {

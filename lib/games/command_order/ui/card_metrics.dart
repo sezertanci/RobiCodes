@@ -1,3 +1,6 @@
+import '../../../app/app_theme.dart';
+import '../../../app/screen_scale.dart';
+
 /// Kart, kutu ve kart görselinin boyutları. Web sürümündeki gibi dar ekranda (560 dp altı)
 /// küçük kartlar kullanılır; tablette boyutlar [ratio] oranında büyür.
 final class CardMetrics {
@@ -23,10 +26,10 @@ final class CardMetrics {
   }
 
   /// Bu genişliğin altında küçük kartlar kullanılır (üç kart yan yana sığar).
-  static const compactMaxWidth = 560.0;
+  static const compactMaxWidth = ScreenScale.narrowMaxWidth;
 
-  static const radius = 18.0;
-  static const lip = 6.0;
+  static const radius = AppMetrics.mediumRadius;
+  static const lip = AppMetrics.lip;
   static const gap = 10.0;
 
   final double width;

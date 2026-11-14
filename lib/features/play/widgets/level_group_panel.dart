@@ -27,9 +27,7 @@ final class LevelGroupPanel extends StatelessWidget {
   final String? hint;
   final List<Widget> levels;
 
-  static const _radius = 28.0;
   static const _border = 4.0;
-  static const _lip = 6.0;
   static const _bodyTint = 0.14;
   static const _lockedBodyTint = 0.06;
   static const _lockedEdgeTint = 0.55;
@@ -44,8 +42,8 @@ final class LevelGroupPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: tone.tint(unlocked ? _bodyTint : _lockedBodyTint),
         border: Border.all(color: edge, width: _border),
-        borderRadius: BorderRadius.circular(_radius),
-        boxShadow: [BoxShadow(color: unlocked ? tone.dark : AppColors.shadow, offset: const Offset(0, _lip))],
+        borderRadius: BorderRadius.circular(AppMetrics.largeRadius),
+        boxShadow: [BoxShadow(color: unlocked ? tone.dark : AppColors.shadow, offset: const Offset(0, AppMetrics.lip))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -131,14 +129,13 @@ final class _Hint extends StatelessWidget {
   final String text;
   final GroupTone tone;
 
-  static const _radius = 18.0;
   static const _font = 15.0;
 
   @override
   Widget build(BuildContext context) => Container(
     margin: const EdgeInsets.fromLTRB(14, 12, 14, 0),
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(_radius)),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(AppMetrics.mediumRadius)),
     child: Text(
       text,
       textAlign: TextAlign.center,

@@ -4,6 +4,9 @@ abstract final class AppAssets {
   static const starEmpty = 'assets/icons/star-empty.svg';
   static const lock = 'assets/icons/lock.svg';
   static const back = 'assets/ui/button-back.svg';
+  static const settings = 'assets/ui/button-settings.svg';
+  static const levelPrevious = 'assets/ui/button-level-previous.svg';
+  static const levelNext = 'assets/ui/button-level-next.svg';
   static const hintButton = 'assets/ui/button-hint.svg';
   static const clearButton = 'assets/ui/button-clear.svg';
   static const checkButton = 'assets/ui/button-check.svg';
@@ -14,6 +17,7 @@ abstract final class AppAssets {
   static const trophy = 'assets/icons/trophy.svg';
   static const medal = 'assets/icons/medal.svg';
   static const hint = 'assets/icons/hint.svg';
+  static const meadow = 'assets/backgrounds/meadow.svg';
 
   // Oyun ikonları: ana ekrandaki oyunun kupasında görünür.
   static const gamePath = 'assets/icons/game-path.svg';

@@ -37,7 +37,7 @@ final class RepeatView extends StatefulWidget {
   static const fixedControlsMinHeight = 620.0;
 
   /// Bu genişliğin altında tekrar bloğunun etiketi kısalır.
-  static const compactMaxWidth = 560.0;
+  static const compactMaxWidth = ScreenScale.narrowMaxWidth;
 
   @override
   State<RepeatView> createState() => _RepeatViewState();

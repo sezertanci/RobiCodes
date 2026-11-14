@@ -14,6 +14,9 @@ final class ScreenScale {
   /// Kısa kenarı bu değer ve altında olan ekranlar telefon sayılır; taban boyutlar kullanılır.
   static const referenceShortestSide = 400.0;
 
+  /// Bu genişliğin altındaki ekranlar dar (telefon) düzeni kullanır; web sürümündeki kırılma noktası.
+  static const narrowMaxWidth = 560.0;
+
   /// Bu genişlik ve üstündeki ekranlar geniş düzen kullanır (ör. yatay tablet).
   static const wideMinWidth = 760.0;
 
@@ -21,6 +24,13 @@ final class ScreenScale {
   static const maxFactor = 1.6;
 
   final double factor;
+
+  /// Ekran dar (telefon) düzende mi.
+  static bool isNarrow(BuildContext context) => MediaQuery.sizeOf(context).width < narrowMaxWidth;
+
+  /// Ekran genişliğinin [ratio] katı, [min] ile [max] arasına sıkıştırılmış (CSS `clamp(min, vw, max)`).
+  static double fluid(BuildContext context, double min, double ratio, double max) =>
+      (MediaQuery.sizeOf(context).width * ratio).clamp(min, max);
 
   /// Taban boyutun ekrana göre büyütülmüş hali; [max] verilirse onu aşmaz.
   double size(double base, {double? max}) {

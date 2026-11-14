@@ -77,8 +77,8 @@ final class AchievementStats {
     final packs = freePacks.where((pack) => pack.gameId == game.id).toList();
     return GameStats(
       game: game,
-      completed: packs.fold(0, (sum, pack) => sum + progress.completedCount(pack.id)),
-      levels: packs.fold(0, (sum, pack) => sum + pack.levelCount),
+      completed: progress.completedIn(packs),
+      levels: packs.levelCount,
       isFirstDone: packs.isNotEmpty && progress.isCompleted(packs.first.id, 1),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../app/screen_scale.dart';
+
 /// Kural satırları, kutular ve blokların ölçüleri. Dar ekranda (telefon) web sürümünün küçük
 /// ölçüleri, tablette ise ekrana göre büyütülmüş ölçüler kullanılır.
 final class IfThenMetrics {
@@ -29,7 +31,7 @@ final class IfThenMetrics {
   }
 
   /// Bu genişliğin altındaki alanlarda küçük ölçüler kullanılır.
-  static const compactMaxWidth = 560.0;
+  static const compactMaxWidth = ScreenScale.narrowMaxWidth;
   static const radius = 14.0;
   static const gap = 8.0;
 

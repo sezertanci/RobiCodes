@@ -61,6 +61,7 @@ flutter:
   # Görseller web sürümünden (MiniCodingWorld/assets) değiştirilmeden kopyalandı. Sesler web sürümündeki
   # notalardan tool/make_sounds.py ile üretildi.
   assets:
+    - assets/backgrounds/
     - assets/characters/
     - assets/command-order/
     - assets/icons/

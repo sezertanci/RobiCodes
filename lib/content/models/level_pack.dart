@@ -62,3 +62,8 @@ final class LevelPack {
 
   bool containsLevel(int level) => level >= 1 && level <= levelCount;
 }
+
+/// Birden çok paketin toplam seviye sayısı.
+extension LevelPackTotals on Iterable<LevelPack> {
+  int get levelCount => fold(0, (sum, pack) => sum + pack.levelCount);
+}

@@ -28,7 +28,7 @@ final class ResultPanel extends StatefulWidget {
   final VoidCallback? onNextLevel;
 
   static const title = 'Harika! Seviye tamamlandı.';
-  static const backLabel = 'Seviyelere dön';
+  static const backLabel = AppTexts.backToLevels;
   static const nextLabel = AppTexts.nextLevel;
 
   static const firstStarDelay = Duration(milliseconds: 750);

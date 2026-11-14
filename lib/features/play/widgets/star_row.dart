@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_assets.dart';
+import '../../../app/app_texts.dart';
 import '../../progress/star_rule.dart';
 
 /// Kazanılan yıldızları dolu, kalanları boş yıldızla gösterir.
@@ -16,7 +17,7 @@ final class StarRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: '$stars yıldız',
+    label: AppTexts.stars(stars),
     excludeSemantics: true,
     child: Row(
       mainAxisSize: MainAxisSize.min,

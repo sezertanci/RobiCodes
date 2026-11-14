@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_assets.dart';
+import '../../../app/app_texts.dart';
 import '../../../app/app_theme.dart';
 import 'group_tone.dart';
 import 'star_row.dart';
@@ -47,7 +48,7 @@ final class LevelButton extends StatelessWidget {
     if (!unlocked) {
       return 'Seviye $level, kilitli';
     }
-    return stars > 0 ? 'Seviye $level, $stars yıldız' : 'Seviye $level';
+    return stars > 0 ? 'Seviye $level, ${AppTexts.stars(stars)}' : 'Seviye $level';
   }
 
   @override

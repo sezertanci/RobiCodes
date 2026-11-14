@@ -26,6 +26,9 @@ final class ProgressRepository extends ChangeNotifier {
 
   int completedCount(String packId) => _snapshot.stars[packId]?.length ?? 0;
 
+  /// [packs] paketlerinde tamamlanan seviyelerin toplamı.
+  int completedIn(Iterable<LevelPack> packs) => packs.fold(0, (sum, pack) => sum + completedCount(pack.id));
+
   /// Seviyeyi kaydeder. Daha önce daha çok yıldız alındıysa en iyi sonuç korunur.
   Future<void> completeLevel(String packId, int level, int stars) => replace(_snapshot.withBest(packId, level, stars));
 

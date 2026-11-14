@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../app/widgets/outlined_text.dart';
 import '../../play/widgets/confetti.dart';
 import '../achievement.dart';
 import 'celebration_label.dart';
@@ -157,31 +158,14 @@ final class _TrophyCelebrationState extends State<TrophyCelebration> with Ticker
   );
 
   /// Sarı, kalın lacivert konturlu başlık.
-  Widget _title(String text, double fontSize) {
-    TextStyle style(Paint? foreground) => TextStyle(
-      fontSize: fontSize,
-      fontWeight: FontWeight.w900,
-      height: 1.05,
-      foreground: foreground,
-      color: foreground == null ? AppColors.yellow : null,
-    );
-    return Stack(
-      children: [
-        Text(
-          text,
-          textAlign: TextAlign.center,
-          style: style(
-            Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 8
-              ..strokeJoin = StrokeJoin.round
-              ..color = _titleStroke,
-          ),
-        ),
-        Text(text, textAlign: TextAlign.center, style: style(null)),
-      ],
-    );
-  }
+  Widget _title(String text, double fontSize) => OutlinedText(
+    text,
+    fontSize: fontSize,
+    color: AppColors.yellow,
+    strokeColor: _titleStroke,
+    strokeWidth: 8,
+    height: 1.05,
+  );
 }
 
 /// Kupanın arkasındaki ışık hüzmeleri: 30 derecede bir 12 derecelik sarı dilim, kenara doğru solar.

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_background.dart';
+
 /// Mevcut web sürümünün renk paleti.
 abstract final class AppColors {
   static const yellow = Color(0xFFFFD24D);
@@ -20,6 +22,25 @@ abstract final class AppColors {
 
   /// Düğme ve kartların altındaki yumuşak gölge.
   static const shadow = Color(0x261F2D4F);
+
+  /// Üst çubuk başlığı ve sayaçların yarı saydam beyaz zemini (`--panel`).
+  static const panel = Color(0xEBFFFFFF);
+}
+
+/// Web sürümündeki ortak ölçüler (`--radius-md`, `--radius-lg`, `--lip` ve `--touch`).
+abstract final class AppMetrics {
+  /// Panel ve kutuların köşe yarıçapı.
+  static const mediumRadius = 18.0;
+
+  /// Büyük kartların köşe yarıçapı.
+  static const largeRadius = 28.0;
+
+  /// Kart ve düğmelerin altındaki kabarık kenarın kalınlığı.
+  static const lip = 6.0;
+
+  /// Dokunulan düğmelerin kenarı; dar ekranda (telefonda) daha küçüktür.
+  static const touch = 64.0;
+  static const compactTouch = 56.0;
 }
 
 /// Bir rengin açık ve koyu tonu. Oyun kartları, rozetler ve kupalar açık tonu zemin, koyu tonu
@@ -51,6 +72,13 @@ ThemeData buildAppTheme() => ThemeData(
     secondary: AppColors.yellow,
     error: AppColors.red,
   ),
-  scaffoldBackgroundColor: const Color(0xFFFFF8E7),
+  // Ekranların arkasında çayır çizimi durur (bkz. [AppBackground]); bu yüzden Scaffold saydamdır.
+  scaffoldBackgroundColor: Colors.transparent,
+  pageTransitionsTheme: PageTransitionsTheme(
+    builders: {
+      for (final MapEntry(:key, :value) in const PageTransitionsTheme().builders.entries)
+        key: BackgroundPageTransitionsBuilder(value),
+    },
+  ),
   textTheme: ThemeData.light().textTheme.apply(bodyColor: AppColors.navy, displayColor: AppColors.navy),
 );

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../app/app_assets.dart';
 import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
+import '../../app/app_texts.dart';
 import '../../app/screen_scale.dart';
+import '../../app/widgets/star_counter.dart';
+import '../../app/widgets/top_bar.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
 import '../progress/progress_repository.dart';
@@ -25,7 +26,7 @@ final class LevelSelectScreen extends StatelessWidget {
 
   static const _padding = 16.0;
   static const _gap = 18.0;
-  static const _twoColumnMinWidth = 560.0;
+  static const _twoColumnMinWidth = ScreenScale.narrowMaxWidth;
   static const _fourColumnMinWidth = 960.0;
 
   /// Tablette seviye satırlarının en fazla büyüme oranı; yatay tablette dört panelin ekrana sığması için sınırlıdır.
@@ -46,22 +47,32 @@ final class LevelSelectScreen extends StatelessWidget {
       builder: (context, _) {
         final packs = services.entitlements.playablePacksOf(game.id);
         return Scaffold(
-          appBar: AppBar(
-            title: Text(game.title),
-            actions: [_StarCounter(stars: services.progress.starsIn(packs))],
-          ),
-          body: LayoutBuilder(
-            builder: (context, constraints) {
-              final columns = columnsFor(constraints.maxWidth);
-              final ratio = ScreenScale.of(context).size(1, max: _maxRowGrowth);
-              return ListView(
-                padding: const EdgeInsets.all(_padding),
-                children: [
-                  for (final pack in packs)
-                    ..._packSection(context, services, pack, columns, ratio, titled: packs.length > 1),
-                ],
-              );
-            },
+          body: SafeArea(
+            child: Column(
+              children: [
+                TopBar(
+                  title: game.title,
+                  icon: game.icon,
+                  backLabel: AppTexts.backToHome,
+                  actions: [StarCounter(stars: services.progress.starsIn(packs))],
+                ),
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final columns = columnsFor(constraints.maxWidth);
+                      final ratio = ScreenScale.of(context).size(1, max: _maxRowGrowth);
+                      return ListView(
+                        padding: const EdgeInsets.all(_padding),
+                        children: [
+                          for (final pack in packs)
+                            ..._packSection(context, services, pack, columns, ratio, titled: packs.length > 1),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -112,24 +123,6 @@ List<Widget> _grid(List<Widget> panels, int columns) => [
       ),
     ),
 ];
-
-final class _StarCounter extends StatelessWidget {
-  const _StarCounter({required this.stars});
-
-  final int stars;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-      children: [
-        SvgPicture.asset(AppAssets.star, width: 24, height: 24),
-        const SizedBox(width: 4),
-        Text('$stars', style: Theme.of(context).textTheme.titleMedium),
-      ],
-    ),
-  );
-}
 
 /// Bir zorluk grubunun verisini panele bağlar.
 final class _GroupPanel extends StatelessWidget {

@@ -32,7 +32,7 @@ final class SpeechBubble extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppMetrics.mediumRadius),
             border: Border.all(color: _borderColor, width: 3),
           ),
           child: Semantics(

@@ -2,9 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../app/app_assets.dart';
 import '../../app/app_scope.dart';
+import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
 import '../../app/screen_scale.dart';
+import '../../app/widgets/top_bar.dart';
 import 'achievement.dart';
 import 'widgets/achievement_card.dart';
 
@@ -14,7 +17,7 @@ final class AchievementsScreen extends StatelessWidget {
   const AchievementsScreen({super.key});
 
   static const title = 'Başarılarım';
-  static const backLabel = 'Ana ekrana dön';
+  static const backLabel = AppTexts.backToHome;
 
   static String summaryText(int earned) => '$earned ödül kazandın!';
 
@@ -61,49 +64,50 @@ final class AchievementsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final achievements = AppScope.of(context).achievements;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(title),
-        leading: IconButton(
-          tooltip: backLabel,
-          onPressed: () => Navigator.of(context).maybePop(),
-          icon: const BackButtonIcon(),
-        ),
-      ),
-      body: ListenableBuilder(
-        listenable: achievements,
-        builder: (context, _) {
-          final statuses = achievements.statuses();
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final width = min(constraints.maxWidth, _maxContentWidth) - 2 * _padding;
-              final isWide = constraints.maxWidth >= ScreenScale.wideMinWidth;
-              return Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: width + 2 * _padding,
-                  child: ListView(
-                    padding: const EdgeInsets.all(_padding),
-                    children: [
-                      _Summary(statuses: statuses),
-                      for (final section in [_badges, _trophies])
-                        _SectionView(
-                          section: section,
-                          statuses: [
-                            for (final status in statuses)
-                              if (status.achievement.kind == section.kind) status,
-                          ],
-                          columns: isWide
-                              ? max(1, ((width + _gap) / (section.minCellWidth + _gap)).floor())
-                              : section.phoneColumns,
-                          width: width,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const TopBar(title: title, icon: AppAssets.trophy, backLabel: backLabel),
+            Expanded(
+              child: ListenableBuilder(
+                listenable: achievements,
+                builder: (context, _) {
+                  final statuses = achievements.statuses();
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = min(constraints.maxWidth, _maxContentWidth) - 2 * _padding;
+                      final isWide = constraints.maxWidth >= ScreenScale.wideMinWidth;
+                      return Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: width + 2 * _padding,
+                          child: ListView(
+                            padding: const EdgeInsets.all(_padding),
+                            children: [
+                              _Summary(statuses: statuses),
+                              for (final section in [_badges, _trophies])
+                                _SectionView(
+                                  section: section,
+                                  statuses: [
+                                    for (final status in statuses)
+                                      if (status.achievement.kind == section.kind) status,
+                                  ],
+                                  columns: isWide
+                                      ? max(1, ((width + _gap) / (section.minCellWidth + _gap)).floor())
+                                      : section.phoneColumns,
+                                  width: width,
+                                ),
+                            ],
+                          ),
                         ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -203,7 +207,7 @@ final class _SectionView extends StatelessWidget {
   }
 
   Widget _header(TextTheme textTheme, int earnedCount) => DecoratedBox(
-    decoration: BoxDecoration(color: section.color, borderRadius: BorderRadius.circular(18)),
+    decoration: BoxDecoration(color: section.color, borderRadius: BorderRadius.circular(AppMetrics.mediumRadius)),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       child: Row(
