@@ -31,7 +31,7 @@ void main() {
 
     // Act
     final result = await ProtectedActionRunner(FakeParentalGate(approves: false))
-        .run(context, ParentalAction.enableCloudSync, (_) async => ran = true);
+        .run(context, ParentalAction.purchase, (_) async => ran = true);
 
     // Assert
     expect(result, isNull);

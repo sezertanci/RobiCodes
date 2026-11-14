@@ -5,9 +5,7 @@ import '../content/content_catalog.dart';
 import '../core/storage/key_value_store.dart';
 import '../features/achievements/achievement_celebration.dart';
 import '../features/achievements/achievement_service.dart';
-import '../features/cloud_save/cloud_save_gateway.dart';
 import '../features/character/character_service.dart';
-import '../features/cloud_save/cloud_sync_service.dart';
 import '../features/parental_gate/dialog_parental_gate.dart';
 import '../features/parental_gate/parental_gate.dart';
 import '../features/parental_gate/parental_question.dart';
@@ -34,7 +32,6 @@ final class AppServices {
     required this.games,
     required KeyValueStore store,
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
-    CloudSaveGateway cloudSaveGateway = const NoCloudSaveGateway(),
     ParentalGate parentalGate = const LockedParentalGate(),
     SoundPlayer soundPlayer = const SilentSoundPlayer(),
   }) : progress = ProgressRepository(store),
@@ -45,7 +42,6 @@ final class AppServices {
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
     listings = ListingService(catalog: catalog, gateway: purchaseGateway);
     offers = OfferPolicy(catalog, entitlements);
-    cloudSync = CloudSyncService(gateway: cloudSaveGateway, progress: progress, store: store);
     achievements = AchievementService(store: store, catalog: catalog, games: games, progress: progress);
     celebration = AchievementCelebration(sound: sound);
   }
@@ -77,7 +73,6 @@ final class AppServices {
   late final EntitlementService entitlements;
   late final ListingService listings;
   late final OfferPolicy offers;
-  late final CloudSyncService cloudSync;
   late final AchievementService achievements;
   late final AchievementCelebration celebration;
 }

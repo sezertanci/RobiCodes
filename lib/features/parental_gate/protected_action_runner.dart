@@ -4,7 +4,7 @@ import 'parental_gate.dart';
 
 /// Ebeveynin tek bir işlem için verdiği onay. Yalnızca [ProtectedActionRunner] oluşturabilir
 /// (kurucu bu dosyaya özeldir). Korunan servis metotları bu nesneyi ister; böylece doğrulamadan
-/// geçmeden satın alma veya bulut işlemi çağrılamaz.
+/// geçmeden satın alma çağrılamaz.
 final class ParentalApproval {
   ParentalApproval._(this.action);
 
@@ -24,7 +24,7 @@ final class ParentalApproval {
   }
 }
 
-/// Korumalı işlemleri çalıştıran tek giriş noktası. Satın alma, hesap ve bulut işlemleri
+/// Korumalı işlemleri çalıştıran tek giriş noktası. Satın alma gibi korumalı işlemler
 /// doğrudan değil, bu sınıf üzerinden çağrılır; doğrulama geçilmezse işlem hiç çalışmaz.
 /// Onay hiçbir yerde saklanmaz: her çağrıda ebeveyne yeniden sorulur, uygulama yeniden
 /// başlatıldığında da önceki onaylardan hiçbiri geçerli değildir.

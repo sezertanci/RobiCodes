@@ -29,10 +29,15 @@
 - Sistem veri odaklıdır: koşullar katalogdaki oyunlar ve seviyeler üzerinden hesaplanır. Yeni oyun ve
   seviyeler eklendiğinde rozet ve kupalar kendiliğinden uyum sağlar.
 
-## Bulut kaydı ve hesap bağlama
+## Bulut kaydı ve hesap bağlama (14.11.2026)
 
-- Google Play Games Services v2'nin güncel gereksinimleri ve Families politikasının çocuk
-  uygulamalarında oturum açmaya ilişkin koşulları, bulut kaydı aşamasında **yeniden araştırılır ve
-  doğrulanır**.
-- Politikalara uygunluk doğrulanmadan entegrasyona başlanmaz.
-- Ebeveyn doğrulaması olmadan hesap bağlantısı yapılmaz.
+- **Bulut kaydı ve Google hesabı bağlama yapılmaz.** İlerleme yalnızca cihazda tutulur.
+- Gerekçe: Google'ın [API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy)
+  belgesine göre yalnızca çocuklara yönelik bir uygulama Google Sign-In'i ve Google hesabı verisine
+  erişen Google API'lerini kullanmamalıdır; bu yasak Google Play Games Services'i de kapsar. Karma
+  kitleli uygulamalarda yalnızca isteğe bağlı olarak sunulabilir. Uygulamanın hedef kitlesi çocuklar
+  olduğu için Play Games Services (Saved Games dahil) eklenmez.
+- Ek bulgu: Play Games Services v2'de uygulama içinden çıkış (sign-out) API'si yoktur; hesap cihaz
+  ayarlarından yönetilir.
+- Daha önce eklenen ve hiçbir ekrana bağlı olmayan taslak bulut kodu (`cloud_save`) ile hesap ve
+  bulut işlemlerine ait ebeveyn onayı eylemleri kaldırıldı.

@@ -5,7 +5,7 @@ import '../../core/json_utils.dart';
 import 'star_rule.dart';
 
 /// Oyuncu ilerlemesinin değişmez kopyası: her paketteki seviyelerin en iyi yıldız sayısı.
-/// Cihaz kaydı ve bulut kaydı aynı biçimi kullanır. Satın alma bilgisi burada tutulmaz.
+/// Yalnızca cihazda saklanır. Satın alma bilgisi burada tutulmaz.
 final class ProgressSnapshot {
   const ProgressSnapshot(this.stars);
 

@@ -4,10 +4,11 @@
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
 kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` klasörü) referans olarak korunur ve bu projeden bağımsızdır.
 
-> **Durum — 6. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
+> **Durum — 8. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
-> Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
-> ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
+> Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi.
+> Google Play Billing ile paket satın alma ve matematik sorulu ebeveyn doğrulaması eklendi. Google hesabı
+> ve bulut kaydı yoktur; ilerleme yalnızca cihazda tutulur (bkz. "İlerleme kaydı").
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
 
@@ -72,7 +73,6 @@ lib/
     sound/        Ses efektleri, ses servisi (açık/kapalı ayarı) ve ses çalıcı
     settings/     Ayarlar penceresi
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
-    cloud_save/   İsteğe bağlı bulut kaydı, kayıt birleştirme
     parental_gate/ Ebeveyn doğrulaması ve korumalı işlem çalıştırıcı
     home/         Ana ekran, karakter ve Başarılarım düğmeleri
 assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon) ve
@@ -127,8 +127,7 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   - Seviye bitince yeni ödüller sırayla gösterilir: önce rozetler üstten kayan bildirimle (kendiliğinden
     veya dokununca kapanır), sonra kupalar durmadan yağan konfetili, dönen ışıklı tam ekran pencerede
     ("Harika!" ile kapanır). Ana ekrandaki kupa düğmesi kazanılan/toplam sayısını gösterir ve Başarılarım
-    ekranını açar; kilitli ödüllerde ilerleme çubuğu görünür. Ayarlarda sıfırlama yoktur; bulut
-    senkronizasyonu bulut kayıt aşamasında eklenecek.
+    ekranını açar; kilitli ödüllerde ilerleme çubuğu görünür. Ayarlarda sıfırlama yoktur.
 - **Konfeti:** Seviye bitince sonuç panelinin üstüne bir kez yağar (`features/play/widgets/confetti.dart`).
   Web sürümündeki gibi 28 parça; konumları, gecikmeleri, renkleri ve dönüşleri aynı formülle sıradan
   hesaplanır ve 3,2 saniyede ekranın altına iner. Paket kullanılmaz, parçalar `CustomPainter` ile çizilir;
@@ -176,15 +175,17 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   için sahiplik uygulama açılışında (ileride ön plana dönüşte de) yeniden sorgulanır.
 - Sahip olunan ürünler cihazda önbelleğe alınır. Mağazaya ulaşılamazsa önbellek korunur; uygulama
   internetsiz çalışır.
-- Satın almalar bulut kaydına yazılmaz; her zaman Google Play'den okunur.
+- Satın alma hakları her zaman Google Play'den okunur.
 
-## Bulut kaydı kararları
+## İlerleme kaydı
 
-- Bulut kaydı isteğe bağlıdır ve varsayılan olarak kapalıdır. Kayıt önce cihaza yapılır.
-- İleride Google Play Games Services v2 Saved Games ile bağlanacak (`CloudSaveGateway`).
-- İki kayıt birleştirilirken her seviyenin en yüksek yıldızı alınır; hiçbir ilerleme kaybolmaz.
+- İlerleme, rozetler, kupalar ve ayarlar yalnızca cihazda tutulur. Google hesabı bağlama ve bulut
+  kaydı yoktur.
+- Google Play Games Services kullanılmaz: Google'ın API Services User Data Policy belgesine göre
+  yalnızca çocuklara yönelik uygulamalar Google Sign-In'i ve Play Games Services'i kullanamaz.
+  Ayrıntı: [docs/decisions.md](docs/decisions.md).
 
 ## Ebeveyn doğrulaması
 
-Satın alma, hesap bağlama, bulut eşitlemesini açma, çıkış ve hesap değiştirme `ProtectedActionRunner` üzerinden çalışır. Nihai doğrulama yöntemi seçilene kadar
+Satın alma `ProtectedActionRunner` üzerinden çalışır. Nihai doğrulama yöntemi seçilene kadar
 `LockedParentalGate` bu işlemlerin hepsini engeller.

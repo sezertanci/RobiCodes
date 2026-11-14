@@ -8,7 +8,6 @@ import 'package:robi_codes/content/models/level_pack.dart';
 import 'package:robi_codes/content/models/store_product.dart';
 import 'package:robi_codes/content/content_catalog.dart';
 import 'package:robi_codes/core/storage/key_value_store.dart';
-import 'package:robi_codes/features/cloud_save/cloud_save_gateway.dart';
 import 'package:robi_codes/features/parental_gate/parental_gate.dart';
 import 'package:robi_codes/features/play/game_feedback.dart';
 import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
@@ -145,28 +144,6 @@ final class FakePurchaseGateway implements PurchaseGateway {
     token: tokenOf(productId),
     isAcknowledged: !unacknowledged.contains(productId),
   );
-}
-
-/// Bellekte çalışan bulut kaydı.
-final class FakeCloudSaveGateway implements CloudSaveGateway {
-  bool signedIn = true;
-  bool reachable = true;
-  String stored = '';
-
-  @override
-  Future<bool> isSignedIn() async => signedIn;
-
-  @override
-  Future<String?> load() async => reachable ? stored : null;
-
-  @override
-  Future<bool> save(String data) async {
-    if (!reachable) {
-      return false;
-    }
-    stored = data;
-    return true;
-  }
 }
 
 /// Sonucu testte ayarlanan ebeveyn doğrulaması.

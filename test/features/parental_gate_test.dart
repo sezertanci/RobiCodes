@@ -2,11 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:robi_codes/features/cloud_save/cloud_sync_service.dart';
 import 'package:robi_codes/features/parental_gate/parental_gate.dart';
 import 'package:robi_codes/features/parental_gate/parental_question.dart';
 import 'package:robi_codes/features/parental_gate/protected_action_runner.dart';
-import 'package:robi_codes/features/progress/progress_repository.dart';
 import 'package:robi_codes/features/store/entitlement_service.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
 
@@ -76,15 +74,6 @@ void main() {
       expect(approval.consume(ParentalAction.purchase), isTrue);
       expect(approval.consume(ParentalAction.purchase), isFalse);
     });
-
-    test('consume_OtherAction_Fails', () async {
-      // Arrange
-      final approval = await grantApproval(ParentalAction.enableCloudSync);
-
-      // Act & Assert
-      expect(approval.consume(ParentalAction.purchase), isFalse);
-      expect(approval.consume(ParentalAction.enableCloudSync), isTrue);
-    });
   });
 
   group('ProtectedActionRunner', () {
@@ -140,18 +129,6 @@ void main() {
       expect(service.canPlayPack(TestCatalog.packB), isFalse);
     });
 
-    test('purchase_ApprovalForOtherAction_ReturnsNotApproved', () async {
-      // Arrange
-      final approval = await grantApproval(ParentalAction.enableCloudSync);
-
-      // Act
-      final outcome = await service.purchase(TestCatalog.productB, approval: approval);
-
-      // Assert
-      expect(outcome, PurchaseOutcome.notApproved);
-      expect(gateway.purchaseRequests, isEmpty);
-    });
-
     test('purchase_ApprovalReused_SecondPurchaseDoesNotReachStore', () async {
       // Arrange
       final approval = await grantApproval(ParentalAction.purchase);
@@ -163,71 +140,6 @@ void main() {
       // Assert
       expect(outcome, PurchaseOutcome.notApproved);
       expect(gateway.purchaseRequests, [TestCatalog.productA]);
-    });
-  });
-
-  group('CloudSyncService protection', () {
-    late CloudSyncService service;
-
-    setUp(() {
-      final store = InMemoryKeyValueStore();
-      service = CloudSyncService(gateway: FakeCloudSaveGateway(), progress: ProgressRepository(store), store: store);
-    });
-
-    test('setEnabled_EnableWithDisableApproval_StaysOff', () async {
-      // Act
-      final changed = await service.setEnabled(
-        enabled: true,
-        approval: await grantApproval(ParentalAction.disableCloudSync),
-      );
-
-      // Assert
-      expect(changed, isFalse);
-      expect(service.isEnabled, isFalse);
-    });
-
-    test('setEnabled_DisableWithEnableApproval_StaysOn', () async {
-      // Arrange
-      await service.setEnabled(enabled: true, approval: await grantApproval(ParentalAction.enableCloudSync));
-
-      // Act
-      final changed = await service.setEnabled(
-        enabled: false,
-        approval: await grantApproval(ParentalAction.enableCloudSync),
-      );
-
-      // Assert
-      expect(changed, isFalse);
-      expect(service.isEnabled, isTrue);
-    });
-
-    test('setEnabled_DisableWithDisableApproval_TurnsOff', () async {
-      // Arrange
-      await service.setEnabled(enabled: true, approval: await grantApproval(ParentalAction.enableCloudSync));
-
-      // Act
-      final changed = await service.setEnabled(
-        enabled: false,
-        approval: await grantApproval(ParentalAction.disableCloudSync),
-      );
-
-      // Assert
-      expect(changed, isTrue);
-      expect(service.isEnabled, isFalse);
-    });
-
-    test('setEnabled_ApprovalReused_SecondChangeIsRejected', () async {
-      // Arrange
-      final approval = await grantApproval(ParentalAction.enableCloudSync);
-      await service.setEnabled(enabled: true, approval: approval);
-      await service.setEnabled(enabled: false, approval: await grantApproval(ParentalAction.disableCloudSync));
-
-      // Act
-      final changed = await service.setEnabled(enabled: true, approval: approval);
-
-      // Assert
-      expect(changed, isFalse);
-      expect(service.isEnabled, isFalse);
     });
   });
 }

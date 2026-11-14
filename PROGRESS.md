@@ -160,6 +160,13 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   Kupası" penceresi göründü; "Harika!" pencereyi kapattı; yeni ödül olmayan seviyelerde bildirim çıkmadı.
   Dikey tablette (711 dp) kupalar tek sütun dizilir.
 
+**7. aşama tamamlandı, commit edildi (`ebadf2b`):** Google Play Billing ile satın alma altyapısı.
+
+**8. aşama — bulut kaydı yapılmayacak (14.11.2026):** Araştırmada, yalnızca çocuklara yönelik
+uygulamaların Google Play Games Services kullanamayacağı görüldü. Kullanıcı kararıyla Play Games
+Services ve bulut kaydı eklenmedi; taslak `cloud_save` kodu, testleri, `cloud-sync.v1` anahtarı ve
+hesap/bulut ebeveyn onayı eylemleri kaldırıldı. Ayrıntı: [docs/decisions.md](docs/decisions.md).
+
 ## Ertelenen işler (unutulmayacak)
 
 2.–5. aşamalarda web sürümünden alınmayan özellikler. Bunlardan vazgeçilmedi; ilgili aşamada ele alınacak.
@@ -167,7 +174,7 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 | Özellik | Durum | Karar |
 |---|---|---|
 | Ses efektleri | Eklendi (6. aşama) | Rozet ve kupa sesleri de bağlandı. |
-| Rozet ve kupalar | Eklendi (6. aşama) | Yerel kayıtta tutuluyor; bulut kayıt aşamasında senkronizasyona dahil edilecek. |
+| Rozet ve kupalar | Eklendi (6. aşama) | Yalnızca cihazda tutuluyor; bulut kaydı yapılmayacak (8. aşama kararı). |
 | Konfeti | Eklendi (6. aşama) | Sonuç panelinde bir kez, kupa penceresinde sürekli yağar. |
 | Karakter seçimi | Eklendi (6. aşama) | Web'deki 5 karakter ve seçim penceresi aktarıldı. |
 | Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları, ana ekran robotunun el sallaması gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
@@ -178,5 +185,5 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-6. aşamanın rozet ve kupalar alt adımı raporlandı; kullanıcının onayı ve commit isteği bekleniyor. Her aşamada yalnızca o aşamanın
+8. aşama (bulut kaydının kaldırılması) raporlandı; kullanıcının onayı ve commit isteği bekleniyor. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.
