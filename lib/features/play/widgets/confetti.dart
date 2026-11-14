@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../../app/app_theme.dart';
 
@@ -52,10 +54,11 @@ final class ConfettiPiece {
   Size get size => isRound ? const Size.square(10) : const Size(12, 18);
 }
 
-/// Bulunduğu alanın tamamına bir kez yağan konfeti. Dokunmaları engellemez, ekran okuyucuya görünmez.
+/// Bulunduğu alanın tamamına yağan konfeti: varsayılan olarak bir kez, [loops] açıksa durmadan
+/// (kupa penceresinde olduğu gibi). Dokunmaları engellemez, ekran okuyucuya görünmez.
 /// "Hareketi azalt" açıksa hiç gösterilmez.
 final class Confetti extends StatefulWidget {
-  const Confetti({super.key});
+  const Confetti({this.loops = false, super.key});
 
   static const pieceCount = 28;
   static const fallDuration = Duration(milliseconds: 3200);
@@ -64,6 +67,9 @@ final class Confetti extends StatefulWidget {
   static final totalDuration = fallDuration + ConfettiPiece.at(_slowestIndex).delay;
   static const _slowestIndex = ConfettiPiece._delayGroups - 1;
 
+  /// Her parça düşüşünü bitirince en üstten yeniden başlar.
+  final bool loops;
+
   @override
   State<Confetti> createState() => _ConfettiState();
 }
@@ -71,50 +77,68 @@ final class Confetti extends StatefulWidget {
 final class _ConfettiState extends State<Confetti> with SingleTickerProviderStateMixin {
   static final _pieces = List.generate(Confetti.pieceCount, ConfettiPiece.at, growable: false);
 
-  late final AnimationController _controller = AnimationController(vsync: this, duration: Confetti.totalDuration)
-    ..addStatusListener((status) {
-      if (status.isCompleted) {
-        setState(() {});
-      }
-    })
-    ..forward();
+  /// Yağmurun başlangıcından beri geçen süre.
+  final _elapsed = ValueNotifier(Duration.zero);
+  late final Ticker _ticker;
+  bool _isFinished = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker(_onTick)..start();
+  }
+
+  void _onTick(Duration elapsed) {
+    _elapsed.value = elapsed;
+    if (!widget.loops && elapsed >= Confetti.totalDuration) {
+      _ticker.stop();
+      setState(() => _isFinished = true);
+    }
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _ticker.dispose();
+    _elapsed.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.disableAnimationsOf(context) || _controller.isCompleted) {
+    if (MediaQuery.disableAnimationsOf(context) || _isFinished) {
       return const SizedBox.shrink();
     }
     return IgnorePointer(
       child: ExcludeSemantics(
-        child: CustomPaint(size: Size.infinite, painter: _ConfettiPainter(_controller, _pieces)),
+        child: CustomPaint(
+          size: Size.infinite,
+          painter: _ConfettiPainter(_elapsed, _pieces, loops: widget.loops),
+        ),
       ),
     );
   }
 }
 
 final class _ConfettiPainter extends CustomPainter {
-  _ConfettiPainter(this._clock, this._pieces) : super(repaint: _clock);
+  _ConfettiPainter(this._elapsed, this._pieces, {required this.loops}) : super(repaint: _elapsed);
 
   /// Parçalar ekranın biraz üstünden başlar ve ekran yüksekliğinin %110'u kadar düşer.
   static const _startTop = -24.0;
   static const _fallFactor = 1.1;
   static const _cornerRadius = Radius.circular(3);
 
-  final Animation<double> _clock;
+  final ValueListenable<Duration> _elapsed;
   final List<ConfettiPiece> _pieces;
+  final bool loops;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final elapsed = Confetti.totalDuration * _clock.value;
     final paint = Paint();
     for (final piece in _pieces) {
-      final progress = (elapsed - piece.delay).inMicroseconds / Confetti.fallDuration.inMicroseconds;
+      final fallen = (_elapsed.value - piece.delay).inMicroseconds;
+      final fall = Confetti.fallDuration.inMicroseconds;
+      // Döngüde parça düşüşünü bitirince en üstten yeniden başlar; gecikmesi dolmadan görünmez.
+      final progress = (loops && fallen > 0 ? fallen % fall : fallen) / fall;
       if (progress <= 0 || progress >= 1) {
         continue;
       }

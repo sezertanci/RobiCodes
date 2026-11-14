@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:robi_codes/app/app_assets.dart';
+import 'package:robi_codes/app/app_theme.dart';
 import 'package:robi_codes/content/models/game_definition.dart';
 import 'package:robi_codes/content/models/level_pack.dart';
 import 'package:robi_codes/content/models/store_product.dart';
@@ -125,7 +127,16 @@ abstract final class TestCatalog {
   static const bundle = 'bundle_ab';
 
   static ContentCatalog build() => ContentCatalog(
-    games: const [GameDefinition(id: gameId, title: 'Oyun', description: 'Açıklama')],
+    games: const [
+      GameDefinition(
+        id: gameId,
+        title: 'Oyun',
+        description: 'Açıklama',
+        tone: AppTones.blue,
+        icon: AppAssets.gamePath,
+        trophy: GameTrophy(title: 'Kupa', description: 'Açıklama'),
+      ),
+    ],
     packs: [
       for (final id in [freePack, packA, packB]) _pack(id),
     ],

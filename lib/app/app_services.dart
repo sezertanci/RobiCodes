@@ -1,6 +1,8 @@
 import '../content/catalog_data.dart';
 import '../content/content_catalog.dart';
 import '../core/storage/key_value_store.dart';
+import '../features/achievements/achievement_celebration.dart';
+import '../features/achievements/achievement_service.dart';
 import '../features/cloud_save/cloud_save_gateway.dart';
 import '../features/character/character_service.dart';
 import '../features/cloud_save/cloud_sync_service.dart';
@@ -38,6 +40,8 @@ final class AppServices {
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
     offers = OfferPolicy(catalog, entitlements);
     cloudSync = CloudSyncService(gateway: cloudSaveGateway, progress: progress, store: store);
+    achievements = AchievementService(store: store, catalog: catalog, games: games, progress: progress);
+    celebration = AchievementCelebration(sound: sound);
   }
 
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
@@ -60,4 +64,6 @@ final class AppServices {
   late final EntitlementService entitlements;
   late final OfferPolicy offers;
   late final CloudSyncService cloudSync;
+  late final AchievementService achievements;
+  late final AchievementCelebration celebration;
 }

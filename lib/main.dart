@@ -15,5 +15,7 @@ Future<void> main() async {
   );
   // Sahiplik arka planda yenilenir; mağazaya ulaşılamazsa önbellekteki haklar geçerli kalır.
   unawaited(services.entitlements.refresh());
+  // Koşulu önceden sağlanmış ödüller (ör. güncellemeden önce bitirilen seviyeler) pencere açılmadan kaydedilir.
+  unawaited(services.achievements.sync());
   runApp(RobiCodesApp(services: services));
 }

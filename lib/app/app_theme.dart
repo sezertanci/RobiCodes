@@ -20,9 +20,28 @@ abstract final class AppColors {
 
   /// Düğme ve kartların altındaki yumuşak gölge.
   static const shadow = Color(0x261F2D4F);
+}
 
-  /// Ana ekrandaki oyun kartlarının sırayla aldığı renkler.
-  static const cardAccents = [blue, green, purple, orange];
+/// Bir rengin açık ve koyu tonu. Oyun kartları, rozetler ve kupalar açık tonu zemin, koyu tonu
+/// kenar ve gölge olarak kullanır (web sürümündeki `--tone` ve `--tone-dark`).
+@immutable
+final class ColorTone {
+  const ColorTone(this.base, this.dark);
+
+  final Color base;
+  final Color dark;
+}
+
+/// Oyunların ve ödüllerin kullandığı renk tonları. Pembe, lacivert ve altın yalnızca ödüllerde kullanılır.
+abstract final class AppTones {
+  static const blue = ColorTone(AppColors.blue, AppColors.blueDark);
+  static const green = ColorTone(AppColors.green, AppColors.greenDark);
+  static const purple = ColorTone(AppColors.purple, AppColors.purpleDark);
+  static const orange = ColorTone(AppColors.orange, AppColors.orangeDark);
+  static const red = ColorTone(AppColors.red, AppColors.redDark);
+  static const pink = ColorTone(Color(0xFFFF8FB7), Color(0xFFE0608E));
+  static const navy = ColorTone(Color(0xFF3A4D7A), AppColors.navy);
+  static const gold = ColorTone(AppColors.yellow, AppColors.yellowDark);
 }
 
 ThemeData buildAppTheme() => ThemeData(

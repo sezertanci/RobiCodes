@@ -6,7 +6,7 @@ kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` k
 
 > **Durum — 6. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
-> Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi eklendi; rozetler sırada. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
+> Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi. Google Play Billing, promosyon kodu, Google hesabı, bulut kaydı ve nihai
 > ebeveyn doğrulaması henüz entegre edilmedi; yerlerinde çalışmayan taslak sınıflar vardır.
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
@@ -66,13 +66,15 @@ lib/
       widgets/    Ortak parçalar: konuşma balonu, görselli düğme, kesik çerçeve, seviye grup paneli,
                   robot görüntüsü, ipucu ve yanlış işaretleri, nabız gibi atan ipucu çerçevesi, konfeti
     progress/     Yıldız kuralı, ilerleme kaydı, grup ve seviye kilitleri
+    achievements/ Rozet ve kupa kataloğu, kazanma koşulları, kayıt servisi, Başarılarım ekranı,
+                  rozet bildirimi ve kupa penceresi
     character/    Seçilebilen karakterler, seçimi saklayan servis ve karakter seçme penceresi
     sound/        Ses efektleri, ses servisi (açık/kapalı ayarı) ve ses çalıcı
     settings/     Ayarlar penceresi
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
     cloud_save/   İsteğe bağlı bulut kaydı, kayıt birleştirme
     parental_gate/ Ebeveyn doğrulaması ve korumalı işlem çalıştırıcı
-    home/         Ana ekran ve karakter düğmesi
+    home/         Ana ekran, karakter ve Başarılarım düğmeleri
 assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon) ve
                   sounds/ altında ses efektleri
 tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py, sesleri üreten
@@ -92,8 +94,8 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
 - **Ses:** Web sürümü sesleri tarayıcıda notalardan anlık üretiyordu. Aynı notalar, süreler ve ses zarfı
   `tool/make_sounds.py` ile WAV dosyalarına çevrildi (`assets/sounds/`). Doğru ve yanlış sesi robot
   sevinince veya üzülünce, seviye sonu sesi sonuç paneli açılınca, yıldız sesi ise her kazanılan yıldız
-  belirdiğinde (tonu her yıldızda yükselerek) çalar. Rozet ve kupa sesleri hazırdır; rozet aşamasında
-  kullanılacak. Sesler diğer uygulamaların sesini kesmez. Ana ekrandaki ayarlar düğmesinden ses açılıp
+  belirdiğinde (tonu her yıldızda yükselerek) çalar. Rozet sesi rozet bildirimiyle, kupa sesi kupa
+  penceresiyle çalar. Sesler diğer uygulamaların sesini kesmez. Ana ekrandaki ayarlar düğmesinden ses açılıp
   kapatılır; ayar cihazda saklanır ve ilk açılışta ses açıktır. Notalar değişirse dosyalar yeniden üretilir
   (yalnızca Python standart kütüphanesi gerekir): `python tool/make_sounds.py assets/sounds`
 - **Oyun ekranı:** Genişliği 760 ve yüksekliği 520 pikselden büyük ekranlarda (tablet) harita solda,
@@ -107,6 +109,26 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
   (telefonda iki, tablette üç sütun); seçilen karakter `character.v1` anahtarında saklanır ve konuşma
   balonunda, haritada ve yolda hemen görünür. Robot çizen widget'lar karakteri `CharacterScope`'tan okur;
   ağaçta yoksa (tek ekranı deneyen testler) varsayılan karakter Robi kullanılır.
+- **Rozet ve kupalar:** `features/achievements/` altında genel bir yapıdır; oyun sayısı ve seviye sayısı
+  sabit yazılmaz. Her oyunun kupası oyun tanımındaki (`GameDefinition.trophy`) ad ve açıklamadan üretilir,
+  yeni oyun eklenince kupası ve "bütün oyunlar" hedefleri kendiliğinden genişler. Hedeflerde yalnızca
+  oynanabilir oyunların ücretsiz paketleri sayılır; satın alınan paketlerdeki yıldızlar yalnızca yıldız
+  rozetlerine eklenir. "Yakında" görünen oyunlar hiçbir hedefe girmez.
+  - Rozetler: İlk Oyunum (1 seviye), Hızlı Başlangıç (bir oyunda 5 seviye), Azimli Oyuncu (bir oyunda
+    10 seviye), Usta Kodlayıcı (bir oyunun bütün seviyeleri), Oyun Kaşifi (bütün oyunlarda en az bir
+    seviye; web'deki "Dört Dörtlük" rozeti oyun sayısı sabit olmasın diye yeniden adlandırıldı), Yıldız
+    Avcısı (20 yıldız), Yıldız Ustası (50 yıldız), Mükemmel Oyuncu (3 yıldızlı seviye), İpucusuz Kahraman
+    (ipucusuz 5 seviye), Büyük Başarı (bütün oyunların bütün seviyeleri).
+  - Kupalar: İlk Macera Kupası (her oyunda ilk seviye), her oyun için bir usta kupası (Robot, Algoritma,
+    Karar, Döngü Ustası) ve Kodlama Şampiyonu (bütün seviyeler).
+  - Kazanılanlar `achievements.v1` anahtarında `{"earned":[...]}` olarak saklanır; bozuk kayıt veya bilinmeyen
+    kimlikler yok sayılır. Açılışta koşulu önceden sağlanmış ödüller kutlama gösterilmeden eşitlenir;
+    kazanılmış ödül bir daha kutlanmaz.
+  - Seviye bitince yeni ödüller sırayla gösterilir: önce rozetler üstten kayan bildirimle (kendiliğinden
+    veya dokununca kapanır), sonra kupalar durmadan yağan konfetili, dönen ışıklı tam ekran pencerede
+    ("Harika!" ile kapanır). Ana ekrandaki kupa düğmesi kazanılan/toplam sayısını gösterir ve Başarılarım
+    ekranını açar; kilitli ödüllerde ilerleme çubuğu görünür. Ayarlarda sıfırlama yoktur; bulut
+    senkronizasyonu bulut kayıt aşamasında eklenecek.
 - **Konfeti:** Seviye bitince sonuç panelinin üstüne bir kez yağar (`features/play/widgets/confetti.dart`).
   Web sürümündeki gibi 28 parça; konumları, gecikmeleri, renkleri ve dönüşleri aynı formülle sıradan
   hesaplanır ve 3,2 saniyede ekranın altına iner. Paket kullanılmaz, parçalar `CustomPainter` ile çizilir;

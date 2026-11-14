@@ -116,7 +116,7 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   başlatmada korundu. Tablet bağlı olmadığı için tablette henüz denenmedi.
 - Sayfa geçişlerindeki "tık" sesi Android'in dokunma sesidir (sistem ayarı); kullanıcı olduğu gibi kalmasını istedi.
 
-**6. aşama — 2. alt adım (kutlama ve konfeti) tamamlandı, onay bekliyor:**
+**6. aşama — 2. alt adım (kutlama ve konfeti) tamamlandı:**
 
 - Web'deki konfeti (`components.js` `confetti()`, `animations.css`) `CustomPainter` ile aynı formülle çizildi:
   28 parça, 3,2 saniyelik düşüş, sırayla gecikme, renk ve dönüş. Sonuç panelinin üstüne bir kez yağar.
@@ -127,7 +127,7 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
   üstünden ekranın altına yağıp bitiyor; animasyonlar kapatılınca hiç görünmüyor. Tablette henüz denenmedi.
 - Kullanıcı onaylayıp commit istedi (`8e92541`).
 
-**6. aşama — 3. alt adım (karakter seçimi) tamamlandı, onay bekliyor:**
+**6. aşama — 3. alt adım (karakter seçimi) tamamlandı, commit edildi (`1cf0d2e`):**
 
 - Web'de seçilebilen karakter 5 tanedir (`js/core/characters.js`: Robi, Fiyo, Işıl, Pembe, Pırıl); dördünün
   görseli `assets/characters/` altına değiştirilmeden kopyalandı. Web klasöründeki diğer robot görselleri
@@ -143,6 +143,22 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 - `flutter analyze` temiz, 311 test geçiyor, debug APK derleniyor. Telefonda (emülatör) ve tablette denendi:
   pencere iki/üç sütun açıldı, seçilen karakter ana ekranda, konuşma balonunda, haritada ve yolda göründü,
   uygulama yeniden başlatılınca seçim korundu.
+**6. aşama — 4. alt adım (rozet ve kupalar) tamamlandı, onay bekliyor:**
+
+- 10 rozet ve 2 genel kupa ile her oynanabilir oyun için bir kupa (şu an 16 ödül) `features/achievements/`
+  altında; liste ve kurallar README'de. Web'deki "Dört Dörtlük" rozetinin adı "Oyun Kaşifi" oldu.
+- Hedeflerde yalnızca oynanabilir oyunların ücretsiz paketleri sayılır; satın alınan paketlerin yıldızları
+  yalnızca yıldız rozetlerine eklenir; "Yakında" oyunlar hiçbir hedefe girmez.
+- Kayıt `achievements.v1` (`{"earned":[...]}`); açılışta önceki ilerlemeden kazanılanlar sessizce eşitlenir.
+- Rozet bildirimi, kupa penceresi (sürekli yağan konfeti, dönen ışıklar, "Harika!", kupa sesi), Başarılarım
+  ekranı ve ana ekrandaki sayaçlı düğme eklendi. `Confetti` bir `loops` seçeneği aldı.
+- Küçük (60 px) bildirim rozetinde "Mükemmel Oyuncu"nun üç yıldızı taşıyordu; yıldız satırı sığmazsa
+  orantılı küçülüyor.
+- `flutter analyze` temiz, 338 test geçiyor, debug APK derleniyor. Telefonda ve tablette denendi: eski
+  ilerleme açılışta 8/16 olarak eşitlendi, Başarılarım ekranı düzgün. Emülatörde sıfırdan oynanınca
+  "İlk Oyunum" ve "Mükemmel Oyuncu" bildirimleri sırayla, sonra "Oyun Kaşifi" bildirimi ve "İlk Macera
+  Kupası" penceresi göründü; "Harika!" pencereyi kapattı; yeni ödül olmayan seviyelerde bildirim çıkmadı.
+  Dikey tablette (711 dp) kupalar tek sütun dizilir.
 
 ## Ertelenen işler (unutulmayacak)
 
@@ -150,9 +166,9 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 
 | Özellik | Durum | Karar |
 |---|---|---|
-| Ses efektleri | Eklendi (6. aşama) | Rozet ve kupa sesleri hazır; rozet alt adımında bağlanacak. |
-| Rozet ve kupalar | Yok | 6. aşamanın 4. alt adımı. Yalnızca dört oyuna özel ve sabit sayılarla yazılmayacak, yeni oyunları da kapsayacak genel bir yapı olacak. Kazanılanlar yerel kayıtta saklanacak, bulut kayıt aşamasında senkronizasyona dahil edilecek. Kazanılmış ödül tekrar kazanılmış gibi gösterilmeyecek. |
-| Konfeti | Sonuç panelinde eklendi (6. aşama) | Kupa penceresindeki sürekli yağan konfeti rozet alt adımında eklenecek. |
+| Ses efektleri | Eklendi (6. aşama) | Rozet ve kupa sesleri de bağlandı. |
+| Rozet ve kupalar | Eklendi (6. aşama) | Yerel kayıtta tutuluyor; bulut kayıt aşamasında senkronizasyona dahil edilecek. |
+| Konfeti | Eklendi (6. aşama) | Sonuç panelinde bir kez, kupa penceresinde sürekli yağar. |
 | Karakter seçimi | Eklendi (6. aşama) | Web'deki 5 karakter ve seçim penceresi aktarıldı. |
 | Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları, ana ekran robotunun el sallaması gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
 
@@ -162,6 +178,5 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-6. aşamanın karakter seçimi alt adımı raporlandı; kullanıcı onaylayınca 4. alt adıma (rozet ve kupalar)
-geçilecek. Her aşamada yalnızca o aşamanın
+6. aşamanın rozet ve kupalar alt adımı raporlandı; kullanıcının onayı ve commit isteği bekleniyor. Her aşamada yalnızca o aşamanın
 işleri yapılır ve sonunda rapor verilip onay beklenir.

@@ -11,4 +11,13 @@ abstract final class AppAssets {
   static const flag = 'assets/puzzles/goal-flag.svg';
   static const rock = 'assets/puzzles/rock.svg';
   static const water = 'assets/puzzles/tile-water.svg';
+  static const trophy = 'assets/icons/trophy.svg';
+  static const medal = 'assets/icons/medal.svg';
+  static const hint = 'assets/icons/hint.svg';
+
+  // Oyun ikonları: ana ekrandaki oyunun kupasında görünür.
+  static const gamePath = 'assets/icons/game-path.svg';
+  static const gameOrder = 'assets/icons/game-order.svg';
+  static const gameIf = 'assets/icons/game-if.svg';
+  static const gameRepeat = 'assets/icons/game-repeat.svg';
 }

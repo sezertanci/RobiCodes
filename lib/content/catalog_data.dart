@@ -1,3 +1,5 @@
+import '../app/app_assets.dart';
+import '../app/app_theme.dart';
 import 'content_catalog.dart';
 import 'models/game_definition.dart';
 import 'models/level_pack.dart';
@@ -35,10 +37,34 @@ const _games = [
     id: GameIds.pathFinder,
     title: 'Robotun Yolunu Bul',
     description: 'Yön komutlarıyla robotu hedefe ulaştır.',
+    tone: AppTones.blue,
+    icon: AppAssets.gamePath,
+    trophy: GameTrophy(title: 'Robot Ustası', description: 'Robot artık her yolu biliyor!'),
   ),
-  GameDefinition(id: GameIds.commandOrder, title: 'Komutları Sırala', description: 'Adımları doğru sıraya diz.'),
-  GameDefinition(id: GameIds.ifThen, title: 'Eğer Böyleyse', description: 'Duruma göre doğru komutu seç.'),
-  GameDefinition(id: GameIds.repeat, title: 'Tekrar Et', description: 'Tekrarlanan hareketleri tek blokla yap.'),
+  GameDefinition(
+    id: GameIds.commandOrder,
+    title: 'Komutları Sırala',
+    description: 'Adımları doğru sıraya diz.',
+    tone: AppTones.green,
+    icon: AppAssets.gameOrder,
+    trophy: GameTrophy(title: 'Algoritma Ustası', description: 'Adımları sıralamakta bir numarasın!'),
+  ),
+  GameDefinition(
+    id: GameIds.ifThen,
+    title: 'Eğer Böyleyse',
+    description: 'Duruma göre doğru komutu seç.',
+    tone: AppTones.purple,
+    icon: AppAssets.gameIf,
+    trophy: GameTrophy(title: 'Karar Ustası', description: 'Her durumda doğru kararı veriyorsun!'),
+  ),
+  GameDefinition(
+    id: GameIds.repeat,
+    title: 'Tekrar Et',
+    description: 'Tekrarlanan hareketleri tek blokla yap.',
+    tone: AppTones.orange,
+    icon: AppAssets.gameRepeat,
+    trophy: GameTrophy(title: 'Döngü Ustası', description: 'Tekrarları ustaca kullanıyorsun!'),
+  ),
 ];
 
 /// Uygulamanın içerik kataloğu. Şu an dört oyunun ücretsiz temel paketleri vardır.

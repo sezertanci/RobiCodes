@@ -38,11 +38,15 @@ final class _LevelScreenState extends State<LevelScreen> {
     _resultStars = null;
   });
 
+  /// Sonucu kaydeder, sonuç panelini açar ve yeni kazanılan ödülleri kutlar.
   Future<void> _complete(int stars) async {
-    await _services.progress.completeLevel(widget.pack.id, _level, stars);
+    final services = _services;
+    final navigator = Navigator.of(context, rootNavigator: true);
+    await services.progress.completeLevel(widget.pack.id, _level, stars);
     if (mounted) {
       setState(() => _resultStars = stars);
     }
+    services.celebration.show(navigator, await services.achievements.sync());
   }
 
   @override

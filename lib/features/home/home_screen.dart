@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
-import '../../app/app_theme.dart';
 import '../../app/robi_codes_app.dart';
 import '../../content/models/game_definition.dart';
 import '../play/level_select_screen.dart';
 import '../progress/star_rule.dart';
 import '../settings/settings_dialog.dart';
+import 'achievements_button.dart';
 import 'character_button.dart';
 import 'game_card.dart';
 
@@ -26,6 +26,7 @@ final class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(RobiCodesApp.title),
         actions: [
+          const AchievementsButton(),
           IconButton(
             tooltip: SettingsDialog.title,
             onPressed: () => SettingsDialog.show(context, services.sound),
@@ -49,10 +50,7 @@ final class HomeScreen extends StatelessWidget {
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
                 ),
-                children: [
-                  for (final (index, game) in services.catalog.games.indexed)
-                    _buildCard(context, services, game, index),
-                ],
+                children: [for (final game in services.catalog.games) _buildCard(context, services, game)],
               ),
             ),
           ],
@@ -62,13 +60,13 @@ final class HomeScreen extends StatelessWidget {
   }
 
   /// Kartta oyunun yalnızca oynanabilir (ücretsiz veya sahip olunan) paketlerinin yıldızları sayılır.
-  Widget _buildCard(BuildContext context, AppServices services, GameDefinition game, int index) {
+  Widget _buildCard(BuildContext context, AppServices services, GameDefinition game) {
     final isPlayable = services.games.isPlayable(game.id);
     final packs = services.catalog.packsOf(game.id).where((pack) => services.entitlements.canPlayPack(pack.id));
     return GameCard(
       title: game.title,
       description: game.description,
-      accent: AppColors.cardAccents[index % AppColors.cardAccents.length],
+      accent: game.tone.base,
       stars: packs.fold(0, (sum, pack) => sum + services.progress.totalStars(pack.id)),
       maxStars: packs.fold(0, (sum, pack) => sum + pack.levelCount * StarRule.perfect),
       isPlayable: isPlayable,
