@@ -16,6 +16,18 @@
 - Bir bundle, yalnızca kendi içerdiği paketlerin erişimini açar.
 - Paketin içindeki grup ve seviye kilitleri, ücretsiz paketlerdeki kuralla aynı şekilde işler.
 
+## Ücretli içerik ve ürün kimlikleri (15.11.2026)
+
+- Şu an oynanabilen 4 oyun ve 20'şer seviyelik temel paketleri **ücretsiz** kalır. Ücretli olanlar bundan
+  sonra yapılacak içeriktir: hem yeni oyunlar hem de mevcut oyunlara eklenecek yeni seviye paketleri.
+- Bu yüzden ilk sürüm ürünsüz çıkar; Play Console'da ürün ve ödeme profili ilk ücretli paketle açılır.
+- Avantajlı paket (bundle) olacak. Bir bundle yalnızca **açıldığı gün var olan** paketleri açar ve adı buna
+  göre konur (ör. "Başlangıç Seti"); sonradan eklenen paketler için yeni bundle'lar açılır.
+- Ürün kimliği biçimi: tek paket `pack.<oyun>.<paket>`, bundle `bundle.<ad>`. Google Play kimlikte `-`
+  kabul etmediği için oyun kimliğindeki `-` yerine `_` yazılır (ör. `pack.path_finder.advanced`).
+  Kimlikler yayından sonra değiştirilmez ve silinse bile yeniden kullanılamaz.
+- Fiyatlar ilk ücretli paket hazır olduğunda belirlenecek.
+
 ## Ses efektleri
 
 - Web sürümünde sesler kodla üretilir. Flutter sürümünde bu sesler **dosya olarak** hazırlanır ve
