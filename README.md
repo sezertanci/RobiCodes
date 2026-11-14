@@ -4,11 +4,12 @@
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
 kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` klasörü) referans olarak korunur ve bu projeden bağımsızdır.
 
-> **Durum — 8. aşama:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
+> **Durum — yayına hazırlık:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
 > Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi.
 > Google Play Billing ile paket satın alma ve matematik sorulu ebeveyn doğrulaması eklendi. Google hesabı
-> ve bulut kaydı yoktur; ilerleme yalnızca cihazda tutulur (bkz. "İlerleme kaydı").
+> ve bulut kaydı yoktur; ilerleme yalnızca cihazda tutulur (bkz. "İlerleme kaydı"). Release derlemesi Google
+> Play'e yüklenecek yükleme anahtarıyla imzalanır (bkz. "Release derlemesi ve imzalama").
 >
 > Ürün ve kapsam kararları: [docs/decisions.md](docs/decisions.md). Aşama durumu: [PROGRESS.md](PROGRESS.md).
 
@@ -17,6 +18,9 @@ kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` k
 - Flutter (stable kanal, Dart 3.13 veya üstü)
 - Android SDK ve bir Android cihaz veya emülatör
 - Android Studio'nun JDK'si (Gradle derlemesi için)
+- Release derlemesi için ayrıca Android SDK Command-line Tools ve Flutter'ın istediği NDK sürümü
+  (`flutter build appbundle` hata ayıklama sembollerini bunlarla ayırır; eksikse "failed to strip debug
+  symbols" hatası verir)
 
 ## Çalıştırma
 
@@ -187,5 +191,46 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
 
 ## Ebeveyn doğrulaması
 
-Satın alma `ProtectedActionRunner` üzerinden çalışır. Nihai doğrulama yöntemi seçilene kadar
-`LockedParentalGate` bu işlemlerin hepsini engeller.
+- Satın alma yalnızca `ProtectedActionRunner` üzerinden çalışır. Korunan servis metotları, runner'ın verdiği işleme özel ve tek kullanımlık `ParentalApproval` olmadan
+  çalışmaz.
+- Doğrulama penceresi (`DialogParentalGate`) yazıyla bir çarpma sorusu sorar (ör. "on dört çarpı yedi kaç
+  eder?"); cevap rakam tuş takımıyla girilir. Sorular `Random.secure()` ile üretilir; PIN veya sabit cevap
+  saklanmaz.
+- Yanlış cevapta pencere kısa süre kilitlenir, sonra yeni soru gelir.
+- Ayarlar penceresinde yalnızca debug derlemesinde görünen bir deneme girişi vardır.
+
+## Release derlemesi ve imzalama
+
+Google Play App Signing kullanılır: uygulama Google'ın tuttuğu uygulama imzalama anahtarıyla dağıtılır,
+geliştirici AAB'yi kendi **yükleme anahtarıyla** (upload key) imzalar. Keystore, parola ve imza bilgileri
+repoya girmez; `.gitignore` `*.jks`, `*.keystore` ve `key.properties` dosyalarını dışarıda tutar.
+
+- **Keystore:** Repo dışında, kullanıcı klasöründe (`.android-keys/robicodes-upload.jks`), PKCS12 biçiminde,
+  alias `upload`. Keystore ve parolası güvenli bir yere yedeklenmelidir; kaybolursa yükleme anahtarı Play
+  Console'dan sıfırlatılmak zorunda kalınır.
+- **`android/key.properties`** (git dışı) yalnızca keystore yolunu ve alias'ı tutar, parola tutmaz:
+
+  ```properties
+  storeFile=<keystore dosyasının tam yolu, / ayırıcıyla>
+  keyAlias=upload
+  ```
+
+- **Parola** `ROBICODES_KEYSTORE_PASSWORD` ortam değişkeninden okunur (PKCS12'de mağaza ve anahtar
+  parolası aynıdır). Kalıcı kullanıcı değişkeni olarak tanımlandıktan sonra açılan terminaller onu görür;
+  önceden açık terminal ve uygulamaların yeniden başlatılması gerekir.
+- `android/app/build.gradle.kts` bu üç bilgi varsa release derlemesini yükleme anahtarıyla imzalar. Biri
+  eksikse uyarı yazar ve debug anahtarına düşer; bu, yerel `flutter run --release` için yeterlidir ama
+  böyle bir AAB'yi Google Play kabul etmez. Debug imzalama ayarı değiştirilmedi.
+
+AAB üretme ve imzayı kontrol etme:
+
+```bash
+flutter build appbundle --release
+```
+
+```bash
+keytool -printcert -jarfile build/app/outputs/bundle/release/app-release.aab
+```
+
+Çıktıdaki sahip `CN=Sezer Tanci, C=TR` olmalıdır; `CN=Android Debug` görünüyorsa parola değişkeni
+derlemeyi başlatan terminale ulaşmamıştır. `keytool`, Android Studio'nun JDK'sindeki `jbr/bin` klasöründedir.

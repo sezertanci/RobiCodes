@@ -166,6 +166,23 @@ kapısı iskeletleri hazır. `flutter analyze` temiz, 43 testin hepsi geçiyor, 
 uygulamaların Google Play Games Services kullanamayacağı görüldü. Kullanıcı kararıyla Play Games
 Services ve bulut kaydı eklenmedi; taslak `cloud_save` kodu, testleri, `cloud-sync.v1` anahtarı ve
 hesap/bulut ebeveyn onayı eylemleri kaldırıldı. Ayrıntı: [docs/decisions.md](docs/decisions.md).
+Commit edildi (`f2c91f5`, eksik testler `e06870c`).
+
+**Matematik sorulu ebeveyn doğrulaması eklendi, commit edildi (`d2d79f1`).** Ayrıntı README'de.
+
+**Release imzalama tamamlandı, commit edildi (`61e968f`, 14.11.2026):**
+
+- Play App Signing kullanılacak; AAB repo dışındaki yükleme anahtarıyla (PKCS12, alias `upload`,
+  `CN=Sezer Tanci, C=TR`) imzalanıyor.
+- Keystore yolu ve alias git dışı `android/key.properties` dosyasında, parola
+  `ROBICODES_KEYSTORE_PASSWORD` kullanıcı ortam değişkeninde. `.gitignore` keystore ve `key.properties`
+  dosyalarını dışarıda tutuyor. Bilgi eksikse release debug anahtarına düşüp uyarı yazıyor; debug
+  imzalama değiştirilmedi.
+- Release derlemesi için Android SDK Command-line Tools ve NDK `28.2.13676358` kuruldu (hata ayıklama
+  sembollerini ayırmak için gerekli).
+- İmzalı AAB (~49 MB) üretildi; `keytool -printcert` ile yükleme anahtarının imzası doğrulandı.
+  `flutter analyze` temiz, 449 test geçiyor.
+- Kurulum ve derleme adımları README'deki "Release derlemesi ve imzalama" bölümünde.
 
 ## Ertelenen işler (unutulmayacak)
 
@@ -185,5 +202,8 @@ Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.
 
 ## Sıradaki adım
 
-8. aşama (bulut kaydının kaldırılması) raporlandı; kullanıcının onayı ve commit isteği bekleniyor. Her aşamada yalnızca o aşamanın
-işleri yapılır ve sonunda rapor verilip onay beklenir.
+Kod tarafı yayına hazır. Google Play Console işlemleri kullanıcının onayıyla başlayacak: uygulamayı
+oluşturma, Play App Signing'e yükleme anahtarıyla katılma, AAB'yi dahili test kanalına yükleme, uygulama içi
+ürünleri katalogdaki kimliklerle tanımlama, Aileler politikası / hedef yaş grubu / veri güvenliği formları,
+gizlilik politikası, mağaza metinleri ve ekran görüntüleri. Her aşamada yalnızca o aşamanın işleri yapılır
+ve sonunda rapor verilip onay beklenir.
