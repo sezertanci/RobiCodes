@@ -6,6 +6,7 @@ import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import '../../l10n/l10n.dart';
 import '../path_finder/board_run.dart';
 import '../path_finder/board_scene.dart';
 import '../path_finder/engine/path_finder_board.dart';
@@ -82,7 +83,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
   /// Tekrarla düğmesi blok açıkken bloktan çıkarır; kapalıyken ancak blok ve içine bir ok sığıyorsa ekler.
   bool get canUseRepeatButton => !_running && (_target != null || blockCount + repeatWithMove <= maxBlocks);
 
-  String get message => voice.message;
+  LocalizedText get message => voice.message;
   RobotMood get mood => voice.mood;
 
   /// Oku açık tekrar bloğunun içine, yoksa programın sonuna ekler.
@@ -100,7 +101,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
       }
     });
     if (isFull) {
-      voice.say(RepeatTexts.full);
+      voice.say((t) => t.repeatFull);
     }
     notifyListeners();
   }
@@ -112,13 +113,13 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
     }
     if (_target != null) {
       _target = null;
-      voice.say(RepeatTexts.outsideRepeat);
+      voice.say((t) => t.repeatOutsideRepeat);
       notifyListeners();
       return;
     }
     _changeProgram(() => _program.add(const RepeatBlock(RepeatBlock.defaultTimes, [])));
     _target = _program.length - 1;
-    voice.say(isFull ? RepeatTexts.full : RepeatTexts.insideRepeat);
+    voice.say((t) => isFull ? t.repeatFull : t.repeatInsideRepeat);
     notifyListeners();
   }
 
@@ -141,7 +142,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
     final leaving = _target == index;
     _target = leaving ? null : index;
     _selected = leaving ? null : Places.top(index);
-    voice.say(leaving ? RepeatTexts.outsideRepeat : RepeatTexts.insideRepeat);
+    voice.say((t) => leaving ? t.repeatOutsideRepeat : t.repeatInsideRepeat);
     notifyListeners();
   }
 
@@ -193,7 +194,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
       _program.insert(place.block + 1, MoveBlock(block.body[place.inner]));
       _target = null;
     });
-    voice.say(RepeatTexts.movedOut);
+    voice.say((t) => t.repeatMovedOut);
     notifyListeners();
   }
 
@@ -220,7 +221,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
       case EmptyRepeatHint(:final block):
         _target = block;
         _selected = null;
-        voice.say(RepeatTexts.emptyRepeat);
+        voice.say((t) => t.repeatEmptyRepeat);
       case FixPlaceHint(:final step):
         _selected = Places.of(step);
         _wrongPlace = Places.of(step);
@@ -234,7 +235,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
           voice.say(RepeatTexts.nextMoveHint(level.hint, move.direction));
         }
       case RepeatSolvedHint():
-        voice.say(RepeatTexts.solved);
+        voice.say((t) => t.repeatSolved);
     }
     notifyListeners();
   }
@@ -245,13 +246,13 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
       return;
     }
     if (_program.isEmpty) {
-      voice.say(RepeatTexts.empty);
+      voice.say((t) => t.repeatEmpty);
       notifyListeners();
       return;
     }
     if (RepeatEngine.findEmptyRepeat(_program) case final empty?) {
       _target = empty;
-      voice.say(RepeatTexts.emptyRepeat);
+      voice.say((t) => t.repeatEmptyRepeat);
       notifyListeners();
       return;
     }
@@ -259,7 +260,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
     _target = null;
     _selected = null;
     _resetBoard();
-    voice.say(RepeatTexts.running);
+    voice.say((t) => t.gameRobotRunning);
     notifyListeners();
     final run = RepeatEngine.run(board, _program);
     final played = await boardRun.play(
@@ -280,7 +281,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
     final result = run.result;
     switch (result.outcome) {
       case RunOutcome.success:
-        voice.say(RepeatTexts.success, RobotMood.happy);
+        voice.say((t) => t.gameRobotReachedFlag, RobotMood.happy);
         voice.react(RobotReaction.celebrate);
         notifyListeners();
         final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: blockCount <= targetBlocks);
@@ -294,8 +295,8 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
         voice.say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
       case RunOutcome.missedGoal || RunOutcome.missingCoins:
         voice.react(RobotReaction.shake);
-        final text = result.outcome == RunOutcome.missingCoins ? RepeatTexts.missingCoins : RepeatTexts.missedGoal;
-        voice.say(text, RobotMood.sad);
+        final missingCoins = result.outcome == RunOutcome.missingCoins;
+        voice.say((t) => missingCoins ? t.gameMissingCoins : t.repeatMissedGoal, RobotMood.sad);
     }
     _running = false;
     notifyListeners();
@@ -316,6 +317,6 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
   }
 
   /// Açılış mesajı: seviyenin kendi mesajı, yoksa altın olup olmamasına göre genel mesaj.
-  static String _introOf(RepeatLevel level) =>
-      level.intro ?? (level.board.coins.isEmpty ? RepeatTexts.intro : RepeatTexts.coinIntro);
+  static LocalizedText _introOf(RepeatLevel level) =>
+      level.intro ?? (t) => level.board.coins.isEmpty ? t.repeatIntro : t.repeatCoinIntro;
 }

@@ -1,3 +1,5 @@
+import '../../../l10n/l10n.dart';
+
 /// Robotun yapabileceği hareketler. Sıra, paletteki sıradır.
 enum LaneAction { forward, jump, bridge, open, collect }
 
@@ -46,5 +48,5 @@ final class IfThenLevel {
   final List<LaneObject> extras;
 
   /// Robotun seviye başında söylediği cümle.
-  final String intro;
+  final LocalizedText intro;
 }

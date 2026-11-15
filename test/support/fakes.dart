@@ -15,6 +15,8 @@ import 'package:robi_codes/features/sound/sound_player.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
 import 'package:robi_codes/games/game_module.dart';
 
+import 'test_l10n.dart';
+
 /// Katalogdaki bir oyunu oynanabilir yapan, ekranı boş sahte modül.
 final class FakeGameModule implements GameModule {
   const FakeGameModule(this.gameId);
@@ -172,30 +174,30 @@ abstract final class TestCatalog {
   static const bundle = 'bundle_ab';
 
   static ContentCatalog build() => ContentCatalog(
-    games: const [
+    games: [
       GameDefinition(
         id: gameId,
-        title: 'Oyun',
-        description: 'Açıklama',
+        title: fixedText('Oyun'),
+        description: fixedText('Açıklama'),
         tone: AppTones.blue,
         icon: AppAssets.gamePath,
-        trophy: GameTrophy(title: 'Kupa', description: 'Açıklama'),
+        trophy: GameTrophy(title: fixedText('Kupa'), description: fixedText('Açıklama')),
       ),
     ],
     packs: [
       for (final id in [freePack, packA, packB]) _pack(id),
     ],
-    products: const [
-      StoreProduct(id: productA, title: 'Paket A', packIds: [packA]),
-      StoreProduct(id: productB, title: 'Paket B', packIds: [packB]),
-      StoreProduct(id: bundle, title: 'A ve B', packIds: [packA, packB]),
+    products: [
+      StoreProduct(id: productA, title: fixedText('Paket A'), packIds: const [packA]),
+      StoreProduct(id: productB, title: fixedText('Paket B'), packIds: const [packB]),
+      StoreProduct(id: bundle, title: fixedText('A ve B'), packIds: const [packA, packB]),
     ],
   );
 
   static LevelPack _pack(String id) => LevelPack(
     id: id,
     gameId: gameId,
-    title: id,
+    title: fixedText(id),
     groups: const [DifficultyGroup(Difficulty.easy, 2), DifficultyGroup(Difficulty.medium, 2)],
   );
 }

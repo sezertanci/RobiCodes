@@ -12,16 +12,17 @@ import 'package:robi_codes/games/if_then/ui/if_then_view.dart';
 import 'package:robi_codes/games/if_then/ui/lane_scene.dart';
 import 'package:robi_codes/games/if_then/ui/rule_board.dart';
 
+import '../../support/test_l10n.dart';
 import '../../support/fakes.dart';
 import '../../support/ui_test_helpers.dart';
 
-const _gameTitle = 'Eğer Böyleyse';
-final _emptyAction = IfThenTexts.slot(condition: false, value: null, locked: false);
+final _gameTitle = texts.gameIfThenTitle;
+final _emptyAction = IfThenTexts.slot(texts, condition: false, value: null, locked: false);
 
 Future<void> _pumpLevel(WidgetTester tester, IfThenLevel level) async {
   await tester.pumpWidget(
-    MaterialApp(
-      home: Scaffold(
+    localizedApp(
+      Scaffold(
         body: IfThenView(key: UniqueKey(), level: level, onCompleted: (_) {}),
       ),
     ),
@@ -41,7 +42,7 @@ void main() {
         expect(find.byType(LaneScene), findsOneWidget);
         expect(find.byType(RuleBoard), findsOneWidget);
         expect(find.byType(BlockPalette), findsOneWidget);
-        expect(find.byTooltip(IfThenTexts.run), findsOneWidget);
+        expect(find.byTooltip(texts.commonRun), findsOneWidget);
       }
     });
 
@@ -55,8 +56,8 @@ void main() {
       // Act: ana ekran → seviye seçimi → 1. seviye → Zıpla bloğu → Başlat
       await openLevelSelect(tester, _gameTitle);
       await openLevel(tester, 1);
-      await tapVisible(tester, findButton(IfThenTexts.paletteBlock(LaneAction.jump)));
-      await tapVisible(tester, find.byTooltip(IfThenTexts.run));
+      await tapVisible(tester, findButton(IfThenTexts.paletteBlock(texts, LaneAction.jump)));
+      await tapVisible(tester, find.byTooltip(texts.commonRun));
       await waitForAnimations(tester);
 
       // Assert
@@ -73,7 +74,7 @@ void main() {
     for (final level in ifThenBaseLevels) {
       await _pumpLevel(tester, level);
 
-      for (final tooltip in [IfThenTexts.run, IfThenTexts.hint, IfThenTexts.clear]) {
+      for (final tooltip in [texts.commonRun, texts.commonHint, texts.commonClear]) {
         expect(tester.getRect(find.byTooltip(tooltip)).bottom, lessThanOrEqualTo(screen.height));
       }
     }
@@ -83,19 +84,19 @@ void main() {
     useScreen(tester, TestScreens.tablet);
     await _pumpLevel(tester, ifThenBaseLevels.first);
 
-    await tapVisible(tester, findButton(IfThenTexts.paletteBlock(LaneAction.forward)));
-    await tapVisible(tester, find.byTooltip(IfThenTexts.run));
+    await tapVisible(tester, findButton(IfThenTexts.paletteBlock(texts, LaneAction.forward)));
+    await tapVisible(tester, find.byTooltip(texts.commonRun));
     await waitForAnimations(tester, steps: 10);
 
     final step = (index: 2, object: LaneObject.rock, action: LaneAction.forward, rule: 0);
-    expect(find.text(IfThenTexts.wrong(step)), findsOneWidget);
+    expect(find.text(IfThenTexts.wrong(step)(texts)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('IfThenView_BlockDraggedToSlot_FillsSlot', (tester) async {
     useScreen(tester, TestScreens.tablet);
     await _pumpLevel(tester, ifThenBaseLevels.first);
-    final block = findButton(IfThenTexts.paletteBlock(LaneAction.jump));
+    final block = findButton(IfThenTexts.paletteBlock(texts, LaneAction.jump));
 
     final gesture = await tester.startGesture(tester.getCenter(block));
     await tester.pump(const Duration(seconds: 1));
@@ -104,7 +105,10 @@ void main() {
     await gesture.up();
     await tester.pump();
 
-    expect(findButton(IfThenTexts.slot(condition: false, value: LaneAction.jump, locked: false)), findsOneWidget);
+    expect(
+      findButton(IfThenTexts.slot(texts, condition: false, value: LaneAction.jump, locked: false)),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -112,10 +116,10 @@ void main() {
     useScreen(tester, TestScreens.phone);
     await _pumpLevel(tester, ifThenBaseLevels.first);
 
-    await tapVisible(tester, find.byTooltip(IfThenTexts.hint));
+    await tapVisible(tester, find.byTooltip(texts.commonHint));
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text(IfThenTexts.hintText(LaneObject.rock)), findsOneWidget);
+    expect(find.text(IfThenTexts.hint(LaneObject.rock)(texts)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

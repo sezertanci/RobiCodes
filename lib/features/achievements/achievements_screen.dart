@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_assets.dart';
 import '../../app/app_scope.dart';
-import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
 import '../../app/screen_scale.dart';
 import '../../app/widgets/top_bar.dart';
+import '../../l10n/l10n.dart';
 import 'achievement.dart';
 import 'widgets/achievement_card.dart';
 
@@ -15,11 +15,6 @@ import 'widgets/achievement_card.dart';
 /// kazanılacaklar ilerlemeleriyle listelenir.
 final class AchievementsScreen extends StatelessWidget {
   const AchievementsScreen({super.key});
-
-  static const title = 'Başarılarım';
-  static const backLabel = AppTexts.backToHome;
-
-  static String summaryText(int earned) => '$earned ödül kazandın!';
 
   static const _padding = 16.0;
   static const _gap = 14.0;
@@ -31,28 +26,28 @@ final class AchievementsScreen extends StatelessWidget {
   static const _phoneBadgeColumns = 2;
   static const _phoneTrophyColumns = 1;
 
-  static const _badges = _Section(
+  static final _badges = _Section(
     kind: AchievementKind.badge,
-    title: 'Rozetler',
-    subtitle: 'Küçük başarılar',
+    title: (t) => t.achievementsBadges,
+    subtitle: (t) => t.achievementsBadgesSubtitle,
     color: AppColors.blue,
     textColor: Colors.white,
-    earnedTitle: 'Kazandığın rozetler',
-    lockedTitle: 'Kazanılacak rozetler',
-    emptyText: 'Henüz rozetin yok. İlk seviyeni bitir!',
+    earnedTitle: (t) => t.achievementsBadgesEarned,
+    lockedTitle: (t) => t.achievementsBadgesLocked,
+    emptyText: (t) => t.achievementsBadgesEmpty,
     minCellWidth: _badgeMinWidth,
     phoneColumns: _phoneBadgeColumns,
   );
 
-  static const _trophies = _Section(
+  static final _trophies = _Section(
     kind: AchievementKind.trophy,
-    title: 'Kupalar',
-    subtitle: 'Büyük hedefler',
+    title: (t) => t.achievementsTrophies,
+    subtitle: (t) => t.achievementsTrophiesSubtitle,
     color: AppColors.yellow,
     textColor: AppColors.navy,
-    earnedTitle: 'Kazandığın kupalar',
-    lockedTitle: 'Kilitli kupalar',
-    emptyText: 'Henüz kupan yok. Büyük hedeflere doğru devam!',
+    earnedTitle: (t) => t.achievementsTrophiesEarned,
+    lockedTitle: (t) => t.achievementsTrophiesLocked,
+    emptyText: (t) => t.achievementsTrophiesEmpty,
     minCellWidth: _trophyMinWidth,
     phoneColumns: _phoneTrophyColumns,
   );
@@ -63,11 +58,12 @@ final class AchievementsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final achievements = AppScope.of(context).achievements;
+    final t = context.l10n;
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            const TopBar(title: title, icon: AppAssets.trophy, backLabel: backLabel),
+            TopBar(title: t.achievementsTitle, icon: AppAssets.trophy, backLabel: t.commonBackToHome),
             Expanded(
               child: ListenableBuilder(
                 listenable: achievements,
@@ -131,13 +127,13 @@ final class _Section {
   });
 
   final AchievementKind kind;
-  final String title;
-  final String subtitle;
+  final LocalizedText title;
+  final LocalizedText subtitle;
   final Color color;
   final Color textColor;
-  final String earnedTitle;
-  final String lockedTitle;
-  final String emptyText;
+  final LocalizedText earnedTitle;
+  final LocalizedText lockedTitle;
+  final LocalizedText emptyText;
   final double minCellWidth;
   final int phoneColumns;
 }
@@ -151,6 +147,7 @@ final class _Summary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final t = context.l10n;
     String count(AchievementKind kind) {
       final ofKind = statuses.where((status) => status.achievement.kind == kind);
       return '${AchievementsScreen._earnedOf(ofKind)}/${ofKind.length}';
@@ -161,14 +158,14 @@ final class _Summary extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            AchievementsScreen.summaryText(AchievementsScreen._earnedOf(statuses)),
+            t.achievementsSummary(AchievementsScreen._earnedOf(statuses)),
             textAlign: TextAlign.center,
             style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 4),
           Text(
-            '${AchievementsScreen._badges.title}: ${count(AchievementKind.badge)}   '
-            '${AchievementsScreen._trophies.title}: ${count(AchievementKind.trophy)}',
+            '${AchievementsScreen._badges.title(t)}: ${count(AchievementKind.badge)}   '
+            '${AchievementsScreen._trophies.title(t)}: ${count(AchievementKind.trophy)}',
             textAlign: TextAlign.center,
             style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
@@ -192,21 +189,22 @@ final class _SectionView extends StatelessWidget {
     final earned = statuses.where((status) => status.isEarned).toList();
     final locked = statuses.where((status) => !status.isEarned).toList();
     final textTheme = Theme.of(context).textTheme;
+    final t = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(top: AchievementsScreen._gap),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _header(textTheme, earned.length),
-          _groupTitle(textTheme, section.earnedTitle),
-          if (earned.isEmpty) Text(section.emptyText, style: textTheme.bodyLarge) else _grid(earned),
-          if (locked.isNotEmpty) ...[_groupTitle(textTheme, section.lockedTitle), _grid(locked)],
+          _header(t, textTheme, earned.length),
+          _groupTitle(textTheme, section.earnedTitle(t)),
+          if (earned.isEmpty) Text(section.emptyText(t), style: textTheme.bodyLarge) else _grid(earned),
+          if (locked.isNotEmpty) ...[_groupTitle(textTheme, section.lockedTitle(t)), _grid(locked)],
         ],
       ),
     );
   }
 
-  Widget _header(TextTheme textTheme, int earnedCount) => DecoratedBox(
+  Widget _header(AppLocalizations t, TextTheme textTheme, int earnedCount) => DecoratedBox(
     decoration: BoxDecoration(color: section.color, borderRadius: BorderRadius.circular(AppMetrics.mediumRadius)),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
@@ -217,10 +215,10 @@ final class _SectionView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  section.title,
+                  section.title(t),
                   style: textTheme.titleLarge?.copyWith(color: section.textColor, fontWeight: FontWeight.w900),
                 ),
-                Text(section.subtitle, style: textTheme.bodyMedium?.copyWith(color: section.textColor)),
+                Text(section.subtitle(t), style: textTheme.bodyMedium?.copyWith(color: section.textColor)),
               ],
             ),
           ),

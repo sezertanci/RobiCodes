@@ -1,4 +1,4 @@
-# Robi Kodluyor (Android)
+# Robi Kodluyor / Robi Codes (Android)
 
 Çocuklara temel kodlama düşüncesini (sıralama, koşul, döngü, yön bulma) oyunlarla öğreten uygulamanın
 yalnızca Android için, tamamen Flutter/Dart ile yazılan yeni sürümü. WebView, HTML, CSS veya JavaScript
@@ -7,7 +7,8 @@ kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` k
 > **Durum — yayına hazırlık:** Temel mimari hazır. "Robotun Yolunu Bul", "Komutları Sırala", "Eğer Böyleyse" ve
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
 > Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi.
-> Google Play Billing ile paket satın alma ve matematik sorulu ebeveyn doğrulaması eklendi. Google hesabı
+> Google Play Billing ile paket satın alma ve matematik sorulu ebeveyn doğrulaması eklendi. Uygulama
+> Türkçe ve İngilizce oynanır (bkz. "Dil desteği"). Google hesabı
 > ve bulut kaydı yoktur; ilerleme yalnızca cihazda tutulur (bkz. "İlerleme kaydı"). Release derlemesi Google
 > Play'e yüklenecek yükleme anahtarıyla imzalanır (bkz. "Release derlemesi ve imzalama").
 >
@@ -75,16 +76,21 @@ lib/
                   rozet bildirimi ve kupa penceresi
     character/    Seçilebilen karakterler, seçimi saklayan servis ve karakter seçme penceresi
     sound/        Ses efektleri, ses servisi (açık/kapalı ayarı) ve ses çalıcı
-    settings/     Ayarlar penceresi
+    language/     Dil seçimi: cihaz dilini çözen ve kullanıcının seçimini saklayan servis
+    settings/     Ayarlar penceresi ve dil seçici
     store/        Mağaza katmanı, erişim hakları, çifte ücretlendirmeyi önleyen satış kuralı
-    parental_gate/ Ebeveyn doğrulaması ve korumalı işlem çalıştırıcı
+    parental_gate/ Ebeveyn doğrulaması, korumalı işlem çalıştırıcı ve sayıları dile göre yazıyla yazan sınıflar
     home/         Ana ekran, karakter ve Başarılarım düğmeleri
+  l10n/           Dil dosyaları (app_tr.arb, app_en.arb), LocalizedText ve flutter gen-l10n'un ürettiği kod
 assets/           Web sürümünden değiştirilmeden kopyalanan görseller (robot, harita, düğme, ikon) ve
                   sounds/ altında ses efektleri
 store/robi-codes/ Google Play için yayın sayfaları: gizlilik politikası (privacy.html). Değişiklik burada
-                  yapılır ve sezertanci.github.io reposundaki robi-codes/ klasörüne kopyalanır
+                  yapılır ve sezertanci.github.io reposundaki robi-codes/ klasörüne kopyalanır. Ayrıca
+                  her dilin mağaza metinleri (listing/tr-TR.md, listing/en-US.md), simge, dile göre öne
+                  çıkan görseller ve ekran görüntüleri (screenshots/<dil>/phone, tablet-7, tablet-10;
+                  dil klasörleri tr-TR ve en-US)
 tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_icon.py, sesleri üreten
-                  make_sounds.py)
+                  make_sounds.py, mağaza simgesi ve öne çıkan görselleri üreten make_store_graphics.py)
 ```
 
 - **İçerik ile mekanik ayrıdır.** Oyunlar, paketler ve ürünler `content/catalog_data.dart` içindeki
@@ -167,6 +173,38 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
 - Yıldız: ipucu kullanılırsa 1, ipucusuz bitirilirse 2, ipucusuz ve hedefe uygun bitirilirse 3.
 - Bir grup, önceki grubun bütün seviyeleri bitince açılır. Bir seviye, önceki seviye bitince açılır.
 - Bir seviyenin kaydı her zaman en iyi sonucu korur.
+
+## Dil desteği
+
+Uygulama Türkçe ve İngilizce oynanır. Mekanizma ortaktır; yeni bir dil kod değiştirmeden eklenir.
+
+- **Dil seçimi:** Varsayılan olarak cihazın dili kullanılır; cihaz dili desteklenmiyorsa uygulama
+  İngilizce açılır. Dil Ayarlar'dan değiştirilebilir, seçim cihazda saklanır (`LanguageService`). Dil
+  değiştirmek için ebeveyn sorusu sorulmaz.
+- **Metinler** `lib/l10n/app_<dil>.arb` dosyalarındadır. Şablon `app_tr.arb`'dir; açıklamalar ve
+  parametreler (`@anahtar`) yalnızca orada tutulur. Kod `flutter gen-l10n` ile `lib/l10n/generated`
+  altına üretilir (`flutter pub get` ve `flutter run` bunu kendisi de yapar). Ekranlar metinleri
+  `context.l10n` ile okur.
+- **Veri içindeki metinler** (oyun, seviye, rozet, karakter adları) sabit metin değil `LocalizedText`
+  tutar: o anki dilin çevirilerinden metni seçen bir fonksiyon. Robotun konuşma balonu da bu türdedir;
+  böylece dil oyunun ortasında değişse bile balon yeni dilde görünür.
+- **Ebeveyn sorusundaki sayılar** dile göre yazıyla yazılır (`NumberSpeller`: "yirmi yedi",
+  "twenty-seven"). Yazımı tanımlı olmayan dilde İngilizce yazım kullanılır.
+- **Uygulama adı** başlatıcıda da dile göre değişir: `android/app/src/main/res/values/strings.xml`
+  (İngilizce, "Robi Codes") ve `values-tr/strings.xml` (Türkçe, "Robi Kodluyor").
+
+**Yeni dil eklemek:**
+
+1. `lib/l10n/app_tr.arb` dosyasını `app_<dil>.arb` adıyla kopyala, `@@locale` değerini değiştir, `@`
+   ile başlayan açıklama satırlarını sil ve metinleri çevir. `languageName` dilin kendi dilindeki adıdır
+   (ör. "Deutsch"); Ayarlar'daki listede bu ad görünür.
+2. `lib/features/parental_gate/number_speller.dart` içinde dilin sayı yazımını tanımla ve
+   `NumberSpellers.byLanguage` içine kaydet.
+3. `android/app/src/main/res/values-<dil>/strings.xml` ile başlatıcıdaki adı ekle.
+4. `flutter gen-l10n` ve `flutter test` çalıştır. Testler her ARB dosyasının şablonla aynı anahtarlara
+   ve parametrelere sahip olduğunu, her dilin sayı yazımının kayıtlı olduğunu denetler.
+5. Mağaza metnini `store/robi-codes/listing/` altına ekle; öne çıkan görsel için
+   `tool/make_store_graphics.py` içindeki `TEXTS` sözlüğüne dili ekleyip betiği çalıştır.
 
 ## Satın alma kararları
 

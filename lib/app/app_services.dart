@@ -6,6 +6,7 @@ import '../core/storage/key_value_store.dart';
 import '../features/achievements/achievement_celebration.dart';
 import '../features/achievements/achievement_service.dart';
 import '../features/character/character_service.dart';
+import '../features/language/language_service.dart';
 import '../features/parental_gate/dialog_parental_gate.dart';
 import '../features/parental_gate/parental_gate.dart';
 import '../features/parental_gate/parental_question.dart';
@@ -37,6 +38,7 @@ final class AppServices {
   }) : progress = ProgressRepository(store),
        sound = SoundService(store: store, player: soundPlayer),
        character = CharacterService(store),
+       language = LanguageService(store),
        protectedActions = ProtectedActionRunner(parentalGate) {
     unlockPolicy = UnlockPolicy(progress);
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
@@ -68,6 +70,7 @@ final class AppServices {
   final ProgressRepository progress;
   final SoundService sound;
   final CharacterService character;
+  final LanguageService language;
   final ProtectedActionRunner protectedActions;
   late final UnlockPolicy unlockPolicy;
   late final EntitlementService entitlements;

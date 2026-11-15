@@ -2,33 +2,64 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/features/parental_gate/number_speller.dart';
 import 'package:robi_codes/features/parental_gate/parental_gate.dart';
 import 'package:robi_codes/features/parental_gate/parental_question.dart';
 import 'package:robi_codes/features/parental_gate/protected_action_runner.dart';
 import 'package:robi_codes/features/store/entitlement_service.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
+import 'package:robi_codes/l10n/l10n.dart';
 
 import '../support/fakes.dart';
 import '../support/parental_approvals.dart';
+import '../support/test_l10n.dart';
 
 /// Sahte kapılar bağlamı kullanmadığı için ağaca bağlanmamış bir öğe yeter.
 final BuildContext _context = const SizedBox().createElement();
 
 /// "Yirmi yedi çarpı sekiz kaç eder?" metnindeki iki sayıyı yazıdan geri çevirir.
 (int, int) _parseQuestion(String text) {
-  final byWords = {for (var number = 1; number < 100; number++) TurkishNumbers.toWords(number): number};
+  const speller = TurkishNumberSpeller();
+  final byWords = {for (var number = 1; number < 100; number++) speller.spell(number): number};
   final match = RegExp(r'^(.+) çarpı (.+) kaç eder\?$').firstMatch(text.toLowerCase())!;
   return (byWords[match.group(1)]!, byWords[match.group(2)]!);
 }
 
 void main() {
   group('ParentalQuestionGenerator', () {
-    test('toWords_SampleNumbers_ReturnsTurkishSpelling', () {
-      expect(TurkishNumbers.toWords(9), 'dokuz');
-      expect(TurkishNumbers.toWords(12), 'on iki');
-      expect(TurkishNumbers.toWords(20), 'yirmi');
-      expect(TurkishNumbers.toWords(27), 'yirmi yedi');
-      expect(TurkishNumbers.toWords(99), 'doksan dokuz');
+    test('spell_TurkishSampleNumbers_ReturnsTurkishSpelling', () {
+      const speller = TurkishNumberSpeller();
+      expect(speller.spell(9), 'dokuz');
+      expect(speller.spell(12), 'on iki');
+      expect(speller.spell(20), 'yirmi');
+      expect(speller.spell(27), 'yirmi yedi');
+      expect(speller.spell(99), 'doksan dokuz');
+    });
+
+    test('spell_EnglishSampleNumbers_ReturnsEnglishSpelling', () {
+      const speller = EnglishNumberSpeller();
+      expect(speller.spell(9), 'nine');
+      expect(speller.spell(10), 'ten');
+      expect(speller.spell(12), 'twelve');
+      expect(speller.spell(20), 'twenty');
+      expect(speller.spell(27), 'twenty-seven');
+      expect(speller.spell(99), 'ninety-nine');
+    });
+
+    test('forLanguage_EverySupportedLanguage_HasOwnSpeller', () {
+      for (final locale in AppLocalizations.supportedLocales) {
+        expect(NumberSpellers.byLanguage, contains(locale.languageCode));
+      }
+    });
+
+    test('forLanguage_UnknownLanguage_FallsBackToEnglish', () {
+      expect(NumberSpellers.forLanguage('xx').spell(27), 'twenty-seven');
+    });
+
+    test('text_EnglishTexts_UsesEnglishSpelling', () {
+      final question = ParentalQuestionGenerator(Random(7)).next();
+      expect(question.text(texts), isNot(question.text(trTexts)));
+      expect(question.text(texts), contains('-'));
     });
 
     test('next_ManyQuestions_AnswerMatchesWrittenNumbersWithinRange', () {
@@ -40,11 +71,11 @@ void main() {
         final question = generator.next();
 
         // Assert
-        final (first, second) = _parseQuestion(question.text);
+        final (first, second) = _parseQuestion(question.text(trTexts));
         expect(question.answer, first * second);
         expect(first, inInclusiveRange(12, 29));
         expect(second, inInclusiveRange(3, 9));
-        expect(question.text[0], question.text[0].toUpperCase());
+        expect(question.text(trTexts)[0], question.text(trTexts)[0].toUpperCase());
         expect('${question.answer}'.length, lessThanOrEqualTo(ParentalQuestionGenerator.maxAnswerDigits));
       }
     });
@@ -59,7 +90,7 @@ void main() {
         final current = generator.next();
 
         // Assert
-        expect(current.text, isNot(previous.text));
+        expect(current.text(trTexts), isNot(previous.text(trTexts)));
         previous = current;
       }
     });

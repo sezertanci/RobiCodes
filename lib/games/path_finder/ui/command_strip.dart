@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../l10n/l10n.dart';
 import '../engine/path_finder_board.dart';
 import '../path_finder_controller.dart';
 import '../path_finder_texts.dart';
@@ -91,7 +92,7 @@ final class _CommandStripState extends State<CommandStrip> {
 
   Widget _list(List<Direction> commands) {
     if (commands.isEmpty) {
-      return const Align(alignment: Alignment.centerLeft, child: Text(PathFinderTexts.emptyStrip));
+      return Align(alignment: Alignment.centerLeft, child: Text(context.l10n.pathFinderEmptyStrip));
     }
     // Listenin boş kısmına bırakılan komut sona gider.
     return DragTarget<int>(
@@ -109,7 +110,7 @@ final class _CommandStripState extends State<CommandStrip> {
 
   Widget _draggableChip(int index, Direction direction) {
     final chip = CommandChip(
-      label: PathFinderTexts.commandChip(index, direction),
+      label: PathFinderTexts.commandChip(context.l10n, index, direction),
       number: index + 1,
       direction: direction,
       size: widget.chipSize,
@@ -144,6 +145,7 @@ final class _EditBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final index = controller.selectedIndex!;
+    final t = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Wrap(
@@ -152,20 +154,20 @@ final class _EditBar extends StatelessWidget {
         alignment: WrapAlignment.center,
         children: [
           _button(
-            label: PathFinderTexts.moveLeft,
-            text: PathFinderTexts.label(Direction.left),
+            label: t.pathFinderMoveLeft,
+            text: PathFinderTexts.direction(t, Direction.left),
             icon: Icons.arrow_back_rounded,
             onPressed: index == 0 ? null : () => controller.moveSelected(-1),
           ),
           _button(
-            label: PathFinderTexts.moveRight,
-            text: PathFinderTexts.label(Direction.right),
+            label: t.pathFinderMoveRight,
+            text: PathFinderTexts.direction(t, Direction.right),
             icon: Icons.arrow_forward_rounded,
             onPressed: index == controller.commands.length - 1 ? null : () => controller.moveSelected(1),
           ),
           _button(
-            label: PathFinderTexts.delete,
-            text: PathFinderTexts.delete,
+            label: t.commonDelete,
+            text: t.commonDelete,
             icon: Icons.close_rounded,
             onPressed: controller.deleteSelected,
             color: AppColors.red,

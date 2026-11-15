@@ -5,6 +5,7 @@ import 'package:robi_codes/app/robi_codes_app.dart';
 import 'package:robi_codes/games/game_registry.dart';
 
 import '../support/fakes.dart';
+import '../support/test_l10n.dart';
 import '../support/ui_test_helpers.dart';
 
 void main() {
@@ -18,9 +19,9 @@ void main() {
       store: InMemoryKeyValueStore(),
       purchaseGateway: gateway,
     );
-    final paidPackTitle = catalog.findPack(TestCatalog.packA)!.title;
+    final paidPackTitle = catalog.findPack(TestCatalog.packA)!.title(texts);
     await tester.pumpWidget(RobiCodesApp(services: services));
-    await openLevelSelect(tester, catalog.games.single.title);
+    await openLevelSelect(tester, catalog.games.single.title(texts));
     expect(find.text(paidPackTitle), findsNothing);
 
     // Act

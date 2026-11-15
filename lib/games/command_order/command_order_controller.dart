@@ -6,6 +6,7 @@ import '../../features/play/play_timings.dart';
 import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import '../../l10n/l10n.dart';
 import 'command_order_texts.dart';
 import 'engine/command_order_engine.dart';
 import 'engine/command_order_level.dart';
@@ -54,7 +55,7 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
   List<int?> get slots => List.unmodifiable(_slots);
   int? get target => _target;
   SlotMark? get mark => _mark;
-  String get message => _voice.message;
+  LocalizedText get message => _voice.message;
   RobotMood get mood => _voice.mood;
 
   /// Her yanlış kontrolde artar; ekran yanlış kartı her seferinde yeniden sallar.
@@ -81,7 +82,7 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
     }
     final slot = _target ?? _slots.indexOf(null);
     if (slot < 0) {
-      _voice.say(CommandOrderTexts.full);
+      _voice.say((t) => t.commandOrderFull);
       notifyListeners();
       return;
     }
@@ -141,7 +142,7 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
       return;
     }
     if (!isFull) {
-      _voice.say(CommandOrderTexts.notFull);
+      _voice.say((t) => t.commandOrderNotFull);
       notifyListeners();
       return;
     }
@@ -152,7 +153,7 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
         _failedChecks++;
         _wrongCount++;
         _mark = (slot: wrong.slot, cardId: null, kind: SlotMarkKind.wrong);
-        _voice.say(CommandOrderTexts.wrong(wrong, cardOf(_slots[wrong.slot]!).text), RobotMood.sad);
+        _voice.say(CommandOrderTexts.wrong(wrong, cardOf(_slots[wrong.slot]!)), RobotMood.sad);
         notifyListeners();
     }
   }
@@ -166,12 +167,12 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
     _hintUsed = true;
     final hint = CommandOrderEngine.nextHint(_slots);
     if (hint == null) {
-      _voice.say(CommandOrderTexts.solved);
+      _voice.say((t) => t.commandOrderSolved);
     } else {
       _mark = (slot: hint.slot, cardId: hint.cardId, kind: SlotMarkKind.hint);
       // Kutu seçili kalır; parlayan karta dokununca kart oraya gider, kutudaki yanlış kart havuza döner.
       _target = hint.slot;
-      _voice.say(CommandOrderTexts.hintText(level.hint, cardOf(hint.cardId).text, hint.slot));
+      _voice.say(CommandOrderTexts.hint(level.hint, cardOf(hint.cardId), hint.slot));
     }
     notifyListeners();
   }
@@ -180,7 +181,7 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
     _done = true;
     _target = null;
     _mark = null;
-    _voice.say(CommandOrderTexts.success, RobotMood.happy);
+    _voice.say((t) => t.commandOrderSuccess, RobotMood.happy);
     notifyListeners();
     final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _failedChecks == 0);
     await completeAfter(celebrateDuration, onCompleted, stars);
@@ -196,6 +197,6 @@ final class CommandOrderController extends ChangeNotifier with LevelLifecycle {
     notifyListeners();
   }
 
-  static String _introOf(CommandOrderLevel level) =>
-      level.extras.isEmpty ? CommandOrderTexts.intro : CommandOrderTexts.extrasIntro;
+  static LocalizedText _introOf(CommandOrderLevel level) =>
+      (t) => level.extras.isEmpty ? t.commandOrderIntro : t.commandOrderExtrasIntro;
 }

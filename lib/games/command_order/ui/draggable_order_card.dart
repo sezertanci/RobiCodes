@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../features/play/widgets/mark_effects.dart';
 import '../command_order_controller.dart';
+import '../../../l10n/l10n.dart';
 import '../command_order_texts.dart';
 import 'card_metrics.dart';
 import 'order_card_tile.dart';
@@ -37,7 +38,7 @@ final class DraggableOrderCard extends StatelessWidget {
       card: card,
       position: controller.positionOf(cardId),
       metrics: metrics,
-      label: slot == null ? card.text : CommandOrderTexts.slotCard(slot, card.text),
+      label: slot == null ? card.step.text(context.l10n) : CommandOrderTexts.slotCard(context.l10n, slot, card),
       onTap: controller.isDone
           ? null
           : () => slot == null ? controller.tapPoolCard(cardId) : controller.returnToPool(slot),

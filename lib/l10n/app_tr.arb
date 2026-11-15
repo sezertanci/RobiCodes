@@ -1,0 +1,1015 @@
+{
+  "@@locale": "tr",
+  "appTitle": "Robi Kodluyor",
+  "languageName": "Türkçe",
+  "homeLogoTop": "Robi",
+  "homeLogoBottom": "Kodluyor",
+  "homeTagline": "Oyna • Öğren • Keşfet",
+  "homeComingSoon": "Yakında",
+  "homeLevels": "{completed}/{levels} seviye",
+  "@homeLevels": {
+    "placeholders": {
+      "completed": {
+        "type": "Object"
+      },
+      "levels": {
+        "type": "Object"
+      }
+    }
+  },
+  "homeChangeCharacter": "Değiştir",
+  "homeCharacterLabel": "Karakterin: {name}. Değiştirmek için dokun.",
+  "@homeCharacterLabel": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "commonClose": "Kapat",
+  "commonNextLevel": "Sonraki seviye",
+  "commonBackToHome": "Ana ekrana dön",
+  "commonBackToLevels": "Seviyelere dön",
+  "commonStars": "{count, plural, other{{count} yıldız}}",
+  "@commonStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonRun": "Başlat",
+  "commonHint": "İpucu",
+  "commonClear": "Temizle",
+  "commonDelete": "Sil",
+  "settingsTitle": "Ayarlar",
+  "settingsSound": "Ses",
+  "settingsLanguage": "Dil",
+  "difficulty": "{difficulty, select, easy{Kolay} medium{Orta} hard{Zor} other{Uzman}}",
+  "@difficulty": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "basePackTitle": "Temel Seviyeler",
+  "playPreviousLevel": "Önceki seviye",
+  "playLevelLabel": "{difficulty}, seviye {level}",
+  "@playLevelLabel": {
+    "placeholders": {
+      "difficulty": {
+        "type": "Object"
+      },
+      "level": {
+        "type": "Object"
+      }
+    }
+  },
+  "playFinishGroupFirst": "Önce {difficulty} seviyelerini bitir",
+  "@playFinishGroupFirst": {
+    "placeholders": {
+      "difficulty": {
+        "type": "Object"
+      }
+    }
+  },
+  "playLevelComplete": "Harika! Seviye tamamlandı.",
+  "playLevel": "Seviye {level}",
+  "@playLevel": {
+    "placeholders": {
+      "level": {
+        "type": "Object"
+      }
+    }
+  },
+  "playLevelLocked": "Seviye {level}, kilitli",
+  "@playLevelLocked": {
+    "placeholders": {
+      "level": {
+        "type": "Object"
+      }
+    }
+  },
+  "playLevelStars": "Seviye {level}, {stars}",
+  "@playLevelStars": {
+    "placeholders": {
+      "level": {
+        "type": "Object"
+      },
+      "stars": {
+        "type": "Object"
+      }
+    }
+  },
+  "playLocked": "kilitli",
+  "gamePathFinderTitle": "Robotun Yolunu Bul",
+  "gamePathFinderDescription": "Yön komutlarıyla robotu hedefe ulaştır.",
+  "gamePathFinderTrophy": "Robot Ustası",
+  "gamePathFinderTrophyDescription": "Robot artık her yolu biliyor!",
+  "gameCommandOrderTitle": "Komutları Sırala",
+  "gameCommandOrderDescription": "Adımları doğru sıraya diz.",
+  "gameCommandOrderTrophy": "Algoritma Ustası",
+  "gameCommandOrderTrophyDescription": "Adımları sıralamakta bir numarasın!",
+  "gameIfThenTitle": "Eğer Böyleyse",
+  "gameIfThenDescription": "Duruma göre doğru komutu seç.",
+  "gameIfThenTrophy": "Karar Ustası",
+  "gameIfThenTrophyDescription": "Her durumda doğru kararı veriyorsun!",
+  "gameRepeatTitle": "Tekrar Et",
+  "gameRepeatDescription": "Tekrarlanan hareketleri tek blokla yap.",
+  "gameRepeatTrophy": "Döngü Ustası",
+  "gameRepeatTrophyDescription": "Tekrarları ustaca kullanıyorsun!",
+  "characterTitle": "Karakterini seç",
+  "characterName": "{id, select, robi{Robi} fiyo{Fiyo} pervane{Pervane} isil{Işıl} kahraman{Kahraman} pembe{Pembe} sovalye{Şövalye} piril{Pırıl} other{Robi}}",
+  "@characterName": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementsTitle": "Başarılarım",
+  "achievementsSummary": "{count} ödül kazandın!",
+  "@achievementsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "achievementsBadges": "Rozetler",
+  "achievementsBadgesSubtitle": "Küçük başarılar",
+  "achievementsBadgesEarned": "Kazandığın rozetler",
+  "achievementsBadgesLocked": "Kazanılacak rozetler",
+  "achievementsBadgesEmpty": "Henüz rozetin yok. İlk seviyeni bitir!",
+  "achievementsTrophies": "Kupalar",
+  "achievementsTrophiesSubtitle": "Büyük hedefler",
+  "achievementsTrophiesEarned": "Kazandığın kupalar",
+  "achievementsTrophiesLocked": "Kilitli kupalar",
+  "achievementsTrophiesEmpty": "Henüz kupan yok. Büyük hedeflere doğru devam!",
+  "achievementsButtonLabel": "Başarılarım: {earned}/{total}",
+  "@achievementsButtonLabel": {
+    "placeholders": {
+      "earned": {
+        "type": "Object"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementEarned": "Kazanıldı!",
+  "achievementCondition": "Nasıl kazanılır? ",
+  "achievementCardEarned": "{title}, kazanıldı",
+  "@achievementCardEarned": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementCardLocked": "{title}, kilitli",
+  "@achievementCardLocked": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementNewBadge": "Yeni rozet!",
+  "achievementNewTrophy": "Yeni kupa kazandın!",
+  "achievementGreat": "Harika!",
+  "achievementFirstGameTitle": "İlk Oyunum",
+  "achievementFirstGameDescription": "Kodlama macerana ilk adımı attın!",
+  "achievementFirstGameCondition": "İlk oyun seviyeni tamamla.",
+  "achievementQuickStartTitle": "Hızlı Başlangıç",
+  "achievementQuickStartDescription": "Robotlar seninle gurur duyuyor!",
+  "achievementQuickStartCondition": "Bir oyunda {goal} seviye tamamla.",
+  "@achievementQuickStartCondition": {
+    "placeholders": {
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementDeterminedTitle": "Azimli Oyuncu",
+  "achievementDeterminedDescription": "Pes etmeden devam ettin!",
+  "achievementDeterminedCondition": "Bir oyunda {goal} seviye tamamla.",
+  "@achievementDeterminedCondition": {
+    "placeholders": {
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementMasterCoderTitle": "Usta Kodlayıcı",
+  "achievementMasterCoderDescription": "Bir oyunun bütün seviyelerini bitirdin!",
+  "achievementMasterCoderCondition": "Bir oyunun bütün seviyelerini tamamla.",
+  "achievementAllGamesTitle": "Oyun Kaşifi",
+  "achievementAllGamesDescription": "Bütün oyunları denedin!",
+  "achievementAllGamesCondition": "Bütün oyunlarda en az bir seviye bitir.",
+  "achievementStarHunterTitle": "Yıldız Avcısı",
+  "achievementStarHunterDescription": "Yıldızları toplamaya başladın!",
+  "achievementStarHunterCondition": "Toplam {goal} yıldız kazan.",
+  "@achievementStarHunterCondition": {
+    "placeholders": {
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementStarMasterTitle": "Yıldız Ustası",
+  "achievementStarMasterDescription": "Gökyüzü kadar yıldızın var!",
+  "achievementStarMasterCondition": "Toplam {goal} yıldız kazan.",
+  "@achievementStarMasterCondition": {
+    "placeholders": {
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementPerfectTitle": "Mükemmel Oyuncu",
+  "achievementPerfectDescription": "Bir seviyeyi kusursuz bitirdin!",
+  "achievementPerfectCondition": "Bir seviyeyi {goal} yıldızla tamamla.",
+  "@achievementPerfectCondition": {
+    "placeholders": {
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementNoHintTitle": "İpucusuz Kahraman",
+  "achievementNoHintDescription": "Kendi başına çözmeyi başardın!",
+  "achievementNoHintCondition": "{goal} seviyeyi ipucu kullanmadan tamamla.",
+  "@achievementNoHintCondition": {
+    "placeholders": {
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "achievementBigSuccessTitle": "Büyük Başarı",
+  "achievementBigSuccessDescription": "Bütün oyunları baştan sona bitirdin!",
+  "achievementBigSuccessCondition": "Bütün oyunların tüm seviyelerini tamamla.",
+  "achievementFirstAdventureTitle": "İlk Macera Kupası",
+  "achievementFirstAdventureDescription": "Bütün oyunlarda ilk adımı attın!",
+  "achievementFirstAdventureCondition": "Her oyunda ilk seviyeyi tamamla.",
+  "achievementChampionTitle": "Kodlama Şampiyonu",
+  "achievementChampionDescription": "Sen gerçek bir kodlama şampiyonusun!",
+  "achievementChampionCondition": "Bütün oyunların bütün seviyelerini bitir.",
+  "achievementGameTrophyCondition": "{game} oyununu bitir.",
+  "@achievementGameTrophyCondition": {
+    "placeholders": {
+      "game": {
+        "type": "Object"
+      }
+    }
+  },
+  "parentalGateTitle": "Ebeveyn onayı",
+  "parentalGateIntro": "Bu işlem için bir yetişkinin onayı gerekiyor: {action}.",
+  "@parentalGateIntro": {
+    "placeholders": {
+      "action": {
+        "type": "Object"
+      }
+    }
+  },
+  "parentalGateAction": "{action, select, purchase{Paket satın alma} other{İşlem}}",
+  "@parentalGateAction": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "parentalGateAnswerHint": "Cevabı rakamlarla yazın.",
+  "parentalGateCancel": "Vazgeç",
+  "parentalGateConfirm": "Onayla",
+  "parentalGateAnswer": "Cevap",
+  "parentalGateWrongAnswer": "Cevap yanlış. Biraz bekleyin, sonra yeni soruyu cevaplayın.",
+  "parentalGateQuestion": "{first} çarpı {second} kaç eder?",
+  "@parentalGateQuestion": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "parentalGateTrialLabel": "Ebeveyn doğrulamasını dene",
+  "parentalGateTrialHint": "Yalnızca test derlemesinde görünür. Gerçek satın alma yapılmaz.",
+  "parentalGateTrialPassed": "Doğrulama geçildi; deneme işlemi çalıştı.",
+  "parentalGateTrialBlocked": "Doğrulama geçilmedi; işlem çalışmadı.",
+  "storeTitle": "Paketler",
+  "storeIntro": "Satın almalar Google Play üzerinden yapılır ve her satın almadan önce ebeveyn onayı istenir. Google Play promosyon kodunu ödeme ekranındaki \"Kodu kullan\" bağlantısından veya Play Store uygulamasından kullanabilirsiniz; kodla alınan paket de burada sahip olunan olarak görünür.",
+  "storePaidSection": "Satın alınabilir paketler",
+  "storeFreeSection": "Ücretsiz paketler",
+  "storeNoProducts": "Şu an satın alınabilir paket yok.",
+  "storeBundle": "Avantajlı paket",
+  "storeOwned": "Sahipsiniz",
+  "storeUnlocks": "Satın alındığında açılanlar:",
+  "storePriceLoading": "Fiyat Google Play'den alınıyor…",
+  "storePriceUnavailable": "Fiyat Google Play'den alınamadı.",
+  "storeNotInStore": "Bu paket şu an Google Play'de bulunmuyor.",
+  "storeRetry": "Tekrar dene",
+  "storePartiallyOwned": "Bu paketteki içeriklerin bir kısmına zaten sahipsiniz. Google Play fiyatı sahip olduklarınıza göre düşürmediği için aynı içerik için iki kez ödeme yapmamanız adına bu paket satılmıyor. Eksik paketler: {missing}",
+  "@storePartiallyOwned": {
+    "placeholders": {
+      "missing": {
+        "type": "Object"
+      }
+    }
+  },
+  "storeRestore": "Satın alımları geri yükle",
+  "storeRestoreHint": "Google Play hesabınızdaki satın alımları yeniden okur; oyun ilerlemesi silinmez.",
+  "storeRestored": "Satın alımlar Google Play'den yeniden okundu. Sahip olunan ürün: {count}.",
+  "@storeRestored": {
+    "placeholders": {
+      "count": {
+        "type": "Object"
+      }
+    }
+  },
+  "storeRestoreOffline": "İnternet bağlantısı yok; cihazdaki satın alma kayıtları geçerli kalır.",
+  "storeRestoreUnavailable": "Google Play'e bağlanılamadı; cihazdaki satın alma kayıtları geçerli kalır.",
+  "storeBuy": "Satın al – {price}",
+  "@storeBuy": {
+    "placeholders": {
+      "price": {
+        "type": "Object"
+      }
+    }
+  },
+  "storeLevels": "{count, plural, other{{count} seviye}}",
+  "@storeLevels": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storePackLine": "{game} – {pack} ({levels})",
+  "@storePackLine": {
+    "placeholders": {
+      "game": {
+        "type": "Object"
+      },
+      "pack": {
+        "type": "Object"
+      },
+      "levels": {
+        "type": "Object"
+      }
+    }
+  },
+  "storePurchased": "Satın alma tamamlandı; paket açıldı.",
+  "storePending": "Ödeme beklemede. Ödeme tamamlanınca paket kendiliğinden açılır.",
+  "storeCancelled": "Satın alma iptal edildi.",
+  "storeAlreadyOwned": "Bu pakete zaten sahipsiniz; yeniden satın alınmadı.",
+  "storeOffline": "İnternet bağlantısı yok. Bağlantıyı kontrol edip tekrar deneyin.",
+  "storeUnavailable": "Google Play'e bağlanılamadı. Daha sonra tekrar deneyin.",
+  "storeFailed": "Satın alma tamamlanamadı.",
+  "storeNotApproved": "Ebeveyn onayı verilmedi; satın alma başlatılmadı.",
+  "gameRobotRunning": "Robot yola çıktı...",
+  "gameRobotReachedFlag": "Harika! Robot bayrağa ulaştı!",
+  "gameMissingCoins": "Bayrağa ulaştın ama bütün altınları toplamadın. Önce altınları topla.",
+  "gameDirection": "{direction, select, up{Yukarı} down{Aşağı} left{Sola} other{Sağa}}",
+  "@gameDirection": {
+    "placeholders": {
+      "direction": {
+        "type": "String"
+      }
+    }
+  },
+  "gameObstacle": "{obstacle, select, rock{taşa} water{suya} other{harita kenarına}}",
+  "@gameObstacle": {
+    "placeholders": {
+      "obstacle": {
+        "type": "String"
+      }
+    }
+  },
+  "pathFinderIntro": "Robotu bayrağa ulaştırmak için komutları sırayla seç.",
+  "pathFinderCoinIntro": "Önce bütün altınları topla, sonra bayrağa git.",
+  "pathFinderEmpty": "Önce bir yön komutu ekle.",
+  "pathFinderFull": "Komut sınırına ulaştın. Bir komutu silip yerine başkasını koyabilirsin.",
+  "pathFinderMissedGoal": "Robot bayrağa ulaşamadı. Komut eklemeyi ya da değiştirmeyi dene.",
+  "pathFinderTooMany": "Bu komutlarla sınır içinde bitiremezsin. Gereksiz adımları silmeyi dene.",
+  "pathFinderSolved": "Komutların doğru! Yeşil Başlat tuşuna dokun.",
+  "pathFinderEmptyStrip": "Yön tuşlarına bas, komutların burada sıralansın.",
+  "pathFinderMoveLeft": "Seçili komutu bir sola taşı",
+  "pathFinderMoveRight": "Seçili komutu bir sağa taşı",
+  "pathFinderBlocked": "Robot {obstacle} çarptı. {number}. komutu değiştirmeyi dene.",
+  "@pathFinderBlocked": {
+    "placeholders": {
+      "obstacle": {
+        "type": "Object"
+      },
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "pathFinderFixCommand": "{number}. komut robotu yoldan çıkarıyor. Onu senin için seçtim; silebilir ya da yerini değiştirebilirsin.",
+  "@pathFinderFixCommand": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "pathFinderNextMove": "Parlayan kareye bak. Sıradaki komut: {direction}.",
+  "@pathFinderNextMove": {
+    "placeholders": {
+      "direction": {
+        "type": "Object"
+      }
+    }
+  },
+  "pathFinderAddCommand": "{direction} komutu ekle",
+  "@pathFinderAddCommand": {
+    "placeholders": {
+      "direction": {
+        "type": "Object"
+      }
+    }
+  },
+  "pathFinderCommandChip": "{number}. komut: {direction}",
+  "@pathFinderCommandChip": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      },
+      "direction": {
+        "type": "Object"
+      }
+    }
+  },
+  "commandOrderIntro": "Görevi bitirmek için kartları doğru sıraya diz. Bir karta dokun ya da onu bir kutuya sürükle.",
+  "commandOrderExtrasIntro": "Dikkat! Bazı kartlar bu göreve ait değil. Yalnızca gereken kartları sıraya diz.",
+  "commandOrderFull": "Bütün kutular dolu. Bir kartı geri almak için ona dokun.",
+  "commandOrderNotFull": "Önce bütün kutuları doldur.",
+  "commandOrderSuccess": "Harika! Bütün adımlar doğru sırada.",
+  "commandOrderSolved": "Sıralama doğru! Yeşil Kontrol et tuşuna dokun.",
+  "commandOrderPoolEmpty": "Bütün kartlar yerleşti",
+  "commandOrderCheck": "Kontrol et",
+  "commandOrderWrongExtra": "\"{card}\" bu görev için gerekli değil. Onu kutudan çıkar.",
+  "@commandOrderWrongExtra": {
+    "placeholders": {
+      "card": {
+        "type": "Object"
+      }
+    }
+  },
+  "commandOrderWrongTooEarly": "{number}. kutudaki \"{card}\" için henüz erken. Ondan önce yapılması gereken bir adım var.",
+  "@commandOrderWrongTooEarly": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      },
+      "card": {
+        "type": "Object"
+      }
+    }
+  },
+  "commandOrderHint": "{levelHint} Parlayan kart \"{card}\" {number}. kutuya gelmeli.",
+  "@commandOrderHint": {
+    "placeholders": {
+      "levelHint": {
+        "type": "Object"
+      },
+      "card": {
+        "type": "Object"
+      },
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "commandOrderSlotCard": "{number}. kutu: {card}. Geri almak için dokun.",
+  "@commandOrderSlotCard": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      },
+      "card": {
+        "type": "Object"
+      }
+    }
+  },
+  "commandOrderEmptySlot": "{number}. kutu, boş. Kartın buraya gelmesi için dokun.",
+  "@commandOrderEmptySlot": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "ifThenIncomplete": "Önce boş kutuları doldur.",
+  "ifThenSuccess": "Harika! Robot kurallarını izleyip bayrağa ulaştı!",
+  "ifThenSolved": "Kuralların doğru! Yeşil Başlat tuşuna dokun.",
+  "ifThenNoSlot": "Bu blok için boş kutu yok. Değiştirmek istediğin kutuya dokunup onu boşalt.",
+  "ifThenLockedSlot": "Bu kutu hazır geldi, değiştirilemez. Bloğu boş bir kutuya koy.",
+  "ifThenWrongType": "Bu blok oraya uymaz. Nesneler \"Eğer\" kutusuna, hareketler ok işaretinin yanına gider.",
+  "ifThenLane": "Robotun yolu",
+  "ifThenObjects": "Nesneler",
+  "ifThenActions": "Hareketler",
+  "ifThenIf": "Eğer",
+  "ifThenElseIf": "Değilse eğer",
+  "ifThenElse": "Değilse",
+  "ifThenThen": "varsa",
+  "ifThenObjectLabel": "{object, select, empty{Boş yol} rock{Taş} water{Su} door{Kapı} other{Yıldız}}",
+  "@ifThenObjectLabel": {
+    "placeholders": {
+      "object": {
+        "type": "String"
+      }
+    }
+  },
+  "ifThenActionLabel": "{action, select, forward{İleri Git} jump{Zıpla} bridge{Köprü Kur} open{Kapıyı Aç} other{Topla}}",
+  "@ifThenActionLabel": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "ifThenObjectName": "{object, select, empty{boş yol} rock{taş} water{su} door{kapı} other{yıldız}}",
+  "@ifThenObjectName": {
+    "placeholders": {
+      "object": {
+        "type": "String"
+      }
+    }
+  },
+  "ifThenProblem": "{object, select, empty{Boş yolda buna gerek yok.} rock{Taşın içinden geçilemez.} water{Robot yüzemez!} door{Kapı kapalıyken geçilemez.} other{Yıldız yerde kaldı.}}",
+  "@ifThenProblem": {
+    "placeholders": {
+      "object": {
+        "type": "String"
+      }
+    }
+  },
+  "ifThenAdvice": "{object, select, empty{Yol boşsa robot ileri gidebilir.} rock{Taşın üstünden zıplayarak geçilir.} water{Suyun üstünden geçmek için köprü kurmak gerekir.} door{Kapıdan geçmek için önce kapıyı açmalısın.} other{Yıldızı almak için Topla bloğunu kullan.}}",
+  "@ifThenAdvice": {
+    "placeholders": {
+      "object": {
+        "type": "String"
+      }
+    }
+  },
+  "ifThenRuleNumber": "{number}. kural",
+  "@ifThenRuleNumber": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "ifThenElseRule": "\"Değilse\" satırı",
+  "ifThenWrong": "Önünde {object} vardı. {rule} çalıştı ve robot \"{action}\" yaptı. {problem} Kuralları değiştirip yeniden dene.",
+  "@ifThenWrong": {
+    "placeholders": {
+      "object": {
+        "type": "Object"
+      },
+      "rule": {
+        "type": "Object"
+      },
+      "action": {
+        "type": "Object"
+      },
+      "problem": {
+        "type": "Object"
+      }
+    }
+  },
+  "ifThenHint": "Parlayan karede {object} var. {advice}",
+  "@ifThenHint": {
+    "placeholders": {
+      "object": {
+        "type": "Object"
+      },
+      "advice": {
+        "type": "Object"
+      }
+    }
+  },
+  "ifThenSlot": "{kind, select, condition{Koşul} other{Hareket}} kutusu: {value}",
+  "@ifThenSlot": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "ifThenSlotEmpty": "boş",
+  "ifThenSlotReady": "{label}, hazır",
+  "@ifThenSlotReady": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "ifThenPaletteBlock": "{kind, select, action{Hareket} other{Nesne}}: {label}",
+  "@ifThenPaletteBlock": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatIntro": "Robotu bayrağa götür. Aynı hareketi tekrar tekrar eklemek yerine Tekrarla bloğunu kullan.",
+  "repeatCoinIntro": "Önce bütün altınları topla, sonra bayrağa git. Tekrarla bloğu işini kolaylaştırır.",
+  "repeatEmpty": "Önce bir ok ya da Tekrarla bloğu ekle.",
+  "repeatFull": "Blok sınırına ulaştın. Hazırsan yeşil Başlat tuşuna dokun; değiştirmek istersen bir bloğu seçip sil.",
+  "repeatInsideRepeat": "Şimdi eklediğin oklar turuncu bloğun içine girecek. Bitince lacivert Bloktan çık düğmesine dokun.",
+  "repeatEmptyStrip": "Ok ya da Tekrarla bloğu ekle, bloklar burada sıralansın.",
+  "repeatOutsideRepeat": "Şimdi eklediğin oklar bloğun dışına, sona eklenecek.",
+  "repeatMovedOut": "Ok bloğun dışına çıktı. Şimdi eklediğin oklar da dışarıya, sona eklenecek.",
+  "repeatEmptyRepeat": "Turuncu bloğun içi boş. Onu seçtim; şimdi içine bir ok ekle.",
+  "repeatMissedGoal": "Robot bayrağa ulaşamadı. Tekrar sayısını ya da okları değiştirmeyi dene.",
+  "repeatSolved": "Blokların doğru! Yeşil Başlat tuşuna dokun.",
+  "repeatFullHint": "Blok sınırın doldu. Bir tekrar sayısını değiştirmeyi ya da bir bloğu silip yerine Tekrarla bloğu koymayı dene.",
+  "repeatAddRepeat": "Tekrarla",
+  "repeatLeaveRepeat": "Bloktan çık ✓",
+  "repeatAddRepeatLabel": "Tekrarla bloğu ekle",
+  "repeatLeaveRepeatLabel": "Bloktan çık; sonraki oklar dışarıya eklensin",
+  "repeatDropHere": "Okları buraya ekle",
+  "repeatEmptyBody": "Boş",
+  "repeatDecrease": "Tekrar sayısını azalt",
+  "repeatIncrease": "Tekrar sayısını artır",
+  "repeatDeleteLabel": "Seçili bloğu sil",
+  "repeatMoveOutLabel": "Seçili oku turuncu bloğun dışına taşı",
+  "repeatTimes": "{times, plural, other{{times} kez}}",
+  "@repeatTimes": {
+    "placeholders": {
+      "times": {
+        "type": "int"
+      }
+    }
+  },
+  "repeatTimesFull": "{times, plural, other{{times} kez tekrarla}}",
+  "@repeatTimesFull": {
+    "placeholders": {
+      "times": {
+        "type": "int"
+      }
+    }
+  },
+  "repeatAddMove": "{direction} oku ekle",
+  "@repeatAddMove": {
+    "placeholders": {
+      "direction": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatArrowName": "{number}. ok",
+  "@repeatArrowName": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatBlockName": "{number}. blok",
+  "@repeatBlockName": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatInnerArrowName": "{block}. bloğun içindeki {arrow}. ok",
+  "@repeatInnerArrowName": {
+    "placeholders": {
+      "block": {
+        "type": "Object"
+      },
+      "arrow": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatMoveChip": "{name}: {direction}",
+  "@repeatMoveChip": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "direction": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatBlockLabel": "{number}. blok: {times, plural, other{{times} kez tekrarla}}. İçine ok eklemek için dokun.",
+  "@repeatBlockLabel": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      },
+      "times": {
+        "type": "int"
+      }
+    }
+  },
+  "repeatFixCount": "{number}. bloğun tekrar sayısını ya da içindeki okları değiştirmeyi dene.",
+  "@repeatFixCount": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatOffPath": "{place} robotu yoldan çıkarıyor.",
+  "@repeatOffPath": {
+    "placeholders": {
+      "place": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatBlocked": "Robot {obstacle} çarptı. {advice}",
+  "@repeatBlocked": {
+    "placeholders": {
+      "obstacle": {
+        "type": "Object"
+      },
+      "advice": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatBlockedInRound": "Robot {round}. turda {obstacle} çarptı. {advice}",
+  "@repeatBlockedInRound": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "obstacle": {
+        "type": "Object"
+      },
+      "advice": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatFixHint": "{advice} Yanlış yeri senin için kırmızıyla gösterdim.",
+  "@repeatFixHint": {
+    "placeholders": {
+      "advice": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatNextMoveHint": "{levelHint} Parlayan kareye bak; robot oraya {direction} gitmeli.",
+  "@repeatNextMoveHint": {
+    "placeholders": {
+      "levelHint": {
+        "type": "Object"
+      },
+      "direction": {
+        "type": "Object"
+      }
+    }
+  },
+  "repeatL1Intro": "Robot 3 kez sağa gitmeli ama yalnızca 2 blok kullanabilirsin. Tekrarla bloğunu ekle, içine sağ oku koy.",
+  "repeatL1Hint": "Tekrarla bloğu, içindeki oku söylediğin kadar yapar. Kaç kez sağa gitmeli?",
+  "repeatL2Intro": "Bayrak yukarıda. Aynı oku tekrar tekrar eklemek yerine Tekrarla bloğunu kullan.",
+  "repeatL2Hint": "Robot hep aynı yöne gidiyor. Hangi yöne ve kaç kez?",
+  "repeatL3Hint": "Robot aşağı iniyor. Kareleri say ve tekrar sayısını ayarla.",
+  "repeatL4Hint": "Bu kez sola. Tekrar sayısını − ve + düğmeleriyle değiştirebilirsin.",
+  "repeatL5Intro": "Yoldaki altınları da topla! Yine yalnızca 2 blok var.",
+  "repeatL5Hint": "Altınlar robotla bayrak arasında, aynı sırada. Robot yalnızca sağa gidiyor.",
+  "repeatL6Intro": "Merdiven gibi in: sağa, aşağı, sağa, aşağı... Tekrarla bloğunun içine iki ok koyabilirsin.",
+  "repeatL6Hint": "Bir basamak: bir sağa, bir aşağı. Kaç basamak var?",
+  "repeatL7Hint": "İki kez sağa, bir kez yukarı. Bu desen kaç kez tekrar ediyor?",
+  "repeatL8Hint": "Önce iki sağa, sonra bir aşağı. Bunu tekrar et.",
+  "repeatL9Intro": "Tekrarla bloğundan sonra tek bir ok da ekleyebilirsin.",
+  "repeatL9Hint": "Yukarı-sol desenini tekrarla; sonunda bir adım daha gerekebilir.",
+  "repeatL10Hint": "Her basamak iki kare geniş, bir kare yüksek.",
+  "repeatL11Intro": "Bu kez iki Tekrarla bloğu gerekiyor: biri sağa, biri aşağı.",
+  "repeatL11Hint": "Önce sağa kaç kare? Sonra aşağı kaç kare? Her biri için ayrı bir Tekrarla bloğu kullan.",
+  "repeatL12Hint": "Önce yukarı çık, sonra sağa git. İki Tekrarla bloğu, iki farklı sayı.",
+  "repeatL13Hint": "Taşların etrafından dolaş: sağa, aşağı, sola. Her yön için kareleri say.",
+  "repeatL14Hint": "Yol üç parça: sağa, aşağı, yine sağa.",
+  "repeatL15Hint": "İki altın da yolun köşelerinde. Her düz parçayı bir Tekrarla bloğuyla yap.",
+  "repeatL16Intro": "Yalnızca 4 blok! Uzun yolu kısa bir desenle yürü.",
+  "repeatL16Hint": "Altınlar çapraz dizilmiş: sağa-aşağı desenine bak.",
+  "repeatL17Hint": "Her basamak iki kare yüksek, iki kare geniş.",
+  "repeatL18Hint": "İki sağa, iki aşağı. Bu desen bayrağa kadar sürüyor.",
+  "repeatL19Hint": "Altınlar basamakların köşesinde. Bir basamak: iki sağa, bir aşağı.",
+  "repeatL20Intro": "Yılan gibi kıvrılan uzun bir yol. 10 bloğu akıllıca kullan.",
+  "repeatL20Hint": "Yol beş düz parçadan oluşuyor. Her parçayı bir Tekrarla bloğuyla yap.",
+  "ifThenL1Intro": "Önünde taş varsa robot ne yapmalı? Boş kutuya bir hareket koy.",
+  "ifThenL2Intro": "Robot yüzemez. Önünde su varsa ne yapmalı?",
+  "ifThenL3Intro": "Yolda kapalı bir kapı var. Kapının önüne gelince ne yapmalı?",
+  "ifThenL4Intro": "Yıldızları toplamadan geçme! Önünde yıldız varsa ne yapmalı?",
+  "ifThenL5Intro": "Bu kez koşulu da sen seç. Yolda ne var?",
+  "ifThenL6Intro": "Taş varsa bir şey, yoksa başka bir şey yapmalı. İki kutuyu da doldur.",
+  "ifThenL7Intro": "Su varsa ne yapmalı? Su yoksa ne yapmalı?",
+  "ifThenL8Intro": "Bu yolda boş kare yok! Kapı yoksa önünde ne var?",
+  "ifThenL9Intro": "Koşulu ve iki hareketi sen seç.",
+  "ifThenL10Intro": "Yolda taş ve su var. Bir kural ve bir \"değilse\" yeter.",
+  "ifThenL11Intro": "Taş da var su da. Her biri için bir kural kur.",
+  "ifThenL12Intro": "Kapıları aç, yıldızları topla.",
+  "ifThenL13Intro": "Üç farklı şey var ama iki kural satırı. Üçüncüsü için \"değilse\" kullan.",
+  "ifThenL14Intro": "Su, kapı ve boş yol. Hangisini \"değilse\"ye bırakırsın?",
+  "ifThenL15Intro": "Dikkat: bloklardan biri bu yolda hiç yok.",
+  "ifThenL16Intro": "Robot kaleye gidiyor: taşlar, hendekler ve kale kapıları var.",
+  "ifThenL17Intro": "Hazine yolu: yıldızları topla, engelleri aş.",
+  "ifThenL18Intro": "Bu yolda hiç boş kare yok. Dört şey için dört karar gerek.",
+  "ifThenL19Intro": "Uzun bir yolculuk! Su, taş, kapı ve boş yol.",
+  "ifThenL20Intro": "Son görev: bütün yıldızları toplayıp bayrağa ulaş.",
+  "pathFinderL1Intro": "Robotu bayrağa götür. Sağa okuna bas, sonra yeşil Başlat tuşuna dokun.",
+  "pathFinderL2Intro": "Bayrak robotun yukarısında. Hangi oku seçmelisin?",
+  "pathFinderL3Intro": "Bayrak solda ve iki kare uzakta.",
+  "pathFinderL4Intro": "Robot aşağı inmeli. Kaç kez?",
+  "pathFinderL5Intro": "Bu kez iki farklı yön kullanacaksın.",
+  "pathFinderL11Intro": "Yolda taş var. Taşın etrafından dolaş.",
+  "pathFinderL12Intro": "Taşlar duvar gibi dizilmiş. Altından dolaş.",
+  "pathFinderL13Intro": "Robot suya giremez. Kuru yolu bul.",
+  "pathFinderL15Intro": "Birden çok yol var. En kısasını bulabilir misin?",
+  "commandOrderL1Title": "Çiçeği sula",
+  "commandOrderL1Step1": "Sulama kabını doldur",
+  "commandOrderL1Step2": "Çiçeği sula",
+  "commandOrderL1Hint": "Çiçeği sulamak için önce kabın içinde su olmalı.",
+  "commandOrderL2Title": "Dişlerini fırçala",
+  "commandOrderL2Step1": "Fırçaya macun sık",
+  "commandOrderL2Step2": "Dişlerini fırçala",
+  "commandOrderL2Step3": "Ağzını çalkala",
+  "commandOrderL2Hint": "Fırçalamaya başlamadan önce fırçanın üstünde macun olmalı.",
+  "commandOrderL3Title": "Ellerini yıka",
+  "commandOrderL3Step1": "Ellerini sabunla",
+  "commandOrderL3Step2": "Ellerini durula",
+  "commandOrderL3Step3": "Ellerini kurula",
+  "commandOrderL3Hint": "Köpükler gitmeden elini kurulamak olmaz.",
+  "commandOrderL4Title": "Ayakkabını giy",
+  "commandOrderL4Step1": "Çorabını giy",
+  "commandOrderL4Step2": "Ayakkabını giy",
+  "commandOrderL4Step3": "Bağcığını bağla",
+  "commandOrderL4Hint": "Ayakkabının içine girmeden önce ayağında ne olmalı?",
+  "commandOrderL5Title": "Resim yap",
+  "commandOrderL5Step1": "Kâğıdı al",
+  "commandOrderL5Step2": "Resmini çiz",
+  "commandOrderL5Step3": "Resmini boya",
+  "commandOrderL5Hint": "Boyamak için önce çizilmiş bir resim gerekir.",
+  "commandOrderL6Title": "Sandviç hazırla",
+  "commandOrderL6Step1": "Tabağı masaya koy",
+  "commandOrderL6Step2": "Ekmeği tabağa koy",
+  "commandOrderL6Step3": "Üstüne peynir koy",
+  "commandOrderL6Step4": "Üstünü ekmekle kapat",
+  "commandOrderL6Step5": "Afiyetle ye",
+  "commandOrderL6Hint": "Ekmeği koyacak bir yer lazım. Masada ilk ne olmalı?",
+  "commandOrderL7Title": "Oyuncakları topla",
+  "commandOrderL7Step1": "Kutuyu getir",
+  "commandOrderL7Step2": "Oyuncakları kutuya koy",
+  "commandOrderL7Step3": "Kutunun kapağını kapat",
+  "commandOrderL7Step4": "Kutuyu rafa kaldır",
+  "commandOrderL7Hint": "Oyuncakları koyacağın kutu yanında değilse ne yaparsın?",
+  "commandOrderL8Title": "Tohum ek",
+  "commandOrderL8Step1": "Toprakta çukur kaz",
+  "commandOrderL8Step2": "Tohumu çukura koy",
+  "commandOrderL8Step3": "Üstünü toprakla ört",
+  "commandOrderL8Step4": "Tohumu sula",
+  "commandOrderL8Step5": "Filizin çıkmasını bekle",
+  "commandOrderL8Hint": "Tohumun gireceği bir çukur olmadan onu toprağa koyamazsın.",
+  "commandOrderL9Title": "Okula hazırlan",
+  "commandOrderL9Step1": "Alarm çalınca uyan",
+  "commandOrderL9Step2": "Okul kıyafetini giy",
+  "commandOrderL9Step3": "Çantanı sırtına tak",
+  "commandOrderL9Step4": "Servise bin",
+  "commandOrderL9Hint": "Uyanmadan giyinmek olmaz. Sabah ilk ne olur?",
+  "commandOrderL10Title": "Mektup gönder",
+  "commandOrderL10Step1": "Mektubu yaz",
+  "commandOrderL10Step2": "Mektubu zarfa koy",
+  "commandOrderL10Step3": "Zarfı kapat",
+  "commandOrderL10Step4": "Posta kutusuna at",
+  "commandOrderL10Hint": "Zarfın içine koyacak bir mektup olmalı.",
+  "commandOrderL11Title": "Kek yap",
+  "commandOrderL11Stage1": "Hamuru hazırla",
+  "commandOrderL11Stage2": "Keki pişir",
+  "commandOrderL11Step1": "Malzemeleri masaya koy",
+  "commandOrderL11Step2": "Hepsini kapta karıştır",
+  "commandOrderL11Step3": "Hamuru kalıba dök",
+  "commandOrderL11Step4": "Kalıbı fırına koy",
+  "commandOrderL11Step5": "Pişmesini bekle",
+  "commandOrderL11Step6": "Keki dilimle",
+  "commandOrderL11Hint": "Hamur hazır olmadan fırına bir şey koyamazsın.",
+  "commandOrderL12Title": "Banyo yap",
+  "commandOrderL12Stage1": "Banyoya hazırlan",
+  "commandOrderL12Stage2": "Yıkan",
+  "commandOrderL12Stage3": "Kurulan",
+  "commandOrderL12Step1": "Küveti suyla doldur",
+  "commandOrderL12Step2": "Küvete gir",
+  "commandOrderL12Step3": "Saçını şampuanla",
+  "commandOrderL12Step4": "Köpükleri durula",
+  "commandOrderL12Step5": "Havluyla kurulan",
+  "commandOrderL12Hint": "Boş küvete girersen yıkanamazsın.",
+  "commandOrderL13Title": "Bisiklet sür",
+  "commandOrderL13Stage1": "Hazırlan",
+  "commandOrderL13Stage2": "Sür",
+  "commandOrderL13Stage3": "Bitir",
+  "commandOrderL13Step1": "Kaskını tak",
+  "commandOrderL13Step2": "Bisiklete bin",
+  "commandOrderL13Step3": "Pedal çevir",
+  "commandOrderL13Step4": "Fren yap",
+  "commandOrderL13Step5": "Bisikletten in",
+  "commandOrderL13Hint": "Güvenlik önce gelir. Bisiklete binmeden ne takarsın?",
+  "commandOrderL14Title": "Kütüphaneden kitap al",
+  "commandOrderL14Stage1": "Kütüphanede",
+  "commandOrderL14Stage2": "Evde",
+  "commandOrderL14Stage3": "Geri ver",
+  "commandOrderL14Step1": "Kütüphaneye git",
+  "commandOrderL14Step2": "Bir kitap seç",
+  "commandOrderL14Step3": "Kitabı ödünç al",
+  "commandOrderL14Step4": "Kitabı eve getir",
+  "commandOrderL14Step5": "Kitabı oku",
+  "commandOrderL14Step6": "Kitabı geri götür",
+  "commandOrderL14Hint": "Kitap seçmek için önce kitapların olduğu yere gitmelisin.",
+  "commandOrderL15Title": "Çadır kur",
+  "commandOrderL15Stage1": "Yeri hazırla",
+  "commandOrderL15Stage2": "Çadırı kur",
+  "commandOrderL15Stage3": "İçini hazırla",
+  "commandOrderL15Step1": "Düz bir yer bul",
+  "commandOrderL15Step2": "Çadırı yere ser",
+  "commandOrderL15Step3": "Direkleri tak",
+  "commandOrderL15Step4": "Çadırı kaldır",
+  "commandOrderL15Step5": "Kazıklarla sabitle",
+  "commandOrderL15Step6": "Uyku tulumunu içine koy",
+  "commandOrderL15Step7": "Fenerini yak",
+  "commandOrderL15Hint": "Çadırı sermek için önce uygun bir yer bulmalısın.",
+  "commandOrderL16Title": "Pizza yap",
+  "commandOrderL16Stage1": "Hamur",
+  "commandOrderL16Stage2": "Malzemeler",
+  "commandOrderL16Stage3": "Pişirme",
+  "commandOrderL16Step1": "Hamuru aç",
+  "commandOrderL16Step2": "Domates sosu sür",
+  "commandOrderL16Step3": "Peynir serp",
+  "commandOrderL16Step4": "Fırına koy",
+  "commandOrderL16Step5": "Pişmesini bekle",
+  "commandOrderL16Step6": "Dilimle",
+  "commandOrderL16Extra1": "Televizyon aç",
+  "commandOrderL16Hint": "Her kart bu göreve ait değil. Pizza yaparken televizyona gerek var mı?",
+  "commandOrderL17Title": "Çamaşır yıka",
+  "commandOrderL17Stage1": "Hazırlık",
+  "commandOrderL17Stage2": "Yıkama",
+  "commandOrderL17Stage3": "Kurutma",
+  "commandOrderL17Step1": "Kirlileri topla",
+  "commandOrderL17Step2": "Makineye koy",
+  "commandOrderL17Step3": "Deterjanı ekle",
+  "commandOrderL17Step4": "Makineyi çalıştır",
+  "commandOrderL17Step5": "Çamaşırları as",
+  "commandOrderL17Step6": "Kuruyunca katla",
+  "commandOrderL17Extra1": "Top oyna",
+  "commandOrderL17Hint": "Kirli çamaşırlar bir yere dağılmışsa önce ne yapmalısın?",
+  "commandOrderL18Title": "Trenle yolculuk",
+  "commandOrderL18Stage1": "İstasyonda",
+  "commandOrderL18Stage2": "Trende",
+  "commandOrderL18Stage3": "Varış",
+  "commandOrderL18Step1": "Bilet al",
+  "commandOrderL18Step2": "Perona git",
+  "commandOrderL18Step3": "Treni bekle",
+  "commandOrderL18Step4": "Trene bin",
+  "commandOrderL18Step5": "Koltuğuna otur",
+  "commandOrderL18Step6": "Durağında in",
+  "commandOrderL18Extra1": "Uçağa bin",
+  "commandOrderL18Hint": "Trene binmek için yanında ne olmalı?",
+  "commandOrderL19Title": "Fidan yetiştir",
+  "commandOrderL19Stage1": "Ek",
+  "commandOrderL19Stage2": "Bakım yap",
+  "commandOrderL19Stage3": "Büyüt",
+  "commandOrderL19Step1": "Saksıya toprak koy",
+  "commandOrderL19Step2": "Tohumu ek",
+  "commandOrderL19Step3": "Tohumu sula",
+  "commandOrderL19Step4": "Saksıyı güneşe koy",
+  "commandOrderL19Step5": "Filizi bekle",
+  "commandOrderL19Step6": "Bahçeye dik",
+  "commandOrderL19Extra1": "Şemsiye aç",
+  "commandOrderL19Extra2": "Saksıyı karanlığa koy",
+  "commandOrderL19Hint": "Bitkiler büyümek için su ve güneş ister. Hangi kartlar onlara zarar verir?",
+  "commandOrderL20Title": "Kurabiye yap ve paylaş",
+  "commandOrderL20Stage1": "Hazırla",
+  "commandOrderL20Stage2": "Pişir",
+  "commandOrderL20Stage3": "Paylaş",
+  "commandOrderL20Step1": "Ellerini yıka",
+  "commandOrderL20Step2": "Malzemeleri karıştır",
+  "commandOrderL20Step3": "Hamura şekil ver",
+  "commandOrderL20Step4": "Fırında pişir",
+  "commandOrderL20Step5": "Soğumasını bekle",
+  "commandOrderL20Step6": "Kutuya koy",
+  "commandOrderL20Step7": "Arkadaşlarına ikram et",
+  "commandOrderL20Extra1": "Oyuncak araba sür",
+  "commandOrderL20Extra2": "Uyumaya git",
+  "commandOrderL20Hint": "Mutfakta çalışmadan önce temizlik gerekir."
+}

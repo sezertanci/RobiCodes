@@ -4,12 +4,12 @@ import 'package:robi_codes/app/app_scope.dart';
 import 'package:robi_codes/app/app_services.dart';
 import 'package:robi_codes/app/robi_codes_app.dart';
 import 'package:robi_codes/content/content_catalog.dart';
-import 'package:robi_codes/features/settings/settings_dialog.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
 import 'package:robi_codes/features/store/store_screen.dart';
 import 'package:robi_codes/features/store/store_texts.dart';
 import 'package:robi_codes/games/game_registry.dart';
 
+import '../support/test_l10n.dart';
 import '../support/fakes.dart';
 import '../support/ui_test_helpers.dart';
 
@@ -37,17 +37,12 @@ void main() {
     useScreen(tester, TestScreens.tablet);
     final services = createServices(approves: approves, catalog: catalog);
     await services.entitlements.refresh();
-    await tester.pumpWidget(
-      AppScope(
-        services: services,
-        child: const MaterialApp(home: StoreScreen()),
-      ),
-    );
+    await tester.pumpWidget(AppScope(services: services, child: localizedApp(const StoreScreen())));
     await settle(tester);
     return services;
   }
 
-  Future<void> tapBuy(WidgetTester tester, String price) => tapVisible(tester, find.text(StoreTexts.buy(price)));
+  Future<void> tapBuy(WidgetTester tester, String price) => tapVisible(tester, find.text(texts.storeBuy(price)));
 
   testWidgets('StoreScreen_NoProductsInCatalog_ShowsEmptyMessageAndFreePacks', (tester) async {
     // Arrange
@@ -58,7 +53,7 @@ void main() {
     await openStore(tester, catalog: catalog);
 
     // Assert
-    expect(find.text(StoreTexts.noProducts), findsOneWidget);
+    expect(find.text(texts.storeNoProducts), findsOneWidget);
     expect(find.textContaining(TestCatalog.freePack), findsOneWidget);
     expect(gateway.listingRequests, isEmpty);
   });
@@ -68,10 +63,10 @@ void main() {
     await openStore(tester);
 
     // Assert
-    expect(find.text(StoreTexts.buy(_priceA)), findsOneWidget);
-    expect(find.text(StoreTexts.buy(_priceB)), findsOneWidget);
-    expect(find.text(StoreTexts.buy(_priceBundle)), findsOneWidget);
-    expect(find.text(StoreTexts.bundleLabel), findsOneWidget);
+    expect(find.text(texts.storeBuy(_priceA)), findsOneWidget);
+    expect(find.text(texts.storeBuy(_priceB)), findsOneWidget);
+    expect(find.text(texts.storeBuy(_priceBundle)), findsOneWidget);
+    expect(find.text(texts.storeBundle), findsOneWidget);
   });
 
   testWidgets('StoreScreen_ParentRejects_ShowsMessageAndStoreNotReached', (tester) async {
@@ -83,7 +78,7 @@ void main() {
     await settle(tester);
 
     // Assert
-    expect(find.text(StoreTexts.outcome(PurchaseOutcome.notApproved)), findsOneWidget);
+    expect(find.text(StoreTexts.outcome(texts, PurchaseOutcome.notApproved)), findsOneWidget);
     expect(gateway.purchaseRequests, isEmpty);
   });
 
@@ -97,9 +92,9 @@ void main() {
 
     // Assert
     expect(gateway.purchaseRequests, [TestCatalog.productB]);
-    expect(find.text(StoreTexts.outcome(PurchaseOutcome.purchased)), findsOneWidget);
-    expect(find.text(StoreTexts.ownedLabel), findsOneWidget);
-    expect(find.text(StoreTexts.buy(_priceB)), findsNothing);
+    expect(find.text(StoreTexts.outcome(texts, PurchaseOutcome.purchased)), findsOneWidget);
+    expect(find.text(texts.storeOwned), findsOneWidget);
+    expect(find.text(texts.storeBuy(_priceB)), findsNothing);
   });
 
   testWidgets('StoreScreen_PendingPayment_ShowsPendingAndKeepsBuyButton', (tester) async {
@@ -112,8 +107,8 @@ void main() {
     await settle(tester);
 
     // Assert
-    expect(find.text(StoreTexts.outcome(PurchaseOutcome.pending)), findsOneWidget);
-    expect(find.text(StoreTexts.ownedLabel), findsNothing);
+    expect(find.text(StoreTexts.outcome(texts, PurchaseOutcome.pending)), findsOneWidget);
+    expect(find.text(texts.storeOwned), findsNothing);
   });
 
   testWidgets('StoreScreen_OnePackOwned_BundleNotSoldAndMissingPackShown', (tester) async {
@@ -124,9 +119,9 @@ void main() {
     await openStore(tester);
 
     // Assert
-    expect(find.text(StoreTexts.buy(_priceBundle)), findsNothing);
-    expect(find.text('${StoreTexts.partiallyOwned} Paket B'), findsOneWidget);
-    expect(find.text(StoreTexts.buy(_priceB)), findsOneWidget);
+    expect(find.text(texts.storeBuy(_priceBundle)), findsNothing);
+    expect(find.text(texts.storePartiallyOwned('Paket B')), findsOneWidget);
+    expect(find.text(texts.storeBuy(_priceB)), findsOneWidget);
   });
 
   testWidgets('StoreScreen_ProductMissingInPlay_ShowsNotInStore', (tester) async {
@@ -137,7 +132,7 @@ void main() {
     await openStore(tester);
 
     // Assert
-    expect(find.text(StoreTexts.notInStore), findsOneWidget);
+    expect(find.text(texts.storeNotInStore), findsOneWidget);
   });
 
   testWidgets('StoreScreen_PricesUnavailable_ShowsRetryWithoutBuyButtons', (tester) async {
@@ -148,8 +143,8 @@ void main() {
     await openStore(tester);
 
     // Assert
-    expect(find.text(StoreTexts.priceUnavailable), findsNWidgets(TestCatalog.build().products.length));
-    expect(find.text(StoreTexts.buy(_priceA)), findsNothing);
+    expect(find.text(texts.storePriceUnavailable), findsNWidgets(TestCatalog.build().products.length));
+    expect(find.text(texts.storeBuy(_priceA)), findsNothing);
   });
 
   testWidgets('StoreScreen_RestoreOffline_ShowsCacheKeptMessage', (tester) async {
@@ -160,23 +155,23 @@ void main() {
       ..unreachable = StoreError.offline;
 
     // Act: liste yalnızca görünen öğeleri kurduğu için düğmeye önce kaydırılır.
-    await tester.scrollUntilVisible(find.text(StoreTexts.restore), 300, scrollable: find.byType(Scrollable).last);
-    await tapVisible(tester, find.text(StoreTexts.restore));
+    await tester.scrollUntilVisible(find.text(texts.storeRestore), 300, scrollable: find.byType(Scrollable).last);
+    await tapVisible(tester, find.text(texts.storeRestore));
     await settle(tester);
 
     // Assert
-    expect(find.text(StoreTexts.restoreOffline), findsOneWidget);
+    expect(find.text(texts.storeRestoreOffline), findsOneWidget);
   });
 
   testWidgets('SettingsDialog_StoreEntry_OpensStoreScreen', (tester) async {
     // Arrange
     useScreen(tester, TestScreens.tablet);
     await tester.pumpWidget(RobiCodesApp(services: createServices()));
-    await tester.tap(find.byTooltip(SettingsDialog.title));
+    await tester.tap(find.byTooltip(texts.settingsTitle));
     await settle(tester);
 
     // Act
-    await tapVisible(tester, find.text(StoreTexts.title));
+    await tapVisible(tester, find.text(texts.storeTitle));
     await settle(tester);
 
     // Assert

@@ -1,4 +1,5 @@
 import '../../app/app_theme.dart';
+import '../../l10n/l10n.dart';
 
 /// Ana ekranda gösterilen bir oyun. Oyunun kuralları ve seviye içeriği burada değil,
 /// oyunun kendi modülündedir (bkz. `GameModule`); burada yalnızca tanıtım bilgisi bulunur.
@@ -14,8 +15,8 @@ final class GameDefinition {
 
   /// Kalıcı kimlik. İlerleme ve paket kayıtları bu kimliğe bağlı olduğu için değiştirilmez.
   final String id;
-  final String title;
-  final String description;
+  final LocalizedText title;
+  final LocalizedText description;
 
   /// Oyun kartının ve oyunun kupasının rengi.
   final ColorTone tone;
@@ -32,6 +33,6 @@ final class GameDefinition {
 final class GameTrophy {
   const GameTrophy({required this.title, required this.description});
 
-  final String title;
-  final String description;
+  final LocalizedText title;
+  final LocalizedText description;
 }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
-import '../../app/app_texts.dart';
 import '../../app/screen_scale.dart';
 import '../../app/widgets/star_counter.dart';
 import '../../app/widgets/top_bar.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
+import '../../l10n/l10n.dart';
 import '../progress/progress_repository.dart';
 import '../progress/unlock_policy.dart';
 import 'level_screen.dart';
@@ -46,14 +46,15 @@ final class LevelSelectScreen extends StatelessWidget {
       listenable: Listenable.merge([services.progress, services.entitlements]),
       builder: (context, _) {
         final packs = services.entitlements.playablePacksOf(game.id);
+        final t = context.l10n;
         return Scaffold(
           body: SafeArea(
             child: Column(
               children: [
                 TopBar(
-                  title: game.title,
+                  title: game.title(t),
                   icon: game.icon,
-                  backLabel: AppTexts.backToHome,
+                  backLabel: t.commonBackToHome,
                   actions: [StarCounter(stars: services.progress.starsIn(packs))],
                 ),
                 Expanded(
@@ -90,7 +91,7 @@ final class LevelSelectScreen extends StatelessWidget {
   }) {
     final nextLevel = services.unlockPolicy.nextLevel(pack);
     return [
-      if (titled) Text(pack.title, style: Theme.of(context).textTheme.headlineSmall),
+      if (titled) Text(pack.title(context.l10n), style: Theme.of(context).textTheme.headlineSmall),
       ..._grid([
         for (final range in pack.groupRanges)
           _GroupPanel(
@@ -150,13 +151,14 @@ final class _GroupPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final unlocked = policy.isGroupUnlocked(pack, range);
     final tone = GroupTone.of(range.group.difficulty);
+    final t = context.l10n;
     return LevelGroupPanel(
-      title: range.group.difficulty.title,
+      title: range.group.difficulty.title(t),
       tone: tone,
       unlocked: unlocked,
       progressText: '${policy.groupCompletedCount(pack, range)}/${range.levelCount}',
       hint: !unlocked && range.index > 0
-          ? 'Önce ${pack.groupRanges[range.index - 1].group.difficulty.title} seviyelerini bitir'
+          ? t.playFinishGroupFirst(pack.groupRanges[range.index - 1].group.difficulty.title(t))
           : null,
       levels: [
         for (var level = range.firstLevel; level <= range.lastLevel; level++)

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/features/play/level_select_screen.dart';
 
+import 'test_l10n.dart';
+
 /// Arayüz testlerinde denenen ekran boyutları: küçük bir telefon (telefon dikeye sabitlenir), yatay
 /// tablet ve test tabletinin (2560x1600, yoğunluk 360) iki yöndeki mantıksal boyutu.
 abstract final class TestScreens {
@@ -64,7 +66,7 @@ Future<void> openLevelSelect(WidgetTester tester, String gameTitle) async {
 
 /// Seviye seçim ekranında [number]. seviyeyi açar.
 Future<void> openLevel(WidgetTester tester, int number) async {
-  await tester.tap(find.bySemanticsLabel('Seviye $number'));
+  await tester.tap(find.bySemanticsLabel(texts.playLevel(number)));
   await settle(tester);
 }
 

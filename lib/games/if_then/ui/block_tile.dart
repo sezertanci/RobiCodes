@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_theme.dart';
 import '../engine/if_then_level.dart';
+import '../../../l10n/l10n.dart';
 import '../if_then_texts.dart';
 import 'if_then_assets.dart';
 import 'if_then_metrics.dart';
@@ -28,7 +29,7 @@ final class BlockTile extends StatelessWidget {
         : (IfThenAssets.objectOf(block as LaneObject), metrics.imageSize);
     final picture = SvgPicture.asset(image, width: imageSize, height: imageSize);
     final caption = Text(
-      IfThenTexts.label(block),
+      IfThenTexts.label(context.l10n, block),
       maxLines: 1,
       style: TextStyle(
         fontSize: metrics.fontSize,

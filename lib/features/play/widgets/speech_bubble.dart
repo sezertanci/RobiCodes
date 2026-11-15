@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../l10n/l10n.dart';
 import '../../character/character_scope.dart';
 import 'idle_sway.dart';
 
@@ -11,7 +12,8 @@ enum RobotMood { talk, happy, sad }
 final class SpeechBubble extends StatelessWidget {
   const SpeechBubble({required this.message, this.mood = RobotMood.talk, super.key});
 
-  final String message;
+  /// Balondaki metin; ekranın o anki dilinde çözülür.
+  final LocalizedText message;
   final RobotMood mood;
 
   static const _robotSize = 64.0;
@@ -40,7 +42,10 @@ final class SpeechBubble extends StatelessWidget {
           ),
           child: Semantics(
             liveRegion: true,
-            child: Text(message, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.navy)),
+            child: Text(
+              message(context.l10n),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.navy),
+            ),
           ),
         ),
       ),

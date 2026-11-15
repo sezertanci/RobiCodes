@@ -5,6 +5,7 @@ import 'package:robi_codes/content/models/level_pack.dart';
 import 'package:robi_codes/content/models/store_product.dart';
 
 import '../support/fakes.dart';
+import '../support/test_l10n.dart';
 
 void main() {
   group('buildContentCatalog', () {
@@ -69,12 +70,17 @@ void main() {
       // Arrange
       final catalog = ContentCatalog(
         games: const [],
-        packs: const [
-          LevelPack(id: 'p', gameId: 'missing', title: 'P', groups: []),
-          LevelPack(id: 'p', gameId: 'missing', title: 'P', groups: [DifficultyGroup(Difficulty.easy, 0)]),
+        packs: [
+          LevelPack(id: 'p', gameId: 'missing', title: fixedText('P'), groups: const []),
+          LevelPack(
+            id: 'p',
+            gameId: 'missing',
+            title: fixedText('P'),
+            groups: const [DifficultyGroup(Difficulty.easy, 0)],
+          ),
         ],
-        products: const [
-          StoreProduct(id: 'x', title: 'X', packIds: ['p', 'p', 'unknown']),
+        products: [
+          StoreProduct(id: 'x', title: fixedText('X'), packIds: const ['p', 'p', 'unknown']),
         ],
       );
 

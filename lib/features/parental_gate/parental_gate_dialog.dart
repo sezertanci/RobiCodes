@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../app/app_theme.dart';
+import '../../l10n/l10n.dart';
 import 'parental_gate.dart';
 import 'parental_question.dart';
 
@@ -14,15 +15,6 @@ final class ParentalGateDialog extends StatefulWidget {
 
   final ParentalAction action;
   final ParentalQuestionGenerator questions;
-
-  static const title = 'Ebeveyn onayı';
-  static const intro = 'Bu işlem için bir yetişkinin onayı gerekiyor:';
-  static const answerHint = 'Cevabı rakamlarla yazın.';
-  static const cancelLabel = 'Vazgeç';
-  static const confirmLabel = 'Onayla';
-  static const deleteLabel = 'Sil';
-  static const answerLabel = 'Cevap';
-  static const wrongAnswer = 'Cevap yanlış. Biraz bekleyin, sonra yeni soruyu cevaplayın.';
 
   /// Yanlış cevaptan sonra tuşların kilitli kaldığı süre.
   static const wrongAnswerDelay = Duration(seconds: 3);
@@ -85,6 +77,7 @@ final class _ParentalGateDialogState extends State<ParentalGateDialog> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final isLandscape = size.width > size.height;
+    final t = context.l10n;
     final keypad = _Keypad(
       enabled: !_isLocked,
       canConfirm: _answer.isNotEmpty,
@@ -93,7 +86,7 @@ final class _ParentalGateDialogState extends State<ParentalGateDialog> {
       onConfirm: _confirm,
     );
     return AlertDialog(
-      title: const Text(ParentalGateDialog.title),
+      title: Text(t.parentalGateTitle),
       content: SingleChildScrollView(
         child: isLandscape
             ? SizedBox(
@@ -102,7 +95,7 @@ final class _ParentalGateDialogState extends State<ParentalGateDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: _gap * 2,
                   children: [
-                    Expanded(child: _questionColumn(context)),
+                    Expanded(child: _questionColumn(context, t)),
                     SizedBox(width: _wideKeypadWidth, child: keypad),
                   ],
                 ),
@@ -111,39 +104,34 @@ final class _ParentalGateDialogState extends State<ParentalGateDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 spacing: _gap,
-                children: [_questionColumn(context), keypad],
+                children: [_questionColumn(context, t), keypad],
               ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text(ParentalGateDialog.cancelLabel),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(t.parentalGateCancel))],
     );
   }
 
   /// İşlem açıklaması, soru, cevap kutusu ve yanlış cevap uyarısı.
-  Widget _questionColumn(BuildContext context) {
+  Widget _questionColumn(BuildContext context, AppLocalizations t) {
     final text = Theme.of(context).textTheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('${ParentalGateDialog.intro} ${widget.action.description}.', style: text.bodyMedium),
+        Text(t.parentalGateIntro(widget.action.description(t)), style: text.bodyMedium),
         const SizedBox(height: _gap),
         Text(
-          _question.text,
+          _question.text(t),
           style: text.titleLarge?.copyWith(color: AppColors.navy, fontWeight: FontWeight.w800),
         ),
-        Text(ParentalGateDialog.answerHint, style: text.bodySmall),
+        Text(t.parentalGateAnswerHint, style: text.bodySmall),
         const SizedBox(height: _gap),
         _AnswerBox(answer: _answer),
         if (_isLocked) ...[
           const SizedBox(height: _gap),
           Semantics(
             liveRegion: true,
-            child: Text(ParentalGateDialog.wrongAnswer, style: text.bodyMedium?.copyWith(color: AppColors.redDark)),
+            child: Text(t.parentalGateWrongAnswer, style: text.bodyMedium?.copyWith(color: AppColors.redDark)),
           ),
         ],
       ],
@@ -162,7 +150,7 @@ final class _AnswerBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: ParentalGateDialog.answerLabel,
+    label: context.l10n.parentalGateAnswer,
     value: answer,
     excludeSemantics: true,
     child: Container(
@@ -203,12 +191,13 @@ final class _Keypad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     final keys = [
       for (var digit = 1; digit <= _highestDigit; digit++) _digitKey(digit),
-      _Key(label: ParentalGateDialog.deleteLabel, icon: Icons.backspace_rounded, onPressed: enabled ? onDelete : null),
+      _Key(label: t.commonDelete, icon: Icons.backspace_rounded, onPressed: enabled ? onDelete : null),
       _digitKey(0),
       _Key(
-        label: ParentalGateDialog.confirmLabel,
+        label: t.parentalGateConfirm,
         icon: Icons.check_rounded,
         onPressed: enabled && canConfirm ? onConfirm : null,
       ),

@@ -1,3 +1,4 @@
+import '../../../l10n/l10n.dart';
 import '../../path_finder/engine/path_finder_board.dart';
 
 /// Bir seviyenin verisi. Harita işaretleri "Robotun Yolunu Bul" ile aynıdır (bkz. [TileSymbols]).
@@ -20,10 +21,10 @@ final class RepeatLevel {
   final int maxBlocks;
 
   /// İpucu düğmesine basılınca söylenen seviyeye özel ipucu.
-  final String hint;
+  final LocalizedText hint;
 
   /// Seviyeye özel açılış mesajı. Yoksa oyunun genel açılış mesajı gösterilir.
-  final String? intro;
+  final LocalizedText? intro;
 
   PathFinderBoard get board => PathFinderBoard.parse(map);
 }

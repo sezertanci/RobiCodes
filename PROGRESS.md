@@ -196,6 +196,16 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
 | Karakter seçimi | Eklendi (6. aşama) | Web'deki 5 karakter ve seçim penceresi aktarıldı. |
 | Animasyonlar | Bazıları yok | Seviye seçimindeki nabız ve giriş animasyonları, ana ekran robotunun el sallaması gibi eksikler sonradan değerlendirilecek. Sürekli tekrarlanan animasyon eklenirse testlerdeki `pumpAndSettle` çağrıları buna göre düzenlenmeli. |
 
+## Dil desteği (15.11.2026)
+
+- Uygulama Türkçe ve İngilizce oynanır; ayrıntılar README'deki "Dil desteği" bölümünde ve
+  [docs/decisions.md](docs/decisions.md) içinde. Sürüm `1.1.0+2`.
+- Mağaza metinleri `store/robi-codes/listing/` altında (tr-TR, en-US); öne çıkan görsel her dil için ayrı.
+- Ekran görüntüleri dile göre ayrıldı: `store/robi-codes/screenshots/<tr-TR|en-US>/<phone|tablet-7|tablet-10>`.
+  İngilizce görüntüler emülatörde çekildi (telefon 1080x1920/420, 7 inç 1200x1920/320, 10 inç 1600x2560/360).
+  Sahneler Türkçe görüntülerle aynı oyunlardan seçildi; 10 inç İngilizce görüntülerde ilerleme gerçek
+  tabletteki Türkçe görüntülerden azdır (seviye ve yıldız sayıları farklı).
+
 ## Kararlar
 
 Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.

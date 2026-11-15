@@ -14,6 +14,7 @@ import 'package:robi_codes/features/progress/progress_repository.dart';
 import 'package:robi_codes/games/game_registry.dart';
 
 import '../support/fakes.dart';
+import '../support/test_l10n.dart';
 
 /// Örnek kataloğa modülü olmayan ("Yakında" görünen) bir oyun eklenir.
 const _soonGameId = 'soon';
@@ -23,13 +24,13 @@ ContentCatalog _catalogWithComingSoonGame() {
   return ContentCatalog(
     games: [
       ...catalog.games,
-      const GameDefinition(
+      GameDefinition(
         id: _soonGameId,
-        title: 'Yakında',
-        description: 'Açıklama',
+        title: fixedText('Yakında'),
+        description: fixedText('Açıklama'),
         tone: AppTones.pink,
         icon: AppAssets.gameIf,
-        trophy: GameTrophy(title: 'Yakında Kupası', description: 'Açıklama'),
+        trophy: GameTrophy(title: fixedText('Yakında Kupası'), description: fixedText('Açıklama')),
       ),
     ],
     packs: catalog.packs,

@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import '../../app/app_assets.dart';
 import '../../app/app_scope.dart';
 import '../../app/app_theme.dart';
-import '../../app/robi_codes_app.dart';
 import '../../app/screen_scale.dart';
 import '../../app/widgets/outlined_text.dart';
 import '../../app/widgets/star_counter.dart';
+import '../../l10n/l10n.dart';
 import '../play/widgets/image_button.dart';
 import '../settings/settings_dialog.dart';
 import 'achievements_button.dart';
@@ -22,8 +22,6 @@ final class HomeHeader extends StatelessWidget {
 
   /// Bütün oyunlarda toplanan yıldız sayısı.
   final int stars;
-
-  static const tagline = 'Oyna • Öğren • Keşfet';
 
   static const _padding = EdgeInsets.fromLTRB(16, 8, 16, 0);
   static const _gap = 12.0;
@@ -47,9 +45,9 @@ final class HomeHeader extends StatelessWidget {
               const SizedBox(width: _gap),
               ImageButton(
                 asset: AppAssets.settings,
-                label: SettingsDialog.title,
+                label: context.l10n.settingsTitle,
                 size: narrow ? AppMetrics.compactTouch : AppMetrics.touch,
-                onPressed: () => SettingsDialog.show(context, services.sound, services.protectedActions),
+                onPressed: () => SettingsDialog.show(context, services),
               ),
             ],
           ),
@@ -77,14 +75,11 @@ final class HomeHeader extends StatelessWidget {
   }
 }
 
-/// İki satırlık, konturlu ve hafif eğik "Robi Kodluyor" yazısı ile altındaki sarı slogan.
+/// İki satırlık, konturlu ve hafif eğik uygulama adı ("Robi Kodluyor" / "Robi Codes") ile altındaki sarı slogan.
 final class _Logo extends StatelessWidget {
   const _Logo({required this.narrow});
 
   final bool narrow;
-
-  static const top = 'Robi';
-  static const bottom = 'Kodluyor';
 
   static const _tilt = -3 * pi / 180;
   static const _lineHeight = 0.95;
@@ -98,6 +93,7 @@ final class _Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     Widget line(String text, Color color, double fontSize) => OutlinedText(
       text,
       fontSize: fontSize,
@@ -109,7 +105,7 @@ final class _Logo extends StatelessWidget {
     );
     return Semantics(
       header: true,
-      label: RobiCodesApp.title,
+      label: t.appTitle,
       excludeSemantics: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -119,8 +115,12 @@ final class _Logo extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                line(top, Colors.white, narrow ? _narrowTopSize : ScreenScale.fluid(context, 36, 0.07, 64)),
-                line(bottom, AppColors.yellow, narrow ? _narrowBottomSize : ScreenScale.fluid(context, 42, 0.08, 76)),
+                line(t.homeLogoTop, Colors.white, narrow ? _narrowTopSize : ScreenScale.fluid(context, 36, 0.07, 64)),
+                line(
+                  t.homeLogoBottom,
+                  AppColors.yellow,
+                  narrow ? _narrowBottomSize : ScreenScale.fluid(context, 42, 0.08, 76),
+                ),
               ],
             ),
           ),
@@ -154,7 +154,7 @@ final class _Tagline extends StatelessWidget {
         shadows: [BoxShadow(color: AppColors.yellowDark, offset: Offset(0, _lip))],
       ),
       child: Text(
-        HomeHeader.tagline,
+        context.l10n.homeTagline,
         style: TextStyle(
           color: AppColors.navy,
           fontWeight: FontWeight.w900,

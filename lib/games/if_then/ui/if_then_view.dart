@@ -7,7 +7,7 @@ import '../../../features/play/widgets/image_button.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../engine/if_then_level.dart';
 import '../if_then_controller.dart';
-import '../if_then_texts.dart';
+import '../../../l10n/l10n.dart';
 import 'block_palette.dart';
 import 'if_then_metrics.dart';
 import 'lane_scene.dart';
@@ -178,6 +178,7 @@ final class _IfThenViewState extends State<IfThenView> {
   /// onlarla aynı hizada, sola yaslı durur.
   Widget _controls(IfThenController controller, double size, {WrapAlignment alignment = WrapAlignment.center}) {
     final editable = controller.isEditable;
+    final t = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(top: _gap),
       child: Wrap(
@@ -185,20 +186,20 @@ final class _IfThenViewState extends State<IfThenView> {
         children: [
           ImageButton(
             asset: AppAssets.runButton,
-            label: IfThenTexts.run,
+            label: t.commonRun,
             size: size,
             highlighted: editable && controller.isComplete,
             onPressed: editable ? controller.run : null,
           ),
           ImageButton(
             asset: AppAssets.hintButton,
-            label: IfThenTexts.hint,
+            label: t.commonHint,
             size: size,
             onPressed: editable ? controller.showHint : null,
           ),
           ImageButton(
             asset: AppAssets.clearButton,
-            label: IfThenTexts.clear,
+            label: t.commonClear,
             size: size,
             onPressed: editable ? controller.clear : null,
           ),

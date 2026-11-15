@@ -7,6 +7,7 @@ import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import '../../l10n/l10n.dart';
 import 'engine/if_then_engine.dart';
 import 'engine/if_then_level.dart';
 import 'if_then_texts.dart';
@@ -67,7 +68,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
   bool _running = false;
   bool _done = false;
 
-  String get message => _voice.message;
+  LocalizedText get message => _voice.message;
   RobotMood get mood => _voice.mood;
   SlotRef? get target => _target;
 
@@ -131,7 +132,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
     final target = _target;
     final slot = target != null && _accepts(target, block) ? target : _firstEmptyFor(block);
     if (slot == null) {
-      _sayNow(IfThenTexts.noSlot);
+      _sayNow((t) => t.ifThenNoSlot);
       return;
     }
     _change(() => _set(slot, block));
@@ -143,9 +144,9 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
       return;
     }
     if (isLocked(slot)) {
-      _sayNow(IfThenTexts.lockedSlot);
+      _sayNow((t) => t.ifThenLockedSlot);
     } else if (!_fits(slot, block)) {
-      _sayNow(IfThenTexts.wrongType);
+      _sayNow((t) => t.ifThenWrongType);
     } else {
       _change(() => _set(slot, block));
     }
@@ -157,7 +158,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
       return;
     }
     if (isLocked(slot)) {
-      _sayNow(IfThenTexts.lockedSlot);
+      _sayNow((t) => t.ifThenLockedSlot);
     } else if (valueOf(slot) != null) {
       _change(() => _set(slot, null));
     } else {
@@ -191,7 +192,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
     _resetScene();
     final hint = IfThenEngine.findHint(lane, program);
     _hint = hint;
-    _sayNow(hint == null ? IfThenTexts.solved : IfThenTexts.hintText(hint.object));
+    _sayNow(hint == null ? (t) => t.ifThenSolved : IfThenTexts.hint(hint.object));
   }
 
   /// Kuralları çalıştırır ve robotu adım adım yürütür. Başarıda kutlamadan sonra yıldızları bildirir.
@@ -200,14 +201,14 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
       return;
     }
     if (!isComplete) {
-      _sayNow(IfThenTexts.incomplete);
+      _sayNow((t) => t.ifThenIncomplete);
       return;
     }
     _running = true;
     _runs++;
     _target = null;
     _resetScene();
-    _sayNow(IfThenTexts.running);
+    _sayNow((t) => t.gameRobotRunning);
     final result = IfThenEngine.run(lane, program);
     // Yanlış adımdan önceki adımların hepsi doğrudur; robot onları yürür.
     if (!await _walk(result.steps.take(result.failedIndex ?? result.steps.length))) {
@@ -273,7 +274,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
     _running = false;
     _done = true;
     _voice.react(RobotReaction.celebrate);
-    _sayNow(IfThenTexts.success, RobotMood.happy);
+    _sayNow((t) => t.ifThenSuccess, RobotMood.happy);
     final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _runs == 1);
     await completeAfter(celebrateDuration, onCompleted, stars);
   }
@@ -326,7 +327,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
     _voice.calm();
   }
 
-  void _sayNow(String text, [RobotMood mood = RobotMood.talk]) {
+  void _sayNow(LocalizedText text, [RobotMood mood = RobotMood.talk]) {
     _voice.say(text, mood);
     notifyListeners();
   }

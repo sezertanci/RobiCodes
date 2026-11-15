@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../app/app_assets.dart';
 import '../../app/app_theme.dart';
 import '../../app/screen_scale.dart';
+import '../../l10n/l10n.dart';
 
 /// Ana ekrandaki tek bir oyunun kartı: oyunun renginde zemin, beyaz daire içinde ikon, başlık,
 /// açıklama, ilerleme çubuğu, tamamlanan seviye ve yıldız sayısı. Görünüm web sürümündeki
@@ -35,10 +36,6 @@ final class GameCard extends StatelessWidget {
   /// Oynanabilir oyunda karta dokununca çağrılır; `null` ise kart dokunulamaz.
   final VoidCallback? onTap;
 
-  static const comingSoonLabel = 'Yakında';
-
-  static String levelsText(int completed, int levels) => '$completed/$levels seviye';
-
   /// Kartın içindeki yarı saydam beyaz halka ve üstten alta solan parlaklık.
   static const _ringWidth = 4.0;
   static const _ringColor = Color(0x59FFFFFF);
@@ -54,6 +51,7 @@ final class GameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final narrow = ScreenScale.isNarrow(context);
     final radius = BorderRadius.circular(AppMetrics.largeRadius);
+    final t = context.l10n;
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -104,7 +102,7 @@ final class GameCard extends StatelessWidget {
                     completed: completed,
                     levels: levels,
                     stars: stars,
-                    label: isPlayable ? levelsText(completed, levels) : comingSoonLabel,
+                    label: isPlayable ? t.homeLevels(completed, levels) : t.homeComingSoon,
                   ),
                 ],
               ),

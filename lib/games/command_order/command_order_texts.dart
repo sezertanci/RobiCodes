@@ -1,28 +1,21 @@
+import '../../l10n/l10n.dart';
 import 'engine/command_order_engine.dart';
 
-/// Oyunun ekranda görünen metinleri. Web sürümündeki mesajların aynısıdır.
+/// Oyunun parçalardan kurulan metinleri. Düz metinler doğrudan ARB dosyalarından okunur; burada
+/// yalnızca kart adı ve kutu numarası gibi değerleri metne yerleştiren yardımcılar bulunur.
+/// Robotun söyledikleri [LocalizedText] döndürür; ekran onları o anki dilde çözer.
 abstract final class CommandOrderTexts {
-  static const intro = 'Görevi bitirmek için kartları doğru sıraya diz. Bir karta dokun ya da onu bir kutuya sürükle.';
-  static const extrasIntro = 'Dikkat! Bazı kartlar bu göreve ait değil. Yalnızca gereken kartları sıraya diz.';
-  static const full = 'Bütün kutular dolu. Bir kartı geri almak için ona dokun.';
-  static const notFull = 'Önce bütün kutuları doldur.';
-  static const success = 'Harika! Bütün adımlar doğru sırada.';
-  static const solved = 'Sıralama doğru! Yeşil Kontrol et tuşuna dokun.';
-  static const poolEmpty = 'Bütün kartlar yerleşti';
-  static const check = 'Kontrol et';
-  static const hint = 'İpucu';
-  static const clear = 'Temizle';
+  static LocalizedText wrong(OrderWrong result, OrderCard card) =>
+      (t) => switch (result.reason) {
+        WrongReason.extra => t.commandOrderWrongExtra(card.step.text(t)),
+        WrongReason.tooEarly => t.commandOrderWrongTooEarly(result.slot + 1, card.step.text(t)),
+      };
 
-  static String wrong(OrderWrong result, String cardText) => switch (result.reason) {
-    WrongReason.extra => '"$cardText" bu görev için gerekli değil. Onu kutudan çıkar.',
-    WrongReason.tooEarly =>
-      '${result.slot + 1}. kutudaki "$cardText" için henüz erken. Ondan önce yapılması gereken bir adım var.',
-  };
+  static LocalizedText hint(LocalizedText levelHint, OrderCard card, int slot) =>
+      (t) => t.commandOrderHint(levelHint(t), card.step.text(t), slot + 1);
 
-  static String hintText(String levelHint, String cardText, int slot) =>
-      '$levelHint Parlayan kart "$cardText" ${slot + 1}. kutuya gelmeli.';
+  static String slotCard(AppLocalizations t, int slot, OrderCard card) =>
+      t.commandOrderSlotCard(slot + 1, card.step.text(t));
 
-  static String slotCard(int slot, String cardText) => '${slot + 1}. kutu: $cardText. Geri almak için dokun.';
-
-  static String emptySlot(int slot) => '${slot + 1}. kutu, boş. Kartın buraya gelmesi için dokun.';
+  static String emptySlot(AppLocalizations t, int slot) => t.commandOrderEmptySlot(slot + 1);
 }

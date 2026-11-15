@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app_theme.dart';
 import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
+import '../../../l10n/l10n.dart';
 import '../repeat_controller.dart';
 import '../repeat_texts.dart';
 import 'repeat_block_view.dart';
@@ -93,7 +94,7 @@ final class _ProgramStripState extends State<ProgramStrip> {
   Widget _list() {
     final program = _controller.program;
     if (program.isEmpty) {
-      return const Align(alignment: Alignment.centerLeft, child: Text(RepeatTexts.emptyStrip));
+      return Align(alignment: Alignment.centerLeft, child: Text(context.l10n.repeatEmptyStrip));
     }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -114,7 +115,7 @@ final class _ProgramStripState extends State<ProgramStrip> {
     return switch (block) {
       MoveBlock(:final direction) => CommandChip(
         key: _keyOf(place),
-        label: RepeatTexts.moveChip(place, direction),
+        label: RepeatTexts.moveChip(context.l10n, place, direction),
         number: index + 1,
         direction: direction,
         size: widget.chipSize,
@@ -150,6 +151,7 @@ final class _SidePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = controller.isRunning ? null : controller.selected;
+    final t = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -162,10 +164,10 @@ final class _SidePanel extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _button(RepeatTexts.deleteLabel, Icons.delete_outline, AppColors.red, controller.deleteSelected),
+              _button(t.repeatDeleteLabel, Icons.delete_outline, AppColors.red, controller.deleteSelected),
               if (Places.isInner(selected)) ...[
                 const SizedBox(width: _gap),
-                _button(RepeatTexts.moveOutLabel, Icons.logout, AppColors.orangeDark, controller.moveSelectedOut),
+                _button(t.repeatMoveOutLabel, Icons.logout, AppColors.orangeDark, controller.moveSelectedOut),
               ],
             ],
           ),

@@ -8,11 +8,10 @@ import 'package:robi_codes/features/parental_gate/parental_gate.dart';
 import 'package:robi_codes/features/parental_gate/parental_gate_dialog.dart';
 import 'package:robi_codes/features/parental_gate/parental_gate_trial.dart';
 import 'package:robi_codes/features/parental_gate/parental_question.dart';
-import 'package:robi_codes/features/parental_gate/protected_action_runner.dart';
 import 'package:robi_codes/features/settings/settings_dialog.dart';
-import 'package:robi_codes/features/sound/sound_player.dart';
-import 'package:robi_codes/features/sound/sound_service.dart';
+import 'package:robi_codes/games/game_registry.dart';
 
+import '../support/test_l10n.dart';
 import '../support/fakes.dart';
 import '../support/ui_test_helpers.dart';
 
@@ -35,8 +34,8 @@ Future<_Outcome> _openDialog(WidgetTester tester) async {
   final outcome = _Outcome();
   final questions = _twin();
   await tester.pumpWidget(
-    MaterialApp(
-      home: Builder(
+    localizedApp(
+      Builder(
         builder: (context) => Scaffold(
           body: Center(
             child: TextButton(
@@ -70,11 +69,15 @@ Future<void> _enter(WidgetTester tester, int answer) async {
   await tester.pumpAndSettle();
 }
 
-Widget _settings(ProtectedActionRunner runner) => MaterialApp(
-  home: Scaffold(
+Widget _settings(ParentalGate gate) => localizedApp(
+  Scaffold(
     body: SettingsDialog(
-      sound: SoundService(store: InMemoryKeyValueStore(), player: const SilentSoundPlayer()),
-      protectedActions: runner,
+      services: AppServices(
+        catalog: TestCatalog.build(),
+        games: GameRegistry(const []),
+        store: InMemoryKeyValueStore(),
+        parentalGate: gate,
+      ),
     ),
   ),
 );
@@ -85,8 +88,8 @@ void main() {
       // Arrange
       final outcome = await _openDialog(tester);
       final question = _twin().next();
-      expect(find.text(question.text), findsOneWidget);
-      expect(find.textContaining(ParentalAction.purchase.description), findsOneWidget);
+      expect(find.text(question.text(texts)), findsOneWidget);
+      expect(find.textContaining(ParentalAction.purchase.description(texts)), findsOneWidget);
 
       // Act
       await _enter(tester, question.answer);
@@ -108,12 +111,12 @@ void main() {
 
       // Assert: pencere açık kalır, yeni soru gelir, tuşlar bekleme süresince kilitlidir.
       expect(find.byType(ParentalGateDialog), findsOneWidget);
-      expect(find.text(second.text), findsOneWidget);
-      expect(find.text(ParentalGateDialog.wrongAnswer), findsOneWidget);
+      expect(find.text(second.text(texts)), findsOneWidget);
+      expect(find.text(texts.parentalGateWrongAnswer), findsOneWidget);
       expect(tester.widget<FilledButton>(_key('1')).onPressed, isNull);
 
       await tester.pump(ParentalGateDialog.wrongAnswerDelay);
-      expect(find.text(ParentalGateDialog.wrongAnswer), findsNothing);
+      expect(find.text(texts.parentalGateWrongAnswer), findsNothing);
       expect(tester.widget<FilledButton>(_key('1')).onPressed, isNotNull);
 
       // Eski sorunun cevabı artık geçmez; yeni sorunun cevabı geçer.
@@ -142,7 +145,7 @@ void main() {
       final outcome = await _openDialog(tester);
 
       // Act
-      await tester.tap(find.text(ParentalGateDialog.cancelLabel));
+      await tester.tap(find.text(texts.parentalGateCancel));
       await tester.pumpAndSettle();
 
       // Assert
@@ -172,8 +175,8 @@ void main() {
       await _press(tester, find.byIcon(Icons.backspace_rounded));
 
       // Assert
-      expect(find.bySemanticsLabel(ParentalGateDialog.answerLabel), findsOneWidget);
-      expect(tester.getSemantics(find.bySemanticsLabel(ParentalGateDialog.answerLabel)).value, '4');
+      expect(find.bySemanticsLabel(texts.parentalGateAnswer), findsOneWidget);
+      expect(tester.getSemantics(find.bySemanticsLabel(texts.parentalGateAnswer)).value, '4');
     });
 
     for (final MapEntry(key: name, value: size) in {...TestScreens.all, 'PhoneLandscape': _phoneLandscape}.entries) {
@@ -195,54 +198,54 @@ void main() {
   group('ParentalGateTrial', () {
     testWidgets('SettingsDialog_DebugBuild_ShowsTrialEntry', (tester) async {
       // Act
-      await tester.pumpWidget(_settings(const ProtectedActionRunner(LockedParentalGate())));
+      await tester.pumpWidget(_settings(const LockedParentalGate()));
 
       // Assert
-      expect(find.text(ParentalGateTrial.label), findsOneWidget);
+      expect(find.text(texts.parentalGateTrialLabel), findsOneWidget);
     });
 
     testWidgets('trial_GateApproves_RunsHarmlessActionOnly', (tester) async {
       // Arrange
       final gate = FakeParentalGate(approves: true);
-      await tester.pumpWidget(_settings(ProtectedActionRunner(gate)));
+      await tester.pumpWidget(_settings(gate));
 
       // Act
-      await tester.tap(find.text(ParentalGateTrial.label));
+      await tester.tap(find.text(texts.parentalGateTrialLabel));
       await tester.pumpAndSettle();
 
       // Assert
       expect(gate.requests, [ParentalGateTrial.action]);
-      expect(find.text(ParentalGateTrial.passed), findsOneWidget);
+      expect(find.text(texts.parentalGateTrialPassed), findsOneWidget);
     });
 
     testWidgets('trial_GateRejects_ShowsBlocked', (tester) async {
       // Arrange
-      await tester.pumpWidget(_settings(ProtectedActionRunner(FakeParentalGate(approves: false))));
+      await tester.pumpWidget(_settings(FakeParentalGate(approves: false)));
 
       // Act
-      await tester.tap(find.text(ParentalGateTrial.label));
+      await tester.tap(find.text(texts.parentalGateTrialLabel));
       await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text(ParentalGateTrial.blocked), findsOneWidget);
+      expect(find.text(texts.parentalGateTrialBlocked), findsOneWidget);
     });
 
     testWidgets('production_TrialFromSettings_OpensQuestionDialogAndCancelBlocks', (tester) async {
       // Arrange
       await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-      await tester.tap(find.byTooltip(SettingsDialog.title));
+      await tester.tap(find.byTooltip(texts.settingsTitle));
       await settle(tester);
 
       // Act
-      await tester.tap(find.text(ParentalGateTrial.label));
+      await tester.tap(find.text(texts.parentalGateTrialLabel));
       await settle(tester);
 
       // Assert
       expect(find.byType(ParentalGateDialog), findsOneWidget);
-      await tester.tap(find.text(ParentalGateDialog.cancelLabel));
+      await tester.tap(find.text(texts.parentalGateCancel));
       await settle(tester);
       expect(find.byType(ParentalGateDialog), findsNothing);
-      expect(find.text(ParentalGateTrial.blocked), findsOneWidget);
+      expect(find.text(texts.parentalGateTrialBlocked), findsOneWidget);
     });
   });
 }

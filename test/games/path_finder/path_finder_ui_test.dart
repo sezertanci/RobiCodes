@@ -11,6 +11,7 @@ import 'package:robi_codes/games/path_finder/ui/board_view.dart';
 import 'package:robi_codes/games/path_finder/ui/path_finder_controls.dart';
 import 'package:robi_codes/games/path_finder/ui/path_finder_view.dart';
 
+import '../../support/test_l10n.dart';
 import '../../support/fakes.dart';
 import '../../support/ui_test_helpers.dart';
 
@@ -18,9 +19,9 @@ import '../../support/ui_test_helpers.dart';
 Future<void> _pumpLevel(WidgetTester tester, Size size) async {
   useScreen(tester, size);
   await tester.pumpWidget(
-    MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text(PathFinderTexts.title)),
+    localizedApp(
+      Scaffold(
+        appBar: AppBar(title: Text(texts.gamePathFinderTitle)),
         body: PathFinderView(key: UniqueKey(), level: pathFinderBaseLevels.first, onCompleted: (_) {}),
       ),
     ),
@@ -35,8 +36,8 @@ void main() {
 
       for (final level in pathFinderBaseLevels) {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
+          localizedApp(
+            Scaffold(
               body: PathFinderView(key: UniqueKey(), level: level, onCompleted: (_) {}),
             ),
           ),
@@ -45,7 +46,7 @@ void main() {
 
         expect(tester.takeException(), isNull);
         expect(find.byType(BoardView), findsOneWidget);
-        expect(find.byTooltip(PathFinderTexts.run), findsOneWidget);
+        expect(find.byTooltip(texts.commonRun), findsOneWidget);
       }
     });
 
@@ -57,23 +58,23 @@ void main() {
       await tester.pumpWidget(RobiCodesApp(services: services));
 
       // Act: ana ekran → seviye seçimi → 1. seviye
-      await openLevelSelect(tester, PathFinderTexts.title);
-      expect(find.bySemanticsLabel('Seviye 2, kilitli'), findsOneWidget);
+      await openLevelSelect(tester, texts.gamePathFinderTitle);
+      expect(find.bySemanticsLabel(texts.playLevelLocked(2)), findsOneWidget);
       await openLevel(tester, 1);
-      await tapVisible(tester, find.byTooltip(PathFinderTexts.addCommand(Direction.right)));
-      await tapVisible(tester, find.byTooltip(PathFinderTexts.run));
+      await tapVisible(tester, find.byTooltip(PathFinderTexts.addCommand(texts, Direction.right)));
+      await tapVisible(tester, find.byTooltip(texts.commonRun));
       await waitForAnimations(tester);
 
       // Assert
       expect(tester.takeException(), isNull);
       expect(services.progress.starsOf(packId, 1), 3);
       expect(find.byType(ResultPanel), findsOneWidget);
-      expect(find.text(ResultPanel.nextLabel), findsOneWidget);
+      expect(find.text(texts.commonNextLevel), findsOneWidget);
 
-      await tester.tap(find.text(ResultPanel.backLabel));
+      await tester.tap(find.text(texts.commonBackToLevels));
       await settle(tester);
-      expect(find.bySemanticsLabel('Seviye 1, 3 yıldız'), findsOneWidget);
-      expect(find.bySemanticsLabel('Seviye 2'), findsOneWidget);
+      expect(find.bySemanticsLabel(texts.playLevelStars(1, texts.commonStars(3))), findsOneWidget);
+      expect(find.bySemanticsLabel(texts.playLevel(2)), findsOneWidget);
     });
   }
 
@@ -83,9 +84,9 @@ void main() {
 
     for (final level in pathFinderBaseLevels) {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(title: const Text(PathFinderTexts.title)),
+        localizedApp(
+          Scaffold(
+            appBar: AppBar(title: Text(texts.gamePathFinderTitle)),
             body: PathFinderView(key: UniqueKey(), level: level, onCompleted: (_) {}),
           ),
         ),
@@ -93,10 +94,10 @@ void main() {
       await tester.pump();
 
       final tooltips = [
-        PathFinderTexts.run,
-        PathFinderTexts.hint,
-        PathFinderTexts.clear,
-        for (final direction in Direction.values) PathFinderTexts.addCommand(direction),
+        texts.commonRun,
+        texts.commonHint,
+        texts.commonClear,
+        for (final direction in Direction.values) PathFinderTexts.addCommand(texts, direction),
       ];
       for (final tooltip in tooltips) {
         expect(tester.getRect(find.byTooltip(tooltip)).bottom, lessThanOrEqualTo(screen.height));
@@ -108,29 +109,29 @@ void main() {
   testWidgets('PathFinderView_LeavesMap_ShowsEdgeMessage', (tester) async {
     useScreen(tester, TestScreens.phone);
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
+      localizedApp(
+        Scaffold(
           body: PathFinderView(level: pathFinderBaseLevels.first, onCompleted: (_) {}),
         ),
       ),
     );
 
-    await tester.tap(find.byTooltip(PathFinderTexts.addCommand(Direction.left)));
+    await tester.tap(find.byTooltip(PathFinderTexts.addCommand(texts, Direction.left)));
     await tester.pump();
-    await tester.tap(find.byTooltip(PathFinderTexts.run));
+    await tester.tap(find.byTooltip(texts.commonRun));
     await waitForAnimations(tester);
 
-    expect(find.text(PathFinderTexts.blocked(Obstacle.edge, 0)), findsOneWidget);
+    expect(find.text(PathFinderTexts.blocked(Obstacle.edge, 0)(texts)), findsOneWidget);
   });
 
   for (final name in ['TabletPortrait', 'TabletLandscape']) {
     testWidgets('PathFinderView_On${name}_UsesLargerButtonsAndBoardThanPhone', (tester) async {
       await _pumpLevel(tester, TestScreens.phone);
-      final phoneButton = tester.getSize(find.byTooltip(PathFinderTexts.run));
+      final phoneButton = tester.getSize(find.byTooltip(texts.commonRun));
       final phoneBoard = tester.getSize(find.byType(BoardView));
 
       await _pumpLevel(tester, TestScreens.all[name]!);
-      final tabletButton = tester.getSize(find.byTooltip(PathFinderTexts.run));
+      final tabletButton = tester.getSize(find.byTooltip(texts.commonRun));
       final tabletBoard = tester.getSize(find.byType(BoardView));
 
       expect(tabletButton.width, greaterThan(phoneButton.width));
@@ -155,10 +156,15 @@ void main() {
   Future<List<Rect>> groupRows(WidgetTester tester, Size size, {int groups = 4}) async {
     useScreen(tester, size);
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, texts.gamePathFinderTitle);
     expect(tester.takeException(), isNull);
     return [
-      for (final label in ['Seviye 1', 'Seviye 6, kilitli', 'Seviye 11, kilitli', 'Seviye 16, kilitli'].take(groups))
+      for (final label in [
+        texts.playLevel(1),
+        texts.playLevelLocked(6),
+        texts.playLevelLocked(11),
+        texts.playLevelLocked(16),
+      ].take(groups))
         tester.getRect(find.bySemanticsLabel(label)),
     ];
   }

@@ -1,8 +1,10 @@
+import '../../../l10n/l10n.dart';
+
 /// Görevin bir adımı veya göreve ait olmayan bir kart: kısa yazı ve eylemi anlatan görsel.
 final class CommandStep {
   const CommandStep(this.text, this.icon);
 
-  final String text;
+  final LocalizedText text;
 
   /// Görselin asset yolu (`.webp` veya `.svg`).
   final String icon;
@@ -12,7 +14,7 @@ final class CommandStep {
 final class TaskStage {
   const TaskStage(this.title, this.size);
 
-  final String title;
+  final LocalizedText title;
   final int size;
 }
 
@@ -27,7 +29,7 @@ final class CommandOrderLevel {
     this.extras = const [],
   });
 
-  final String title;
+  final LocalizedText title;
 
   /// Görevin büyük görseli.
   final String icon;
@@ -36,7 +38,7 @@ final class CommandOrderLevel {
   final List<CommandStep> steps;
 
   /// İpucu düğmesine basılınca robotun söylediği cümle.
-  final String hint;
+  final LocalizedText hint;
 
   /// Ara hedefler; yoksa bütün kutular başlıksız tek bir grup olur. Boyların toplamı adım sayısıdır.
   final List<TaskStage>? stages;
@@ -48,7 +50,13 @@ final class CommandOrderLevel {
   List<SlotGroup> get slotGroups {
     final groups = <SlotGroup>[];
     var start = 0;
-    for (final stage in stages ?? [TaskStage('', steps.length)]) {
+    final stages = this.stages;
+    if (stages == null) {
+      return [
+        SlotGroup(null, [for (var i = 0; i < steps.length; i++) i]),
+      ];
+    }
+    for (final stage in stages) {
       groups.add(SlotGroup(stage.title, [for (var i = 0; i < stage.size; i++) start + i]));
       start += stage.size;
     }
@@ -56,10 +64,10 @@ final class CommandOrderLevel {
   }
 }
 
-/// Ekranda birlikte gösterilen kutular. Başlık boşsa aşama başlığı çizilmez.
+/// Ekranda birlikte gösterilen kutular. Başlık yoksa aşama başlığı çizilmez.
 final class SlotGroup {
   const SlotGroup(this.title, this.slots);
 
-  final String title;
+  final LocalizedText? title;
   final List<int> slots;
 }

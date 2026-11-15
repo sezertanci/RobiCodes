@@ -7,6 +7,7 @@ import 'package:robi_codes/games/path_finder/path_finder_controller.dart';
 import 'package:robi_codes/games/path_finder/path_finder_texts.dart';
 
 import '../../support/fakes.dart';
+import '../../support/test_l10n.dart';
 
 const _up = Direction.up;
 const _down = Direction.down;
@@ -45,7 +46,7 @@ void main() {
 
       expect(controller.commands.length, 3);
       expect(controller.isFull, isTrue);
-      expect(controller.message, PathFinderTexts.full);
+      expect(controller.message(texts), texts.pathFinderFull);
     });
 
     test('moveSelected_Right_SwapsAndKeepsSelection', () {
@@ -101,7 +102,7 @@ void main() {
         ..clear();
 
       expect(controller.commands, isEmpty);
-      expect(controller.message, PathFinderTexts.intro);
+      expect(controller.message(texts), texts.pathFinderIntro);
     });
   });
 
@@ -111,7 +112,7 @@ void main() {
 
       await controller.run();
 
-      expect(controller.message, PathFinderTexts.empty);
+      expect(controller.message(texts), texts.pathFinderEmpty);
       expect(completed, isEmpty);
     });
 
@@ -158,7 +159,7 @@ void main() {
 
       expect(controller.wrongIndex, 2);
       expect(controller.reaction, RobotReaction.bump);
-      expect(controller.message, PathFinderTexts.blocked(Obstacle.rock, 2));
+      expect(controller.message(texts), PathFinderTexts.blocked(Obstacle.rock, 2)(texts));
       expect(feedback.audibleMoods, [RobotMood.sad]);
       expect(controller.isRunning, isFalse);
       expect(completed, isEmpty);
@@ -170,7 +171,7 @@ void main() {
       await controller.run();
 
       expect(controller.reaction, RobotReaction.shake);
-      expect(controller.message, PathFinderTexts.missedGoal);
+      expect(controller.message(texts), texts.pathFinderMissedGoal);
       expect(controller.trail.keys, [controller.board.start]);
     });
 
@@ -181,7 +182,7 @@ void main() {
 
       expect(controller.selectedIndex, 0);
       expect(controller.wrongIndex, 0);
-      expect(controller.message, PathFinderTexts.fixCommand(0));
+      expect(controller.message(texts), PathFinderTexts.fixCommand(0)(texts));
     });
 
     test('run_DisposedDuringWalk_DoesNotComplete', () async {

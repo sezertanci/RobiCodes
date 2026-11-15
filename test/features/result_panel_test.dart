@@ -5,6 +5,7 @@ import 'package:robi_codes/features/play/result_panel.dart';
 import 'package:robi_codes/features/play/widgets/confetti.dart';
 import 'package:robi_codes/features/progress/star_rule.dart';
 
+import '../support/test_l10n.dart';
 import '../support/fakes.dart';
 
 void main() {
@@ -13,11 +14,7 @@ void main() {
     final feedback = RecordingGameFeedback();
 
     // Act
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ResultPanel(stars: 2, feedback: feedback, onBackToLevels: () {}),
-      ),
-    );
+    await tester.pumpWidget(localizedApp(ResultPanel(stars: 2, feedback: feedback, onBackToLevels: () {})));
     await tester.pump(ResultPanel.firstStarDelay);
     for (var i = 0; i < StarRule.perfect; i++) {
       await tester.pump(ResultPanel.starInterval);
@@ -55,8 +52,8 @@ void main() {
 }
 
 /// Sonuç panelini verilen hareket azaltma tercihiyle açar.
-Widget _panel({bool reduceMotion = false}) => MaterialApp(
-  home: MediaQuery(
+Widget _panel({bool reduceMotion = false}) => localizedApp(
+  MediaQuery(
     data: MediaQueryData(size: const Size(400, 800), disableAnimations: reduceMotion),
     child: ResultPanel(stars: StarRule.perfect, feedback: const SilentGameFeedback(), onBackToLevels: () {}),
   ),

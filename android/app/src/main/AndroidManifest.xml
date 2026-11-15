@@ -2,7 +2,7 @@
     <!-- Çocuk verisi cihaz dışına çıkmasın diye Android'in bulut yedeklemesi kapalıdır;
          gizlilik politikası buna dayanır. -->
     <application
-        android:label="Robi Kodluyor"
+        android:label="@string/app_name"
         android:allowBackup="false"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

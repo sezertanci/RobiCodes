@@ -1,13 +1,13 @@
+import '../../l10n/l10n.dart';
+
 /// Seviyelerin zorluk grubu. Seviye seçim ekranında grup başlığı olarak görünür.
 enum Difficulty {
-  easy('Kolay'),
-  medium('Orta'),
-  hard('Zor'),
-  expert('Uzman');
+  easy,
+  medium,
+  hard,
+  expert;
 
-  const Difficulty(this.title);
-
-  final String title;
+  String title(AppLocalizations t) => t.difficulty(name);
 }
 
 /// Paket içindeki bir zorluk grubu ve bu gruptaki seviye sayısı.
@@ -43,7 +43,7 @@ final class LevelPack {
   /// Kalıcı kimlik. İlerleme kaydı bu kimlikle tutulur; yayından sonra değiştirilmez.
   final String id;
   final String gameId;
-  final String title;
+  final LocalizedText title;
   final List<DifficultyGroup> groups;
 
   int get levelCount => groups.fold(0, (sum, group) => sum + group.levelCount);

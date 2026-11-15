@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../app/widgets/outlined_text.dart';
+import '../../../l10n/l10n.dart';
 import '../../play/widgets/confetti.dart';
 import '../achievement.dart';
 import 'celebration_label.dart';
@@ -16,9 +17,6 @@ final class TrophyCelebration extends StatefulWidget {
   const TrophyCelebration({required this.status, super.key});
 
   final AchievementStatus status;
-
-  static const label = 'Yeni kupa kazandın!';
-  static const closeLabel = 'Harika!';
 
   /// Pencereyi açar; çocuk "Harika!" deyince (veya geri tuşuyla) kapanınca tamamlanır.
   static Future<void> show(NavigatorState navigator, AchievementStatus status) => navigator.push<void>(
@@ -57,6 +55,7 @@ final class _TrophyCelebrationState extends State<TrophyCelebration> with Ticker
     final size = MediaQuery.sizeOf(context);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final achievement = widget.status.achievement;
+    final t = context.l10n;
     final titleSize = (size.width * 0.07).clamp(32.0, 46.0);
     return Scaffold(
       body: DecoratedBox(
@@ -80,14 +79,14 @@ final class _TrophyCelebrationState extends State<TrophyCelebration> with Ticker
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CelebrationLabel(TrophyCelebration.label, fontSize: 20),
+                        CelebrationLabel(t.achievementNewTrophy, fontSize: 20),
                         const SizedBox(height: 12),
                         _stage(size, reduceMotion: reduceMotion),
                         const SizedBox(height: 12),
-                        _title(achievement.title, titleSize),
+                        _title(achievement.title(t), titleSize),
                         const SizedBox(height: 12),
                         Text(
-                          achievement.description,
+                          achievement.description(t),
                           textAlign: TextAlign.center,
                           style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800),
                         ),
@@ -101,7 +100,7 @@ final class _TrophyCelebrationState extends State<TrophyCelebration> with Ticker
                           ),
                           autofocus: true,
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text(TrophyCelebration.closeLabel),
+                          child: Text(t.achievementGreat),
                         ),
                       ],
                     ),

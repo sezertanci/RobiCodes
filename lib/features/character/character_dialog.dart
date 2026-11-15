@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
+import '../../l10n/l10n.dart';
 import 'character.dart';
 import 'character_service.dart';
 
@@ -14,9 +14,6 @@ final class CharacterDialog extends StatelessWidget {
   const CharacterDialog({required this.characters, super.key});
 
   final CharacterService characters;
-
-  static const title = 'Karakterini seç';
-  static const closeLabel = AppTexts.close;
 
   /// Bu genişliğin altındaki ekranlarda iki, üstündekilerde üç sütun kullanılır (web ile aynı).
   static const _narrowWidth = 560.0;
@@ -37,9 +34,10 @@ final class CharacterDialog extends StatelessWidget {
     final columns = isNarrow ? 2 : 3;
     final contentWidth = min(_maxDialogWidth, screenWidth - 2 * _screenMargin) - _contentPadding;
     final optionWidth = (contentWidth - (columns - 1) * _gap) / columns;
+    final t = context.l10n;
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: _screenMargin, vertical: 24),
-      title: const Text(title),
+      title: Text(t.characterTitle),
       content: SizedBox(
         width: contentWidth,
         child: SingleChildScrollView(
@@ -65,7 +63,7 @@ final class CharacterDialog extends StatelessWidget {
           ),
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text(closeLabel))],
+      actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(t.commonClose))],
     );
   }
 }
@@ -87,36 +85,39 @@ final class _CharacterOption extends StatelessWidget {
   static const _radius = BorderRadius.all(Radius.circular(16));
 
   @override
-  Widget build(BuildContext context) => Semantics(
-    button: true,
-    selected: isSelected,
-    label: character.name,
-    excludeSemantics: true,
-    child: Material(
-      color: isSelected ? AppColors.yellow.withValues(alpha: 0.25) : AppColors.navy.withValues(alpha: 0.06),
-      shape: RoundedRectangleBorder(
-        borderRadius: _radius,
-        side: BorderSide(color: isSelected ? AppColors.yellow : Colors.transparent, width: 4),
-      ),
-      child: InkWell(
-        borderRadius: _radius,
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(character.image, height: imageHeight, fit: BoxFit.contain),
-              const SizedBox(height: 6),
-              Text(
-                character.name,
-                style: Theme.of(context).textTheme.titleMedium
-                    ?.copyWith(color: AppColors.navy, fontWeight: FontWeight.w800),
-              ),
-            ],
+  Widget build(BuildContext context) {
+    final name = character.name(context.l10n);
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: name,
+      excludeSemantics: true,
+      child: Material(
+        color: isSelected ? AppColors.yellow.withValues(alpha: 0.25) : AppColors.navy.withValues(alpha: 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: _radius,
+          side: BorderSide(color: isSelected ? AppColors.yellow : Colors.transparent, width: 4),
+        ),
+        child: InkWell(
+          borderRadius: _radius,
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(character.image, height: imageHeight, fit: BoxFit.contain),
+                const SizedBox(height: 6),
+                Text(
+                  name,
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(color: AppColors.navy, fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

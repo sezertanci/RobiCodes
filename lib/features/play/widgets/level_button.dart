@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_assets.dart';
-import '../../../app/app_texts.dart';
 import '../../../app/app_theme.dart';
+import '../../../l10n/l10n.dart';
 import 'group_tone.dart';
 import 'star_row.dart';
 
@@ -44,11 +44,11 @@ final class LevelButton extends StatelessWidget {
   static const _inset = 6.0;
   static const _endInset = 16.0;
 
-  String get _label {
+  String _label(AppLocalizations t) {
     if (!unlocked) {
-      return 'Seviye $level, kilitli';
+      return t.playLevelLocked(level);
     }
-    return stars > 0 ? 'Seviye $level, ${AppTexts.stars(stars)}' : 'Seviye $level';
+    return stars > 0 ? t.playLevelStars(level, t.commonStars(stars)) : t.playLevel(level);
   }
 
   @override
@@ -95,7 +95,7 @@ final class LevelButton extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: unlocked,
-      label: _label,
+      label: _label(context.l10n),
       excludeSemantics: true,
       onTap: unlocked ? onTap : null,
       child: unlocked ? button : Opacity(opacity: _lockedOpacity, child: button),

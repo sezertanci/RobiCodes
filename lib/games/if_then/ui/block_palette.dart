@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/mark_effects.dart';
 import '../if_then_controller.dart';
+import '../../../l10n/l10n.dart';
 import '../if_then_texts.dart';
 import 'block_tile.dart';
 import 'if_then_metrics.dart';
@@ -16,17 +17,20 @@ final class BlockPalette extends StatelessWidget {
   final IfThenMetrics metrics;
 
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      if (controller.needsConditions) ...[
-        _group(IfThenTexts.objects, controller.palette.conditions),
-        const SizedBox(height: IfThenMetrics.gap * 1.5),
+  Widget build(BuildContext context) {
+    final t = context.l10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (controller.needsConditions) ...[
+          _group(t.ifThenObjects, controller.palette.conditions),
+          const SizedBox(height: IfThenMetrics.gap * 1.5),
+        ],
+        _group(t.ifThenActions, controller.palette.actions),
       ],
-      _group(IfThenTexts.actions, controller.palette.actions),
-    ],
-  );
+    );
+  }
 
   Widget _group(String title, List<Enum> blocks) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +74,7 @@ final class _PaletteBlock extends StatelessWidget {
     final shown = Semantics(
       button: true,
       enabled: editable,
-      label: IfThenTexts.paletteBlock(block),
+      label: IfThenTexts.paletteBlock(context.l10n, block),
       excludeSemantics: true,
       onTap: editable ? () => controller.tapBlock(block) : null,
       child: GestureDetector(

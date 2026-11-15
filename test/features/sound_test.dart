@@ -13,6 +13,7 @@ import 'package:robi_codes/features/sound/sound_effect.dart';
 import 'package:robi_codes/features/sound/sound_service.dart';
 
 import '../support/fakes.dart';
+import '../support/test_l10n.dart';
 import '../support/ui_test_helpers.dart';
 
 void main() {
@@ -146,13 +147,13 @@ void main() {
       // Arrange
       final services = AppServices.production(store, soundPlayer: player);
       await tester.pumpWidget(RobiCodesApp(services: services));
-      await tester.tap(find.byTooltip(SettingsDialog.title));
+      await tester.tap(find.byTooltip(texts.settingsTitle));
       await settle(tester);
 
       // Act
       await tester.tap(find.byType(Switch));
       await settle(tester);
-      await tester.tap(find.text(SettingsDialog.closeLabel));
+      await tester.tap(find.text(texts.commonClose));
       await settle(tester);
 
       // Assert

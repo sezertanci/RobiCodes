@@ -3,21 +3,13 @@ import 'path_finder_level.dart';
 /// "Robotun Yolunu Bul" temel paketinin 20 seviyesi. Web sürümündeki
 /// `js/games/path-finder/levels.js` dosyasından aynı sırayla aktarıldı.
 /// Gruplar katalogda tanımlıdır: 1–5 Kolay, 6–10 Orta, 11–15 Zor, 16–20 Uzman.
-const pathFinderBaseLevels = <PathFinderLevel>[
+final pathFinderBaseLevels = <PathFinderLevel>[
   // Kolay
-  PathFinderLevel(
-    map: ['....', 'SG..', '....'],
-    solution: 'R',
-    intro: 'Robotu bayrağa götür. Sağa okuna bas, sonra yeşil Başlat tuşuna dokun.',
-  ),
-  PathFinderLevel(
-    map: ['..G.', '..S.', '....'],
-    solution: 'U',
-    intro: 'Bayrak robotun yukarısında. Hangi oku seçmelisin?',
-  ),
-  PathFinderLevel(map: ['.....', 'G.S..', '.....'], solution: 'LL', intro: 'Bayrak solda ve iki kare uzakta.'),
-  PathFinderLevel(map: ['.S..', '....', '.G..'], solution: 'DD', intro: 'Robot aşağı inmeli. Kaç kez?'),
-  PathFinderLevel(map: ['...G', '.S..', '....'], solution: 'URR', intro: 'Bu kez iki farklı yön kullanacaksın.'),
+  PathFinderLevel(map: ['....', 'SG..', '....'], solution: 'R', intro: (t) => t.pathFinderL1Intro),
+  PathFinderLevel(map: ['..G.', '..S.', '....'], solution: 'U', intro: (t) => t.pathFinderL2Intro),
+  PathFinderLevel(map: ['.....', 'G.S..', '.....'], solution: 'LL', intro: (t) => t.pathFinderL3Intro),
+  PathFinderLevel(map: ['.S..', '....', '.G..'], solution: 'DD', intro: (t) => t.pathFinderL4Intro),
+  PathFinderLevel(map: ['...G', '.S..', '....'], solution: 'URR', intro: (t) => t.pathFinderL5Intro),
   // Orta
   PathFinderLevel(map: ['S....', '.....', '...G.'], solution: 'DDRRR'),
   PathFinderLevel(map: ['.....', '..G..', '.....', 'S....'], solution: 'UURR'),
@@ -25,22 +17,14 @@ const pathFinderBaseLevels = <PathFinderLevel>[
   PathFinderLevel(map: ['..S..', '.....', 'G....', '.....'], solution: 'DDLL'),
   PathFinderLevel(map: ['....G', 'S....', '.....'], solution: 'URRRR'),
   // Zor
-  PathFinderLevel(
-    map: ['S.#.G', '.....', '.....'],
-    solution: 'DRRRUR',
-    intro: 'Yolda taş var. Taşın etrafından dolaş.',
-  ),
-  PathFinderLevel(
-    map: ['S.#G.', '..#..', '.....'],
-    solution: 'DDRRRUU',
-    intro: 'Taşlar duvar gibi dizilmiş. Altından dolaş.',
-  ),
-  PathFinderLevel(map: ['S~~~G', '.....', '~~.~~'], solution: 'DRRRRU', intro: 'Robot suya giremez. Kuru yolu bul.'),
+  PathFinderLevel(map: ['S.#.G', '.....', '.....'], solution: 'DRRRUR', intro: (t) => t.pathFinderL11Intro),
+  PathFinderLevel(map: ['S.#G.', '..#..', '.....'], solution: 'DDRRRUU', intro: (t) => t.pathFinderL12Intro),
+  PathFinderLevel(map: ['S~~~G', '.....', '~~.~~'], solution: 'DRRRRU', intro: (t) => t.pathFinderL13Intro),
   PathFinderLevel(map: ['..#..', 'S.#.G', '..#..', '.....'], solution: 'DDRRRRUU'),
   PathFinderLevel(
     map: ['S.#...', '..#.#.', '....#G', '......'],
     solution: 'DDDRRRRRU',
-    intro: 'Birden çok yol var. En kısasını bulabilir misin?',
+    intro: (t) => t.pathFinderL15Intro,
   ),
   // Uzman
   PathFinderLevel(map: ['S.....G', '...*...', '.......'], solution: 'DRRRURRR', maxCommands: 10),

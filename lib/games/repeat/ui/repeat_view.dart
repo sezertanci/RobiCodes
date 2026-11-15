@@ -111,23 +111,44 @@ final class _RepeatViewState extends State<RepeatView> {
     ],
   );
 
-  Widget _narrowControls(RepeatController controller, ScreenScale scale) => RepeatControls(
-    controller: controller,
-    buttonSize: scale.size(_narrowButton, max: _maxButton),
-    stacked: false,
-  );
+  double _narrowButtonSize(ScreenScale scale) => scale.size(_narrowButton, max: _maxButton);
+
+  Widget _narrowControls(RepeatController controller, ScreenScale scale) =>
+      RepeatControls(controller: controller, buttonSize: _narrowButtonSize(scale), stacked: false);
 
   Widget _narrowLayout(RepeatController controller, ScreenScale scale, bool compact) => Padding(
     padding: const EdgeInsets.all(_padding),
     child: Column(
       children: [
         _header(controller, scale.size(_narrowChip, max: _maxChip), compact),
-        Expanded(child: _fittedBoard(controller, scale)),
-        const SizedBox(height: _gap),
-        _narrowControls(controller, scale),
+        Expanded(child: LayoutBuilder(builder: (context, area) => _narrowBody(controller, scale, area.maxHeight))),
       ],
     ),
   );
+
+  /// Harita kalan alana sığdırılır, kontroller altta sabit durur. Balon metni o kadar uzarsa ki
+  /// (ör. çeviri daha uzunsa) kontrollere bile yer kalmazsa harita ve kontroller birlikte kaydırılır;
+  /// böylece düzen hiçbir dilde taşmaz.
+  Widget _narrowBody(RepeatController controller, ScreenScale scale, double height) {
+    if (height > _gap + RepeatControls.rowHeight(_narrowButtonSize(scale))) {
+      return Column(
+        children: [
+          Expanded(child: _fittedBoard(controller, scale)),
+          const SizedBox(height: _gap),
+          _narrowControls(controller, scale),
+        ],
+      );
+    }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          BoardView(controller: controller, tileSize: _minTileSize),
+          const SizedBox(height: _gap),
+          _narrowControls(controller, scale),
+        ],
+      ),
+    );
+  }
 
   Widget _scrollLayout(RepeatController controller, ScreenScale scale, bool compact, double width) =>
       SingleChildScrollView(

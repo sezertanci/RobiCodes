@@ -7,6 +7,7 @@ import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
 import '../../features/progress/star_rule.dart';
+import '../../l10n/l10n.dart';
 import 'board_run.dart';
 import 'board_scene.dart';
 import 'engine/path_finder_board.dart';
@@ -56,7 +57,7 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
   List<Direction> get commands => List.unmodifiable(_commands);
   int get commandLimit => level.commandLimit;
   bool get isFull => _commands.length >= commandLimit;
-  String get message => voice.message;
+  LocalizedText get message => voice.message;
   RobotMood get mood => voice.mood;
   int? get selectedIndex => _selected;
   int? get activeIndex => _activeIndex;
@@ -70,7 +71,7 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
     }
     _changeProgram(() => _commands.add(direction));
     if (isFull) {
-      voice.say(PathFinderTexts.full);
+      voice.say((t) => t.pathFinderFull);
     }
     notifyListeners();
   }
@@ -150,9 +151,9 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
         _wrongIndex = index;
         voice.say(PathFinderTexts.fixCommand(index));
       case TooManyCommandsHint():
-        voice.say(PathFinderTexts.tooMany);
+        voice.say((t) => t.pathFinderTooMany);
       case SolvedHint():
-        voice.say(PathFinderTexts.solved);
+        voice.say((t) => t.pathFinderSolved);
     }
     notifyListeners();
   }
@@ -163,14 +164,14 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
       return;
     }
     if (_commands.isEmpty) {
-      voice.say(PathFinderTexts.empty);
+      voice.say((t) => t.pathFinderEmpty);
       notifyListeners();
       return;
     }
     _running = true;
     _selected = null;
     _resetBoard();
-    voice.say(PathFinderTexts.running);
+    voice.say((t) => t.gameRobotRunning);
     notifyListeners();
     final result = PathFinderEngine.run(board, _commands);
     final played = await boardRun.play(
@@ -190,7 +191,7 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
     _activeIndex = null;
     switch (result.outcome) {
       case RunOutcome.success:
-        voice.say(PathFinderTexts.success, RobotMood.happy);
+        voice.say((t) => t.gameRobotReachedFlag, RobotMood.happy);
         voice.react(RobotReaction.celebrate);
         notifyListeners();
         final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: _commands.length <= optimalLength);
@@ -204,10 +205,8 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
         voice.say(PathFinderTexts.blocked(result.obstacle!, index), RobotMood.sad);
       case RunOutcome.missedGoal || RunOutcome.missingCoins:
         voice.react(RobotReaction.shake);
-        final text = result.outcome == RunOutcome.missingCoins
-            ? PathFinderTexts.missingCoins
-            : PathFinderTexts.missedGoal;
-        voice.say(text, RobotMood.sad);
+        final missingCoins = result.outcome == RunOutcome.missingCoins;
+        voice.say((t) => missingCoins ? t.gameMissingCoins : t.pathFinderMissedGoal, RobotMood.sad);
     }
     _running = false;
     notifyListeners();
@@ -228,6 +227,6 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
   }
 
   /// Açılış mesajı: seviyenin kendi mesajı, yoksa altın olup olmamasına göre genel mesaj.
-  static String _introOf(PathFinderLevel level) =>
-      level.intro ?? (level.board.coins.isEmpty ? PathFinderTexts.intro : PathFinderTexts.coinIntro);
+  static LocalizedText _introOf(PathFinderLevel level) =>
+      level.intro ?? (t) => level.board.coins.isEmpty ? t.pathFinderIntro : t.pathFinderCoinIntro;
 }

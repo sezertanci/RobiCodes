@@ -6,6 +6,7 @@ import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
 import '../../content/models/level_pack.dart';
 import '../../content/models/store_product.dart';
+import '../../l10n/l10n.dart';
 import '../parental_gate/parental_gate.dart';
 import 'offer_policy.dart';
 import 'purchase_gateway.dart';
@@ -42,50 +43,53 @@ final class _StoreScreenState extends State<StoreScreen> {
       ParentalAction.purchase,
       (approval) => _services.entitlements.purchase(product.id, approval: approval),
     );
-    return StoreTexts.outcome(outcome ?? PurchaseOutcome.notApproved);
+    return (AppLocalizations t) => StoreTexts.outcome(t, outcome ?? PurchaseOutcome.notApproved);
   });
 
   Future<void> _restore() => _whileBusy(() async {
     final error = await _services.entitlements.refresh();
-    return StoreTexts.restoreResult(error, _services.entitlements.ownedProductIds.length);
+    final owned = _services.entitlements.ownedProductIds.length;
+    return (AppLocalizations t) => StoreTexts.restoreResult(t, error, owned);
   });
 
-  /// İşlem sürerken düğmeleri kapatır, bitince sonucu kullanıcıya gösterir.
-  Future<void> _whileBusy(Future<String> Function() action) async {
+  /// İşlem sürerken düğmeleri kapatır, bitince sonucu kullanıcıya gösterir. Sonuç metni, ekran hâlâ
+  /// açıkken o anki dilde kurulur.
+  Future<void> _whileBusy(Future<LocalizedText> Function() action) async {
     setState(() => _isBusy = true);
     final message = await action();
     if (!mounted) {
       return;
     }
     setState(() => _isBusy = false);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message(context.l10n))));
   }
 
   @override
   Widget build(BuildContext context) {
     final catalog = _services.catalog;
+    final t = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text(StoreTexts.title)),
+      appBar: AppBar(title: Text(t.storeTitle)),
       body: ListenableBuilder(
         listenable: Listenable.merge([_services.entitlements, _services.listings]),
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(_padding),
           children: [
-            const Text(StoreTexts.intro),
-            _SectionTitle(StoreTexts.paidSection),
-            if (catalog.products.isEmpty) const Text(StoreTexts.noProducts),
+            Text(t.storeIntro),
+            _SectionTitle(t.storePaidSection),
+            if (catalog.products.isEmpty) Text(t.storeNoProducts),
             for (final product in catalog.products)
               _ProductCard(product: product, services: _services, isBusy: _isBusy, onBuy: _buy),
-            _SectionTitle(StoreTexts.freeSection),
+            _SectionTitle(t.storeFreeSection),
             for (final game in catalog.games)
-              for (final pack in catalog.freePacksOf(game.id)) ListTile(title: Text(_packLine(_services, pack))),
+              for (final pack in catalog.freePacksOf(game.id)) ListTile(title: Text(_packLine(t, _services, pack))),
             const SizedBox(height: _padding),
             OutlinedButton.icon(
               onPressed: _isBusy ? null : _restore,
               icon: const Icon(Icons.restore_rounded),
-              label: const Text(StoreTexts.restore),
+              label: Text(t.storeRestore),
             ),
-            const Text(StoreTexts.restoreHint),
+            Text(t.storeRestoreHint),
           ],
         ),
       ),
@@ -94,9 +98,9 @@ final class _StoreScreenState extends State<StoreScreen> {
 }
 
 /// "Oyun – Paket (N seviye)" satırı.
-String _packLine(AppServices services, LevelPack pack) {
-  final game = services.catalog.findGame(pack.gameId)?.title ?? pack.gameId;
-  return '$game – ${pack.title} (${StoreTexts.levels(pack.levelCount)})';
+String _packLine(AppLocalizations t, AppServices services, LevelPack pack) {
+  final game = services.catalog.findGame(pack.gameId)?.title(t) ?? pack.gameId;
+  return t.storePackLine(game, pack.title(t), t.storeLevels(pack.levelCount));
 }
 
 final class _SectionTitle extends StatelessWidget {
@@ -128,6 +132,7 @@ final class _ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final packs = [for (final id in product.packIds) ?services.catalog.findPack(id)];
+    final t = context.l10n;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(_padding),
@@ -135,47 +140,44 @@ final class _ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: _gap,
           children: [
-            Text(product.title, style: Theme.of(context).textTheme.titleMedium),
-            if (product.isBundle) const Chip(label: Text(StoreTexts.bundleLabel)),
-            const Text(StoreTexts.unlocksLabel),
-            for (final pack in packs) Text('• ${_packLine(services, pack)}'),
-            _action(context),
+            Text(product.title(t), style: Theme.of(context).textTheme.titleMedium),
+            if (product.isBundle) Chip(label: Text(t.storeBundle)),
+            Text(t.storeUnlocks),
+            for (final pack in packs) Text('• ${_packLine(t, services, pack)}'),
+            _action(t),
           ],
         ),
       ),
     );
   }
 
-  Widget _action(BuildContext context) {
+  Widget _action(AppLocalizations t) {
     final offers = services.offers;
     final listings = services.listings;
     switch (offers.statusOf(product)) {
       case OfferStatus.alreadyOwned:
-        return const Chip(avatar: Icon(Icons.check_circle_rounded), label: Text(StoreTexts.ownedLabel));
+        return Chip(avatar: const Icon(Icons.check_circle_rounded), label: Text(t.storeOwned));
       case OfferStatus.partiallyOwned:
-        final missing = offers.missingPartsOf(product).map((part) => part.title).join(', ');
-        return Text('${StoreTexts.partiallyOwned} $missing');
+        final missing = offers.missingPartsOf(product).map((part) => part.title(t)).join(', ');
+        return Text(t.storePartiallyOwned(missing));
       case OfferStatus.available:
         if (listings.isLoading) {
-          return const Text(StoreTexts.priceLoading);
+          return Text(t.storePriceLoading);
         }
         if (listings.error != null) {
           return Row(
             spacing: _gap,
             children: [
-              const Expanded(child: Text(StoreTexts.priceUnavailable)),
-              TextButton(onPressed: () => unawaited(listings.load()), child: const Text(StoreTexts.retry)),
+              Expanded(child: Text(t.storePriceUnavailable)),
+              TextButton(onPressed: () => unawaited(listings.load()), child: Text(t.storeRetry)),
             ],
           );
         }
         final listing = listings.listingOf(product.id);
         if (listing == null) {
-          return const Text(StoreTexts.notInStore);
+          return Text(t.storeNotInStore);
         }
-        return FilledButton(
-          onPressed: isBusy ? null : () => onBuy(product),
-          child: Text(StoreTexts.buy(listing.price)),
-        );
+        return FilledButton(onPressed: isBusy ? null : () => onBuy(product), child: Text(t.storeBuy(listing.price)));
     }
   }
 }

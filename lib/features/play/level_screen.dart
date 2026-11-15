@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../../app/app_assets.dart';
 import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
-import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
 import '../../app/screen_scale.dart';
 import '../../app/widgets/top_bar.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
 import '../../games/game_module.dart';
+import '../../l10n/l10n.dart';
 import 'game_feedback.dart';
 import 'result_panel.dart';
 import 'widgets/image_button.dart';
@@ -23,9 +23,6 @@ final class LevelScreen extends StatefulWidget {
   final GameDefinition game;
   final LevelPack pack;
   final int initialLevel;
-
-  static const previousLabel = 'Önceki seviye';
-  static const nextLabel = AppTexts.nextLevel;
 
   @override
   State<LevelScreen> createState() => _LevelScreenState();
@@ -66,31 +63,33 @@ final class _LevelScreenState extends State<LevelScreen> {
     final previous = _level - 1;
     final next = _level + 1;
     final arrowSize = ScreenScale.isNarrow(context) ? _narrowArrowSize : _arrowSize;
+    final t = context.l10n;
+    final difficulty = group.difficulty.title(t);
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             TopBar(
-              title: widget.game.title,
+              title: widget.game.title(t),
               icon: widget.game.icon,
-              backLabel: AppTexts.backToLevels,
+              backLabel: t.commonBackToLevels,
               dense: true,
               showHome: true,
               actions: [
                 ImageButton(
                   asset: AppAssets.levelPrevious,
-                  label: LevelScreen.previousLabel,
+                  label: t.playPreviousLevel,
                   size: arrowSize,
                   onPressed: _isOpen(previous) ? () => _goTo(previous) : null,
                 ),
                 Semantics(
-                  label: '${group.difficulty.title}, seviye $_level',
+                  label: t.playLevelLabel(difficulty, _level),
                   excludeSemantics: true,
-                  child: _LevelBadge(text: '${group.difficulty.title} · $_level', tone: widget.game.tone),
+                  child: _LevelBadge(text: '$difficulty · $_level', tone: widget.game.tone),
                 ),
                 ImageButton(
                   asset: AppAssets.levelNext,
-                  label: LevelScreen.nextLabel,
+                  label: t.commonNextLevel,
                   size: arrowSize,
                   onPressed: _isOpen(next) ? () => _goTo(next) : null,
                 ),

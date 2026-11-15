@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Varsayılan (İngilizce) uygulama adı. Cihaz dili Türkçe ise values-tr içindeki ad kullanılır. -->
+<resources>
+    <string name="app_name">Robi Codes</string>
+</resources>

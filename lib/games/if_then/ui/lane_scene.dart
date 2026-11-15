@@ -10,7 +10,7 @@ import '../../../features/play/widgets/pulsing_hint_frame.dart';
 import '../../../features/play/widgets/robot_sprite.dart';
 import '../engine/if_then_level.dart';
 import '../if_then_controller.dart';
-import '../if_then_texts.dart';
+import '../../../l10n/l10n.dart';
 import 'if_then_assets.dart';
 
 /// Robotun yolu: başlangıç karesi, yol kareleri ve bayrak tek sırada. Robotun geçtiği karelerde
@@ -75,7 +75,7 @@ final class _LaneSceneState extends State<LaneScene> {
         boxShadow: const [BoxShadow(color: AppColors.shadow, offset: Offset(0, _lip))],
       ),
       child: Semantics(
-        label: IfThenTexts.lane,
+        label: context.l10n.ifThenLane,
         excludeSemantics: true,
         child: SingleChildScrollView(
           controller: _scroll,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../l10n/l10n.dart';
 import '../achievement.dart';
 import 'reward_emblem.dart';
 
@@ -10,11 +11,8 @@ final class AchievementCard extends StatelessWidget {
 
   final AchievementStatus status;
 
-  static const earnedLabel = 'Kazanıldı!';
-  static const conditionLabel = 'Nasıl kazanılır? ';
-
-  static String semanticLabel(String title, {required bool isEarned}) =>
-      '$title, ${isEarned ? 'kazanıldı' : 'kilitli'}';
+  static String semanticLabel(AppLocalizations t, String title, {required bool isEarned}) =>
+      isEarned ? t.achievementCardEarned(title) : t.achievementCardLocked(title);
 
   static const _badgeSize = 76.0;
   static const _trophySize = 104.0;
@@ -25,9 +23,11 @@ final class AchievementCard extends StatelessWidget {
     final AchievementStatus(:achievement, :progress, :isEarned) = status;
     final textTheme = Theme.of(context).textTheme;
     final isBadge = achievement.kind == AchievementKind.badge;
+    final t = context.l10n;
+    final title = achievement.title(t);
     return Semantics(
       container: true,
-      label: semanticLabel(achievement.title, isEarned: isEarned),
+      label: semanticLabel(t, title, isEarned: isEarned),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -42,21 +42,21 @@ final class AchievementCard extends StatelessWidget {
               RewardEmblem(status: status, size: isBadge ? _badgeSize : _trophySize),
               const SizedBox(height: 8),
               Text(
-                achievement.title,
+                title,
                 textAlign: TextAlign.center,
                 style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 2),
-              Text(achievement.description, textAlign: TextAlign.center, style: textTheme.bodyMedium),
+              Text(achievement.description(t), textAlign: TextAlign.center, style: textTheme.bodyMedium),
               const SizedBox(height: 6),
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(
-                      text: conditionLabel,
-                      style: TextStyle(fontWeight: FontWeight.w800),
+                    TextSpan(
+                      text: t.achievementCondition,
+                      style: const TextStyle(fontWeight: FontWeight.w800),
                     ),
-                    TextSpan(text: achievement.condition),
+                    TextSpan(text: achievement.condition(t)),
                   ],
                 ),
                 textAlign: TextAlign.center,
@@ -65,7 +65,7 @@ final class AchievementCard extends StatelessWidget {
               const SizedBox(height: 8),
               if (isEarned)
                 Text(
-                  earnedLabel,
+                  t.achievementEarned,
                   style: textTheme.titleSmall?.copyWith(color: AppColors.greenDark, fontWeight: FontWeight.w900),
                 )
               else

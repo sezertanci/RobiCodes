@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../../app/app_theme.dart';
+import '../../l10n/l10n.dart';
 import 'achievement_stats.dart';
 
 /// Ödülün türü: rozetler küçük başarılar, kupalar büyük hedeflerdir. Rozet kazanılınca ekranın
@@ -55,11 +56,11 @@ final class Achievement {
   /// Kayıtta saklanan kalıcı kimlik. Yayından sonra değiştirilmez.
   final String id;
   final AchievementKind kind;
-  final String title;
-  final String description;
+  final LocalizedText title;
+  final LocalizedText description;
 
   /// "Nasıl kazanılır?" sorusunun cevabı.
-  final String condition;
+  final LocalizedText condition;
   final ColorTone tone;
   final RewardSymbol symbol;
   final AchievementProgress Function(AchievementStats stats) measure;

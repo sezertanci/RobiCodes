@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../l10n/l10n.dart';
 import '../achievement.dart';
 import 'celebration_label.dart';
 import 'reward_emblem.dart';
@@ -16,8 +17,6 @@ final class BadgeToast extends StatefulWidget {
 
   final AchievementStatus status;
   final VoidCallback onClosed;
-
-  static const label = 'Yeni rozet!';
 
   static const enterDuration = Duration(milliseconds: 500);
   static const visibleDuration = Duration(milliseconds: 3200);
@@ -129,11 +128,12 @@ final class _BadgeToastState extends State<BadgeToast> with SingleTickerProvider
 
   Widget _card(BuildContext context, {required bool isNarrow, required bool reduceMotion}) {
     final status = widget.status;
+    final t = context.l10n;
     final emblem = RewardEmblem(status: status, size: isNarrow ? 60 : 76);
     return Semantics(
       liveRegion: true,
       button: true,
-      label: '${BadgeToast.label} ${status.achievement.title}. ${status.achievement.description}',
+      label: '${t.achievementNewBadge} ${status.achievement.title(t)}. ${status.achievement.description(t)}',
       excludeSemantics: true,
       child: GestureDetector(
         onTap: _close,
@@ -182,14 +182,15 @@ final class _BadgeToastState extends State<BadgeToast> with SingleTickerProvider
 
   Widget _texts({required bool isNarrow}) {
     final achievement = widget.status.achievement;
+    final t = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CelebrationLabel(BadgeToast.label, fontSize: 15),
+        CelebrationLabel(t.achievementNewBadge, fontSize: 15),
         const SizedBox(height: 2),
         Text(
-          achievement.title,
+          achievement.title(t),
           style: TextStyle(
             color: AppColors.navy,
             fontSize: isNarrow ? 20 : 24,
@@ -198,7 +199,7 @@ final class _BadgeToastState extends State<BadgeToast> with SingleTickerProvider
           ),
         ),
         Text(
-          achievement.description,
+          achievement.description(t),
           style: const TextStyle(color: AppColors.navy, fontSize: 16, fontWeight: FontWeight.w700),
         ),
       ],

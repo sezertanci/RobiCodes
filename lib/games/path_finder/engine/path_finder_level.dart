@@ -1,3 +1,4 @@
+import '../../../l10n/l10n.dart';
 import 'path_finder_board.dart';
 
 /// Bir seviyenin verisi. Oyun kuralları bu veriyi okur; seviye eklemek için kod değişmez.
@@ -11,7 +12,7 @@ final class PathFinderLevel {
   final String solution;
 
   /// Seviyeye özel açılış mesajı. Yoksa oyunun genel açılış mesajı gösterilir.
-  final String? intro;
+  final LocalizedText? intro;
 
   /// Komut sınırı. Yoksa oyunun varsayılan sınırı geçerlidir.
   final int? maxCommands;

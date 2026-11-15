@@ -12,6 +12,7 @@ import 'package:robi_codes/features/home/character_button.dart';
 import 'package:robi_codes/features/play/widgets/speech_bubble.dart';
 
 import '../support/fakes.dart';
+import '../support/test_l10n.dart';
 import '../support/ui_test_helpers.dart';
 
 const _fiyo = 'fiyo';
@@ -99,30 +100,33 @@ void main() {
         final services = AppServices.production(store);
         final fiyo = CharacterRoster.find(_fiyo)!;
         await tester.pumpWidget(RobiCodesApp(services: services));
-        expect(find.bySemanticsLabel(CharacterButton.semanticLabel('Robi')), findsOneWidget);
+        expect(
+          find.bySemanticsLabel(texts.homeCharacterLabel(CharacterRoster.defaultCharacter.name(texts))),
+          findsOneWidget,
+        );
 
         // Act
         await tester.tap(find.byType(CharacterButton));
         await settle(tester);
-        expect(find.text(CharacterDialog.title), findsOneWidget);
+        expect(find.text(texts.characterTitle), findsOneWidget);
         expect(tester.takeException(), isNull);
         for (final character in CharacterRoster.all) {
-          expect(find.bySemanticsLabel(character.name), findsOneWidget);
+          expect(find.bySemanticsLabel(character.name(texts)), findsOneWidget);
         }
         final columns = size.width < 560 ? 2 : 3;
         final rowTops = {
           for (final character in CharacterRoster.all.take(columns))
-            tester.getTopLeft(find.bySemanticsLabel(character.name)).dy,
+            tester.getTopLeft(find.bySemanticsLabel(character.name(texts))).dy,
         };
         expect(rowTops, hasLength(1), reason: 'İlk $columns karakter aynı satırda olmalı.');
-        await tester.tap(find.bySemanticsLabel(fiyo.name));
+        await tester.tap(find.bySemanticsLabel(fiyo.name(texts)));
         await settle(tester);
 
         // Assert
         expect(find.byType(CharacterDialog), findsNothing);
-        expect(find.bySemanticsLabel(CharacterButton.semanticLabel(fiyo.name)), findsOneWidget);
+        expect(find.bySemanticsLabel(texts.homeCharacterLabel(fiyo.name(texts))), findsOneWidget);
         expect(store.read(StorageKeys.character), contains(_fiyo));
-        await openLevelSelect(tester, 'Robotun Yolunu Bul');
+        await openLevelSelect(tester, texts.gamePathFinderTitle);
         await openLevel(tester, 1);
         expect(find.descendant(of: find.byType(SpeechBubble), matching: _imagesOf(fiyo.image)), findsOneWidget);
         expect(_imagesOf(CharacterRoster.defaultCharacter.image), findsNothing);
@@ -137,7 +141,7 @@ void main() {
       await settle(tester);
 
       // Act
-      await tester.tap(find.text(CharacterDialog.closeLabel));
+      await tester.tap(find.text(texts.commonClose));
       await settle(tester);
 
       // Assert

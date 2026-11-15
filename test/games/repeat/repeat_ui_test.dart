@@ -12,15 +12,16 @@ import 'package:robi_codes/games/repeat/repeat_texts.dart';
 import 'package:robi_codes/games/repeat/ui/program_strip.dart';
 import 'package:robi_codes/games/repeat/ui/repeat_view.dart';
 
+import '../../support/test_l10n.dart';
 import '../../support/fakes.dart';
 import '../../support/ui_test_helpers.dart';
 
-const _gameTitle = 'Tekrar Et';
+final _gameTitle = texts.gameRepeatTitle;
 
 Future<void> _pumpLevel(WidgetTester tester, RepeatLevel level) async {
   await tester.pumpWidget(
-    MaterialApp(
-      home: Scaffold(
+    localizedApp(
+      Scaffold(
         body: RepeatView(key: UniqueKey(), level: level, onCompleted: (_) {}),
       ),
     ),
@@ -30,9 +31,9 @@ Future<void> _pumpLevel(WidgetTester tester, RepeatLevel level) async {
 
 /// 1. seviyenin çözümü: Tekrarla bloğu, içine sağ ok, tekrar sayısı 3.
 Future<void> _buildFirstSolution(WidgetTester tester) async {
-  await tapVisible(tester, findButton(RepeatTexts.addRepeatLabel));
-  await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(Direction.right)));
-  await tapVisible(tester, findButton(RepeatTexts.increase));
+  await tapVisible(tester, findButton(texts.repeatAddRepeatLabel));
+  await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(texts, Direction.right)));
+  await tapVisible(tester, findButton(texts.repeatIncrease));
 }
 
 void main() {
@@ -46,7 +47,7 @@ void main() {
         expect(tester.takeException(), isNull, reason: '${index + 1}. seviye');
         expect(find.byType(BoardView), findsOneWidget);
         expect(find.byType(ProgramStrip), findsOneWidget);
-        expect(find.byTooltip(RepeatTexts.run), findsOneWidget);
+        expect(find.byTooltip(texts.commonRun), findsOneWidget);
       }
     });
 
@@ -54,13 +55,16 @@ void main() {
       useScreen(tester, size);
       await _pumpLevel(tester, repeatBaseLevels.last);
 
-      await tapVisible(tester, findButton(RepeatTexts.addRepeatLabel));
-      await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(Direction.right)));
-      await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(Direction.down)));
-      await tapVisible(tester, find.bySemanticsLabel(RepeatTexts.moveChip((block: 0, inner: 1), Direction.down)));
+      await tapVisible(tester, findButton(texts.repeatAddRepeatLabel));
+      await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(texts, Direction.right)));
+      await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(texts, Direction.down)));
+      await tapVisible(
+        tester,
+        find.bySemanticsLabel(RepeatTexts.moveChip(texts, (block: 0, inner: 1), Direction.down)),
+      );
 
-      expect(find.byTooltip(RepeatTexts.deleteLabel), findsOneWidget);
-      expect(find.byTooltip(RepeatTexts.moveOutLabel), findsOneWidget);
+      expect(find.byTooltip(texts.repeatDeleteLabel), findsOneWidget);
+      expect(find.byTooltip(texts.repeatMoveOutLabel), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -75,7 +79,7 @@ void main() {
       await openLevelSelect(tester, _gameTitle);
       await openLevel(tester, 1);
       await _buildFirstSolution(tester);
-      await tapVisible(tester, find.byTooltip(RepeatTexts.run));
+      await tapVisible(tester, find.byTooltip(texts.commonRun));
       await waitForAnimations(tester);
 
       // Assert
@@ -92,10 +96,10 @@ void main() {
     for (final level in repeatBaseLevels) {
       await _pumpLevel(tester, level);
 
-      for (final tooltip in [RepeatTexts.run, RepeatTexts.hint, RepeatTexts.clear]) {
+      for (final tooltip in [texts.commonRun, texts.commonHint, texts.commonClear]) {
         expect(tester.getRect(find.byTooltip(tooltip)).bottom, lessThanOrEqualTo(screen.height));
       }
-      expect(tester.getRect(findButton(RepeatTexts.addRepeatLabel)).bottom, lessThanOrEqualTo(screen.height));
+      expect(tester.getRect(findButton(texts.repeatAddRepeatLabel)).bottom, lessThanOrEqualTo(screen.height));
     }
   });
 
@@ -104,12 +108,12 @@ void main() {
     await _pumpLevel(tester, repeatBaseLevels.first);
 
     await _buildFirstSolution(tester);
-    await tapVisible(tester, findButton(RepeatTexts.increase));
-    await tapVisible(tester, find.byTooltip(RepeatTexts.run));
+    await tapVisible(tester, findButton(texts.repeatIncrease));
+    await tapVisible(tester, find.byTooltip(texts.commonRun));
     await waitForAnimations(tester, steps: 15);
 
     final step = (direction: Direction.right, block: 0, inner: 0, round: 3);
-    expect(find.text(RepeatTexts.blocked(Obstacle.edge, step)), findsOneWidget);
+    expect(find.text(RepeatTexts.blocked(Obstacle.edge, step)(texts)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -117,12 +121,12 @@ void main() {
     useScreen(tester, TestScreens.phone);
     await _pumpLevel(tester, repeatBaseLevels[5]);
 
-    await tapVisible(tester, findButton(RepeatTexts.addRepeatLabel));
-    await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(Direction.right)));
-    await tapVisible(tester, findButton(RepeatTexts.leaveRepeatLabel));
+    await tapVisible(tester, findButton(texts.repeatAddRepeatLabel));
+    await tapVisible(tester, find.byTooltip(RepeatTexts.addMove(texts, Direction.right)));
+    await tapVisible(tester, findButton(texts.repeatLeaveRepeatLabel));
 
-    expect(findButton(RepeatTexts.addRepeatLabel), findsOneWidget);
-    expect(find.text(RepeatTexts.outsideRepeat), findsOneWidget);
+    expect(findButton(texts.repeatAddRepeatLabel), findsOneWidget);
+    expect(find.text(texts.repeatOutsideRepeat), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -131,10 +135,10 @@ void main() {
     final level = repeatBaseLevels.first;
     await _pumpLevel(tester, level);
 
-    await tapVisible(tester, find.byTooltip(RepeatTexts.hint));
+    await tapVisible(tester, find.byTooltip(texts.commonHint));
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text(RepeatTexts.nextMoveHint(level.hint, Direction.right)), findsOneWidget);
+    expect(find.text(RepeatTexts.nextMoveHint(level.hint, Direction.right)(texts)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

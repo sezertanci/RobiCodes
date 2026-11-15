@@ -7,4 +7,5 @@ abstract final class StorageKeys {
   static const sound = 'sound.v1';
   static const character = 'character.v1';
   static const achievements = 'achievements.v1';
+  static const language = 'language.v1';
 }

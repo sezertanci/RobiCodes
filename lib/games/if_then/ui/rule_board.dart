@@ -5,6 +5,7 @@ import '../../../features/play/widgets/dashed_frame.dart';
 import '../../../features/play/widgets/mark_effects.dart';
 import '../engine/if_then_engine.dart';
 import '../if_then_controller.dart';
+import '../../../l10n/l10n.dart';
 import '../if_then_texts.dart';
 import 'block_tile.dart';
 import 'if_then_metrics.dart';
@@ -75,7 +76,8 @@ final class _RuleHead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isElse = rule == IfThenEngine.elseRule;
-    final word = isElse ? IfThenTexts.elseWord : (rule == 0 ? IfThenTexts.ifWord : IfThenTexts.elseIfWord);
+    final t = context.l10n;
+    final word = isElse ? t.ifThenElse : (rule == 0 ? t.ifThenIf : t.ifThenElseIf);
     return Container(
       constraints: BoxConstraints(minHeight: metrics.headMinHeight),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
@@ -96,7 +98,7 @@ final class _RuleHead extends StatelessWidget {
           _word(word),
           if (!isElse) ...[
             _SlotBox(controller: controller, slot: (rule: rule, part: SlotPart.condition), metrics: metrics),
-            _word(IfThenTexts.thenWord),
+            _word(t.ifThenThen),
           ],
         ],
       ),
@@ -178,7 +180,7 @@ final class _SlotBox extends StatelessWidget {
           button: true,
           selected: controller.target == slot,
           enabled: onTap != null,
-          label: IfThenTexts.slot(condition: condition, value: value, locked: locked),
+          label: IfThenTexts.slot(context.l10n, condition: condition, value: value, locked: locked),
           excludeSemantics: true,
           onTap: onTap,
           child: GestureDetector(

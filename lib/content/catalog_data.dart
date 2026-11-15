@@ -24,46 +24,44 @@ const _standardGroups = [
   DifficultyGroup(Difficulty.expert, _levelsPerGroup),
 ];
 
-const _basePackTitle = 'Temel Seviyeler';
-
 /// Oyunun ücretsiz temel paketinin kimliği: `<oyun>.base`.
 String basePackId(String gameId) => '$gameId.base';
 
 LevelPack _basePack(String gameId) =>
-    LevelPack(id: basePackId(gameId), gameId: gameId, title: _basePackTitle, groups: _standardGroups);
+    LevelPack(id: basePackId(gameId), gameId: gameId, title: (t) => t.basePackTitle, groups: _standardGroups);
 
-const _games = [
+final _games = [
   GameDefinition(
     id: GameIds.pathFinder,
-    title: 'Robotun Yolunu Bul',
-    description: 'Yön komutlarıyla robotu hedefe ulaştır.',
+    title: (t) => t.gamePathFinderTitle,
+    description: (t) => t.gamePathFinderDescription,
     tone: AppTones.blue,
     icon: AppAssets.gamePath,
-    trophy: GameTrophy(title: 'Robot Ustası', description: 'Robot artık her yolu biliyor!'),
+    trophy: GameTrophy(title: (t) => t.gamePathFinderTrophy, description: (t) => t.gamePathFinderTrophyDescription),
   ),
   GameDefinition(
     id: GameIds.commandOrder,
-    title: 'Komutları Sırala',
-    description: 'Adımları doğru sıraya diz.',
+    title: (t) => t.gameCommandOrderTitle,
+    description: (t) => t.gameCommandOrderDescription,
     tone: AppTones.green,
     icon: AppAssets.gameOrder,
-    trophy: GameTrophy(title: 'Algoritma Ustası', description: 'Adımları sıralamakta bir numarasın!'),
+    trophy: GameTrophy(title: (t) => t.gameCommandOrderTrophy, description: (t) => t.gameCommandOrderTrophyDescription),
   ),
   GameDefinition(
     id: GameIds.ifThen,
-    title: 'Eğer Böyleyse',
-    description: 'Duruma göre doğru komutu seç.',
+    title: (t) => t.gameIfThenTitle,
+    description: (t) => t.gameIfThenDescription,
     tone: AppTones.purple,
     icon: AppAssets.gameIf,
-    trophy: GameTrophy(title: 'Karar Ustası', description: 'Her durumda doğru kararı veriyorsun!'),
+    trophy: GameTrophy(title: (t) => t.gameIfThenTrophy, description: (t) => t.gameIfThenTrophyDescription),
   ),
   GameDefinition(
     id: GameIds.repeat,
-    title: 'Tekrar Et',
-    description: 'Tekrarlanan hareketleri tek blokla yap.',
+    title: (t) => t.gameRepeatTitle,
+    description: (t) => t.gameRepeatDescription,
     tone: AppTones.orange,
     icon: AppAssets.gameRepeat,
-    trophy: GameTrophy(title: 'Döngü Ustası', description: 'Tekrarları ustaca kullanıyorsun!'),
+    trophy: GameTrophy(title: (t) => t.gameRepeatTrophy, description: (t) => t.gameRepeatTrophyDescription),
   ),
 ];
 

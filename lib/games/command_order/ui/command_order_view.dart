@@ -6,7 +6,7 @@ import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/image_button.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../command_order_controller.dart';
-import '../command_order_texts.dart';
+import '../../../l10n/l10n.dart';
 import '../engine/command_order_engine.dart';
 import '../engine/command_order_level.dart';
 import 'card_metrics.dart';
@@ -148,25 +148,26 @@ final class _CommandOrderViewState extends State<CommandOrderView> {
 
   Widget _controls(double size) {
     final playing = !_controller.isDone;
+    final t = context.l10n;
     return Wrap(
       alignment: WrapAlignment.center,
       children: [
         ImageButton(
           asset: AppAssets.checkButton,
-          label: CommandOrderTexts.check,
+          label: t.commandOrderCheck,
           size: size,
           highlighted: playing && _controller.isFull,
           onPressed: playing && _controller.isFull ? _controller.check : null,
         ),
         ImageButton(
           asset: AppAssets.hintButton,
-          label: CommandOrderTexts.hint,
+          label: t.commonHint,
           size: size,
           onPressed: playing ? _controller.showHint : null,
         ),
         ImageButton(
           asset: AppAssets.clearButton,
-          label: CommandOrderTexts.clear,
+          label: t.commonClear,
           size: size,
           onPressed: playing && _controller.poolCards.length < _controller.cards.length ? _controller.clear : null,
         ),

@@ -7,30 +7,35 @@ import 'package:robi_codes/games/command_order/engine/command_order_engine.dart'
 import 'package:robi_codes/games/command_order/engine/command_order_level.dart';
 
 import '../../support/fakes.dart';
+import '../../support/test_l10n.dart';
 
-const _level = CommandOrderLevel(
-  title: 'Görev',
+final _level = CommandOrderLevel(
+  title: fixedText('Görev'),
   icon: 'task.svg',
-  hint: 'Önce başla.',
-  steps: [CommandStep('Bir', '1.svg'), CommandStep('İki', '2.svg'), CommandStep('Üç', '3.svg')],
+  hint: fixedText('Önce başla.'),
+  steps: [
+    CommandStep(fixedText('Bir'), '1.svg'),
+    CommandStep(fixedText('İki'), '2.svg'),
+    CommandStep(fixedText('Üç'), '3.svg'),
+  ],
 );
 
-const _levelWithExtra = CommandOrderLevel(
-  title: 'Görev',
+final _levelWithExtra = CommandOrderLevel(
+  title: fixedText('Görev'),
   icon: 'task.svg',
-  hint: 'Önce başla.',
-  steps: [CommandStep('Bir', '1.svg'), CommandStep('İki', '2.svg')],
-  extras: [CommandStep('Fazla', 'x.svg')],
+  hint: fixedText('Önce başla.'),
+  steps: [CommandStep(fixedText('Bir'), '1.svg'), CommandStep(fixedText('İki'), '2.svg')],
+  extras: [CommandStep(fixedText('Fazla'), 'x.svg')],
 );
 
 /// Kartlar ters sırayla verilir; böylece havuzdaki sıra testte bellidir.
 CommandOrderController _controller(
   List<int> stars, {
-  CommandOrderLevel level = _level,
+  CommandOrderLevel? level,
   GameFeedback feedback = const SilentGameFeedback(),
 }) => CommandOrderController(
-  level: level,
-  cards: CommandOrderEngine.buildCards(level).reversed.toList(),
+  level: level ?? _level,
+  cards: CommandOrderEngine.buildCards(level ?? _level).reversed.toList(),
   onCompleted: stars.add,
   feedback: feedback,
   celebrateDuration: Duration.zero,
@@ -44,8 +49,8 @@ void _fillInOrder(CommandOrderController controller) {
 
 void main() {
   test('constructor_LevelWithExtras_SaysExtrasIntro', () {
-    expect(_controller([]).message, CommandOrderTexts.intro);
-    expect(_controller([], level: _levelWithExtra).message, CommandOrderTexts.extrasIntro);
+    expect(_controller([]).message(texts), texts.commandOrderIntro);
+    expect(_controller([], level: _levelWithExtra).message(texts), texts.commandOrderExtrasIntro);
   });
 
   test('tapPoolCard_NoTarget_FillsFirstEmptySlot', () {
@@ -74,7 +79,7 @@ void main() {
 
     controller.tapPoolCard(2);
 
-    expect(controller.message, CommandOrderTexts.full);
+    expect(controller.message(texts), texts.commandOrderFull);
     expect(controller.slots, [0, 1]);
   });
 
@@ -123,7 +128,7 @@ void main() {
 
     await controller.check();
 
-    expect(controller.message, CommandOrderTexts.notFull);
+    expect(controller.message(texts), texts.commandOrderNotFull);
     expect(controller.mark, isNull);
   });
 
@@ -140,7 +145,10 @@ void main() {
     expect(controller.mood, RobotMood.sad);
     expect(feedback.audibleMoods, [RobotMood.sad]);
     expect(controller.wrongCount, 1);
-    expect(controller.message, CommandOrderTexts.wrong(const OrderWrong(1, WrongReason.tooEarly), 'Üç'));
+    expect(
+      controller.message(texts),
+      CommandOrderTexts.wrong(const OrderWrong(1, WrongReason.tooEarly), controller.cardOf(2))(texts),
+    );
   });
 
   test('change_AfterWrongMark_ClearsMarkAndSaysIntro', () async {
@@ -153,7 +161,7 @@ void main() {
     controller.returnToPool(1);
 
     expect(controller.mark, isNull);
-    expect(controller.message, CommandOrderTexts.intro);
+    expect(controller.message(texts), texts.commandOrderIntro);
   });
 
   test('check_CorrectFirstTry_CompletesWithThreeStars', () async {
@@ -192,7 +200,7 @@ void main() {
     expect(controller.mark, (slot: 0, cardId: 0, kind: SlotMarkKind.hint));
     expect(controller.target, 0);
     expect(controller.hintUsed, isTrue);
-    expect(controller.message, CommandOrderTexts.hintText(_level.hint, 'Bir', 0));
+    expect(controller.message(texts), CommandOrderTexts.hint(_level.hint, controller.cardOf(0), 0)(texts));
   });
 
   test('showHint_ThenTapHintedCard_PlacesItAndCompletesWithOneStar', () async {
@@ -215,7 +223,7 @@ void main() {
 
     controller.showHint();
 
-    expect(controller.message, CommandOrderTexts.solved);
+    expect(controller.message(texts), texts.commandOrderSolved);
     expect(controller.mark, isNull);
   });
 
@@ -226,7 +234,7 @@ void main() {
     controller.clear();
 
     expect(controller.slots, [null, null, null]);
-    expect(controller.message, CommandOrderTexts.intro);
+    expect(controller.message(texts), texts.commandOrderIntro);
   });
 
   test('actions_AfterDone_AreIgnored', () async {

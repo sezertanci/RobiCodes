@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/group_tone.dart';
+import '../../../l10n/l10n.dart';
 import '../engine/command_order_engine.dart';
 import 'card_metrics.dart';
 import 'step_image.dart';
@@ -69,7 +70,7 @@ final class OrderCardTile extends StatelessWidget {
                 child: StepImage(card.icon, size: metrics.art),
               ),
               const SizedBox(height: _textGap),
-              Expanded(child: Center(child: _text(tone))),
+              Expanded(child: Center(child: _text(context, tone))),
             ],
           ),
         ),
@@ -78,12 +79,12 @@ final class OrderCardTile extends StatelessWidget {
   }
 
   /// Yazı kalan alana sığmazsa küçülür.
-  Widget _text(GroupTone tone) => FittedBox(
+  Widget _text(BuildContext context, GroupTone tone) => FittedBox(
     fit: BoxFit.scaleDown,
     child: SizedBox(
       width: metrics.width - metrics.padding * 2,
       child: Text(
-        card.text,
+        card.step.text(context.l10n),
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: metrics.fontSize,

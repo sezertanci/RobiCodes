@@ -6,6 +6,7 @@ import '../../../features/play/widgets/dashed_frame.dart';
 import '../../path_finder/engine/path_finder_board.dart';
 import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
+import '../../../l10n/l10n.dart';
 import '../repeat_controller.dart';
 import '../repeat_texts.dart';
 import 'repeat_assets.dart';
@@ -81,7 +82,7 @@ final class RepeatBlockView extends StatelessWidget {
           children: [
             _head(context),
             const SizedBox(width: _gap + 2),
-            _body(),
+            _body(context),
           ],
         ),
       ),
@@ -91,6 +92,7 @@ final class RepeatBlockView extends StatelessWidget {
   Widget _head(BuildContext context) {
     final step = controller.activeStep;
     final editable = !controller.isRunning;
+    final t = context.l10n;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -99,18 +101,18 @@ final class RepeatBlockView extends StatelessWidget {
           children: [
             _TimesButton(
               text: '−',
-              label: RepeatTexts.decrease,
+              label: t.repeatDecrease,
               size: chipSize * 0.8,
               onPressed: editable && block.times > RepeatBlock.minTimes
                   ? () => controller.changeTimes(index, -1)
                   : null,
             ),
             const SizedBox(width: 6),
-            _label(editable),
+            _label(t, editable),
             const SizedBox(width: 6),
             _TimesButton(
               text: '+',
-              label: RepeatTexts.increase,
+              label: t.repeatIncrease,
               size: chipSize * 0.8,
               onPressed: editable && block.times < RepeatBlock.maxTimes ? () => controller.changeTimes(index, 1) : null,
             ),
@@ -122,10 +124,10 @@ final class RepeatBlockView extends StatelessWidget {
     );
   }
 
-  Widget _label(bool editable) => Semantics(
+  Widget _label(AppLocalizations t, bool editable) => Semantics(
     button: true,
     selected: _isTarget,
-    label: RepeatTexts.repeatLabel(index, block.times),
+    label: RepeatTexts.repeatLabel(t, index, block.times),
     excludeSemantics: true,
     child: GestureDetector(
       onTap: editable ? () => controller.toggleTarget(index) : null,
@@ -142,8 +144,7 @@ final class RepeatBlockView extends StatelessWidget {
           children: [
             RepeatIcon(size: chipSize * 0.56),
             const SizedBox(width: 6),
-            Text(RepeatTexts.times(block.times), style: _labelStyle),
-            if (!compact) ...[const SizedBox(width: 6), const Text(RepeatTexts.repeatWord, style: _labelStyle)],
+            Text(compact ? t.repeatTimes(block.times) : t.repeatTimesFull(block.times), style: _labelStyle),
           ],
         ),
       ),
@@ -157,7 +158,7 @@ final class RepeatBlockView extends StatelessWidget {
     shadows: [Shadow(color: AppColors.orangeDark, offset: Offset(0, 2))],
   );
 
-  Widget _body() {
+  Widget _body(BuildContext context) {
     final showDrop = (_isTarget && !controller.isFull) || block.body.isEmpty;
     return Container(
       height: chipSize + 8,
@@ -171,12 +172,12 @@ final class RepeatBlockView extends StatelessWidget {
         children: [
           for (final (inner, direction) in block.body.indexed) ...[
             if (inner > 0) const SizedBox(width: _gap),
-            _innerChip(inner, direction),
+            _innerChip(context, inner, direction),
           ],
           if (showDrop) ...[
             if (block.body.isNotEmpty) const SizedBox(width: _gap),
             _DropHint(
-              text: _isTarget && !controller.isFull ? RepeatTexts.dropHere : RepeatTexts.emptyBody,
+              text: _isTarget && !controller.isFull ? context.l10n.repeatDropHere : context.l10n.repeatEmptyBody,
               size: chipSize,
             ),
           ],
@@ -185,12 +186,12 @@ final class RepeatBlockView extends StatelessWidget {
     );
   }
 
-  Widget _innerChip(int inner, Direction direction) {
+  Widget _innerChip(BuildContext context, int inner, Direction direction) {
     final place = (block: index, inner: inner);
     final step = controller.activeStep;
     return CommandChip(
       key: keyOf(place),
-      label: RepeatTexts.moveChip(place, direction),
+      label: RepeatTexts.moveChip(context.l10n, place, direction),
       direction: direction,
       size: chipSize,
       selected: controller.selected == place,

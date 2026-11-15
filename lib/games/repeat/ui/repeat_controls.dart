@@ -4,6 +4,7 @@ import '../../../app/app_assets.dart';
 import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/image_button.dart';
 import '../../path_finder/ui/direction_pad.dart';
+import '../../../l10n/l10n.dart';
 import '../repeat_controller.dart';
 import '../repeat_texts.dart';
 import 'repeat_block_view.dart';
@@ -33,6 +34,9 @@ final class RepeatControls extends StatelessWidget {
   static double stackedButtonSizeFor(double height) =>
       (height - _stackedGap - ImageButton.padding * 2 * (_stackedRows + 1)) / (_stackedRows + _repeatHeightRatio);
 
+  /// Yan yana düzenin verilen düğme boyundaki yüksekliği; en uzun parça yön tuşlarıdır.
+  static double rowHeight(double buttonSize) => DirectionPad.extent(buttonSize);
+
   /// Alt alta düzenin verilen düğme boyundaki genişliği.
   static double stackedWidth(double buttonSize) => DirectionPad.extent(buttonSize);
 
@@ -40,16 +44,17 @@ final class RepeatControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     final pad = DirectionPad(
       buttonSize: buttonSize,
       enabled: controller.canAddMove,
       highlighted: controller.hint?.direction,
-      label: RepeatTexts.addMove,
+      label: (direction) => RepeatTexts.addMove(t, direction),
       onPressed: controller.addMove,
     );
-    final run = _action(AppAssets.runButton, RepeatTexts.run, controller.run);
-    final hint = _action(AppAssets.hintButton, RepeatTexts.hint, controller.showHint);
-    final clear = _action(AppAssets.clearButton, RepeatTexts.clear, controller.clear);
+    final run = _action(AppAssets.runButton, t.commonRun, controller.run);
+    final hint = _action(AppAssets.hintButton, t.commonHint, controller.showHint);
+    final clear = _action(AppAssets.clearButton, t.commonClear, controller.clear);
     if (stacked) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -115,10 +120,11 @@ final class RepeatButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = leaving ? AppColors.navy : AppColors.orange;
     final dark = leaving ? _navyDark : AppColors.orangeDark;
+    final t = context.l10n;
     return Semantics(
       button: true,
       enabled: onPressed != null,
-      label: leaving ? RepeatTexts.leaveRepeatLabel : RepeatTexts.addRepeatLabel,
+      label: leaving ? t.repeatLeaveRepeatLabel : t.repeatAddRepeatLabel,
       excludeSemantics: true,
       onTap: onPressed,
       child: Opacity(
@@ -140,7 +146,7 @@ final class RepeatButton extends StatelessWidget {
                 children: [
                   if (!leaving) ...[RepeatIcon(size: height * 0.6), const SizedBox(width: 8)],
                   Text(
-                    leaving ? RepeatTexts.leaveRepeat : RepeatTexts.addRepeat,
+                    leaving ? t.repeatLeaveRepeat : t.repeatAddRepeat,
                     style: TextStyle(
                       fontSize: height * 0.36,
                       fontWeight: FontWeight.w900,

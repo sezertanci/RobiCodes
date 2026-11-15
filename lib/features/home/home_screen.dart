@@ -4,6 +4,7 @@ import '../../app/app_scope.dart';
 import '../../app/app_services.dart';
 import '../../content/models/game_definition.dart';
 import '../../content/models/level_pack.dart';
+import '../../l10n/l10n.dart';
 import '../play/level_select_screen.dart';
 import 'game_card.dart';
 import 'home_header.dart';
@@ -49,9 +50,10 @@ final class HomeScreen extends StatelessWidget {
   Widget _buildCard(BuildContext context, AppServices services, GameDefinition game) {
     final isPlayable = services.games.isPlayable(game.id);
     final packs = services.entitlements.playablePacksOf(game.id);
+    final t = context.l10n;
     return GameCard(
-      title: game.title,
-      description: game.description,
+      title: game.title(t),
+      description: game.description(t),
       tone: game.tone,
       icon: game.icon,
       completed: services.progress.completedIn(packs),

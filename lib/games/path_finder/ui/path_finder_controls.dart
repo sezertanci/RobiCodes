@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../features/play/widgets/image_button.dart';
+import '../../../l10n/l10n.dart';
 import '../path_finder_controller.dart';
 import '../path_finder_texts.dart';
 import 'direction_pad.dart';
@@ -31,29 +32,30 @@ final class PathFinderControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.l10n;
     final pad = DirectionPad(
       buttonSize: buttonSize,
       enabled: !controller.isRunning && !controller.isFull,
       highlighted: controller.hint?.direction,
-      label: PathFinderTexts.addCommand,
+      label: (direction) => PathFinderTexts.addCommand(t, direction),
       onPressed: controller.addCommand,
     );
     final actions = [
       ImageButton(
         asset: AppAssets.runButton,
-        label: PathFinderTexts.run,
+        label: t.commonRun,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.run,
       ),
       ImageButton(
         asset: AppAssets.hintButton,
-        label: PathFinderTexts.hint,
+        label: t.commonHint,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.showHint,
       ),
       ImageButton(
         asset: AppAssets.clearButton,
-        label: PathFinderTexts.clear,
+        label: t.commonClear,
         size: buttonSize,
         onPressed: controller.isRunning ? null : controller.clear,
       ),

@@ -1,3 +1,5 @@
+import '../../l10n/l10n.dart';
+
 /// Google Play Console'da tanımlanan, tek seferlik ve tüketilmeyen (non-consumable) bir ürün.
 ///
 /// Bir ürün bir veya birden çok paketin erişimini açar. Birden çok paket açan ürün,
@@ -11,7 +13,7 @@ final class StoreProduct {
   final String id;
 
   /// Mağaza ekranında gösterilen ad. Play Console'daki ürün adıyla aynı tutulması önerilir.
-  final String title;
+  final LocalizedText title;
 
   /// Ürün satın alındığında açılan paketler.
   final List<String> packIds;

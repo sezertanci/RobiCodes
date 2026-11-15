@@ -12,6 +12,7 @@ import 'package:robi_codes/features/play/widgets/confetti.dart';
 import 'package:robi_codes/features/sound/sound_effect.dart';
 import 'package:robi_codes/features/sound/sound_player.dart';
 
+import '../support/test_l10n.dart';
 import '../support/fakes.dart';
 import '../support/ui_test_helpers.dart';
 
@@ -60,10 +61,10 @@ void main() {
 
       // Assert
       expect(find.byType(AchievementsScreen), findsOneWidget);
-      expect(find.text(AchievementsScreen.summaryText(services.achievements.earnedCount)), findsOneWidget);
+      expect(find.text(texts.achievementsSummary(services.achievements.earnedCount)), findsOneWidget);
       final scrollable = find.byType(Scrollable).last;
       for (final achievement in services.achievements.all) {
-        await tester.scrollUntilVisible(find.text(achievement.title), 300, scrollable: scrollable);
+        await tester.scrollUntilVisible(find.text(achievement.title(texts)), 300, scrollable: scrollable);
       }
       expect(tester.takeException(), isNull);
     });
@@ -96,7 +97,7 @@ void main() {
     final services = await _servicesWithFirstLevelDone(player);
     await tester.pumpWidget(RobiCodesApp(services: services));
     final total = services.achievements.all.length;
-    expect(find.bySemanticsLabel(AchievementsButton.semanticLabel(0, total)), findsOneWidget);
+    expect(find.bySemanticsLabel(texts.achievementsButtonLabel(0, total)), findsOneWidget);
 
     // Act
     await services.achievements.sync();
@@ -105,7 +106,7 @@ void main() {
     // Assert
     final earned = services.achievements.earnedCount;
     expect(earned, greaterThan(0));
-    expect(find.bySemanticsLabel(AchievementsButton.semanticLabel(earned, total)), findsOneWidget);
+    expect(find.bySemanticsLabel(texts.achievementsButtonLabel(earned, total)), findsOneWidget);
   });
 
   testWidgets('AchievementCard_LockedReward_ShowsProgressInsteadOfEarned', (tester) async {
@@ -114,16 +115,12 @@ void main() {
     final locked = services.achievements.statuses().firstWhere((status) => !status.progress.isReached);
 
     // Act
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(body: AchievementCard(status: locked)),
-      ),
-    );
+    await tester.pumpWidget(localizedApp(Scaffold(body: AchievementCard(status: locked))));
 
     // Assert
-    expect(find.text(AchievementCard.earnedLabel), findsNothing);
+    expect(find.text(texts.achievementEarned), findsNothing);
     expect(find.text('${locked.progress.shownCurrent}/${locked.progress.goal}'), findsOneWidget);
-    final label = AchievementCard.semanticLabel(locked.achievement.title, isEarned: false);
+    final label = AchievementCard.semanticLabel(texts, locked.achievement.title(texts), isEarned: false);
     expect(find.bySemanticsLabel(RegExp('^${RegExp.escape(label)}')), findsOneWidget);
   });
 
@@ -175,16 +172,17 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     // Başlık kontur ve dolgu için iki kez çizilir.
-    expect(find.text(trophies.first.achievement.title), findsWidgets);
+    expect(find.text(trophies.first.achievement.title(texts)), findsWidgets);
 
     // Act
-    await tester.tap(find.text(TrophyCelebration.closeLabel));
+    // İngilizce kupa adı iki satıra taşar; düğme kaydırılabilir alanın altında kalabilir.
+    await tapVisible(tester, find.text(texts.achievementGreat));
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
 
     // Assert
-    expect(find.text(trophies.first.achievement.title), findsNothing);
-    expect(find.text(trophies.elementAt(1).achievement.title), findsWidgets);
+    expect(find.text(trophies.first.achievement.title(texts)), findsNothing);
+    expect(find.text(trophies.elementAt(1).achievement.title(texts)), findsWidgets);
     expect(player.played, [SoundEffect.trophy.assetFor(), SoundEffect.trophy.assetFor()]);
   });
 

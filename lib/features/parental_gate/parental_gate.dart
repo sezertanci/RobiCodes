@@ -1,14 +1,15 @@
 import 'package:flutter/widgets.dart';
 
+import '../../l10n/l10n.dart';
+
 /// Ebeveyn doğrulaması gerektiren işlemler. Yeni bir korumalı işlem buraya eklenir;
-/// hangi işlemin korunduğu tek bir yerden görülür. [description], doğrulama penceresinde
-/// ebeveyne hangi işlemi onayladığını söyler.
+/// hangi işlemin korunduğu tek bir yerden görülür. Her işlemin açıklaması ARB dosyalarındaki
+/// `parentalGateAction` seçiminde bulunur.
 enum ParentalAction {
-  purchase('Paket satın alma');
+  purchase;
 
-  const ParentalAction(this.description);
-
-  final String description;
+  /// Doğrulama penceresinde ebeveyne hangi işlemi onayladığını söyleyen metin.
+  String description(AppLocalizations t) => t.parentalGateAction(name);
 }
 
 /// Ebeveyn doğrulaması. Her çağrıda yeniden sorulur; önceki bir onay hatırlanmaz.

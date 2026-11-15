@@ -62,3 +62,17 @@
   verir, ödüllü reklamın da 5 saniyede kapatılabilmesini ister; gelir düşük kalır. Reklam, gizlilik
   politikasındaki "veri toplamaz" taahhüdünü bozar, mağazada "Reklam içerir" etiketi getirir ve çocuğun
   ebeveyn doğrulamasını aşarak içerik açmasına yol açar.
+
+## Dil desteği (15.11.2026)
+
+- Uygulama **Türkçe ve İngilizce** sunulur. Dil mekanizması ortaktır (ARB dosyaları ve `flutter gen-l10n`);
+  ileride başka diller kod değiştirmeden eklenebilir.
+- Varsayılan dil cihazın dilidir; desteklenmeyen bir cihaz dilinde uygulama İngilizce açılır. Dil
+  Ayarlar'dan değiştirilebilir ve seçim saklanır. Dil değiştirmek için ebeveyn sorusu sorulmaz.
+- İngilizce ad **Robi Codes**'tur; logoda "Robi" / "Codes" olarak iki satırda yazılır.
+- Karakter adlarının çevirisi varsa İngilizceye çevrilir, yoksa Türkçe kalır; her ad ayrı
+  değerlendirilir: Robi ve Fiyo aynı kalır; Işıl → Glow, Pembe → Pinky, Pırıl → Sparkle,
+  Pervane → Propeller, Kahraman → Hero, Şövalye → Knight.
+- İngilizce oyun adları: Find the Robot's Path, Order the Steps, If This, Then, Repeat It.
+- Mağaza girişi tr-TR ve en-US dillerinde tutulur (`store/robi-codes/listing/`); öne çıkan görsel her
+  dil için ayrı üretilir.

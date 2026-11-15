@@ -3,22 +3,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/app/app_assets.dart';
 import 'package:robi_codes/app/app_background.dart';
 import 'package:robi_codes/app/app_services.dart';
-import 'package:robi_codes/app/app_texts.dart';
 import 'package:robi_codes/app/app_theme.dart';
 import 'package:robi_codes/app/robi_codes_app.dart';
 import 'package:robi_codes/app/widgets/top_bar.dart';
 import 'package:robi_codes/content/catalog_data.dart';
 import 'package:robi_codes/content/models/level_pack.dart';
 import 'package:robi_codes/features/home/game_card.dart';
-import 'package:robi_codes/features/home/home_header.dart';
 import 'package:robi_codes/features/home/home_screen.dart';
 import 'package:robi_codes/features/play/level_screen.dart';
 import 'package:robi_codes/features/play/level_select_screen.dart';
 import 'package:robi_codes/features/play/widgets/level_button.dart';
-import 'package:robi_codes/games/path_finder/path_finder_texts.dart';
 
 import '../support/fakes.dart';
+import '../support/test_l10n.dart';
 import '../support/ui_test_helpers.dart';
+
+/// Yol Bul oyununun test dilindeki adı.
+final _pathFinder = texts.gamePathFinderTitle;
 
 Finder _inCard(String gameTitle, String text) => find.descendant(
   of: find.ancestor(of: find.text(gameTitle), matching: find.byType(GameCard)),
@@ -38,14 +39,14 @@ void main() {
 
     // Assert
     expect(find.byType(GameCard), findsNWidgets(services.catalog.games.length));
-    expect(_inCard(PathFinderTexts.title, GameCard.levelsText(1, levels)), findsOneWidget);
-    expect(_inCard(PathFinderTexts.title, '3'), findsOneWidget);
-    expect(find.text('Komutları Sırala'), findsOneWidget);
-    expect(find.text('Eğer Böyleyse'), findsOneWidget);
-    expect(find.text('Tekrar Et'), findsOneWidget);
+    expect(_inCard(_pathFinder, texts.homeLevels(1, levels)), findsOneWidget);
+    expect(_inCard(_pathFinder, '3'), findsOneWidget);
+    expect(find.text(texts.gameCommandOrderTitle), findsOneWidget);
+    expect(find.text(texts.gameIfThenTitle), findsOneWidget);
+    expect(find.text(texts.gameRepeatTitle), findsOneWidget);
     final playable = services.catalog.games.where((game) => services.games.isPlayable(game.id)).length;
     expect(playable, 4);
-    expect(find.text(GameCard.comingSoonLabel), findsNWidgets(services.catalog.games.length - playable));
+    expect(find.text(texts.homeComingSoon), findsNWidgets(services.catalog.games.length - playable));
   });
 
   for (final MapEntry(key: name, value: size) in TestScreens.all.entries) {
@@ -60,7 +61,7 @@ void main() {
 
       // Assert
       for (final game in services.catalog.games) {
-        await tester.scrollUntilVisible(find.text(game.title), 200, scrollable: find.byType(Scrollable).first);
+        await tester.scrollUntilVisible(find.text(game.title(texts)), 200, scrollable: find.byType(Scrollable).first);
       }
       expect(tester.takeException(), isNull);
     });
@@ -69,8 +70,8 @@ void main() {
   testWidgets('GameCard_NotPlayable_ShowsComingSoonInsteadOfLevels', (tester) async {
     // Act
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
+      localizedApp(
+        const Scaffold(
           body: SizedBox(
             width: 320,
             height: 280,
@@ -90,8 +91,8 @@ void main() {
     );
 
     // Assert
-    expect(find.text(GameCard.comingSoonLabel), findsOneWidget);
-    expect(find.text(GameCard.levelsText(0, 10)), findsNothing);
+    expect(find.text(texts.homeComingSoon), findsOneWidget);
+    expect(find.text(texts.homeLevels(0, 10)), findsNothing);
   });
 
   testWidgets('PageRoute_PushedScreen_HasItsOwnBackground', (tester) async {
@@ -101,7 +102,7 @@ void main() {
     expect(find.byType(AppBackground), findsOneWidget);
 
     // Act
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
 
     // Assert: ana ekran alttaki rotada kalır, seviye seçim ekranı kendi arka planıyla çizilir.
     expect(find.ancestor(of: find.byType(LevelSelectScreen), matching: find.byType(AppBackground)), findsOneWidget);
@@ -117,9 +118,9 @@ void main() {
     await tester.pumpWidget(RobiCodesApp(services: services));
 
     // Assert
-    expect(find.bySemanticsLabel(RobiCodesApp.title), findsOneWidget);
-    expect(find.text(HomeHeader.tagline), findsOneWidget);
-    expect(find.bySemanticsLabel(AppTexts.stars(5)), findsOneWidget);
+    expect(find.bySemanticsLabel(texts.appTitle), findsOneWidget);
+    expect(find.text(texts.homeTagline), findsOneWidget);
+    expect(find.bySemanticsLabel(texts.commonStars(5)), findsOneWidget);
   });
 
   for (final MapEntry(key: name, value: size) in TestScreens.all.entries) {
@@ -127,7 +128,7 @@ void main() {
       // Arrange
       useScreen(tester, size);
       await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-      await openLevelSelect(tester, PathFinderTexts.title);
+      await openLevelSelect(tester, _pathFinder);
 
       // Act
       await tapVisible(tester, find.byType(LevelButton).first);
@@ -144,30 +145,30 @@ void main() {
     // Arrange
     useScreen(tester, TestScreens.phone);
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
 
     // Act
     await tapVisible(tester, find.byType(LevelButton).first);
     await settle(tester);
 
     // Assert
-    final inTopBar = find.descendant(of: find.byType(TopBar), matching: find.text(PathFinderTexts.title));
+    final inTopBar = find.descendant(of: find.byType(TopBar), matching: find.text(_pathFinder));
     expect(inTopBar, findsNothing);
-    expect(find.bySemanticsLabel(PathFinderTexts.title), findsOneWidget);
+    expect(find.bySemanticsLabel(_pathFinder), findsOneWidget);
   });
 
   testWidgets('TopBar_LevelOnTablet_ShowsTitleText', (tester) async {
     // Arrange
     useScreen(tester, TestScreens.tabletPortrait);
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
 
     // Act
     await tapVisible(tester, find.byType(LevelButton).first);
     await settle(tester);
 
     // Assert
-    final inTopBar = find.descendant(of: find.byType(TopBar), matching: find.text(PathFinderTexts.title));
+    final inTopBar = find.descendant(of: find.byType(TopBar), matching: find.text(_pathFinder));
     expect(inTopBar, findsOneWidget);
   });
 
@@ -175,14 +176,14 @@ void main() {
     // Arrange
     useScreen(tester, TestScreens.smallTablet);
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
 
     // Act
     await tapVisible(tester, find.byType(LevelButton).first);
     await settle(tester);
 
     // Assert
-    final title = find.descendant(of: find.byType(TopBar), matching: find.text(PathFinderTexts.title));
+    final title = find.descendant(of: find.byType(TopBar), matching: find.text(_pathFinder));
     expect(tester.widget<Text>(title).maxLines, 2);
     expect(tester.takeException(), isNull);
   });
@@ -194,9 +195,9 @@ void main() {
 
     // Act
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: TopBar(title: shortTitle, icon: AppAssets.gamePath, backLabel: AppTexts.backToHome, dense: true),
+      localizedApp(
+        Scaffold(
+          body: TopBar(title: shortTitle, icon: AppAssets.gamePath, backLabel: texts.commonBackToHome, dense: true),
         ),
       ),
     );
@@ -208,10 +209,10 @@ void main() {
   testWidgets('TopBar_BackPressed_ReturnsToPreviousScreen', (tester) async {
     // Arrange
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
 
     // Act
-    await tester.tap(findButton(AppTexts.backToHome));
+    await tester.tap(findButton(texts.commonBackToHome));
     await settle(tester);
 
     // Assert
@@ -222,12 +223,12 @@ void main() {
   testWidgets('TopBar_HomePressedOnLevel_ReturnsToHomeScreen', (tester) async {
     // Arrange
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
     await tapVisible(tester, find.byType(LevelButton).first);
     await settle(tester);
 
     // Act
-    await tester.tap(findButton(AppTexts.backToHome));
+    await tester.tap(findButton(texts.commonBackToHome));
     await settle(tester);
 
     // Assert
@@ -241,10 +242,10 @@ void main() {
     await tester.pumpWidget(RobiCodesApp(services: AppServices.production(InMemoryKeyValueStore())));
 
     // Act
-    await openLevelSelect(tester, PathFinderTexts.title);
+    await openLevelSelect(tester, _pathFinder);
 
     // Assert
-    expect(findButton(AppTexts.backToHome), findsOneWidget);
+    expect(findButton(texts.commonBackToHome), findsOneWidget);
   });
 
   testWidgets('TopBar_LongTitleOnPhone_ShortensTitleWithoutOverflow', (tester) async {
@@ -253,12 +254,12 @@ void main() {
 
     // Act
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
+      localizedApp(
+        Scaffold(
           body: TopBar(
             title: 'Çok uzun bir oyun başlığı ' * 4,
             icon: AppAssets.gamePath,
-            backLabel: AppTexts.backToHome,
+            backLabel: texts.commonBackToHome,
             actions: const [SizedBox(width: 120, height: 40)],
           ),
         ),

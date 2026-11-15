@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../app/app_texts.dart';
 import '../../app/app_theme.dart';
+import '../../l10n/l10n.dart';
 import '../progress/star_rule.dart';
 import 'game_feedback.dart';
 import 'widgets/confetti.dart';
@@ -26,10 +26,6 @@ final class ResultPanel extends StatefulWidget {
 
   /// Sonraki seviye açıksa dolu; değilse "Sonraki seviye" düğmesi gösterilmez.
   final VoidCallback? onNextLevel;
-
-  static const title = 'Harika! Seviye tamamlandı.';
-  static const backLabel = AppTexts.backToLevels;
-  static const nextLabel = AppTexts.nextLevel;
 
   static const firstStarDelay = Duration(milliseconds: 750);
   static const starInterval = Duration(milliseconds: 380);
@@ -72,6 +68,7 @@ final class _ResultPanelState extends State<ResultPanel> {
   Widget build(BuildContext context) => Stack(fit: StackFit.expand, children: [_panel(context), const Confetti()]);
 
   Widget _panel(BuildContext context) {
+    final t = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     return ColoredBox(
       color: Colors.black45,
@@ -89,7 +86,7 @@ final class _ResultPanelState extends State<ResultPanel> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    ResultPanel.title,
+                    t.playLevelComplete,
                     textAlign: TextAlign.center,
                     style: textTheme.headlineSmall?.copyWith(color: AppColors.navy, fontWeight: FontWeight.bold),
                   ),
@@ -101,9 +98,9 @@ final class _ResultPanelState extends State<ResultPanel> {
                     runSpacing: 12,
                     alignment: WrapAlignment.center,
                     children: [
-                      OutlinedButton(onPressed: widget.onBackToLevels, child: const Text(ResultPanel.backLabel)),
+                      OutlinedButton(onPressed: widget.onBackToLevels, child: Text(t.commonBackToLevels)),
                       if (widget.onNextLevel case final onNext?)
-                        FilledButton(onPressed: onNext, child: const Text(ResultPanel.nextLabel)),
+                        FilledButton(onPressed: onNext, child: Text(t.commonNextLevel)),
                     ],
                   ),
                 ],

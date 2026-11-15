@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
 import '../command_order_controller.dart';
-import '../command_order_texts.dart';
+import '../../../l10n/l10n.dart';
 import 'card_metrics.dart';
 import 'draggable_order_card.dart';
 
@@ -38,15 +38,15 @@ final class CardPool extends StatelessWidget {
         ),
       ),
       alignment: Alignment.center,
-      child: _cards(),
+      child: _cards(context),
     ),
   );
 
-  Widget _cards() {
+  Widget _cards(BuildContext context) {
     final cards = controller.poolCards;
     if (cards.isEmpty) {
       return Text(
-        CommandOrderTexts.poolEmpty,
+        context.l10n.commandOrderPoolEmpty,
         style: TextStyle(
           fontWeight: FontWeight.w800,
           color: AppColors.navy.withValues(alpha: _emptyAlpha),

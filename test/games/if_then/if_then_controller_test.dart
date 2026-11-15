@@ -6,10 +6,13 @@ import 'package:robi_codes/games/if_then/engine/if_then_engine.dart';
 import 'package:robi_codes/games/if_then/engine/if_then_level.dart';
 import 'package:robi_codes/games/if_then/if_then_controller.dart';
 import 'package:robi_codes/games/if_then/if_then_texts.dart';
+import 'package:robi_codes/l10n/l10n.dart';
 
 import '../../support/fakes.dart';
+import '../../support/test_l10n.dart';
 
-const _intro = 'Başla.';
+/// Seviyenin dile göre değişmeyen giriş cümlesi; sabit seviyelerde kullanılabilmesi için fonksiyondur.
+String _intro(AppLocalizations _) => 'Başla.';
 
 /// Tek koşulu ve "Değilse" kutusu hazır gelen kolay seviye; yalnızca bir hareket kutusu açık.
 const _easy = IfThenLevel(
@@ -42,7 +45,7 @@ void main() {
   test('constructor_EasyLevel_SaysIntroAndLocksGivenSlots', () {
     final controller = _controller([]);
 
-    expect(controller.message, _intro);
+    expect(controller.message(texts), _intro(texts));
     expect(controller.isLocked(_rockCondition), isTrue);
     expect(controller.isLocked(_elseAction), isTrue);
     expect(controller.isLocked(_rockAction), isFalse);
@@ -78,19 +81,19 @@ void main() {
     controller.tapBlock(LaneAction.bridge);
 
     expect(controller.valueOf(_rockAction), LaneAction.jump);
-    expect(controller.message, IfThenTexts.noSlot);
+    expect(controller.message(texts), texts.ifThenNoSlot);
   });
 
   test('dropBlock_LockedOrWrongTypeSlot_SaysWhyAndKeepsSlot', () {
     final controller = _controller([], level: _open);
 
     controller.dropBlock(LaneAction.jump, _rockCondition);
-    expect(controller.message, IfThenTexts.wrongType);
+    expect(controller.message(texts), texts.ifThenWrongType);
     expect(controller.valueOf(_rockCondition), isNull);
 
     final easy = _controller([]);
     easy.dropBlock(LaneAction.jump, _elseAction);
-    expect(easy.message, IfThenTexts.lockedSlot);
+    expect(easy.message(texts), texts.ifThenLockedSlot);
     expect(easy.valueOf(_elseAction), LaneAction.forward);
   });
 
@@ -111,7 +114,7 @@ void main() {
     controller.tapSlot(_rockCondition);
 
     expect(controller.valueOf(_rockAction), isNull);
-    expect(controller.message, IfThenTexts.lockedSlot);
+    expect(controller.message(texts), texts.ifThenLockedSlot);
   });
 
   test('tapSlot_EmptySlotTwice_SelectsThenClearsTarget', () {
@@ -147,7 +150,7 @@ void main() {
     expect(controller.reaction, RobotReaction.celebrate);
     expect(controller.mood, RobotMood.happy);
     expect(feedback.audibleMoods, [RobotMood.happy]);
-    expect(controller.message, IfThenTexts.success);
+    expect(controller.message(texts), texts.ifThenSuccess);
     expect(stars, [3]);
   });
 
@@ -179,7 +182,7 @@ void main() {
     expect(controller.reaction, RobotReaction.bump);
     expect(controller.mood, RobotMood.sad);
     expect(feedback.audibleMoods, [RobotMood.sad]);
-    expect(controller.message, IfThenTexts.wrong(step));
+    expect(controller.message(texts), IfThenTexts.wrong(step)(texts));
     expect(controller.isEditable, isTrue);
     expect(stars, isEmpty);
   });
@@ -193,7 +196,7 @@ void main() {
     controller.dropBlock(LaneAction.jump, _rockAction);
     expect(controller.wrongCell, isNull);
     expect(controller.robotCell, IfThenController.startCell);
-    expect(controller.message, _intro);
+    expect(controller.message(texts), _intro(texts));
     await controller.run();
 
     expect(stars, [2]);
@@ -207,7 +210,7 @@ void main() {
     controller.showHint();
 
     expect(controller.hint, (index: 1, object: LaneObject.rock, action: LaneAction.jump, rule: 0));
-    expect(controller.message, IfThenTexts.hintText(LaneObject.rock));
+    expect(controller.message(texts), IfThenTexts.hint(LaneObject.rock)(texts));
     controller.dropBlock(LaneAction.jump, _rockAction);
     expect(controller.hint, isNull);
     await controller.run();
@@ -221,7 +224,7 @@ void main() {
     controller.showHint();
 
     expect(controller.hint, isNull);
-    expect(controller.message, IfThenTexts.solved);
+    expect(controller.message(texts), texts.ifThenSolved);
   });
 
   test('clear_FilledSlots_EmptiesOnlyOpenSlots', () {
@@ -233,7 +236,7 @@ void main() {
     expect(controller.valueOf(_rockAction), isNull);
     expect(controller.valueOf(_rockCondition), LaneObject.rock);
     expect(controller.valueOf(_elseAction), LaneAction.forward);
-    expect(controller.message, _intro);
+    expect(controller.message(texts), _intro(texts));
   });
 
   test('run_DisposedWhileWalking_DoesNotComplete', () async {

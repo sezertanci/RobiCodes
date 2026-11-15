@@ -3,6 +3,8 @@ import 'package:robi_codes/games/command_order/engine/command_order_engine.dart'
 import 'package:robi_codes/games/command_order/engine/command_order_level.dart';
 import 'package:robi_codes/games/command_order/engine/command_order_levels.dart';
 
+import '../../support/test_l10n.dart';
+
 List<int> _ids(List<OrderCard> cards) => [for (final card in cards) card.id];
 
 void main() {
@@ -12,7 +14,7 @@ void main() {
       expect(level.steps, isNotEmpty);
       final stages = level.stages;
       if (stages != null) {
-        expect(stages.fold(0, (sum, stage) => sum + stage.size), level.steps.length, reason: level.title);
+        expect(stages.fold(0, (sum, stage) => sum + stage.size), level.steps.length, reason: level.title(texts));
       }
       final groups = level.slotGroups;
       expect([for (final group in groups) ...group.slots], [for (var i = 0; i < level.steps.length; i++) i]);
@@ -28,7 +30,7 @@ void main() {
     expect(cards.where((card) => card.extra).map((card) => card.id), [
       for (var i = 0; i < level.extras.length; i++) level.steps.length + i,
     ]);
-    expect(cards.first.text, level.steps.first.text);
+    expect(cards.first.step, level.steps.first);
   });
 
   test('shuffleCards_ManySeeds_NeverInOrderAndKeepsAllCards', () {
@@ -59,11 +61,11 @@ void main() {
   });
 
   test('shuffleCards_TwoCards_ReturnsReversedOrder', () {
-    const level = CommandOrderLevel(
-      title: 'İki',
+    final level = CommandOrderLevel(
+      title: fixedText('İki'),
       icon: 'a.svg',
-      hint: '',
-      steps: [CommandStep('A', 'a.svg'), CommandStep('B', 'b.svg')],
+      hint: fixedText(''),
+      steps: [CommandStep(fixedText('A'), 'a.svg'), CommandStep(fixedText('B'), 'b.svg')],
     );
 
     final cards = CommandOrderEngine.shuffleCards(CommandOrderEngine.buildCards(level), 1);

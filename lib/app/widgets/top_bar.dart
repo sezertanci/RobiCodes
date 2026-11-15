@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../features/play/widgets/image_button.dart';
 import '../app_assets.dart';
-import '../app_texts.dart';
+import '../../l10n/l10n.dart';
 import '../app_theme.dart';
 import '../screen_scale.dart';
 
@@ -62,7 +62,7 @@ final class TopBar extends StatelessWidget {
                   if (showHome)
                     ImageButton(
                       asset: AppAssets.home,
-                      label: AppTexts.backToHome,
+                      label: context.l10n.commonBackToHome,
                       size: button,
                       onPressed: () => navigator.popUntil((route) => route.isFirst),
                     ),

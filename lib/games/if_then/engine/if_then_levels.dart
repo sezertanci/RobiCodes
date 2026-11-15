@@ -1,107 +1,75 @@
 import 'if_then_level.dart';
 
 /// "Eğer Böyleyse" oyununun 20 seviyesi. Yollar, hazır kutular ve cümleler web sürümüyle aynıdır.
-const ifThenBaseLevels = <IfThenLevel>[
+final ifThenBaseLevels = <IfThenLevel>[
   // Kolay 1–5: tek koşul ve tek karar. "Değilse" hazır: İleri Git.
   IfThenLevel(
     lane: '..#..',
     rules: [RuleSlot(condition: LaneObject.rock)],
     otherwise: LaneAction.forward,
-    intro: 'Önünde taş varsa robot ne yapmalı? Boş kutuya bir hareket koy.',
+    intro: (t) => t.ifThenL1Intro,
   ),
   IfThenLevel(
     lane: '.~..~',
     rules: [RuleSlot(condition: LaneObject.water)],
     otherwise: LaneAction.forward,
-    intro: 'Robot yüzemez. Önünde su varsa ne yapmalı?',
+    intro: (t) => t.ifThenL2Intro,
   ),
   IfThenLevel(
     lane: '..D..',
     rules: [RuleSlot(condition: LaneObject.door)],
     otherwise: LaneAction.forward,
-    intro: 'Yolda kapalı bir kapı var. Kapının önüne gelince ne yapmalı?',
+    intro: (t) => t.ifThenL3Intro,
   ),
   IfThenLevel(
     lane: '.*.*.',
     rules: [RuleSlot(condition: LaneObject.star)],
     otherwise: LaneAction.forward,
-    intro: 'Yıldızları toplamadan geçme! Önünde yıldız varsa ne yapmalı?',
+    intro: (t) => t.ifThenL4Intro,
   ),
   IfThenLevel(
     lane: '#..#.',
     rules: [RuleSlot()],
     otherwise: LaneAction.forward,
     extras: [LaneObject.water],
-    intro: 'Bu kez koşulu da sen seç. Yolda ne var?',
+    intro: (t) => t.ifThenL5Intro,
   ),
 
   // Orta 6–10: eğer / değilse ile iki olasılık.
   IfThenLevel(
     lane: '..#..#',
     rules: [RuleSlot(condition: LaneObject.rock)],
-    intro: 'Taş varsa bir şey, yoksa başka bir şey yapmalı. İki kutuyu da doldur.',
+    intro: (t) => t.ifThenL6Intro,
   ),
   IfThenLevel(
     lane: '~.~.~.',
     rules: [RuleSlot(condition: LaneObject.water)],
-    intro: 'Su varsa ne yapmalı? Su yoksa ne yapmalı?',
+    intro: (t) => t.ifThenL7Intro,
   ),
   IfThenLevel(
     lane: 'D*D*D*',
     rules: [RuleSlot(condition: LaneObject.door)],
-    intro: 'Bu yolda boş kare yok! Kapı yoksa önünde ne var?',
+    intro: (t) => t.ifThenL8Intro,
   ),
-  IfThenLevel(lane: '.*..*.', rules: [RuleSlot()], extras: [LaneObject.rock], intro: 'Koşulu ve iki hareketi sen seç.'),
-  IfThenLevel(lane: '~#~~#', rules: [RuleSlot()], intro: 'Yolda taş ve su var. Bir kural ve bir "değilse" yeter.'),
+  IfThenLevel(lane: '.*..*.', rules: [RuleSlot()], extras: [LaneObject.rock], intro: (t) => t.ifThenL9Intro),
+  IfThenLevel(lane: '~#~~#', rules: [RuleSlot()], intro: (t) => t.ifThenL10Intro),
 
   // Zor 11–15: birden fazla koşul.
-  IfThenLevel(
-    lane: '.#.~.#.',
-    rules: [RuleSlot(), RuleSlot()],
-    intro: 'Taş da var su da. Her biri için bir kural kur.',
-  ),
-  IfThenLevel(lane: 'D.*.D.*', rules: [RuleSlot(), RuleSlot()], intro: 'Kapıları aç, yıldızları topla.'),
-  IfThenLevel(
-    lane: '#~*#~*',
-    rules: [RuleSlot(), RuleSlot()],
-    intro: 'Üç farklı şey var ama iki kural satırı. Üçüncüsü için "değilse" kullan.',
-  ),
-  IfThenLevel(
-    lane: '~D~.D~',
-    rules: [RuleSlot(), RuleSlot()],
-    intro: 'Su, kapı ve boş yol. Hangisini "değilse"ye bırakırsın?',
-  ),
+  IfThenLevel(lane: '.#.~.#.', rules: [RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL11Intro),
+  IfThenLevel(lane: 'D.*.D.*', rules: [RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL12Intro),
+  IfThenLevel(lane: '#~*#~*', rules: [RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL13Intro),
+  IfThenLevel(lane: '~D~.D~', rules: [RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL14Intro),
   IfThenLevel(
     lane: '*#.*#.',
     rules: [RuleSlot(), RuleSlot()],
     extras: [LaneObject.water],
-    intro: 'Dikkat: bloklardan biri bu yolda hiç yok.',
+    intro: (t) => t.ifThenL15Intro,
   ),
 
   // Uzman 16–20: birkaç koşulu birleştiren küçük senaryolar.
-  IfThenLevel(
-    lane: '#~D.#~D.',
-    rules: [RuleSlot(), RuleSlot(), RuleSlot()],
-    intro: 'Robot kaleye gidiyor: taşlar, hendekler ve kale kapıları var.',
-  ),
-  IfThenLevel(
-    lane: '.*#~*.#~',
-    rules: [RuleSlot(), RuleSlot(), RuleSlot()],
-    intro: 'Hazine yolu: yıldızları topla, engelleri aş.',
-  ),
-  IfThenLevel(
-    lane: 'D*~#D*~#',
-    rules: [RuleSlot(), RuleSlot(), RuleSlot()],
-    intro: 'Bu yolda hiç boş kare yok. Dört şey için dört karar gerek.',
-  ),
-  IfThenLevel(
-    lane: '~#..D~#.D',
-    rules: [RuleSlot(), RuleSlot(), RuleSlot()],
-    intro: 'Uzun bir yolculuk! Su, taş, kapı ve boş yol.',
-  ),
-  IfThenLevel(
-    lane: '*D#~*D#~*',
-    rules: [RuleSlot(), RuleSlot(), RuleSlot()],
-    intro: 'Son görev: bütün yıldızları toplayıp bayrağa ulaş.',
-  ),
+  IfThenLevel(lane: '#~D.#~D.', rules: [RuleSlot(), RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL16Intro),
+  IfThenLevel(lane: '.*#~*.#~', rules: [RuleSlot(), RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL17Intro),
+  IfThenLevel(lane: 'D*~#D*~#', rules: [RuleSlot(), RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL18Intro),
+  IfThenLevel(lane: '~#..D~#.D', rules: [RuleSlot(), RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL19Intro),
+  IfThenLevel(lane: '*D#~*D#~*', rules: [RuleSlot(), RuleSlot(), RuleSlot()], intro: (t) => t.ifThenL20Intro),
 ];

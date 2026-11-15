@@ -7,11 +7,16 @@ import 'package:robi_codes/games/repeat/engine/repeat_level.dart';
 import 'package:robi_codes/games/repeat/engine/repeat_program.dart';
 import 'package:robi_codes/games/repeat/repeat_controller.dart';
 import 'package:robi_codes/games/repeat/repeat_texts.dart';
+import 'package:robi_codes/l10n/l10n.dart';
 
 import '../../support/fakes.dart';
+import '../../support/test_l10n.dart';
 
-const _intro = 'Başla.';
-const _levelHint = 'Sağa git.';
+/// Seviyenin dile göre değişmeyen giriş cümlesi; sabit seviyelerde kullanılabilmesi için fonksiyondur.
+String _intro(AppLocalizations _) => 'Başla.';
+
+/// Seviyenin ipucu cümlesi.
+String _levelHint(AppLocalizations _) => 'Sağa git.';
 
 /// Bayrak üç kare sağda; önerilen çözüm 2 blok, sınır 2 blok.
 const _tight = RepeatLevel(map: ['S..G'], solution: '3(R)', maxBlocks: 2, hint: _levelHint, intro: _intro);
@@ -47,7 +52,7 @@ void main() {
   test('constructor_LevelWithIntro_SaysIntroAndStartsAtStart', () {
     final controller = _controller([]);
 
-    expect(controller.message, _intro);
+    expect(controller.message(texts), _intro(texts));
     expect(controller.robot, controller.board.start);
     expect(controller.targetBlocks, 2);
     expect(controller.program, isEmpty);
@@ -67,7 +72,7 @@ void main() {
 
     controller.pressRepeatButton();
     expect(controller.target, 0);
-    expect(controller.message, RepeatTexts.insideRepeat);
+    expect(controller.message(texts), texts.repeatInsideRepeat);
     controller.addMove(_right);
 
     expect(controller.program, [
@@ -98,7 +103,7 @@ void main() {
     controller.addMove(_right);
 
     expect(controller.isFull, isTrue);
-    expect(controller.message, RepeatTexts.full);
+    expect(controller.message(texts), texts.repeatFull);
     expect(controller.blockCount, 2);
   });
 
@@ -136,7 +141,7 @@ void main() {
 
     expect(controller.target, isNull);
     expect(controller.selected, isNull);
-    expect(controller.message, RepeatTexts.outsideRepeat);
+    expect(controller.message(texts), texts.repeatOutsideRepeat);
   });
 
   test('deleteSelected_BlockBeforeOpenBlock_KeepsSameBlockOpen', () {
@@ -191,7 +196,7 @@ void main() {
     ]);
     expect(controller.target, isNull);
     expect(controller.selected, isNull);
-    expect(controller.message, RepeatTexts.movedOut);
+    expect(controller.message(texts), texts.repeatMovedOut);
   });
 
   test('clear_Program_EmptiesAndSaysIntro', () {
@@ -202,7 +207,7 @@ void main() {
 
     expect(controller.program, isEmpty);
     expect(controller.target, isNull);
-    expect(controller.message, _intro);
+    expect(controller.message(texts), _intro(texts));
   });
 
   test('run_EmptyProgram_SaysEmpty', () async {
@@ -210,7 +215,7 @@ void main() {
 
     await controller.run();
 
-    expect(controller.message, RepeatTexts.empty);
+    expect(controller.message(texts), texts.repeatEmpty);
     expect(controller.isRunning, isFalse);
   });
 
@@ -224,7 +229,7 @@ void main() {
     await controller.run();
 
     expect(controller.target, 1);
-    expect(controller.message, RepeatTexts.emptyRepeat);
+    expect(controller.message(texts), texts.repeatEmptyRepeat);
     expect(stars, isEmpty);
   });
 
@@ -240,7 +245,7 @@ void main() {
     expect(controller.reaction, RobotReaction.celebrate);
     expect(controller.mood, RobotMood.happy);
     expect(feedback.audibleMoods, [RobotMood.happy]);
-    expect(controller.message, RepeatTexts.success);
+    expect(controller.message(texts), texts.gameRobotReachedFlag);
     expect(stars, [3]);
   });
 
@@ -284,7 +289,7 @@ void main() {
     expect(controller.reaction, RobotReaction.bump);
     expect(controller.bumpDirection, _right);
     expect(controller.wrongPlace, (block: 0, inner: 0));
-    expect(controller.message, RepeatTexts.blocked(Obstacle.edge, step));
+    expect(controller.message(texts), RepeatTexts.blocked(Obstacle.edge, step)(texts));
     expect(controller.mood, RobotMood.sad);
     expect(feedback.audibleMoods, [RobotMood.sad]);
     expect(controller.isRunning, isFalse);
@@ -298,7 +303,7 @@ void main() {
     await controller.run();
 
     expect(controller.reaction, RobotReaction.shake);
-    expect(controller.message, RepeatTexts.missedGoal);
+    expect(controller.message(texts), texts.repeatMissedGoal);
   });
 
   test('showHint_ShortProgram_HighlightsNextMoveAndGivesOneStar', () async {
@@ -308,7 +313,7 @@ void main() {
     controller.showHint();
 
     expect(controller.hint?.direction, _right);
-    expect(controller.message, RepeatTexts.nextMoveHint(_levelHint, _right));
+    expect(controller.message(texts), RepeatTexts.nextMoveHint(_levelHint, _right)(texts));
     _addRepeatRight(controller);
     expect(controller.hint, isNull);
     await controller.run();
@@ -325,7 +330,7 @@ void main() {
     final step = (direction: Direction.up, block: 0, inner: 0, round: 0);
     expect(controller.selected, (block: 0, inner: 0));
     expect(controller.wrongPlace, (block: 0, inner: 0));
-    expect(controller.message, RepeatTexts.fixHint(step));
+    expect(controller.message(texts), RepeatTexts.fixHint(step)(texts));
   });
 
   test('showHint_FullAndShort_SuggestsChangingPattern', () {
@@ -335,7 +340,7 @@ void main() {
     controller.showHint();
 
     expect(controller.hint, isNull);
-    expect(controller.message, RepeatTexts.fullLevelHint(_levelHint));
+    expect(controller.message(texts), RepeatTexts.fullLevelHint(_levelHint)(texts));
   });
 
   test('showHint_EmptyRepeat_OpensIt', () {
@@ -346,7 +351,7 @@ void main() {
     controller.showHint();
 
     expect(controller.target, 0);
-    expect(controller.message, RepeatTexts.emptyRepeat);
+    expect(controller.message(texts), texts.repeatEmptyRepeat);
   });
 
   test('showHint_SolvedProgram_SaysSolved', () {
@@ -355,7 +360,7 @@ void main() {
 
     controller.showHint();
 
-    expect(controller.message, RepeatTexts.solved);
+    expect(controller.message(texts), texts.repeatSolved);
   });
 
   test('run_DisposedWhileWalking_DoesNotComplete', () async {

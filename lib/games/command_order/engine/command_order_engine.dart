@@ -11,7 +11,6 @@ final class OrderCard {
   /// `true` ise kart bu göreve ait değildir.
   final bool extra;
 
-  String get text => step.text;
   String get icon => step.icon;
 }
 

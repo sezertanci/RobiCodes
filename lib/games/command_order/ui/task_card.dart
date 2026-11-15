@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../l10n/l10n.dart';
 import '../engine/command_order_level.dart';
 import 'card_metrics.dart';
 import 'step_image.dart';
@@ -23,7 +24,7 @@ final class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = Text(
-      level.title,
+      level.title(context.l10n),
       textAlign: vertical ? TextAlign.center : TextAlign.start,
       style: TextStyle(fontSize: 20 * ratio, fontWeight: FontWeight.w900, color: AppColors.navy),
     );

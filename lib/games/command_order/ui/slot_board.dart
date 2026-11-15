@@ -4,6 +4,7 @@ import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/dashed_frame.dart';
 import '../../../features/play/widgets/mark_effects.dart';
 import '../command_order_controller.dart';
+import '../../../l10n/l10n.dart';
 import '../command_order_texts.dart';
 import 'card_metrics.dart';
 import 'draggable_order_card.dart';
@@ -28,7 +29,7 @@ final class SlotBoard extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (group.title.isNotEmpty) ...[_StageTitle(group.title), const SizedBox(height: _titleGap)],
+            if (group.title case final title?) ...[_StageTitle(title(context.l10n)), const SizedBox(height: _titleGap)],
             Wrap(
               alignment: WrapAlignment.center,
               spacing: CardMetrics.gap,
@@ -126,7 +127,7 @@ final class _EmptySlot extends StatelessWidget {
     button: true,
     selected: targeted,
     enabled: onTap != null,
-    label: CommandOrderTexts.emptySlot(slot),
+    label: CommandOrderTexts.emptySlot(context.l10n, slot),
     excludeSemantics: true,
     onTap: onTap,
     child: GestureDetector(
