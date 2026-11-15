@@ -8,6 +8,21 @@ import 'package:robi_codes/features/progress/unlock_policy.dart';
 
 import '../support/fakes.dart';
 
+bool _owned(String packId) => true;
+
+bool _notOwned(String packId) => false;
+
+/// Satın alınmamış, denemesi olan paket: 2'şer seviyelik iki grup, deneme seviyeleri 1 ve 3.
+const _previewPack = LevelPack(
+  id: 'game.preview',
+  gameId: TestCatalog.gameId,
+  title: _previewTitle,
+  groups: [DifficultyGroup(Difficulty.easy, 2), DifficultyGroup(Difficulty.medium, 2)],
+  freePreview: true,
+);
+
+String _previewTitle(Object _) => 'Deneme';
+
 void main() {
   group('StarRule', () {
     test('calculate_HintUsed_ReturnsOneStar', () {
@@ -173,7 +188,7 @@ void main() {
     final pack = TestCatalog.build().findPack(TestCatalog.freePack)!;
 
     test('isLevelUnlocked_FirstLevel_ReturnsTrue', () {
-      final policy = UnlockPolicy(ProgressRepository(InMemoryKeyValueStore()));
+      final policy = UnlockPolicy(ProgressRepository(InMemoryKeyValueStore()), _owned);
 
       expect(policy.isLevelUnlocked(pack, 1), isTrue);
       expect(policy.isLevelUnlocked(pack, 2), isFalse);
@@ -183,7 +198,7 @@ void main() {
       // Arrange
       final progress = ProgressRepository(InMemoryKeyValueStore());
       await progress.completeLevel(pack.id, 1, 1);
-      final policy = UnlockPolicy(progress);
+      final policy = UnlockPolicy(progress, _owned);
 
       // Act & Assert
       expect(policy.isLevelUnlocked(pack, 2), isTrue);
@@ -195,7 +210,7 @@ void main() {
       final progress = ProgressRepository(InMemoryKeyValueStore());
       await progress.completeLevel(pack.id, 1, 1);
       await progress.completeLevel(pack.id, 2, 1);
-      final policy = UnlockPolicy(progress);
+      final policy = UnlockPolicy(progress, _owned);
 
       // Act & Assert
       expect(policy.isLevelUnlocked(pack, 3), isTrue);
@@ -203,7 +218,7 @@ void main() {
     });
 
     test('isLevelUnlocked_OutsidePack_ReturnsFalse', () {
-      final policy = UnlockPolicy(ProgressRepository(InMemoryKeyValueStore()));
+      final policy = UnlockPolicy(ProgressRepository(InMemoryKeyValueStore()), _owned);
 
       expect(policy.isLevelUnlocked(pack, 0), isFalse);
       expect(policy.isLevelUnlocked(pack, 5), isFalse);
@@ -217,7 +232,48 @@ void main() {
       }
 
       // Act & Assert
-      expect(UnlockPolicy(progress).nextLevel(pack), isNull);
+      expect(UnlockPolicy(progress, _owned).nextLevel(pack), isNull);
+    });
+
+    test('isLevelUnlocked_NotOwnedPreviewPack_OpensOnlyFirstPreviewLevel', () {
+      final policy = UnlockPolicy(ProgressRepository(InMemoryKeyValueStore()), _notOwned);
+
+      expect(_previewPack.previewLevels, [1, 3]);
+      expect(policy.isLevelUnlocked(_previewPack, 1), isTrue);
+      expect(policy.isLevelUnlocked(_previewPack, 2), isFalse);
+      expect(policy.isLevelUnlocked(_previewPack, 3), isFalse);
+      expect(policy.isGroupUnlocked(_previewPack, _previewPack.groupRanges[1]), isFalse);
+    });
+
+    test('isLevelUnlocked_NotOwnedPreviewDone_OpensNextPreviewLevelOnly', () async {
+      // Arrange
+      final progress = ProgressRepository(InMemoryKeyValueStore());
+      await progress.completeLevel(_previewPack.id, 1, 3);
+      final policy = UnlockPolicy(progress, _notOwned);
+
+      // Act & Assert
+      expect(policy.isLevelUnlocked(_previewPack, 2), isFalse);
+      expect(policy.isLevelUnlocked(_previewPack, 3), isTrue);
+      expect(policy.isGroupUnlocked(_previewPack, _previewPack.groupRanges[1]), isTrue);
+      expect(policy.nextLevel(_previewPack), 3);
+    });
+
+    test('isLevelUnlocked_OwnedPreviewPack_UsesNormalRules', () async {
+      // Arrange
+      final progress = ProgressRepository(InMemoryKeyValueStore());
+      await progress.completeLevel(_previewPack.id, 1, 3);
+      final policy = UnlockPolicy(progress, _owned);
+
+      // Act & Assert
+      expect(policy.isLevelUnlocked(_previewPack, 2), isTrue);
+      expect(policy.isLevelUnlocked(_previewPack, 3), isFalse);
+    });
+
+    test('isLevelUnlocked_NotOwnedWithoutPreview_KeepsEveryLevelLocked', () {
+      final policy = UnlockPolicy(ProgressRepository(InMemoryKeyValueStore()), _notOwned);
+
+      expect(policy.isLevelUnlocked(pack, 1), isFalse);
+      expect(policy.nextLevel(pack), isNull);
     });
   });
 }

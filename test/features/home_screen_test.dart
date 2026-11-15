@@ -13,6 +13,7 @@ import 'package:robi_codes/features/home/home_screen.dart';
 import 'package:robi_codes/features/play/level_screen.dart';
 import 'package:robi_codes/features/play/level_select_screen.dart';
 import 'package:robi_codes/features/play/widgets/level_button.dart';
+import 'package:robi_codes/games/game_registry.dart';
 
 import '../support/fakes.dart';
 import '../support/test_l10n.dart';
@@ -45,7 +46,9 @@ void main() {
     expect(find.text(texts.gameIfThenTitle), findsOneWidget);
     expect(find.text(texts.gameRepeatTitle), findsOneWidget);
     final playable = services.catalog.games.where((game) => services.games.isPlayable(game.id)).length;
-    expect(playable, 4);
+    expect(find.text(texts.gameBugHunterTitle), findsOneWidget);
+    expect(find.text(texts.homeLocked), findsOneWidget);
+    expect(playable, 5);
     expect(find.text(texts.homeComingSoon), findsNWidgets(services.catalog.games.length - playable));
   });
 
@@ -66,6 +69,29 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('HomeScreen_PaidGameNotOwned_ShowsPriceInsteadOfLevels', (tester) async {
+    // Arrange
+    const price = '₺49,99';
+    final catalog = TestCatalog.withPaidGame();
+    final services = AppServices(
+      catalog: catalog,
+      games: GameRegistry([const FakeGameModule(TestCatalog.gameId), const FakeGameModule(TestCatalog.paidGameId)]),
+      store: InMemoryKeyValueStore(),
+      purchaseGateway: FakePurchaseGateway()..prices = {TestCatalog.paidProduct: price},
+    );
+    final title = catalog.findGame(TestCatalog.paidGameId)!.title(texts);
+
+    // Act
+    await tester.pumpWidget(RobiCodesApp(services: services));
+    expect(_inCard(title, texts.homeLocked), findsOneWidget);
+    await services.listings.load();
+    await settle(tester);
+
+    // Assert
+    expect(_inCard(title, price), findsOneWidget);
+    expect(_inCard(title, texts.homeLevels(0, 4)), findsNothing);
+  });
 
   testWidgets('GameCard_NotPlayable_ShowsComingSoonInsteadOfLevels', (tester) async {
     // Act

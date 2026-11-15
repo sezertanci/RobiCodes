@@ -19,6 +19,7 @@ import '../features/store/entitlement_service.dart';
 import '../features/store/listing_service.dart';
 import '../features/store/offer_policy.dart';
 import '../features/store/purchase_gateway.dart';
+import '../games/bug_hunter/bug_hunter_module.dart';
 import '../games/command_order/command_order_module.dart';
 import '../games/game_registry.dart';
 import '../games/if_then/if_then_module.dart';
@@ -40,8 +41,8 @@ final class AppServices {
        character = CharacterService(store),
        language = LanguageService(store),
        protectedActions = ProtectedActionRunner(parentalGate) {
-    unlockPolicy = UnlockPolicy(progress);
     entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
+    unlockPolicy = UnlockPolicy(progress, entitlements.canPlayPack);
     listings = ListingService(catalog: catalog, gateway: purchaseGateway);
     offers = OfferPolicy(catalog, entitlements);
     achievements = AchievementService(store: store, catalog: catalog, games: games, progress: progress);
@@ -58,7 +59,7 @@ final class AppServices {
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
   }) => AppServices(
     catalog: buildContentCatalog(),
-    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule()]),
+    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule(), BugHunterModule()]),
     store: store,
     parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
     soundPlayer: soundPlayer,

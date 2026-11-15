@@ -177,6 +177,42 @@ void main() {
     });
   });
 
+  group('Paid game trophy', () {
+    AchievementService createPaidService() => AchievementService(
+      store: store,
+      catalog: TestCatalog.withPaidGame(),
+      games: GameRegistry([const FakeGameModule(TestCatalog.gameId), const FakeGameModule(TestCatalog.paidGameId)]),
+      progress: progress,
+    );
+
+    final paidTrophy = AchievementCatalog.gameTrophyId(TestCatalog.paidGameId);
+
+    test('statuses_PaidGame_HasTrophyMeasuredOverAllLevels', () {
+      // Act
+      final status = statusOf(createPaidService(), paidTrophy);
+
+      // Assert
+      expect(status.progress.goal, 4);
+    });
+
+    test('sync_PaidGameAllLevelsDone_EarnsTrophyOnly', () async {
+      // Arrange
+      final service = createPaidService();
+      for (var level = 1; level <= 4; level++) {
+        await progress.completeLevel(TestCatalog.paidPack, level, 3);
+      }
+
+      // Act
+      final fresh = await service.sync();
+
+      // Assert
+      final ids = [for (final status in fresh) status.achievement.id];
+      expect(ids, contains(paidTrophy));
+      expect(ids, isNot(contains('first-game')));
+      expect(statusOf(service, 'all-games').progress.goal, 1);
+    });
+  });
+
   group('AchievementCatalog', () {
     test('build_ProductionCatalog_HasUniqueIdsAndOneTrophyPerGame', () {
       // Arrange

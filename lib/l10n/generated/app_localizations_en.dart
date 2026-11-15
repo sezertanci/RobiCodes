@@ -28,6 +28,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeComingSoon => 'Coming soon';
 
   @override
+  String get homeLocked => 'Locked';
+
+  @override
   String homeLevels(Object completed, Object levels) {
     return '$completed/$levels levels';
   }
@@ -112,6 +115,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get playPreviewNote =>
+      'The first level of each difficulty can be tried for free. The other levels open after purchase.';
+
+  @override
   String get playLevelComplete => 'Great! Level complete.';
 
   @override
@@ -184,6 +191,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gameRepeatTrophyDescription => 'You use loops like a pro!';
+
+  @override
+  String get gameBugHunterTitle => 'Bug Hunter';
+
+  @override
+  String get gameBugHunterDescription => 'Find and fix the broken code.';
+
+  @override
+  String get gameBugHunterTrophy => 'Master Bug Hunter';
+
+  @override
+  String get gameBugHunterTrophyDescription =>
+      'You found even the trickiest bugs!';
 
   @override
   String get characterTitle => 'Choose your character';
@@ -1159,6 +1179,133 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get repeatL20Hint =>
       'The path is made of five straight parts. Do each part with a Repeat block.';
+
+  @override
+  String get bugHunterIntro =>
+      'There\'s a bug in this code! First tap Start and watch where the robot gets confused.';
+
+  @override
+  String get bugHunterSelected =>
+      'If you selected an arrow, a direction button changes it. You can delete the selected block or add a new arrow before it.';
+
+  @override
+  String get bugHunterPickInsert =>
+      'Which arrow should go before it? Tap a direction button.';
+
+  @override
+  String get bugHunterInsertLabel => 'Add an arrow before the selected block';
+
+  @override
+  String get bugHunterReset => 'Start over';
+
+  @override
+  String get bugHunterL1Intro =>
+      'The robot can\'t reach the flag, there\'s a bug in the code! Tap Start and watch the robot. Then tap the wrong arrow and press the right direction button.';
+
+  @override
+  String get bugHunterL1Hint =>
+      'The flag is straight to the right. All arrows should point right.';
+
+  @override
+  String get bugHunterL2Hint =>
+      'The robot goes around below the rock. The last arrow should take it up to the flag.';
+
+  @override
+  String get bugHunterL3Intro =>
+      'An arrow is missing in this code. Where did the robot stop? Add the missing arrow.';
+
+  @override
+  String get bugHunterL3Hint =>
+      'The robot stops before the flag. It needs one more step.';
+
+  @override
+  String get bugHunterL4Intro =>
+      'There\'s an extra arrow in this code. Select the extra arrow and delete it.';
+
+  @override
+  String get bugHunterL4Hint =>
+      'The robot takes one more step after reaching the flag.';
+
+  @override
+  String get bugHunterL5Intro =>
+      'An arrow is missing, but not at the end. Select an arrow, tap the Add before button, then tap a direction button.';
+
+  @override
+  String get bugHunterL5Hint =>
+      'While passing below the rock, the robot should go right twice.';
+
+  @override
+  String get bugHunterL6Hint => 'After picking up the coin, the flag is below.';
+
+  @override
+  String get bugHunterL7Hint =>
+      'To get past the water, go right three times along the bottom row.';
+
+  @override
+  String get bugHunterL8Intro =>
+      'There are two bugs in this code! Each time the robot gets stuck, fix one bug.';
+
+  @override
+  String get bugHunterL8Hint => 'Go above the rocks: first right, then down.';
+
+  @override
+  String get bugHunterL9Hint =>
+      'After picking up both coins, the robot should stop on the flag.';
+
+  @override
+  String get bugHunterL10Hint =>
+      'Follow the path that winds between the rocks. One arrow is wrong and one is missing.';
+
+  @override
+  String get bugHunterL11Intro =>
+      'This time the bug is inside the orange Repeat block. Select the arrow inside and change it.';
+
+  @override
+  String get bugHunterL11Hint =>
+      'The arrow in the Repeat block should point toward the flag.';
+
+  @override
+  String get bugHunterL12Intro =>
+      'The arrows in this code are right, but the repeat count is wrong. Change the number.';
+
+  @override
+  String get bugHunterL12Hint =>
+      'How many steps are there? The repeat count should match the number of steps.';
+
+  @override
+  String get bugHunterL13Hint => 'Each step is two right, one up.';
+
+  @override
+  String get bugHunterL14Hint =>
+      'Each step is two right, one down. An arrow is missing inside the block.';
+
+  @override
+  String get bugHunterL15Hint =>
+      'Only one step is left after the Repeat block.';
+
+  @override
+  String get bugHunterL16Intro =>
+      'Expert hunter! These codes have more than one bug. Find one each time you run.';
+
+  @override
+  String get bugHunterL16Hint =>
+      'How many squares to the right first? Then how many down?';
+
+  @override
+  String get bugHunterL17Hint =>
+      'Each repeat goes two squares right. How many repeats does it take to reach the flag?';
+
+  @override
+  String get bugHunterL18Hint =>
+      'The rocks are above the steps. On each step, go down first, then right.';
+
+  @override
+  String get bugHunterL19Hint =>
+      'There\'s a staircase between the water: one right, one down. How many steps are there?';
+
+  @override
+  String get bugHunterL20Hint =>
+      'First right, then down. Count the squares in each straight part.';
 
   @override
   String get ifThenL1Intro =>

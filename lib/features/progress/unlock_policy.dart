@@ -1,16 +1,22 @@
 import '../../content/models/level_pack.dart';
 import 'progress_repository.dart';
 
-/// Seviye ve grup kilitleri. Mevcut oyundaki kuralların aynısıdır:
+/// Paketin tamamına erişim olup olmadığını söyler (bkz. `EntitlementService.canPlayPack`).
+typedef PackAccess = bool Function(String packId);
+
+/// Seviye ve grup kilitleri. Paketin tamamına erişim varsa mevcut oyundaki kurallar geçerlidir:
 /// - Bir grup, önceki grubun bütün seviyeleri tamamlanınca açılır.
 /// - Bir seviye, grubu açıksa ve önceki seviye tamamlandıysa açılır.
 /// - Bir seviyeyi açmak için önceki seviyede 1 yıldız yeterlidir.
 ///
-/// Paketin satın alınmış olup olmadığı burada denetlenmez; o iş `EntitlementService`'indir.
+/// Erişim yoksa yalnızca paketin deneme seviyeleri (her grubun ilk seviyesi) sırayla açılır: ilki hemen,
+/// sonraki ise önceki deneme seviyesi tamamlanınca. Deneme seviyesi açık olan grup açık görünür.
+/// Erişimin kendisi burada hesaplanmaz; [PackAccess] ile `EntitlementService`'ten alınır.
 final class UnlockPolicy {
-  const UnlockPolicy(this._progress);
+  const UnlockPolicy(this._progress, this._canPlayPack);
 
   final ProgressRepository _progress;
+  final PackAccess _canPlayPack;
 
   int groupCompletedCount(LevelPack pack, GroupRange range) {
     var count = 0;
@@ -21,6 +27,9 @@ final class UnlockPolicy {
   }
 
   bool isGroupUnlocked(LevelPack pack, GroupRange range) {
+    if (!_canPlayPack(pack.id)) {
+      return isLevelUnlocked(pack, range.firstLevel);
+    }
     if (range.index == 0) {
       return true;
     }
@@ -31,6 +40,9 @@ final class UnlockPolicy {
   bool isLevelUnlocked(LevelPack pack, int level) {
     if (!pack.containsLevel(level)) {
       return false;
+    }
+    if (!_canPlayPack(pack.id)) {
+      return _isPreviewUnlocked(pack, level);
     }
     final range = pack.groupRanges.firstWhere((candidate) => candidate.contains(level));
     if (!isGroupUnlocked(pack, range)) {
@@ -47,5 +59,11 @@ final class UnlockPolicy {
       }
     }
     return null;
+  }
+
+  bool _isPreviewUnlocked(LevelPack pack, int level) {
+    final previews = pack.previewLevels;
+    final index = previews.indexOf(level);
+    return index == 0 || (index > 0 && _progress.isCompleted(pack.id, previews[index - 1]));
   }
 }

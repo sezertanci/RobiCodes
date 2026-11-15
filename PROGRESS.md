@@ -211,6 +211,14 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
 - Portekizce (Brezilya), İtalyanca ve Endonezce eklendi (yalnızca uygulama içi). Adlar ve karakter adları
   [docs/decisions.md](docs/decisions.md) içinde; bu diller de emülatörde görsel olarak denetlenmedi.
 
+## Ücretli oyunlar (15.11.2026)
+
+- **Hata Avcısı** kodlandı (`lib/games/bug_hunter/`): 20 seviye, deneme altyapısı, kilitli kart, satın alma
+  akışı. "Tekrar Et" denetleyicisine isteğe bağlı `StartingProgram` eklendi; verilmezse Tekrar Et aynen çalışır.
+  Kararlar [docs/decisions.md](docs/decisions.md) içinde. Tablette denendi ve commit edildi; Play Console'da
+  ürün (`pack.bug_hunter.base`) ve fiyat kullanıcı tarafından tanımlanacak.
+- Sırada: Kendi Komutunu Oluştur, ardından iki oyunu kapsayan bundle.
+
 ## Kararlar
 
 Açık sorulara verilen cevaplar [docs/decisions.md](docs/decisions.md) içinde.

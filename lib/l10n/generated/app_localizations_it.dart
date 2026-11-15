@@ -28,6 +28,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get homeComingSoon => 'Presto in arrivo';
 
   @override
+  String get homeLocked => 'Bloccato';
+
+  @override
   String homeLevels(Object completed, Object levels) {
     return '$completed/$levels livelli';
   }
@@ -112,6 +115,10 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get playPreviewNote =>
+      'Il primo livello di ogni difficoltà si può provare gratis. Gli altri livelli si sbloccano con l’acquisto.';
+
+  @override
   String get playLevelComplete => 'Bravo! Livello completato.';
 
   @override
@@ -184,6 +191,20 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get gameRepeatTrophyDescription => 'Usi i cicli come un campione!';
+
+  @override
+  String get gameBugHunterTitle => 'Caccia all’errore';
+
+  @override
+  String get gameBugHunterDescription =>
+      'Trova e correggi il codice sbagliato.';
+
+  @override
+  String get gameBugHunterTrophy => 'Maestro cacciatore di errori';
+
+  @override
+  String get gameBugHunterTrophyDescription =>
+      'Hai trovato anche gli errori più difficili!';
 
   @override
   String get characterTitle => 'Scegli il tuo personaggio';
@@ -1168,6 +1189,135 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get repeatL20Hint =>
       'La strada è fatta di cinque tratti dritti. Fai ogni tratto con un blocco Ripeti.';
+
+  @override
+  String get bugHunterIntro =>
+      'In questo codice c’è un errore! Prima tocca Via e guarda dove il robot si confonde.';
+
+  @override
+  String get bugHunterSelected =>
+      'Se hai scelto una freccia, un pulsante di direzione la cambia. Puoi cancellare il blocco scelto o aggiungere una nuova freccia prima di lui.';
+
+  @override
+  String get bugHunterPickInsert =>
+      'Quale freccia va prima? Tocca un pulsante di direzione.';
+
+  @override
+  String get bugHunterInsertLabel =>
+      'Aggiungi una freccia prima del blocco scelto';
+
+  @override
+  String get bugHunterReset => 'Ricomincia';
+
+  @override
+  String get bugHunterL1Intro =>
+      'Il robot non arriva alla bandiera: c’è un errore nel codice! Tocca Via e guarda il robot. Poi tocca la freccia sbagliata e premi il pulsante di direzione giusto.';
+
+  @override
+  String get bugHunterL1Hint =>
+      'La bandiera è dritta a destra. Tutte le frecce devono andare a destra.';
+
+  @override
+  String get bugHunterL2Hint =>
+      'Il robot passa sotto la roccia. L’ultima freccia deve portarlo su fino alla bandiera.';
+
+  @override
+  String get bugHunterL3Intro =>
+      'In questo codice manca una freccia. Dove si è fermato il robot? Aggiungi la freccia che manca.';
+
+  @override
+  String get bugHunterL3Hint =>
+      'Il robot si ferma prima della bandiera. Gli serve ancora un passo.';
+
+  @override
+  String get bugHunterL4Intro =>
+      'In questo codice c’è una freccia in più. Scegli la freccia in più e cancellala.';
+
+  @override
+  String get bugHunterL4Hint =>
+      'Il robot fa ancora un passo dopo essere arrivato alla bandiera.';
+
+  @override
+  String get bugHunterL5Intro =>
+      'Manca una freccia, ma non alla fine. Scegli una freccia, tocca il pulsante Aggiungi prima, poi tocca un pulsante di direzione.';
+
+  @override
+  String get bugHunterL5Hint =>
+      'Mentre passa sotto la roccia, il robot deve andare a destra due volte.';
+
+  @override
+  String get bugHunterL6Hint =>
+      'Dopo aver raccolto la moneta, la bandiera è giù.';
+
+  @override
+  String get bugHunterL7Hint =>
+      'Per passare accanto all’acqua, vai a destra tre volte lungo la riga in basso.';
+
+  @override
+  String get bugHunterL8Intro =>
+      'In questo codice ci sono due errori! Ogni volta che il robot si blocca, correggi un errore.';
+
+  @override
+  String get bugHunterL8Hint =>
+      'Passa sopra le rocce: prima a destra, poi giù.';
+
+  @override
+  String get bugHunterL9Hint =>
+      'Dopo aver raccolto tutte e due le monete, il robot deve fermarsi sulla bandiera.';
+
+  @override
+  String get bugHunterL10Hint =>
+      'Segui la strada che fa le curve tra le rocce. Una freccia è sbagliata e una manca.';
+
+  @override
+  String get bugHunterL11Intro =>
+      'Questa volta l’errore è dentro il blocco arancione Ripeti. Scegli la freccia che c’è dentro e cambiala.';
+
+  @override
+  String get bugHunterL11Hint =>
+      'La freccia nel blocco Ripeti deve andare verso la bandiera.';
+
+  @override
+  String get bugHunterL12Intro =>
+      'Le frecce di questo codice sono giuste, ma il numero di ripetizioni è sbagliato. Cambia il numero.';
+
+  @override
+  String get bugHunterL12Hint =>
+      'Quanti gradini ci sono? Il numero di ripetizioni deve essere uguale al numero di gradini.';
+
+  @override
+  String get bugHunterL13Hint => 'Ogni gradino è due a destra, una su.';
+
+  @override
+  String get bugHunterL14Hint =>
+      'Ogni gradino è due a destra, una giù. Dentro il blocco manca una freccia.';
+
+  @override
+  String get bugHunterL15Hint => 'Dopo il blocco Ripeti manca solo un passo.';
+
+  @override
+  String get bugHunterL16Intro =>
+      'Cacciatore esperto! In questi codici c’è più di un errore. Trovane uno ogni volta che tocchi Via.';
+
+  @override
+  String get bugHunterL16Hint =>
+      'Prima quante caselle a destra? Poi quante giù?';
+
+  @override
+  String get bugHunterL17Hint =>
+      'Ogni ripetizione va due caselle a destra. Quante ripetizioni servono per arrivare alla bandiera?';
+
+  @override
+  String get bugHunterL18Hint =>
+      'Le rocce sono sopra i gradini. A ogni gradino, prima vai giù, poi a destra.';
+
+  @override
+  String get bugHunterL19Hint =>
+      'Tra l’acqua c’è una scala: una a destra, una giù. Quanti gradini ci sono?';
+
+  @override
+  String get bugHunterL20Hint =>
+      'Prima a destra, poi giù. Conta le caselle di ogni tratto dritto.';
 
   @override
   String get ifThenL1Intro =>

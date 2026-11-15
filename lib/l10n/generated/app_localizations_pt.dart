@@ -28,6 +28,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeComingSoon => 'Em breve';
 
   @override
+  String get homeLocked => 'Bloqueado';
+
+  @override
   String homeLevels(Object completed, Object levels) {
     return '$completed/$levels fases';
   }
@@ -112,6 +115,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get playPreviewNote =>
+      'A primeira fase de cada dificuldade pode ser testada de graça. As outras fases são desbloqueadas depois da compra.';
+
+  @override
   String get playLevelComplete => 'Muito bem! Fase concluída.';
 
   @override
@@ -185,6 +192,19 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get gameRepeatTrophyDescription =>
       'Você usa repetições como um profissional!';
+
+  @override
+  String get gameBugHunterTitle => 'Caçador de Erros';
+
+  @override
+  String get gameBugHunterDescription => 'Ache o código quebrado e conserte.';
+
+  @override
+  String get gameBugHunterTrophy => 'Mestre Caçador de Erros';
+
+  @override
+  String get gameBugHunterTrophyDescription =>
+      'Você achou até os erros mais difíceis!';
 
   @override
   String get characterTitle => 'Escolha seu personagem';
@@ -1169,6 +1189,136 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get repeatL20Hint =>
       'O caminho tem cinco partes retas. Faça cada parte com um bloco Repetir.';
+
+  @override
+  String get bugHunterIntro =>
+      'Tem um erro neste código! Primeiro toque em Começar e veja onde o robô se confunde.';
+
+  @override
+  String get bugHunterSelected =>
+      'Se você escolheu uma seta, um botão de direção troca essa seta. Você pode apagar o bloco escolhido ou adicionar uma seta nova antes dele.';
+
+  @override
+  String get bugHunterPickInsert =>
+      'Qual seta deve vir antes dele? Toque em um botão de direção.';
+
+  @override
+  String get bugHunterInsertLabel =>
+      'Adicionar uma seta antes do bloco escolhido';
+
+  @override
+  String get bugHunterReset => 'Recomeçar';
+
+  @override
+  String get bugHunterL1Intro =>
+      'O robô não consegue chegar à bandeira, tem um erro no código! Toque em Começar e veja o robô. Depois toque na seta errada e aperte o botão de direção certo.';
+
+  @override
+  String get bugHunterL1Hint =>
+      'A bandeira está bem à direita. Todas as setas devem apontar para a direita.';
+
+  @override
+  String get bugHunterL2Hint =>
+      'O robô dá a volta por baixo da pedra. A última seta deve levar o robô para cima, até a bandeira.';
+
+  @override
+  String get bugHunterL3Intro =>
+      'Falta uma seta neste código. Onde o robô parou? Adicione a seta que falta.';
+
+  @override
+  String get bugHunterL3Hint =>
+      'O robô para antes da bandeira. Ele precisa de mais um passo.';
+
+  @override
+  String get bugHunterL4Intro =>
+      'Tem uma seta a mais neste código. Escolha a seta a mais e apague.';
+
+  @override
+  String get bugHunterL4Hint =>
+      'O robô dá mais um passo depois de chegar à bandeira.';
+
+  @override
+  String get bugHunterL5Intro =>
+      'Falta uma seta, mas não no final. Escolha uma seta, toque no botão Adicionar antes e depois toque em um botão de direção.';
+
+  @override
+  String get bugHunterL5Hint =>
+      'Quando passa por baixo da pedra, o robô deve ir duas vezes para a direita.';
+
+  @override
+  String get bugHunterL6Hint =>
+      'Depois de pegar a moeda, a bandeira está lá embaixo.';
+
+  @override
+  String get bugHunterL7Hint =>
+      'Para passar pela água, vá três vezes para a direita pela fileira de baixo.';
+
+  @override
+  String get bugHunterL8Intro =>
+      'Tem dois erros neste código! Cada vez que o robô travar, conserte um erro.';
+
+  @override
+  String get bugHunterL8Hint =>
+      'Passe por cima das pedras: primeiro para a direita, depois para baixo.';
+
+  @override
+  String get bugHunterL9Hint =>
+      'Depois de pegar as duas moedas, o robô deve parar na bandeira.';
+
+  @override
+  String get bugHunterL10Hint =>
+      'Siga o caminho que faz curvas entre as pedras. Uma seta está errada e uma está faltando.';
+
+  @override
+  String get bugHunterL11Intro =>
+      'Desta vez o erro está dentro do bloco laranja Repetir. Escolha a seta lá dentro e troque.';
+
+  @override
+  String get bugHunterL11Hint =>
+      'A seta do bloco Repetir deve apontar para a bandeira.';
+
+  @override
+  String get bugHunterL12Intro =>
+      'As setas deste código estão certas, mas o número de repetições está errado. Troque o número.';
+
+  @override
+  String get bugHunterL12Hint =>
+      'Quantos degraus tem? O número de repetições deve ser igual ao número de degraus.';
+
+  @override
+  String get bugHunterL13Hint =>
+      'Cada degrau é duas para a direita e uma para cima.';
+
+  @override
+  String get bugHunterL14Hint =>
+      'Cada degrau é duas para a direita e uma para baixo. Falta uma seta dentro do bloco.';
+
+  @override
+  String get bugHunterL15Hint => 'Depois do bloco Repetir, falta só um passo.';
+
+  @override
+  String get bugHunterL16Intro =>
+      'Caçador especialista! Estes códigos têm mais de um erro. Ache um erro cada vez que você começar.';
+
+  @override
+  String get bugHunterL16Hint =>
+      'Quantos quadrados para a direita primeiro? E depois, quantos para baixo?';
+
+  @override
+  String get bugHunterL17Hint =>
+      'Cada repetição vai dois quadrados para a direita. Quantas repetições são necessárias até a bandeira?';
+
+  @override
+  String get bugHunterL18Hint =>
+      'As pedras estão em cima dos degraus. Em cada degrau, primeiro vá para baixo, depois para a direita.';
+
+  @override
+  String get bugHunterL19Hint =>
+      'Tem uma escada no meio da água: uma para a direita, uma para baixo. Quantos degraus tem?';
+
+  @override
+  String get bugHunterL20Hint =>
+      'Primeiro para a direita, depois para baixo. Conte os quadrados de cada parte reta.';
 
   @override
   String get ifThenL1Intro =>

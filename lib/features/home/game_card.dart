@@ -20,6 +20,7 @@ final class GameCard extends StatelessWidget {
     required this.levels,
     required this.stars,
     required this.isPlayable,
+    this.lockedLabel,
     this.onTap,
     super.key,
   });
@@ -32,6 +33,9 @@ final class GameCard extends StatelessWidget {
   final int levels;
   final int stars;
   final bool isPlayable;
+
+  /// Satın alınmamış ücretli oyunda seviye metni yerine kilit simgesiyle gösterilen fiyat veya "Kilitli" metni.
+  final String? lockedLabel;
 
   /// Oynanabilir oyunda karta dokununca çağrılır; `null` ise kart dokunulamaz.
   final VoidCallback? onTap;
@@ -102,7 +106,8 @@ final class GameCard extends StatelessWidget {
                     completed: completed,
                     levels: levels,
                     stars: stars,
-                    label: isPlayable ? t.homeLevels(completed, levels) : t.homeComingSoon,
+                    label: lockedLabel ?? (isPlayable ? t.homeLevels(completed, levels) : t.homeComingSoon),
+                    isLocked: lockedLabel != null,
                   ),
                 ],
               ),
@@ -148,17 +153,25 @@ final class _IconBadge extends StatelessWidget {
 
 /// Beyaz ilerleme çubuğu, altında seviye metni ve yıldız sayısı.
 final class _Progress extends StatelessWidget {
-  const _Progress({required this.completed, required this.levels, required this.stars, required this.label});
+  const _Progress({
+    required this.completed,
+    required this.levels,
+    required this.stars,
+    required this.label,
+    required this.isLocked,
+  });
 
   final int completed;
   final int levels;
   final int stars;
   final String label;
+  final bool isLocked;
 
   static const _barHeight = 14.0;
   static const _barBackground = Color(0x59FFFFFF);
   static const _starSize = 22.0;
   static const _gap = 6.0;
+  static const _iconGap = 4.0;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -181,12 +194,21 @@ final class _Progress extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isLocked) ...[
+                  SvgPicture.asset(AppAssets.lock, width: _starSize, height: _starSize),
+                  const SizedBox(width: _iconGap),
+                ],
+                Text(label),
+              ],
+            ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SvgPicture.asset(AppAssets.star, width: _starSize, height: _starSize),
-                const SizedBox(width: 4),
+                const SizedBox(width: _iconGap),
                 Text('$stars'),
               ],
             ),

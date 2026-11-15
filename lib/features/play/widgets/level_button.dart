@@ -18,6 +18,7 @@ final class LevelButton extends StatelessWidget {
     required this.tone,
     required this.ratio,
     required this.onTap,
+    this.onLockedTap,
     super.key,
   });
 
@@ -30,6 +31,11 @@ final class LevelButton extends StatelessWidget {
   /// Ekran ölçeği; telefonda 1, tablette satırın bütün boyutları bu oranda büyür.
   final double ratio;
   final VoidCallback onTap;
+
+  /// Kilitli satıra dokununca çağrılır (ör. ücretli seviyede satın alma); `null` ise kilitli satır dokunulamaz.
+  final VoidCallback? onLockedTap;
+
+  VoidCallback? get _tapAction => unlocked ? onTap : onLockedTap;
 
   /// Çocuk parmağı için en küçük dokunma yüksekliği.
   static const _minHeight = 64.0;
@@ -67,7 +73,7 @@ final class LevelButton extends StatelessWidget {
         type: MaterialType.transparency,
         child: InkWell(
           customBorder: shape,
-          onTap: unlocked ? onTap : null,
+          onTap: _tapAction,
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: _minHeight * ratio),
             child: Padding(
@@ -94,10 +100,10 @@ final class LevelButton extends StatelessWidget {
     );
     return Semantics(
       button: true,
-      enabled: unlocked,
+      enabled: _tapAction != null,
       label: _label(context.l10n),
       excludeSemantics: true,
-      onTap: unlocked ? onTap : null,
+      onTap: _tapAction,
       child: unlocked ? button : Opacity(opacity: _lockedOpacity, child: button),
     );
   }

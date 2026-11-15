@@ -23,7 +23,7 @@ final class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: ListenableBuilder(
-          listenable: Listenable.merge([services.progress, services.entitlements]),
+          listenable: Listenable.merge([services.progress, services.entitlements, services.listings]),
           builder: (context, _) => CustomScrollView(
             slivers: [
               SliverToBoxAdapter(child: HomeHeader(stars: services.progress.starsIn(services.catalog.packs))),
@@ -46,10 +46,10 @@ final class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Kartta oyunun yalnızca oynanabilir (ücretsiz veya sahip olunan) paketleri sayılır.
+  /// Kartta oyunun seviye seçiminde görünen (ücretsiz, sahip olunan veya denemesi olan) paketleri sayılır.
   Widget _buildCard(BuildContext context, AppServices services, GameDefinition game) {
     final isPlayable = services.games.isPlayable(game.id);
-    final packs = services.entitlements.playablePacksOf(game.id);
+    final packs = services.entitlements.visiblePacksOf(game.id);
     final t = context.l10n;
     return GameCard(
       title: game.title(t),
@@ -60,9 +60,20 @@ final class HomeScreen extends StatelessWidget {
       levels: packs.levelCount,
       stars: services.progress.starsIn(packs),
       isPlayable: isPlayable,
+      lockedLabel: isPlayable ? _lockedLabel(t, services, packs) : null,
       onTap: isPlayable
           ? () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => LevelSelectScreen(game: game)))
           : null,
     );
+  }
+
+  /// Oyunun bütün paketleri yalnızca denemeyle oynanıyorsa ilk paketin fiyatı, fiyat bilinmiyorsa
+  /// "Kilitli"; oynanabilir paketi varsa `null`.
+  static String? _lockedLabel(AppLocalizations t, AppServices services, List<LevelPack> packs) {
+    if (packs.isEmpty || !packs.every(services.entitlements.isPreviewOnly)) {
+      return null;
+    }
+    final product = services.catalog.purchaseFor(packs.first.id);
+    return (product == null ? null : services.listings.listingOf(product.id)?.price) ?? t.homeLocked;
   }
 }

@@ -28,6 +28,20 @@
   Kimlikler yayından sonra değiştirilmez ve silinse bile yeniden kullanılamaz.
 - Fiyatlar ilk ücretli paket hazır olduğunda belirlenecek.
 
+### İlk ücretli oyun: Hata Avcısı (15.11.2026)
+
+- Ücretli oyunlar sırayla yapılır ve her biri kendi fiyatıyla kapalı teste çıkar: önce **Hata Avcısı**, sonra
+  **Kendi Komutunu Oluştur**, ardından ikisini kapsayan bir bundle. Sonraki oyunlar: Değişken Kutusu → Desen
+  Bulmacası → Devre → Akış Şeması.
+- Hata Avcısı, "Tekrar Et" haritaları ve bloklarıyla oynanır (yön okları + Tekrarla). Seviye bozuk bir kodla
+  açılır; çocuk kodu çalıştırıp hatayı bulur ve düzeltir. Ürün kimliği `pack.bug_hunter.base`.
+- Deneme: her zorluk grubunun ilk seviyesi ücretsizdir (toplam 4 seviye) ve sırayla açılır; satın alınca kalan
+  16 seviye açılır. Ana ekranda kart kilitli görünür ve fiyatı (yoksa "Kilitli") yazar.
+- Görünüm: kırmızı renk, ikonda büyüteç altında uğur böceği. Kupa 20 seviye bitince verilir.
+- Düzenleme: bir oka dokunup yön tuşuna basınca o ok değişir; seçiliyken "Sil" ve "Önüne ekle" düğmeleri
+  görünür. "Temizle" yerine "Baştan al" düğmesi bozuk koda geri döner. Tekrarla düğmesi yalnızca tekrarlı
+  seviyelerde (11–20) görünür.
+
 ## Ses efektleri
 
 - Web sürümünde sesler kodla üretilir. Flutter sürümünde bu sesler **dosya olarak** hazırlanır ve

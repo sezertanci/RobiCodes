@@ -146,6 +146,12 @@ abstract class AppLocalizations {
   /// **'Yakında'**
   String get homeComingSoon;
 
+  /// Satın alınmamış ücretli oyunun kartında, fiyat bilinmediğinde kilit simgesinin yanında yazar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kilitli'**
+  String get homeLocked;
+
   /// No description provided for @homeLevels.
   ///
   /// In tr, this message translates to:
@@ -265,6 +271,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Önce {difficulty} seviyelerini bitir'**
   String playFinishGroupFirst(Object difficulty);
+
+  /// Satın alınmamış ücretli oyunun seviye seçiminde, fiyatlı satın alma düğmesinin üstündeki sakin bilgi metni.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her zorluğun ilk seviyesi ücretsiz denenebilir. Diğer seviyeler satın alınınca açılır.'**
+  String get playPreviewNote;
 
   /// No description provided for @playLevelComplete.
   ///
@@ -391,6 +403,30 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tekrarları ustaca kullanıyorsun!'**
   String get gameRepeatTrophyDescription;
+
+  /// No description provided for @gameBugHunterTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hata Avcısı'**
+  String get gameBugHunterTitle;
+
+  /// No description provided for @gameBugHunterDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bozuk kodu bul ve düzelt.'**
+  String get gameBugHunterDescription;
+
+  /// No description provided for @gameBugHunterTrophy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Usta Hata Avcısı'**
+  String get gameBugHunterTrophy;
+
+  /// No description provided for @gameBugHunterTrophyDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'En zor hataları bile buldun!'**
+  String get gameBugHunterTrophyDescription;
 
   /// No description provided for @characterTitle.
   ///
@@ -1735,6 +1771,204 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Yol beş düz parçadan oluşuyor. Her parçayı bir Tekrarla bloğuyla yap.'**
   String get repeatL20Hint;
+
+  /// No description provided for @bugHunterIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kodda bir hata var! Önce Başlat\'a bas ve robotun nerede şaşırdığını izle.'**
+  String get bugHunterIntro;
+
+  /// No description provided for @bugHunterSelected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ok seçtiysen bir yön tuşu onu değiştirir. Seçili bloğu silebilir ya da önüne yeni bir ok ekleyebilirsin.'**
+  String get bugHunterSelected;
+
+  /// No description provided for @bugHunterPickInsert.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önüne hangi ok gelsin? Bir yön tuşuna bas.'**
+  String get bugHunterPickInsert;
+
+  /// Hata Avcısı'nda seçili bloğun önüne ok ekleme düğmesinin erişilebilirlik etiketi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçili bloğun önüne ok ekle'**
+  String get bugHunterInsertLabel;
+
+  /// Hata Avcısı'nda Temizle düğmesinin yerini alan, bozuk koda geri dönen düğme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Baştan al'**
+  String get bugHunterReset;
+
+  /// No description provided for @bugHunterL1Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot bayrağa gidemiyor, kodda bir hata var! Başlat\'a bas ve robotu izle. Sonra yanlış oka dokunup doğru yön tuşuna bas.'**
+  String get bugHunterL1Intro;
+
+  /// No description provided for @bugHunterL1Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bayrak tam sağda. Bütün oklar sağı göstermeli.'**
+  String get bugHunterL1Hint;
+
+  /// No description provided for @bugHunterL2Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot taşın altından dolaşıyor. Son ok onu bayrağa çıkarmalı.'**
+  String get bugHunterL2Hint;
+
+  /// No description provided for @bugHunterL3Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kodda bir ok eksik. Robot nerede durdu? Eksik oku ekle.'**
+  String get bugHunterL3Intro;
+
+  /// No description provided for @bugHunterL3Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot bayrağa varmadan duruyor. Bir adım daha gerekiyor.'**
+  String get bugHunterL3Hint;
+
+  /// No description provided for @bugHunterL4Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kodda fazladan bir ok var. Fazla oku seç ve sil.'**
+  String get bugHunterL4Intro;
+
+  /// No description provided for @bugHunterL4Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot bayrağa vardıktan sonra bir adım daha atıyor.'**
+  String get bugHunterL4Hint;
+
+  /// No description provided for @bugHunterL5Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir ok eksik ama yeri sonda değil. Bir oku seç, Önüne ekle düğmesine bas, sonra yön tuşuna bas.'**
+  String get bugHunterL5Intro;
+
+  /// No description provided for @bugHunterL5Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşın altından geçerken robot iki kez sağa gitmeli.'**
+  String get bugHunterL5Hint;
+
+  /// No description provided for @bugHunterL6Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Altını aldıktan sonra bayrak aşağıda.'**
+  String get bugHunterL6Hint;
+
+  /// No description provided for @bugHunterL7Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Suyun yanından geçmek için en alttaki sırada üç kez sağa git.'**
+  String get bugHunterL7Hint;
+
+  /// No description provided for @bugHunterL8Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kodda iki hata var! Robot her takıldığında bir hatayı düzelt.'**
+  String get bugHunterL8Intro;
+
+  /// No description provided for @bugHunterL8Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşların üstünden git: önce sağa, sonra aşağı.'**
+  String get bugHunterL8Hint;
+
+  /// No description provided for @bugHunterL9Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İki altını da aldıktan sonra robot bayrakta durmalı.'**
+  String get bugHunterL9Hint;
+
+  /// No description provided for @bugHunterL10Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşların arasından kıvrılan yolu izle. Bir ok yanlış, bir ok eksik.'**
+  String get bugHunterL10Hint;
+
+  /// No description provided for @bugHunterL11Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kez hata turuncu Tekrarla bloğunun içinde. İçteki oku seç ve değiştir.'**
+  String get bugHunterL11Intro;
+
+  /// No description provided for @bugHunterL11Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrarla bloğundaki ok bayrağa doğru bakmalı.'**
+  String get bugHunterL11Hint;
+
+  /// No description provided for @bugHunterL12Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kodun okları doğru ama tekrar sayısı yanlış. Sayıyı değiştir.'**
+  String get bugHunterL12Intro;
+
+  /// No description provided for @bugHunterL12Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaç basamak var? Tekrar sayısı basamak sayısı kadar olmalı.'**
+  String get bugHunterL12Hint;
+
+  /// No description provided for @bugHunterL13Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her basamak iki sağa, bir yukarı.'**
+  String get bugHunterL13Hint;
+
+  /// No description provided for @bugHunterL14Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her basamak iki sağa, bir aşağı. Bloğun içinde bir ok eksik.'**
+  String get bugHunterL14Hint;
+
+  /// No description provided for @bugHunterL15Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrarla bloğundan sonra yalnızca bir adım kaldı.'**
+  String get bugHunterL15Hint;
+
+  /// No description provided for @bugHunterL16Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzman avcı! Bu kodlarda birden çok hata var. Her çalıştırmada birini bul.'**
+  String get bugHunterL16Intro;
+
+  /// No description provided for @bugHunterL16Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce sağa kaç kare? Sonra aşağı kaç kare?'**
+  String get bugHunterL16Hint;
+
+  /// No description provided for @bugHunterL17Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her tekrar iki kare sağa gidiyor. Bayrağa kadar kaç tekrar gerekir?'**
+  String get bugHunterL17Hint;
+
+  /// No description provided for @bugHunterL18Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşlar basamakların üstünde. Her basamakta önce aşağı, sonra sağa git.'**
+  String get bugHunterL18Hint;
+
+  /// No description provided for @bugHunterL19Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Suların arasında bir merdiven var: bir sağa, bir aşağı. Kaç basamak var?'**
+  String get bugHunterL19Hint;
+
+  /// No description provided for @bugHunterL20Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce sağa, sonra aşağı. Her düz parçadaki kareleri say.'**
+  String get bugHunterL20Hint;
 
   /// No description provided for @ifThenL1Intro.
   ///

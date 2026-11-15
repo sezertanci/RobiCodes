@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
@@ -10,13 +12,16 @@ import '../../content/models/level_pack.dart';
 import '../../l10n/l10n.dart';
 import '../progress/progress_repository.dart';
 import '../progress/unlock_policy.dart';
+import '../store/purchase_flow.dart';
 import 'level_screen.dart';
 import 'widgets/group_tone.dart';
 import 'widgets/level_button.dart';
 import 'widgets/level_group_panel.dart';
+import 'widgets/preview_banner.dart';
 
-/// Bir oyunun seviye seçim ekranı. Yalnızca oynanabilir (ücretsiz veya sahip olunan) paketler
-/// gösterilir; her paketin seviyeleri zorluk gruplarının renkli panellerinde durur. Paneller ekran
+/// Bir oyunun seviye seçim ekranı. Oynanabilir (ücretsiz veya sahip olunan) paketler ve satın
+/// alınmamış ama deneme seviyeleri olan paketler gösterilir. Deneme paketinin üstünde fiyatlı satın alma
+/// bandı durur; kilitli seviyesine dokunmak da satın almayı açar; her paketin seviyeleri zorluk gruplarının renkli panellerinde durur. Paneller ekran
 /// genişliğine göre bir, iki veya dört sütuna dizilir (web sürümündeki kırılma noktaları).
 /// İlerleme veya paket sahipliği değişince (ör. mağaza açılışta geç cevap verirse) ekran yenilenir.
 final class LevelSelectScreen extends StatelessWidget {
@@ -45,7 +50,7 @@ final class LevelSelectScreen extends StatelessWidget {
     return ListenableBuilder(
       listenable: Listenable.merge([services.progress, services.entitlements]),
       builder: (context, _) {
-        final packs = services.entitlements.playablePacksOf(game.id);
+        final packs = services.entitlements.visiblePacksOf(game.id);
         final t = context.l10n;
         return Scaffold(
           body: SafeArea(
@@ -90,8 +95,14 @@ final class LevelSelectScreen extends StatelessWidget {
     required bool titled,
   }) {
     final nextLevel = services.unlockPolicy.nextLevel(pack);
+    final product = services.entitlements.isPreviewOnly(pack) ? services.catalog.purchaseFor(pack.id) : null;
     return [
       if (titled) Text(pack.title(context.l10n), style: Theme.of(context).textTheme.headlineSmall),
+      if (product != null)
+        Padding(
+          padding: const EdgeInsets.only(bottom: LevelSelectScreen._gap),
+          child: PreviewBanner(product: product, services: services),
+        ),
       ..._grid([
         for (final range in pack.groupRanges)
           _GroupPanel(
@@ -102,6 +113,9 @@ final class LevelSelectScreen extends StatelessWidget {
             progress: services.progress,
             policy: services.unlockPolicy,
             ratio: ratio,
+            onLockedTap: product == null
+                ? null
+                : () => unawaited(PurchaseFlow.buyAndReport(context, services, product)),
           ),
       ], columns),
     ];
@@ -135,6 +149,7 @@ final class _GroupPanel extends StatelessWidget {
     required this.progress,
     required this.policy,
     required this.ratio,
+    required this.onLockedTap,
   });
 
   final GameDefinition game;
@@ -147,6 +162,9 @@ final class _GroupPanel extends StatelessWidget {
   final UnlockPolicy policy;
   final double ratio;
 
+  /// Satın alınmamış deneme paketinde kilitli seviyeye dokununca satın almayı açar; diğer paketlerde `null`.
+  final VoidCallback? onLockedTap;
+
   @override
   Widget build(BuildContext context) {
     final unlocked = policy.isGroupUnlocked(pack, range);
@@ -157,7 +175,8 @@ final class _GroupPanel extends StatelessWidget {
       tone: tone,
       unlocked: unlocked,
       progressText: '${policy.groupCompletedCount(pack, range)}/${range.levelCount}',
-      hint: !unlocked && range.index > 0
+      // Deneme paketinde kilit önceki grubu bitirmekle açılmaz; ipucu yanıltmasın diye gösterilmez.
+      hint: !unlocked && range.index > 0 && onLockedTap == null
           ? t.playFinishGroupFirst(pack.groupRanges[range.index - 1].group.difficulty.title(t))
           : null,
       levels: [
@@ -169,6 +188,7 @@ final class _GroupPanel extends StatelessWidget {
             isNext: level == nextLevel,
             tone: tone,
             ratio: ratio,
+            onLockedTap: onLockedTap,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (_) => LevelScreen(game: game, pack: pack, initialLevel: level),

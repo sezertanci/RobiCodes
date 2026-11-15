@@ -47,10 +47,20 @@ final class EntitlementService extends ChangeNotifier {
   bool canPlayPack(String packId) =>
       _catalog.isFree(packId) || _catalog.productsGranting(packId).any((product) => ownsProduct(product.id));
 
+  /// Paket satın alınmamış ama deneme seviyeleriyle oynanabiliyor mu?
+  bool isPreviewOnly(LevelPack pack) => pack.freePreview && !canPlayPack(pack.id);
+
   /// Oyunun oynanabilir (ücretsiz veya sahip olunan) paketleri, katalogdaki sırayla.
   List<LevelPack> playablePacksOf(String gameId) => [
     for (final pack in _catalog.packsOf(gameId))
       if (canPlayPack(pack.id)) pack,
+  ];
+
+  /// Seviye seçiminde gösterilen paketler: oynanabilir paketler ve satın alınmamış ama denemesi olan
+  /// paketler, katalogdaki sırayla.
+  List<LevelPack> visiblePacksOf(String gameId) => [
+    for (final pack in _catalog.packsOf(gameId))
+      if (canPlayPack(pack.id) || pack.freePreview) pack,
   ];
 
   /// Sahipliği mağazadan yeniden okur (uygulama açılışı, ön plana dönüş, "Satın alımları geri yükle").

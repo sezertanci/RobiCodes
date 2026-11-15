@@ -19,6 +19,8 @@ Future<void> main() async {
   // Promosyon kodu Play Store'da, uygulama dışında da kullanılabildiği için ön plana her dönüşte
   // yeniden sorgulanır. Dinleyici uygulama boyunca yaşar.
   unawaited(services.entitlements.refresh());
+  // Ücretli oyunların kartında ve deneme bandında fiyat gösterilir.
+  unawaited(services.listings.load());
   AppLifecycleListener(onResume: () => unawaited(services.entitlements.refresh()));
   // Koşulu önceden sağlanmış ödüller (ör. güncellemeden önce bitirilen seviyeler) pencere açılmadan kaydedilir.
   unawaited(services.achievements.sync());

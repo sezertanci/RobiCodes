@@ -28,6 +28,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeComingSoon => 'Yakında';
 
   @override
+  String get homeLocked => 'Kilitli';
+
+  @override
   String homeLevels(Object completed, Object levels) {
     return '$completed/$levels seviye';
   }
@@ -111,6 +114,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get playPreviewNote =>
+      'Her zorluğun ilk seviyesi ücretsiz denenebilir. Diğer seviyeler satın alınınca açılır.';
+
+  @override
   String get playLevelComplete => 'Harika! Seviye tamamlandı.';
 
   @override
@@ -181,6 +188,18 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get gameRepeatTrophyDescription => 'Tekrarları ustaca kullanıyorsun!';
+
+  @override
+  String get gameBugHunterTitle => 'Hata Avcısı';
+
+  @override
+  String get gameBugHunterDescription => 'Bozuk kodu bul ve düzelt.';
+
+  @override
+  String get gameBugHunterTrophy => 'Usta Hata Avcısı';
+
+  @override
+  String get gameBugHunterTrophyDescription => 'En zor hataları bile buldun!';
 
   @override
   String get characterTitle => 'Karakterini seç';
@@ -1138,6 +1157,133 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get repeatL20Hint =>
       'Yol beş düz parçadan oluşuyor. Her parçayı bir Tekrarla bloğuyla yap.';
+
+  @override
+  String get bugHunterIntro =>
+      'Bu kodda bir hata var! Önce Başlat\'a bas ve robotun nerede şaşırdığını izle.';
+
+  @override
+  String get bugHunterSelected =>
+      'Ok seçtiysen bir yön tuşu onu değiştirir. Seçili bloğu silebilir ya da önüne yeni bir ok ekleyebilirsin.';
+
+  @override
+  String get bugHunterPickInsert =>
+      'Önüne hangi ok gelsin? Bir yön tuşuna bas.';
+
+  @override
+  String get bugHunterInsertLabel => 'Seçili bloğun önüne ok ekle';
+
+  @override
+  String get bugHunterReset => 'Baştan al';
+
+  @override
+  String get bugHunterL1Intro =>
+      'Robot bayrağa gidemiyor, kodda bir hata var! Başlat\'a bas ve robotu izle. Sonra yanlış oka dokunup doğru yön tuşuna bas.';
+
+  @override
+  String get bugHunterL1Hint =>
+      'Bayrak tam sağda. Bütün oklar sağı göstermeli.';
+
+  @override
+  String get bugHunterL2Hint =>
+      'Robot taşın altından dolaşıyor. Son ok onu bayrağa çıkarmalı.';
+
+  @override
+  String get bugHunterL3Intro =>
+      'Bu kodda bir ok eksik. Robot nerede durdu? Eksik oku ekle.';
+
+  @override
+  String get bugHunterL3Hint =>
+      'Robot bayrağa varmadan duruyor. Bir adım daha gerekiyor.';
+
+  @override
+  String get bugHunterL4Intro =>
+      'Bu kodda fazladan bir ok var. Fazla oku seç ve sil.';
+
+  @override
+  String get bugHunterL4Hint =>
+      'Robot bayrağa vardıktan sonra bir adım daha atıyor.';
+
+  @override
+  String get bugHunterL5Intro =>
+      'Bir ok eksik ama yeri sonda değil. Bir oku seç, Önüne ekle düğmesine bas, sonra yön tuşuna bas.';
+
+  @override
+  String get bugHunterL5Hint =>
+      'Taşın altından geçerken robot iki kez sağa gitmeli.';
+
+  @override
+  String get bugHunterL6Hint => 'Altını aldıktan sonra bayrak aşağıda.';
+
+  @override
+  String get bugHunterL7Hint =>
+      'Suyun yanından geçmek için en alttaki sırada üç kez sağa git.';
+
+  @override
+  String get bugHunterL8Intro =>
+      'Bu kodda iki hata var! Robot her takıldığında bir hatayı düzelt.';
+
+  @override
+  String get bugHunterL8Hint =>
+      'Taşların üstünden git: önce sağa, sonra aşağı.';
+
+  @override
+  String get bugHunterL9Hint =>
+      'İki altını da aldıktan sonra robot bayrakta durmalı.';
+
+  @override
+  String get bugHunterL10Hint =>
+      'Taşların arasından kıvrılan yolu izle. Bir ok yanlış, bir ok eksik.';
+
+  @override
+  String get bugHunterL11Intro =>
+      'Bu kez hata turuncu Tekrarla bloğunun içinde. İçteki oku seç ve değiştir.';
+
+  @override
+  String get bugHunterL11Hint =>
+      'Tekrarla bloğundaki ok bayrağa doğru bakmalı.';
+
+  @override
+  String get bugHunterL12Intro =>
+      'Bu kodun okları doğru ama tekrar sayısı yanlış. Sayıyı değiştir.';
+
+  @override
+  String get bugHunterL12Hint =>
+      'Kaç basamak var? Tekrar sayısı basamak sayısı kadar olmalı.';
+
+  @override
+  String get bugHunterL13Hint => 'Her basamak iki sağa, bir yukarı.';
+
+  @override
+  String get bugHunterL14Hint =>
+      'Her basamak iki sağa, bir aşağı. Bloğun içinde bir ok eksik.';
+
+  @override
+  String get bugHunterL15Hint =>
+      'Tekrarla bloğundan sonra yalnızca bir adım kaldı.';
+
+  @override
+  String get bugHunterL16Intro =>
+      'Uzman avcı! Bu kodlarda birden çok hata var. Her çalıştırmada birini bul.';
+
+  @override
+  String get bugHunterL16Hint => 'Önce sağa kaç kare? Sonra aşağı kaç kare?';
+
+  @override
+  String get bugHunterL17Hint =>
+      'Her tekrar iki kare sağa gidiyor. Bayrağa kadar kaç tekrar gerekir?';
+
+  @override
+  String get bugHunterL18Hint =>
+      'Taşlar basamakların üstünde. Her basamakta önce aşağı, sonra sağa git.';
+
+  @override
+  String get bugHunterL19Hint =>
+      'Suların arasında bir merdiven var: bir sağa, bir aşağı. Kaç basamak var?';
+
+  @override
+  String get bugHunterL20Hint =>
+      'Önce sağa, sonra aşağı. Her düz parçadaki kareleri say.';
 
   @override
   String get ifThenL1Intro =>

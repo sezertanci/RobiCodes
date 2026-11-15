@@ -20,7 +20,7 @@ void main() {
       expect(errors, isEmpty);
     });
 
-    test('buildContentCatalog_Default_HasFourFreeGamesWithEightyLevels', () {
+    test('buildContentCatalog_Default_HasFiveGamesWithHundredLevels', () {
       // Arrange
       final catalog = buildContentCatalog();
 
@@ -28,9 +28,9 @@ void main() {
       final totalLevels = catalog.packs.fold(0, (sum, pack) => sum + pack.levelCount);
 
       // Assert
-      expect(catalog.games, hasLength(4));
-      expect(totalLevels, 80);
-      expect(catalog.packs.every((pack) => catalog.isFree(pack.id)), isTrue);
+      expect(catalog.games, hasLength(5));
+      expect(totalLevels, 100);
+      expect(catalog.packs.where((pack) => !catalog.isFree(pack.id)).map((pack) => pack.gameId), [GameIds.bugHunter]);
     });
   });
 
@@ -64,6 +64,15 @@ void main() {
 
       // Assert
       expect(ids, [TestCatalog.productA, TestCatalog.bundle]);
+    });
+
+    test('purchaseFor_PackInBundle_PrefersOwnProduct', () {
+      // Arrange
+      final catalog = TestCatalog.build();
+
+      // Act & Assert
+      expect(catalog.purchaseFor(TestCatalog.packA)?.id, TestCatalog.productA);
+      expect(catalog.purchaseFor(TestCatalog.freePack), isNull);
     });
 
     test('validate_BrokenData_ReportsEveryProblem', () {

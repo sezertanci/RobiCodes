@@ -7,9 +7,11 @@ import '../../path_finder/ui/direction_pad.dart';
 import '../../../l10n/l10n.dart';
 import '../repeat_controller.dart';
 import '../repeat_texts.dart';
+import 'program_strip.dart';
 import 'repeat_block_view.dart';
 
-/// Yön tuşları, Tekrarla düğmesi ile Başlat, İpucu ve Temizle düğmeleri.
+/// Yön tuşları, Tekrarla düğmesi ile Başlat, İpucu ve Temizle düğmeleri. Hazır programı düzeltme
+/// kurallarında Temizle "Baştan al" olur; Tekrarla düğmesi yalnızca seviye izin veriyorsa görünür.
 /// Geniş ekranda düğmeler yön tuşlarının altında durur: üstte tam satır Tekrarla, altında üç düğme.
 /// Dar ekranda yön tuşlarının sağında Tekrarla üstte, Başlat ile İpucu ortada, Temizle altta durur.
 final class RepeatControls extends StatelessWidget {
@@ -45,23 +47,27 @@ final class RepeatControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
-    final pad = DirectionPad(
-      buttonSize: buttonSize,
-      enabled: controller.canAddMove,
-      highlighted: controller.hint?.direction,
-      label: (direction) => RepeatTexts.addMove(t, direction),
-      onPressed: controller.addMove,
+    final pad = TapRegion(
+      groupId: ProgramStrip.tapGroup,
+      child: DirectionPad(
+        buttonSize: buttonSize,
+        enabled: controller.canAddMove,
+        highlighted: controller.hint?.direction,
+        label: (direction) => RepeatTexts.addMove(t, direction),
+        onPressed: controller.addMove,
+      ),
     );
     final run = _action(AppAssets.runButton, t.commonRun, controller.run);
     final hint = _action(AppAssets.hintButton, t.commonHint, controller.showHint);
-    final clear = _action(AppAssets.clearButton, t.commonClear, controller.clear);
+    final clearLabel = controller.fixesProgram ? t.bugHunterReset : t.commonClear;
+    final clear = _action(AppAssets.clearButton, clearLabel, controller.clear);
     if (stacked) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           pad,
           const SizedBox(height: _stackedGap),
-          _repeatButton(columns: DirectionPad.gridSize),
+          if (controller.allowsRepeat) _repeatButton(columns: DirectionPad.gridSize),
           Row(mainAxisSize: MainAxisSize.min, children: [run, hint, clear]),
         ],
       );
@@ -74,7 +80,7 @@ final class RepeatControls extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _repeatButton(columns: 2),
+            if (controller.allowsRepeat) _repeatButton(columns: 2),
             Row(mainAxisSize: MainAxisSize.min, children: [run, hint]),
             clear,
           ],

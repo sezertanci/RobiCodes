@@ -7,6 +7,7 @@ import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../../path_finder/ui/board_view.dart';
 import '../engine/repeat_level.dart';
+import '../engine/starting_program.dart';
 import '../repeat_controller.dart';
 import 'program_strip.dart';
 import 'repeat_controls.dart';
@@ -20,10 +21,14 @@ final class RepeatView extends StatefulWidget {
     required this.level,
     required this.onCompleted,
     this.feedback = const SilentGameFeedback(),
+    this.startingProgram,
     super.key,
   });
 
   final RepeatLevel level;
+
+  /// Verilirse seviye bu hazır programla açılır (bkz. [StartingProgram]).
+  final StartingProgram? startingProgram;
   final ValueChanged<int> onCompleted;
 
   /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
@@ -66,6 +71,7 @@ final class _RepeatViewState extends State<RepeatView> {
       level: widget.level,
       onCompleted: widget.onCompleted,
       feedback: widget.feedback,
+      startingProgram: widget.startingProgram,
       stepDuration: MediaQuery.disableAnimationsOf(context)
           ? RepeatController.reducedStepDuration
           : RepeatController.defaultStepDuration,

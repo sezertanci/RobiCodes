@@ -18,6 +18,8 @@ import 'achievement_stats.dart';
 ///
 /// Ödüllerde yalnızca oynanabilir oyunların ücretsiz paketleri sayılır; "Yakında" görünen oyunlar
 /// hiçbir hedefe girmez. Satın alınan paketlerdeki yıldızlar yalnızca yıldız sayısı rozetlerine eklenir.
+/// Ücretsiz paketi olmayan (ücretli) oyunlar yalnızca kendi kupalarında sayılır; o kupa oyunun bütün
+/// seviyeleri bitince kazanıldığı için yalnızca oyunu satın alan kazanabilir.
 final class AchievementService extends ChangeNotifier {
   AchievementService({
     required this._store,
@@ -25,8 +27,9 @@ final class AchievementService extends ChangeNotifier {
     required GameRegistry games,
     required this._progress,
   }) : _catalog = catalog,
-       _games = _countedGames(catalog, games) {
-    all = AchievementCatalog.build(_games);
+       _games = _countedGames(catalog, games),
+       _paidGames = _paidGamesOf(catalog, games) {
+    all = AchievementCatalog.build(_games, paidGames: _paidGames);
     _earned = _readEarned();
   }
 
@@ -36,6 +39,7 @@ final class AchievementService extends ChangeNotifier {
   final ContentCatalog _catalog;
   final ProgressRepository _progress;
   final List<GameDefinition> _games;
+  final List<GameDefinition> _paidGames;
 
   /// Bütün ödüller; önce rozetler, sonra kupalar.
   late final List<Achievement> all;
@@ -74,7 +78,8 @@ final class AchievementService extends ChangeNotifier {
     return fresh;
   }
 
-  AchievementStats _stats() => AchievementStats.collect(catalog: _catalog, games: _games, progress: _progress);
+  AchievementStats _stats() =>
+      AchievementStats.collect(catalog: _catalog, games: _games, paidGames: _paidGames, progress: _progress);
 
   /// Kayıttaki kimlikler; bozuk kayıt ve artık bulunmayan ödüller yok sayılır.
   Set<String> _readEarned() {
@@ -92,5 +97,12 @@ final class AchievementService extends ChangeNotifier {
   static List<GameDefinition> _countedGames(ContentCatalog catalog, GameRegistry games) => [
     for (final game in catalog.games)
       if (games.isPlayable(game.id) && catalog.freePacksOf(game.id).isNotEmpty) game,
+  ];
+
+  /// Yalnızca kupasında sayılan oyunlar: modülü eklenmiş, paketleri olan ama hiç ücretsiz paketi olmayan oyunlar.
+  static List<GameDefinition> _paidGamesOf(ContentCatalog catalog, GameRegistry games) => [
+    for (final game in catalog.games)
+      if (games.isPlayable(game.id) && catalog.packsOf(game.id).isNotEmpty && catalog.freePacksOf(game.id).isEmpty)
+        game,
   ];
 }

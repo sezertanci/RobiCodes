@@ -38,13 +38,23 @@ final class GroupRange {
 /// Paketin ücretli olup olmadığı burada yazılmaz: paketi açan bir mağaza ürünü varsa ücretlidir,
 /// yoksa ücretsizdir (bkz. `ContentCatalog.isFree`). Böylece aynı bilgi iki yerde tutulmaz.
 final class LevelPack {
-  const LevelPack({required this.id, required this.gameId, required this.title, required this.groups});
+  const LevelPack({
+    required this.id,
+    required this.gameId,
+    required this.title,
+    required this.groups,
+    this.freePreview = false,
+  });
 
   /// Kalıcı kimlik. İlerleme kaydı bu kimlikle tutulur; yayından sonra değiştirilmez.
   final String id;
   final String gameId;
   final LocalizedText title;
   final List<DifficultyGroup> groups;
+
+  /// Ücretli pakette satın almadan önce her grubun ilk seviyesi deneme olarak oynanabilir mi?
+  /// Ücretsiz pakette anlamı yoktur; bütün seviyeleri zaten açıktır.
+  final bool freePreview;
 
   int get levelCount => groups.fold(0, (sum, group) => sum + group.levelCount);
 
@@ -61,6 +71,9 @@ final class LevelPack {
   }
 
   bool containsLevel(int level) => level >= 1 && level <= levelCount;
+
+  /// Deneme seviyeleri: her grubun ilk seviyesi (ör. 1, 6, 11, 16). Deneme yoksa boştur.
+  List<int> get previewLevels => freePreview ? [for (final range in groupRanges) range.firstLevel] : const [];
 }
 
 /// Birden çok paketin toplam seviye sayısı.

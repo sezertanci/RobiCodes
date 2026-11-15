@@ -20,9 +20,13 @@ abstract final class AchievementCatalog {
   static const perfectGoal = 1;
   static const noHintGoal = 5;
 
-  /// [games] ödüllerde sayılan oyunlardır (oynanabilir ve ücretsiz paketi olanlar). Liste önce rozetleri,
-  /// sonra kupaları içerir; aynı anda kazanılanlar da bu sırayla gösterilir.
-  static List<Achievement> build(List<GameDefinition> games) => [..._badges, ..._trophies(games)];
+  /// [games] ödüllerde sayılan oyunlardır (oynanabilir ve ücretsiz paketi olanlar); [paidGames] yalnızca
+  /// kendi kupası olan ücretli oyunlardır. Liste önce rozetleri, sonra kupaları içerir; aynı anda
+  /// kazanılanlar da bu sırayla gösterilir.
+  static List<Achievement> build(List<GameDefinition> games, {List<GameDefinition> paidGames = const []}) => [
+    ..._badges,
+    ..._trophies(games, paidGames),
+  ];
 
   /// Oyun kupasının kimliği: `<oyun>-master`.
   static String gameTrophyId(String gameId) => '$gameId-master';
@@ -127,7 +131,7 @@ abstract final class AchievementCatalog {
     ),
   ];
 
-  static List<Achievement> _trophies(List<GameDefinition> games) => [
+  static List<Achievement> _trophies(List<GameDefinition> games, List<GameDefinition> paidGames) => [
     Achievement(
       id: 'first-adventure',
       kind: AchievementKind.trophy,
@@ -138,7 +142,7 @@ abstract final class AchievementCatalog {
       symbol: RewardSymbol(image: CharacterRoster.defaultCharacter.image),
       measure: (stats) => AchievementProgress(stats.gamesFirstDone, stats.games.length),
     ),
-    for (final game in games) _gameTrophy(game),
+    for (final game in [...games, ...paidGames]) _gameTrophy(game),
     Achievement(
       id: 'champion',
       kind: AchievementKind.trophy,
@@ -151,7 +155,7 @@ abstract final class AchievementCatalog {
     ),
   ];
 
-  /// Oyunun kupası: oyunun ücretsiz seviyelerinin hepsi bitince kazanılır.
+  /// Oyunun kupası: ücretsiz oyunda ücretsiz seviyelerin, ücretli oyunda bütün seviyelerin hepsi bitince kazanılır.
   static Achievement _gameTrophy(GameDefinition game) => Achievement(
     id: gameTrophyId(game.id),
     kind: AchievementKind.trophy,

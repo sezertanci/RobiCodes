@@ -28,6 +28,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeComingSoon => 'Bald verfügbar';
 
   @override
+  String get homeLocked => 'Gesperrt';
+
+  @override
   String homeLevels(Object completed, Object levels) {
     return '$completed/$levels Level';
   }
@@ -112,6 +115,10 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get playPreviewNote =>
+      'Das erste Level jedes Schwierigkeitsgrads kannst du kostenlos ausprobieren. Die anderen Level werden nach dem Kauf freigeschaltet.';
+
+  @override
   String get playLevelComplete => 'Super! Level geschafft.';
 
   @override
@@ -187,6 +194,20 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get gameRepeatTrophyDescription =>
       'Du benutzt Schleifen wie ein Profi!';
+
+  @override
+  String get gameBugHunterTitle => 'Fehlerjäger';
+
+  @override
+  String get gameBugHunterDescription =>
+      'Finde den kaputten Code und repariere ihn.';
+
+  @override
+  String get gameBugHunterTrophy => 'Fehlerjäger-Meister';
+
+  @override
+  String get gameBugHunterTrophyDescription =>
+      'Du hast sogar die kniffligsten Fehler gefunden!';
 
   @override
   String get characterTitle => 'Wähle deine Figur';
@@ -1175,6 +1196,136 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get repeatL20Hint =>
       'Der Weg besteht aus fünf geraden Stücken. Mach jedes Stück mit einem Wiederholen-Block.';
+
+  @override
+  String get bugHunterIntro =>
+      'In diesem Code steckt ein Fehler! Tippe zuerst auf Start und schau, wo der Roboter durcheinanderkommt.';
+
+  @override
+  String get bugHunterSelected =>
+      'Wenn du einen Pfeil ausgewählt hast, ändert ein Richtungsknopf ihn. Du kannst den ausgewählten Block löschen oder davor einen neuen Pfeil einfügen.';
+
+  @override
+  String get bugHunterPickInsert =>
+      'Welcher Pfeil soll davor kommen? Tippe auf einen Richtungsknopf.';
+
+  @override
+  String get bugHunterInsertLabel =>
+      'Pfeil vor dem ausgewählten Block einfügen';
+
+  @override
+  String get bugHunterReset => 'Von vorn';
+
+  @override
+  String get bugHunterL1Intro =>
+      'Der Roboter kommt nicht zur Flagge, im Code steckt ein Fehler! Tippe auf Start und schau dem Roboter zu. Tippe dann auf den falschen Pfeil und drücke den richtigen Richtungsknopf.';
+
+  @override
+  String get bugHunterL1Hint =>
+      'Die Flagge ist genau rechts. Alle Pfeile sollten nach rechts zeigen.';
+
+  @override
+  String get bugHunterL2Hint =>
+      'Der Roboter geht unten um den Felsen herum. Der letzte Pfeil sollte ihn hoch zur Flagge bringen.';
+
+  @override
+  String get bugHunterL3Intro =>
+      'In diesem Code fehlt ein Pfeil. Wo ist der Roboter stehen geblieben? Füge den fehlenden Pfeil hinzu.';
+
+  @override
+  String get bugHunterL3Hint =>
+      'Der Roboter bleibt vor der Flagge stehen. Er braucht noch einen Schritt.';
+
+  @override
+  String get bugHunterL4Intro =>
+      'In diesem Code ist ein Pfeil zu viel. Wähle den überzähligen Pfeil aus und lösche ihn.';
+
+  @override
+  String get bugHunterL4Hint =>
+      'Der Roboter macht noch einen Schritt, nachdem er die Flagge erreicht hat.';
+
+  @override
+  String get bugHunterL5Intro =>
+      'Ein Pfeil fehlt, aber nicht am Ende. Wähle einen Pfeil aus, tippe auf den Knopf „Davor einfügen“ und dann auf einen Richtungsknopf.';
+
+  @override
+  String get bugHunterL5Hint =>
+      'Unter dem Felsen sollte der Roboter zweimal nach rechts gehen.';
+
+  @override
+  String get bugHunterL6Hint =>
+      'Nachdem du die Münze eingesammelt hast, ist die Flagge unten.';
+
+  @override
+  String get bugHunterL7Hint =>
+      'Um am Wasser vorbeizukommen, geh in der untersten Reihe dreimal nach rechts.';
+
+  @override
+  String get bugHunterL8Intro =>
+      'In diesem Code stecken zwei Fehler! Immer wenn der Roboter hängen bleibt, behebst du einen Fehler.';
+
+  @override
+  String get bugHunterL8Hint =>
+      'Geh oben über den Felsen: zuerst nach rechts, dann nach unten.';
+
+  @override
+  String get bugHunterL9Hint =>
+      'Nachdem der Roboter beide Münzen eingesammelt hat, sollte er auf der Flagge stehen bleiben.';
+
+  @override
+  String get bugHunterL10Hint =>
+      'Folge dem Weg, der sich zwischen den Felsen schlängelt. Ein Pfeil ist falsch und einer fehlt.';
+
+  @override
+  String get bugHunterL11Intro =>
+      'Diesmal steckt der Fehler im orangen Wiederholen-Block. Wähle den Pfeil darin aus und ändere ihn.';
+
+  @override
+  String get bugHunterL11Hint =>
+      'Der Pfeil im Wiederholen-Block sollte zur Flagge zeigen.';
+
+  @override
+  String get bugHunterL12Intro =>
+      'Die Pfeile in diesem Code stimmen, aber die Wiederholungszahl ist falsch. Ändere die Zahl.';
+
+  @override
+  String get bugHunterL12Hint =>
+      'Wie viele Stufen gibt es? Die Wiederholungszahl sollte genauso groß sein wie die Zahl der Stufen.';
+
+  @override
+  String get bugHunterL13Hint => 'Jede Stufe ist zweimal rechts, einmal hoch.';
+
+  @override
+  String get bugHunterL14Hint =>
+      'Jede Stufe ist zweimal rechts, einmal runter. Im Block fehlt ein Pfeil.';
+
+  @override
+  String get bugHunterL15Hint =>
+      'Nach dem Wiederholen-Block fehlt nur noch ein Schritt.';
+
+  @override
+  String get bugHunterL16Intro =>
+      'Profi-Jäger! In diesen Codes steckt mehr als ein Fehler. Finde bei jedem Start einen davon.';
+
+  @override
+  String get bugHunterL16Hint =>
+      'Wie viele Felder zuerst nach rechts? Dann wie viele nach unten?';
+
+  @override
+  String get bugHunterL17Hint =>
+      'Jede Wiederholung geht zwei Felder nach rechts. Wie viele Wiederholungen braucht es bis zur Flagge?';
+
+  @override
+  String get bugHunterL18Hint =>
+      'Die Felsen liegen über den Stufen. Geh auf jeder Stufe zuerst nach unten, dann nach rechts.';
+
+  @override
+  String get bugHunterL19Hint =>
+      'Zwischen dem Wasser gibt es eine Treppe: einmal rechts, einmal runter. Wie viele Stufen gibt es?';
+
+  @override
+  String get bugHunterL20Hint =>
+      'Zuerst nach rechts, dann nach unten. Zähl die Felder in jedem geraden Stück.';
 
   @override
   String get ifThenL1Intro =>

@@ -7,14 +7,13 @@ import '../../app/app_services.dart';
 import '../../content/models/level_pack.dart';
 import '../../content/models/store_product.dart';
 import '../../l10n/l10n.dart';
-import '../parental_gate/parental_gate.dart';
 import 'offer_policy.dart';
-import 'purchase_gateway.dart';
+import 'product_buy_button.dart';
+import 'purchase_flow.dart';
 import 'store_texts.dart';
 
 /// Paket mağazası: ücretli ürünler, fiyatları, sahiplik durumu, ücretsiz paketler ve geri yükleme.
-/// Her satın alma merkezi ebeveyn korumasından (`ProtectedActionRunner`) geçer; onay alınamazsa
-/// Google Play penceresi hiç açılmaz.
+/// Satın alma `PurchaseFlow` ile ebeveyn onayından geçer.
 final class StoreScreen extends StatefulWidget {
   const StoreScreen({super.key});
 
@@ -31,20 +30,19 @@ final class _StoreScreenState extends State<StoreScreen> {
 
   static const _padding = 16.0;
 
+  /// Fiyatlar ilk kareden sonra yenilenir; yükleme bildirimi, fiyatları dinleyen diğer ekranlar
+  /// (ör. ana ekran) kurulurken gelmesin diye.
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    unawaited(_services.listings.load());
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(_services.listings.load());
+      }
+    });
   }
 
-  Future<void> _buy(StoreProduct product) => _whileBusy(() async {
-    final outcome = await _services.protectedActions.run(
-      context,
-      ParentalAction.purchase,
-      (approval) => _services.entitlements.purchase(product.id, approval: approval),
-    );
-    return (AppLocalizations t) => StoreTexts.outcome(t, outcome ?? PurchaseOutcome.notApproved);
-  });
+  Future<void> _buy(StoreProduct product) => _whileBusy(() => PurchaseFlow.buy(context, _services, product));
 
   Future<void> _restore() => _whileBusy(() async {
     final error = await _services.entitlements.refresh();
@@ -61,7 +59,7 @@ final class _StoreScreenState extends State<StoreScreen> {
       return;
     }
     setState(() => _isBusy = false);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message(context.l10n))));
+    PurchaseFlow.report(context, message);
   }
 
   @override
@@ -153,31 +151,17 @@ final class _ProductCard extends StatelessWidget {
 
   Widget _action(AppLocalizations t) {
     final offers = services.offers;
-    final listings = services.listings;
-    switch (offers.statusOf(product)) {
-      case OfferStatus.alreadyOwned:
-        return Chip(avatar: const Icon(Icons.check_circle_rounded), label: Text(t.storeOwned));
-      case OfferStatus.partiallyOwned:
-        final missing = offers.missingPartsOf(product).map((part) => part.title(t)).join(', ');
-        return Text(t.storePartiallyOwned(missing));
-      case OfferStatus.available:
-        if (listings.isLoading) {
-          return Text(t.storePriceLoading);
-        }
-        if (listings.error != null) {
-          return Row(
-            spacing: _gap,
-            children: [
-              Expanded(child: Text(t.storePriceUnavailable)),
-              TextButton(onPressed: () => unawaited(listings.load()), child: Text(t.storeRetry)),
-            ],
-          );
-        }
-        final listing = listings.listingOf(product.id);
-        if (listing == null) {
-          return Text(t.storeNotInStore);
-        }
-        return FilledButton(onPressed: isBusy ? null : () => onBuy(product), child: Text(t.storeBuy(listing.price)));
-    }
+    return switch (offers.statusOf(product)) {
+      OfferStatus.alreadyOwned => Chip(avatar: const Icon(Icons.check_circle_rounded), label: Text(t.storeOwned)),
+      OfferStatus.partiallyOwned => Text(
+        t.storePartiallyOwned(offers.missingPartsOf(product).map((part) => part.title(t)).join(', ')),
+      ),
+      OfferStatus.available => ProductBuyButton(
+        product: product,
+        listings: services.listings,
+        isBusy: isBusy,
+        onBuy: onBuy,
+      ),
+    };
   }
 }

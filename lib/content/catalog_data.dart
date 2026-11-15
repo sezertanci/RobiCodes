@@ -12,6 +12,12 @@ abstract final class GameIds {
   static const commandOrder = 'command-order';
   static const ifThen = 'if-then';
   static const repeat = 'repeat';
+  static const bugHunter = 'bug-hunter';
+}
+
+/// Play Console'daki ürün kimlikleri. Yayından sonra değiştirilmez.
+abstract final class ProductIds {
+  static const bugHunterBase = 'pack.bug_hunter.base';
 }
 
 /// Mevcut oyunlardaki seviye düzeni: her zorluk grubunda 5 seviye.
@@ -27,8 +33,14 @@ const _standardGroups = [
 /// Oyunun ücretsiz temel paketinin kimliği: `<oyun>.base`.
 String basePackId(String gameId) => '$gameId.base';
 
-LevelPack _basePack(String gameId) =>
-    LevelPack(id: basePackId(gameId), gameId: gameId, title: (t) => t.basePackTitle, groups: _standardGroups);
+/// Oyunun temel paketi. Ücretli oyunun paketinde her zorluğun ilk seviyesi ücretsiz denenir ([freePreview]).
+LevelPack _basePack(String gameId, {bool freePreview = false}) => LevelPack(
+  id: basePackId(gameId),
+  gameId: gameId,
+  title: (t) => t.basePackTitle,
+  groups: _standardGroups,
+  freePreview: freePreview,
+);
 
 final _games = [
   GameDefinition(
@@ -65,11 +77,31 @@ final _games = [
   ),
 ];
 
-/// Uygulamanın içerik kataloğu. Şu an dört oyunun ücretsiz temel paketleri vardır.
-/// Ücretli paketler ve avantajlı paketler Play Console'da ürün açıldığında `products`
-/// listesine eklenir.
+/// Ücretli oyunlar: temel paketleri satın alınınca açılır.
+final _paidGames = [
+  GameDefinition(
+    id: GameIds.bugHunter,
+    title: (t) => t.gameBugHunterTitle,
+    description: (t) => t.gameBugHunterDescription,
+    tone: AppTones.red,
+    icon: AppAssets.gameBug,
+    trophy: GameTrophy(title: (t) => t.gameBugHunterTrophy, description: (t) => t.gameBugHunterTrophyDescription),
+  ),
+];
+
+/// Uygulamanın içerik kataloğu: ücretsiz oyunların temel paketleri ve ücretli oyunların satın alınan
+/// paketleri. Avantajlı paketler (bundle) Play Console'da ürün açıldığında `products` listesine eklenir.
 ContentCatalog buildContentCatalog() => ContentCatalog(
-  games: _games,
-  packs: [for (final game in _games) _basePack(game.id)],
-  products: const <StoreProduct>[],
+  games: [..._games, ..._paidGames],
+  packs: [
+    for (final game in _games) _basePack(game.id),
+    for (final game in _paidGames) _basePack(game.id, freePreview: true),
+  ],
+  products: [
+    StoreProduct(
+      id: ProductIds.bugHunterBase,
+      title: (t) => t.gameBugHunterTitle,
+      packIds: [basePackId(GameIds.bugHunter)],
+    ),
+  ],
 );

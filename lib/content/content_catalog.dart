@@ -28,6 +28,13 @@ final class ContentCatalog {
   List<StoreProduct> productsGranting(String packId) =>
       products.where((product) => product.packIds.contains(packId)).toList();
 
+  /// Paketi satın almak için önerilen ürün: yalnızca o paketi açan ürün, yoksa paketi içeren ilk ürün.
+  /// Paket ücretsizse `null`.
+  StoreProduct? purchaseFor(String packId) {
+    final granting = productsGranting(packId);
+    return granting.where((product) => !product.isBundle).firstOrNull ?? granting.firstOrNull;
+  }
+
   /// Hiçbir ürün paketi açmıyorsa paket ücretsizdir.
   bool isFree(String packId) => productsGranting(packId).isEmpty;
 

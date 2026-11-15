@@ -28,6 +28,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get homeComingSoon => 'Segera hadir';
 
   @override
+  String get homeLocked => 'Terkunci';
+
+  @override
   String homeLevels(Object completed, Object levels) {
     return '$completed/$levels level';
   }
@@ -112,6 +115,10 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get playPreviewNote =>
+      'Level pertama di setiap tingkat kesulitan bisa dicoba gratis. Level lainnya terbuka setelah dibeli.';
+
+  @override
   String get playLevelComplete => 'Hebat! Level selesai.';
 
   @override
@@ -186,6 +193,20 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get gameRepeatTrophyDescription =>
       'Kamu memakai perulangan seperti seorang ahli!';
+
+  @override
+  String get gameBugHunterTitle => 'Pemburu Kesalahan';
+
+  @override
+  String get gameBugHunterDescription =>
+      'Temukan kode yang rusak lalu perbaiki.';
+
+  @override
+  String get gameBugHunterTrophy => 'Pemburu Kesalahan Ulung';
+
+  @override
+  String get gameBugHunterTrophyDescription =>
+      'Kamu menemukan kesalahan yang paling sulit sekalipun!';
 
   @override
   String get characterTitle => 'Pilih karaktermu';
@@ -1168,6 +1189,137 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get repeatL20Hint =>
       'Jalannya terdiri dari lima bagian lurus. Lewati setiap bagian dengan blok Ulangi.';
+
+  @override
+  String get bugHunterIntro =>
+      'Ada kesalahan di kode ini! Ketuk Mulai dulu dan lihat di mana robot jadi bingung.';
+
+  @override
+  String get bugHunterSelected =>
+      'Kalau kamu memilih panah, tombol arah akan mengubahnya. Kamu bisa menghapus blok yang dipilih atau menambahkan panah baru sebelumnya.';
+
+  @override
+  String get bugHunterPickInsert =>
+      'Panah mana yang harus ada sebelumnya? Ketuk tombol arah.';
+
+  @override
+  String get bugHunterInsertLabel =>
+      'Tambahkan panah sebelum blok yang dipilih';
+
+  @override
+  String get bugHunterReset => 'Ulang dari awal';
+
+  @override
+  String get bugHunterL1Intro =>
+      'Robot tidak bisa sampai di bendera, ada kesalahan di kodenya! Ketuk Mulai dan lihat robotnya. Lalu ketuk panah yang salah dan tekan tombol arah yang benar.';
+
+  @override
+  String get bugHunterL1Hint =>
+      'Benderanya ada lurus di kanan. Semua panah harus ke kanan.';
+
+  @override
+  String get bugHunterL2Hint =>
+      'Robot berjalan memutar di bawah batu. Panah terakhir harus membawanya naik ke bendera.';
+
+  @override
+  String get bugHunterL3Intro =>
+      'Ada satu panah yang hilang di kode ini. Di mana robot berhenti? Tambahkan panah yang hilang.';
+
+  @override
+  String get bugHunterL3Hint =>
+      'Robot berhenti sebelum sampai di bendera. Robot perlu satu langkah lagi.';
+
+  @override
+  String get bugHunterL4Intro =>
+      'Ada satu panah yang berlebih di kode ini. Pilih panah itu lalu hapus.';
+
+  @override
+  String get bugHunterL4Hint =>
+      'Robot melangkah sekali lagi setelah sampai di bendera.';
+
+  @override
+  String get bugHunterL5Intro =>
+      'Ada satu panah yang hilang, tapi bukan di akhir. Pilih sebuah panah, ketuk tombol Tambah sebelumnya, lalu ketuk tombol arah.';
+
+  @override
+  String get bugHunterL5Hint =>
+      'Saat lewat di bawah batu, robot harus dua kali ke kanan.';
+
+  @override
+  String get bugHunterL6Hint =>
+      'Setelah mengambil koin, benderanya ada di bawah.';
+
+  @override
+  String get bugHunterL7Hint =>
+      'Untuk melewati air, pergilah tiga kali ke kanan di baris paling bawah.';
+
+  @override
+  String get bugHunterL8Intro =>
+      'Ada dua kesalahan di kode ini! Setiap kali robot tersangkut, perbaiki satu kesalahan.';
+
+  @override
+  String get bugHunterL8Hint =>
+      'Lewat di atas batu-batunya: pertama ke kanan, lalu ke bawah.';
+
+  @override
+  String get bugHunterL9Hint =>
+      'Setelah mengambil kedua koin, robot harus berhenti di bendera.';
+
+  @override
+  String get bugHunterL10Hint =>
+      'Ikuti jalan yang berkelok di antara batu-batu. Satu panah salah dan satu panah hilang.';
+
+  @override
+  String get bugHunterL11Intro =>
+      'Kali ini kesalahannya ada di dalam blok Ulangi yang oranye. Pilih panah di dalamnya lalu ubah.';
+
+  @override
+  String get bugHunterL11Hint =>
+      'Panah di dalam blok Ulangi harus mengarah ke bendera.';
+
+  @override
+  String get bugHunterL12Intro =>
+      'Panah-panah di kode ini sudah benar, tapi jumlah ulangannya salah. Ubah angkanya.';
+
+  @override
+  String get bugHunterL12Hint =>
+      'Ada berapa anak tangga? Jumlah ulangan harus sama dengan jumlah anak tangga.';
+
+  @override
+  String get bugHunterL13Hint =>
+      'Setiap anak tangga: dua kali ke kanan, sekali ke atas.';
+
+  @override
+  String get bugHunterL14Hint =>
+      'Setiap anak tangga: dua kali ke kanan, sekali ke bawah. Ada satu panah yang hilang di dalam blok.';
+
+  @override
+  String get bugHunterL15Hint =>
+      'Setelah blok Ulangi, hanya tinggal satu langkah lagi.';
+
+  @override
+  String get bugHunterL16Intro =>
+      'Pemburu ahli! Kode-kode ini punya lebih dari satu kesalahan. Temukan satu setiap kali kamu menjalankannya.';
+
+  @override
+  String get bugHunterL16Hint =>
+      'Berapa kotak ke kanan dulu? Lalu berapa kotak ke bawah?';
+
+  @override
+  String get bugHunterL17Hint =>
+      'Setiap ulangan berjalan dua kotak ke kanan. Berapa ulangan yang diperlukan sampai ke bendera?';
+
+  @override
+  String get bugHunterL18Hint =>
+      'Batu-batunya ada di atas anak tangga. Di setiap anak tangga, pergi ke bawah dulu, lalu ke kanan.';
+
+  @override
+  String get bugHunterL19Hint =>
+      'Ada tangga di antara air: sekali ke kanan, sekali ke bawah. Ada berapa anak tangga?';
+
+  @override
+  String get bugHunterL20Hint =>
+      'Pertama ke kanan, lalu ke bawah. Hitung kotak di setiap bagian lurus.';
 
   @override
   String get ifThenL1Intro =>

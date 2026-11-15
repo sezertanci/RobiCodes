@@ -327,6 +327,37 @@ void main() {
       expect(ids, [TestCatalog.freePack, TestCatalog.packB]);
     });
 
+    test('visiblePacksOf_PaidGameNotOwned_ShowsPreviewPack', () {
+      // Arrange
+      final service = EntitlementService(catalog: TestCatalog.withPaidGame(), gateway: gateway, store: store);
+      final pack = TestCatalog.withPaidGame().findPack(TestCatalog.paidPack)!;
+
+      // Act
+      final ids = service.visiblePacksOf(TestCatalog.paidGameId).map((pack) => pack.id);
+
+      // Assert
+      expect(ids, [TestCatalog.paidPack]);
+      expect(service.playablePacksOf(TestCatalog.paidGameId), isEmpty);
+      expect(service.isPreviewOnly(pack), isTrue);
+    });
+
+    test('isPreviewOnly_PaidPackOwned_ReturnsFalse', () async {
+      // Arrange
+      final catalog = TestCatalog.withPaidGame();
+      gateway.owned = {TestCatalog.paidProduct};
+      final service = EntitlementService(catalog: catalog, gateway: gateway, store: store);
+      await service.refresh();
+
+      // Act & Assert
+      expect(service.isPreviewOnly(catalog.findPack(TestCatalog.paidPack)!), isFalse);
+    });
+
+    test('visiblePacksOf_PackWithoutPreviewNotOwned_HidesIt', () {
+      final ids = createService().visiblePacksOf(TestCatalog.gameId).map((pack) => pack.id);
+
+      expect(ids, [TestCatalog.freePack]);
+    });
+
     test('constructor_CachedProducts_ReadsOnlyProductIds', () {
       store.values[StorageKeys.ownedProducts] = '["${TestCatalog.productA}", 1]';
 

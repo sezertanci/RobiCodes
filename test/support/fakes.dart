@@ -173,6 +173,11 @@ abstract final class TestCatalog {
   static const productB = 'pack_b';
   static const bundle = 'bundle_ab';
 
+  /// [withPaidGame] kataloğundaki, ücretsiz paketi olmayan ve denemesi olan ücretli oyun.
+  static const paidGameId = 'paid';
+  static const paidPack = 'paid.base';
+  static const paidProduct = 'paid_product';
+
   static ContentCatalog build() => ContentCatalog(
     games: [
       GameDefinition(
@@ -194,10 +199,37 @@ abstract final class TestCatalog {
     ],
   );
 
-  static LevelPack _pack(String id) => LevelPack(
+  /// [build] kataloğuna ücretli bir oyun eklenir: tek paketi satın alınmadan yalnızca deneme seviyeleriyle oynanır.
+  static ContentCatalog withPaidGame() {
+    final catalog = build();
+    return ContentCatalog(
+      games: [
+        ...catalog.games,
+        GameDefinition(
+          id: paidGameId,
+          title: fixedText('Ücretli Oyun'),
+          description: fixedText('Açıklama'),
+          tone: AppTones.red,
+          icon: AppAssets.gamePath,
+          trophy: GameTrophy(title: fixedText('Ücretli Kupa'), description: fixedText('Açıklama')),
+        ),
+      ],
+      packs: [
+        ...catalog.packs,
+        _pack(paidPack, gameId: paidGameId, freePreview: true),
+      ],
+      products: [
+        ...catalog.products,
+        StoreProduct(id: paidProduct, title: fixedText('Ücretli Paket'), packIds: const [paidPack]),
+      ],
+    );
+  }
+
+  static LevelPack _pack(String id, {String gameId = gameId, bool freePreview = false}) => LevelPack(
     id: id,
     gameId: gameId,
     title: fixedText(id),
+    freePreview: freePreview,
     groups: const [DifficultyGroup(Difficulty.easy, 2), DifficultyGroup(Difficulty.medium, 2)],
   );
 }

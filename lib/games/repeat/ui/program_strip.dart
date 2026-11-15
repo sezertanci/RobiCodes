@@ -10,8 +10,8 @@ import 'repeat_block_view.dart';
 
 /// Blok şeridi: oklar ve turuncu tekrar blokları sırayla tek satırda durur, sığmazsa yatay kayar.
 /// Bir bloğa dokunmak onu seçer; seçiliyken sağda, sayacın altında "Sil" ve (bloğun içindeki ok için) "Dışarı çıkar"
-/// düğmeleri çıkar. Şeridin dışına dokunulunca seçim kalkar. Çalışan, hatalı, seçili ya da açık
-/// blok görünür tutulur.
+/// düğmeleri çıkar. Şeridin ve yön tuşlarının ([tapGroup]) dışına dokunulunca seçim kalkar. Çalışan,
+/// hatalı, seçili ya da açık blok görünür tutulur.
 final class ProgramStrip extends StatefulWidget {
   const ProgramStrip({required this.controller, required this.chipSize, required this.compact, super.key});
 
@@ -20,6 +20,10 @@ final class ProgramStrip extends StatefulWidget {
 
   /// Dar ekranda bloğun etiketi kısalır.
   final bool compact;
+
+  /// Seçimi kaldırmayan dokunma bölgelerinin ortak grubu; yön tuşu seçili oku değiştirebilsin diye
+  /// yön tuşları da bu gruptadır.
+  static const tapGroup = #repeatProgramEdit;
 
   static const _gap = 10.0;
 
@@ -72,6 +76,7 @@ final class _ProgramStripState extends State<ProgramStrip> {
   Widget build(BuildContext context) {
     _revealFocus();
     return TapRegion(
+      groupId: ProgramStrip.tapGroup,
       onTapOutside: (_) => _controller.clearSelection(),
       child: Card(
         margin: EdgeInsets.zero,
@@ -137,8 +142,8 @@ final class _ProgramStripState extends State<ProgramStrip> {
   }
 }
 
-/// Şeridin sağındaki sütun: blok sayacı ve seçili blok için düzenleme düğmeleri (sil ve, bloğun
-/// içindeki ok için, dışarı çıkar). Düğmeler şeridin yanında durduğu için seçim yapınca ekranın
+/// Şeridin sağındaki sütun: blok sayacı ve seçili blok için düzenleme düğmeleri (sil, bloğun
+/// içindeki ok için dışarı çıkar ve hazır programı düzeltme kurallarında önüne ekle). Düğmeler şeridin yanında durduğu için seçim yapınca ekranın
 /// düzeni değişmez; dar telefonda da harita ve kontroller yerinde kalır.
 final class _SidePanel extends StatelessWidget {
   const _SidePanel({required this.controller, required this.buttonSize});
@@ -169,6 +174,15 @@ final class _SidePanel extends StatelessWidget {
                 const SizedBox(width: _gap),
                 _button(t.repeatMoveOutLabel, Icons.logout, AppColors.orangeDark, controller.moveSelectedOut),
               ],
+              if (controller.fixesProgram) ...[
+                const SizedBox(width: _gap),
+                _button(
+                  t.bugHunterInsertLabel,
+                  controller.isInserting ? Icons.add_circle : Icons.add_circle_outline,
+                  AppColors.greenDark,
+                  controller.canInsert ? controller.toggleInserting : null,
+                ),
+              ],
             ],
           ),
         ],
@@ -176,7 +190,7 @@ final class _SidePanel extends StatelessWidget {
     );
   }
 
-  Widget _button(String label, IconData icon, Color color, VoidCallback onPressed) => SizedBox.square(
+  Widget _button(String label, IconData icon, Color color, VoidCallback? onPressed) => SizedBox.square(
     dimension: buttonSize,
     child: IconButton.filledTonal(
       tooltip: label,
