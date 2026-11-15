@@ -78,6 +78,34 @@ void main() {
       expect(speller.spell(99), 'quatre-vingt-dix-neuf');
     });
 
+    test('spell_PortugueseSampleNumbers_ReturnsPortugueseSpelling', () {
+      const speller = PortugueseNumberSpeller();
+      expect(speller.spell(3), 'três');
+      expect(speller.spell(16), 'dezesseis');
+      expect(speller.spell(20), 'vinte');
+      expect(speller.spell(27), 'vinte e sete');
+      expect(speller.spell(99), 'noventa e nove');
+    });
+
+    test('spell_ItalianSampleNumbers_ReturnsItalianSpelling', () {
+      const speller = ItalianNumberSpeller();
+      expect(speller.spell(17), 'diciassette');
+      expect(speller.spell(21), 'ventuno');
+      expect(speller.spell(23), 'ventitré');
+      expect(speller.spell(27), 'ventisette');
+      expect(speller.spell(38), 'trentotto');
+      expect(speller.spell(90), 'novanta');
+    });
+
+    test('spell_IndonesianSampleNumbers_ReturnsIndonesianSpelling', () {
+      const speller = IndonesianNumberSpeller();
+      expect(speller.spell(10), 'sepuluh');
+      expect(speller.spell(11), 'sebelas');
+      expect(speller.spell(15), 'lima belas');
+      expect(speller.spell(27), 'dua puluh tujuh');
+      expect(speller.spell(99), 'sembilan puluh sembilan');
+    });
+
     test('forLanguage_EverySupportedLanguage_HasOwnSpeller', () {
       for (final locale in AppLocalizations.supportedLocales) {
         expect(NumberSpellers.byLanguage, contains(locale.languageCode));

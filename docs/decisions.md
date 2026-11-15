@@ -96,3 +96,20 @@
 
 - Ebeveyn sorusundaki sayılar her dilin kendi yazımıyla yazılır (`GermanNumberSpeller`,
   `SpanishNumberSpeller`, `FrenchNumberSpeller`).
+
+### Portekizce, İtalyanca ve Endonezce (15.11.2026)
+
+- Uygulamaya **Portekizce (Brezilya), İtalyanca ve Endonezce** eklendi; yine yalnızca uygulama içi metinler.
+  Portekizce tek dosyadır (`app_pt.arb`) ve Brezilya Portekizcesiyle yazılır; Portekiz'deki cihazlar da
+  bunu kullanır.
+- Uygulama adları: **Robi Programa** (pt), **Robi Programma** (it), **Robi Ngoding** (id).
+- Karakter adları (Robi ve Fiyo aynı kalır):
+
+  | Türkçe | Portekizce | İtalyanca | Endonezce |
+  | --- | --- | --- | --- |
+  | Pervane | Hélice | Elica | Baling |
+  | Işıl | Brilho | Luce | Kilau |
+  | Kahraman | Herói | Eroe | Pahlawan |
+  | Pembe | Rosinha | Rosina | Merah Muda |
+  | Şövalye | Cavaleiro | Cavaliere | Kesatria |
+  | Pırıl | Faísca | Scintilla | Kerlip |

@@ -39,6 +39,11 @@ void main() {
       expect(LanguageService.resolve(const [Locale('ja'), Locale('tr')], supported), const Locale('tr'));
     });
 
+    test('resolve_LegacyIndonesianCode_MatchesIndonesian', () {
+      // Android, Endonezceyi eski "in" koduyla bildirebilir; Locale bunu "id" olarak okur.
+      expect(LanguageService.resolve(const [Locale('in')], const [Locale('id')]), const Locale('id'));
+    });
+
     test('resolve_NoSupportedLanguage_FallsBackToEnglish', () {
       expect(LanguageService.resolve(const [Locale('ja'), Locale('ko')], supported), LanguageService.fallback);
       expect(LanguageService.resolve(null, supported), LanguageService.fallback);

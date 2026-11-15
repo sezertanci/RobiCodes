@@ -8,7 +8,7 @@ kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` k
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
 > Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi.
 > Google Play Billing ile paket satın alma ve matematik sorulu ebeveyn doğrulaması eklendi. Uygulama
-> Türkçe, İngilizce, Almanca, İspanyolca ve Fransızca oynanır (bkz. "Dil desteği"). Google hesabı
+> Türkçe, İngilizce, Almanca, İspanyolca, Fransızca, Portekizce, İtalyanca ve Endonezce oynanır (bkz. "Dil desteği"). Google hesabı
 > ve bulut kaydı yoktur; ilerleme yalnızca cihazda tutulur (bkz. "İlerleme kaydı"). Release derlemesi Google
 > Play'e yüklenecek yükleme anahtarıyla imzalanır (bkz. "Release derlemesi ve imzalama").
 >
@@ -176,7 +176,8 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
 
 ## Dil desteği
 
-Uygulama Türkçe, İngilizce, Almanca, İspanyolca ve Fransızca oynanır. Mekanizma ortaktır; yeni bir dil kod değiştirmeden eklenir.
+Uygulama Türkçe, İngilizce, Almanca, İspanyolca, Fransızca, Portekizce (Brezilya), İtalyanca ve Endonezce
+oynanır. Mekanizma ortaktır; yeni bir dil kod değiştirmeden eklenir.
 
 - **Dil seçimi:** Varsayılan olarak cihazın dili kullanılır; cihaz dili desteklenmiyorsa uygulama
   İngilizce açılır. Dil Ayarlar'dan değiştirilebilir, seçim cihazda saklanır (`LanguageService`). Dil
@@ -192,9 +193,10 @@ Uygulama Türkçe, İngilizce, Almanca, İspanyolca ve Fransızca oynanır. Meka
   "twenty-seven", "siebenundzwanzig", "veintisiete", "vingt-sept"). Yazımı tanımlı olmayan dilde İngilizce yazım kullanılır.
 - **Uygulama adı** başlatıcıda da dile göre değişir: `android/app/src/main/res/values/strings.xml`
   (İngilizce, "Robi Codes"), `values-tr` (Türkçe, "Robi Kodluyor"), `values-de` (Almanca, "Robi
-  Programmiert"), `values-es` (İspanyolca, "Robi Programa") ve `values-fr` (Fransızca, "Robi Programme").
-- **Mağaza girişi** yalnızca Türkçe ve İngilizce tutulur; Almanca, İspanyolca ve Fransızca yalnızca
-  uygulama içindedir.
+  Programmiert"), `values-es` (İspanyolca, "Robi Programa") ve `values-fr` (Fransızca, "Robi Programme"), `values-pt` (Portekizce, "Robi
+  Programa"), `values-it` (İtalyanca, "Robi Programma") ve `values-in` (Endonezce, "Robi Ngoding"; Android
+  Endonezce için klasörde eski `in` kodunu kullanır, Flutter tarafında dil kodu `id`'dir).
+- **Mağaza girişi** yalnızca Türkçe ve İngilizce tutulur; diğer diller yalnızca uygulama içindedir.
 
 **Yeni dil eklemek:**
 

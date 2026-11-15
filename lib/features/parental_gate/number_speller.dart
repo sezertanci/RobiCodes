@@ -16,6 +16,9 @@ abstract final class NumberSpellers {
     'de': GermanNumberSpeller(),
     'es': SpanishNumberSpeller(),
     'fr': FrenchNumberSpeller(),
+    'pt': PortugueseNumberSpeller(),
+    'it': ItalianNumberSpeller(),
+    'id': IndonesianNumberSpeller(),
   };
 
   static NumberSpeller forLanguage(String languageCode) => byLanguage[languageCode] ?? _fallback;
@@ -27,6 +30,18 @@ const _base = 10;
 
 void _checkRange(int number) {
   assert(number > 0 && number < _limit, 'Yalnızca 1–99 desteklenir.');
+}
+
+/// [small] tablosunda olan sayıyı oradan alır; diğerlerinde onluğu ve birliği [connector] ile bağlar
+/// ("treinta y uno", "dua puluh tujuh"). [tens] onluğun basamağına göre dizilmiş onluk adlarıdır.
+String _spellWithConnector(int number, List<String> small, List<String> tens, String connector) {
+  _checkRange(number);
+  if (number < small.length) {
+    return small[number];
+  }
+  final tensWord = tens[number ~/ _base];
+  final unit = number % _base;
+  return unit == 0 ? tensWord : '$tensWord$connector${small[unit]}';
 }
 
 /// Türkçe yazım: onlar ve birler boşlukla yazılır ("yirmi yedi", "on iki").
@@ -159,15 +174,7 @@ final class SpanishNumberSpeller implements NumberSpeller {
   static const _tens = ['', '', '', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
 
   @override
-  String spell(int number) {
-    _checkRange(number);
-    if (number < _small.length) {
-      return _small[number];
-    }
-    final tens = _tens[number ~/ _base];
-    final unit = number % _base;
-    return unit == 0 ? tens : '$tens y ${_small[unit]}';
-  }
+  String spell(int number) => _spellWithConnector(number, _small, _tens, ' y ');
 }
 
 /// Fransızca yazım: 1–19 kendine özgüdür; 70'ler ve 90'lar 60 ile 80'in üzerine 10–19 eklenerek
@@ -237,4 +244,155 @@ final class FrenchNumberSpeller implements NumberSpeller {
     final joinWithEt = _joinedWithEt.contains(rest) && !_hyphenOnlyTens.contains(tens);
     return joinWithEt ? '$tensWord et ${_small[rest]}' : '$tensWord-${_small[rest]}';
   }
+}
+
+/// Portekizce (Brezilya) yazım: 1–19 kendine özgüdür; diğerlerinde onlar ile birler "e" ile bağlanır
+/// ("vinte e sete").
+final class PortugueseNumberSpeller implements NumberSpeller {
+  const PortugueseNumberSpeller();
+
+  static const _small = [
+    '',
+    'um',
+    'dois',
+    'três',
+    'quatro',
+    'cinco',
+    'seis',
+    'sete',
+    'oito',
+    'nove',
+    'dez',
+    'onze',
+    'doze',
+    'treze',
+    'catorze',
+    'quinze',
+    'dezesseis',
+    'dezessete',
+    'dezoito',
+    'dezenove',
+  ];
+  static const _tens = [
+    '',
+    '',
+    'vinte',
+    'trinta',
+    'quarenta',
+    'cinquenta',
+    'sessenta',
+    'setenta',
+    'oitenta',
+    'noventa',
+  ];
+
+  @override
+  String spell(int number) => _spellWithConnector(number, _small, _tens, ' e ');
+}
+
+/// İtalyanca yazım: 1–19 kendine özgüdür; diğerlerinde onlar ile birler bitişik yazılır ("ventisette").
+/// Birler 1 veya 8 ise onluğun son ünlüsü düşer ("ventuno", "trentotto"); birlerdeki 3 vurguyla yazılır
+/// ("ventitré").
+final class ItalianNumberSpeller implements NumberSpeller {
+  const ItalianNumberSpeller();
+
+  static const _small = [
+    '',
+    'uno',
+    'due',
+    'tre',
+    'quattro',
+    'cinque',
+    'sei',
+    'sette',
+    'otto',
+    'nove',
+    'dieci',
+    'undici',
+    'dodici',
+    'tredici',
+    'quattordici',
+    'quindici',
+    'sedici',
+    'diciassette',
+    'diciotto',
+    'diciannove',
+  ];
+  static const _tens = [
+    '',
+    '',
+    'venti',
+    'trenta',
+    'quaranta',
+    'cinquanta',
+    'sessanta',
+    'settanta',
+    'ottanta',
+    'novanta',
+  ];
+
+  /// Ünlüyle başladığı için onluğun son ünlüsünü düşüren birler ("uno", "otto").
+  static const _elidingUnits = {1, 8};
+
+  /// Birleşik sayıda farklı yazılan birler.
+  static const _compoundUnits = {3: 'tré'};
+
+  @override
+  String spell(int number) {
+    _checkRange(number);
+    if (number < _small.length) {
+      return _small[number];
+    }
+    final tens = _tens[number ~/ _base];
+    final unit = number % _base;
+    if (unit == 0) {
+      return tens;
+    }
+    final tensWord = _elidingUnits.contains(unit) ? tens.substring(0, tens.length - 1) : tens;
+    return '$tensWord${_compoundUnits[unit] ?? _small[unit]}';
+  }
+}
+
+/// Endonezce yazım: 11–19 "belas", onluklar "puluh" ile kurulur; onlar ile birler boşlukla yazılır
+/// ("dua puluh tujuh").
+final class IndonesianNumberSpeller implements NumberSpeller {
+  const IndonesianNumberSpeller();
+
+  static const _small = [
+    '',
+    'satu',
+    'dua',
+    'tiga',
+    'empat',
+    'lima',
+    'enam',
+    'tujuh',
+    'delapan',
+    'sembilan',
+    'sepuluh',
+    'sebelas',
+    'dua belas',
+    'tiga belas',
+    'empat belas',
+    'lima belas',
+    'enam belas',
+    'tujuh belas',
+    'delapan belas',
+    'sembilan belas',
+  ];
+  static const _tens = [
+    '',
+    '',
+    'dua puluh',
+    'tiga puluh',
+    'empat puluh',
+    'lima puluh',
+    'enam puluh',
+    'tujuh puluh',
+    'delapan puluh',
+    'sembilan puluh',
+  ];
+
+  @override
+  String spell(int number) => _spellWithConnector(number, _small, _tens, ' ');
 }

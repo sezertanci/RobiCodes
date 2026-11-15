@@ -208,6 +208,8 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
 - Almanca, İspanyolca ve Fransızca eklendi (yalnızca uygulama içi; mağaza tarafı yok). Uygulama adları ve
   karakter adı çevirileri [docs/decisions.md](docs/decisions.md) içinde. Bu dillerde uzun metinlerin dar
   ekranlarda sığıp sığmadığı henüz emülatörde denetlenmedi.
+- Portekizce (Brezilya), İtalyanca ve Endonezce eklendi (yalnızca uygulama içi). Adlar ve karakter adları
+  [docs/decisions.md](docs/decisions.md) içinde; bu diller de emülatörde görsel olarak denetlenmedi.
 
 ## Kararlar
 
