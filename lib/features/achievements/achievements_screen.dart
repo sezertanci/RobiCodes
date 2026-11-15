@@ -89,7 +89,7 @@ final class AchievementsScreen extends StatelessWidget {
                                       if (status.achievement.kind == section.kind) status,
                                   ],
                                   columns: isWide
-                                      ? max(1, ((width + _gap) / (section.minCellWidth + _gap)).floor())
+                                      ? ScreenScale.columns(width, section.minCellWidth, _gap)
                                       : section.phoneColumns,
                                   width: width,
                                 ),
@@ -237,7 +237,7 @@ final class _SectionView extends StatelessWidget {
   );
 
   Widget _grid(List<AchievementStatus> items) {
-    final cellWidth = (width - (columns - 1) * AchievementsScreen._gap) / columns;
+    final cellWidth = ScreenScale.cellWidth(width, columns, AchievementsScreen._gap);
     return Wrap(
       spacing: AchievementsScreen._gap,
       runSpacing: AchievementsScreen._gap,

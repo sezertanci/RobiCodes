@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 
 /// Ekranın kısa kenarına göre büyüyen boyutlar. Telefonda taban değerler aynen kalır;
@@ -31,6 +33,14 @@ final class ScreenScale {
   /// Ekran genişliğinin [ratio] katı, [min] ile [max] arasına sıkıştırılmış (CSS `clamp(min, vw, max)`).
   static double fluid(BuildContext context, double min, double ratio, double max) =>
       (MediaQuery.sizeOf(context).width * ratio).clamp(min, max);
+
+  /// [width] genişliğe, hücreler en az [minCellWidth] genişlikte ve aralarında [gap] boşluk kalacak
+  /// şekilde sığan sütun sayısı; en az 1.
+  static int columns(double width, double minCellWidth, double gap) =>
+      math.max(1, ((width + gap) / (minCellWidth + gap)).floor());
+
+  /// [columns] sütunlu ızgarada, aralarında [gap] boşluk olan hücrelerin genişliği.
+  static double cellWidth(double width, int columns, double gap) => (width - (columns - 1) * gap) / columns;
 
   /// Taban boyutun ekrana göre büyütülmüş hali; [max] verilirse onu aşmaz.
   double size(double base, {double? max}) {
