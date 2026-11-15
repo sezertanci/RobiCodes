@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cihaz dili Fransızca olduğunda başlatıcıda görünen uygulama adı. -->
+<resources>
+    <string name="app_name">Robi Programme</string>
+</resources>

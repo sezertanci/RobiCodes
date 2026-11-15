@@ -8,7 +8,7 @@ kullanılmaz. Önceki web sürümü (Mini Kodlama Dünyası, `MiniCodingWorld` k
 > "Tekrar Et" oyunları 20'şer seviyeyle oynanabilir; diğer oyunlar ana ekranda "Yakında" olarak görünür.
 > Ses efektleri, ses ayarı, sonuç panelindeki konfeti ve karakter seçimi, rozetler ve kupalar eklendi.
 > Google Play Billing ile paket satın alma ve matematik sorulu ebeveyn doğrulaması eklendi. Uygulama
-> Türkçe ve İngilizce oynanır (bkz. "Dil desteği"). Google hesabı
+> Türkçe, İngilizce, Almanca, İspanyolca ve Fransızca oynanır (bkz. "Dil desteği"). Google hesabı
 > ve bulut kaydı yoktur; ilerleme yalnızca cihazda tutulur (bkz. "İlerleme kaydı"). Release derlemesi Google
 > Play'e yüklenecek yükleme anahtarıyla imzalanır (bkz. "Release derlemesi ve imzalama").
 >
@@ -176,7 +176,7 @@ tool/             Geliştirme betikleri (uygulama ikonunu üreten make_launcher_
 
 ## Dil desteği
 
-Uygulama Türkçe ve İngilizce oynanır. Mekanizma ortaktır; yeni bir dil kod değiştirmeden eklenir.
+Uygulama Türkçe, İngilizce, Almanca, İspanyolca ve Fransızca oynanır. Mekanizma ortaktır; yeni bir dil kod değiştirmeden eklenir.
 
 - **Dil seçimi:** Varsayılan olarak cihazın dili kullanılır; cihaz dili desteklenmiyorsa uygulama
   İngilizce açılır. Dil Ayarlar'dan değiştirilebilir, seçim cihazda saklanır (`LanguageService`). Dil
@@ -189,9 +189,12 @@ Uygulama Türkçe ve İngilizce oynanır. Mekanizma ortaktır; yeni bir dil kod 
   tutar: o anki dilin çevirilerinden metni seçen bir fonksiyon. Robotun konuşma balonu da bu türdedir;
   böylece dil oyunun ortasında değişse bile balon yeni dilde görünür.
 - **Ebeveyn sorusundaki sayılar** dile göre yazıyla yazılır (`NumberSpeller`: "yirmi yedi",
-  "twenty-seven"). Yazımı tanımlı olmayan dilde İngilizce yazım kullanılır.
+  "twenty-seven", "siebenundzwanzig", "veintisiete", "vingt-sept"). Yazımı tanımlı olmayan dilde İngilizce yazım kullanılır.
 - **Uygulama adı** başlatıcıda da dile göre değişir: `android/app/src/main/res/values/strings.xml`
-  (İngilizce, "Robi Codes") ve `values-tr/strings.xml` (Türkçe, "Robi Kodluyor").
+  (İngilizce, "Robi Codes"), `values-tr` (Türkçe, "Robi Kodluyor"), `values-de` (Almanca, "Robi
+  Programmiert"), `values-es` (İspanyolca, "Robi Programa") ve `values-fr` (Fransızca, "Robi Programme").
+- **Mağaza girişi** yalnızca Türkçe ve İngilizce tutulur; Almanca, İspanyolca ve Fransızca yalnızca
+  uygulama içindedir.
 
 **Yeni dil eklemek:**
 

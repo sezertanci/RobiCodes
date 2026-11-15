@@ -205,6 +205,9 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   İngilizce görüntüler emülatörde çekildi (telefon 1080x1920/420, 7 inç 1200x1920/320, 10 inç 1600x2560/360).
   Sahneler Türkçe görüntülerle aynı oyunlardan seçildi; 10 inç İngilizce görüntülerde ilerleme gerçek
   tabletteki Türkçe görüntülerden azdır (seviye ve yıldız sayıları farklı).
+- Almanca, İspanyolca ve Fransızca eklendi (yalnızca uygulama içi; mağaza tarafı yok). Uygulama adları ve
+  karakter adı çevirileri [docs/decisions.md](docs/decisions.md) içinde. Bu dillerde uzun metinlerin dar
+  ekranlarda sığıp sığmadığı henüz emülatörde denetlenmedi.
 
 ## Kararlar
 

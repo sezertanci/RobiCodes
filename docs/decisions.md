@@ -76,3 +76,23 @@
 - İngilizce oyun adları: Find the Robot's Path, Order the Steps, If This, Then, Repeat It.
 - Mağaza girişi tr-TR ve en-US dillerinde tutulur (`store/robi-codes/listing/`); öne çıkan görsel her
   dil için ayrı üretilir.
+
+### Almanca, İspanyolca ve Fransızca (15.11.2026)
+
+- Uygulamaya **Almanca, İspanyolca ve Fransızca** eklendi. Yalnızca uygulama içi metinler çevrildi;
+  mağaza girişi, öne çıkan görsel ve ekran görüntüleri bu diller için hazırlanmadı.
+- Uygulama adı başlatıcıda ve logoda her dile çevrilir; iki kelimenin de ilk harfi büyüktür:
+  **Robi Programmiert** (de), **Robi Programa** (es), **Robi Programme** (fr).
+- Karakter adları (Robi ve Fiyo her dilde aynı kalır):
+
+  | Türkçe | Almanca | İspanyolca | Fransızca |
+  | --- | --- | --- | --- |
+  | Pervane | Propeller | Hélice | Hélice |
+  | Işıl | Leuchti | Brillo | Lueur |
+  | Kahraman | Held | Héroe | Héros |
+  | Pembe | Rosa | Rosita | Rosie |
+  | Şövalye | Ritter | Caballero | Chevalier |
+  | Pırıl | Glitzer | Chispa | Étincelle |
+
+- Ebeveyn sorusundaki sayılar her dilin kendi yazımıyla yazılır (`GermanNumberSpeller`,
+  `SpanishNumberSpeller`, `FrenchNumberSpeller`).

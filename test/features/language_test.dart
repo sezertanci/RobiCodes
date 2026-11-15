@@ -36,11 +36,11 @@ void main() {
     });
 
     test('resolve_FirstLanguageUnsupported_UsesNextSupportedOne', () {
-      expect(LanguageService.resolve(const [Locale('de'), Locale('tr')], supported), const Locale('tr'));
+      expect(LanguageService.resolve(const [Locale('ja'), Locale('tr')], supported), const Locale('tr'));
     });
 
     test('resolve_NoSupportedLanguage_FallsBackToEnglish', () {
-      expect(LanguageService.resolve(const [Locale('de'), Locale('fr')], supported), LanguageService.fallback);
+      expect(LanguageService.resolve(const [Locale('ja'), Locale('ko')], supported), LanguageService.fallback);
       expect(LanguageService.resolve(null, supported), LanguageService.fallback);
     });
 

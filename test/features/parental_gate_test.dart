@@ -46,6 +46,38 @@ void main() {
       expect(speller.spell(99), 'ninety-nine');
     });
 
+    test('spell_GermanSampleNumbers_ReturnsGermanSpelling', () {
+      const speller = GermanNumberSpeller();
+      expect(speller.spell(1), 'eins');
+      expect(speller.spell(12), 'zwölf');
+      expect(speller.spell(17), 'siebzehn');
+      expect(speller.spell(21), 'einundzwanzig');
+      expect(speller.spell(30), 'dreißig');
+      expect(speller.spell(99), 'neunundneunzig');
+    });
+
+    test('spell_SpanishSampleNumbers_ReturnsSpanishSpelling', () {
+      const speller = SpanishNumberSpeller();
+      expect(speller.spell(16), 'dieciséis');
+      expect(speller.spell(22), 'veintidós');
+      expect(speller.spell(30), 'treinta');
+      expect(speller.spell(31), 'treinta y uno');
+      expect(speller.spell(99), 'noventa y nueve');
+    });
+
+    test('spell_FrenchSampleNumbers_ReturnsFrenchSpelling', () {
+      const speller = FrenchNumberSpeller();
+      expect(speller.spell(17), 'dix-sept');
+      expect(speller.spell(21), 'vingt et un');
+      expect(speller.spell(27), 'vingt-sept');
+      expect(speller.spell(70), 'soixante-dix');
+      expect(speller.spell(71), 'soixante et onze');
+      expect(speller.spell(80), 'quatre-vingts');
+      expect(speller.spell(81), 'quatre-vingt-un');
+      expect(speller.spell(91), 'quatre-vingt-onze');
+      expect(speller.spell(99), 'quatre-vingt-dix-neuf');
+    });
+
     test('forLanguage_EverySupportedLanguage_HasOwnSpeller', () {
       for (final locale in AppLocalizations.supportedLocales) {
         expect(NumberSpellers.byLanguage, contains(locale.languageCode));
