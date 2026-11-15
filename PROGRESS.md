@@ -215,9 +215,21 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
 
 - **Hata Avcısı** kodlandı (`lib/games/bug_hunter/`): 20 seviye, deneme altyapısı, kilitli kart, satın alma
   akışı. "Tekrar Et" denetleyicisine isteğe bağlı `StartingProgram` eklendi; verilmezse Tekrar Et aynen çalışır.
-  Kararlar [docs/decisions.md](docs/decisions.md) içinde. Tablette denendi ve commit edildi; Play Console'da
-  ürün (`pack.bug_hunter.base`) ve fiyat kullanıcı tarafından tanımlanacak.
-- Sırada: Kendi Komutunu Oluştur, ardından iki oyunu kapsayan bundle.
+  Kararlar [docs/decisions.md](docs/decisions.md) içinde. Commit `2548424`.
+- Play Console (15.11.2026): ödeme profili, TL banka hesabı (doğrulama bekliyor), hesap grubu ve %15 hizmet
+  ücreti kaydı tamam. Ürün `pack.bug_hunter.base` etkin; satın alma seçeneği `buy` ("Eski sürümlerle uyumlu"),
+  174 ülke. Fiyat: Türkiye 29,99 TL, diğer ülkeler 1,99 USD tabanlı. **Play Console'a girilen fiyat vergisiz
+  sayılır, KDV üstüne eklenir** (Türkiye'ye 24,99 girilince 29,99 görünür). Ürün simgesi
+  `store/robi-codes/products/bug-hunter-512.png`. Sürüm `1.3.0+4` kapalı teste (Alpha) yüklendi, yayında ve
+  cihazlarda satın alma çalışıyor.
+- Yeni ücretli paket/bundle için adım adım yol: [docs/paid-pack-release.md](docs/paid-pack-release.md).
+- Paketler ekranı genel temaya uyarlandı: ücretli ürün oyun renginde kart (`ProductCard`), ücretsiz paketler
+  simgeli küçük kartlar (`FreePackCard`), bilgi ve geri yükleme beyaz panellerde. Ortak `ToneCard` ve
+  `GameIconBadge` ana ekrandaki oyun kartıyla paylaşılıyor. Tablete bir sonraki Play sürümüyle gelecek.
+- Mağaza metinlerinde "Türkçe ve İngilizce oynanabilir" ifadesi eskidi (8 dil var); güncellenmedi.
+- Üretime başvuru için kapalı testte 12 test kullanıcısı ve 14 gün gerekiyor (şu an 11 kullanıcı).
+- Sırada: Kendi Komutunu Oluştur, ardından iki oyunu kapsayan bundle. Sonraki oyunlar: Değişken Kutusu →
+  Desen Bulmacası → Devre → Akış Şeması.
 
 ## Kararlar
 

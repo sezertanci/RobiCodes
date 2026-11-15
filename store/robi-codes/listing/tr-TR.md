@@ -34,6 +34,12 @@ AİLELER İÇİN
 
 Gizlilik politikası: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.3.0)
+
+- Yeni oyun: Hata Avcısı. Robi'nin kodunda bir hata var; çocuk kodu çalıştırıp hatayı bulur ve düzeltir.
+- Her zorluk grubunun ilk seviyesi ücretsiz denenebilir. 20 seviyenin tamamı tek seferlik satın alımla açılır.
+- Diğer dört oyun ücretsiz kalmaya devam ediyor.
+
 ## Sürüm notu (1.1.0)
 
 - Uygulama artık İngilizce de oynanabiliyor. Cihazın diline göre açılır; dil Ayarlar'dan değiştirilebilir.

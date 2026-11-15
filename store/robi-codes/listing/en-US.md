@@ -34,6 +34,12 @@ FOR FAMILIES
 
 Privacy policy: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.3.0)
+
+- New game: Bug Hunter. Robi's code has a mistake; children run the code, find the bug and fix it.
+- The first level of each difficulty group can be tried for free. All 20 levels unlock with a one-time purchase.
+- The other four games remain free.
+
 ## Sürüm notu (1.1.0)
 
 - Robi Codes can now be played in English. It opens in the device's language, and the language can be changed in Settings.
