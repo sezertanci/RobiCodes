@@ -1,0 +1,43 @@
+# Mağaza kaydı – Türkçe (tr-TR)
+
+## Uygulama adı (en fazla 30 karakter)
+
+Robi Kodluyor
+
+## Kısa açıklama (en fazla 80 karakter)
+
+Robotla oyna, kodlamayı öğren! 7–12 yaş için reklamsız kodlama oyunları.
+
+## Tam açıklama (en fazla 4000 karakter)
+
+Robi Kodluyor, 7–12 yaş arası çocuklara kodlamanın temel düşüncesini oyun oynayarak öğretir. Ekran başında kod yazmak yok; çocuk komutları dizer, robotun nasıl hareket ettiğini izler ve hatasını kendisi bulur.
+
+DÖRT OYUN, DÖRT TEMEL KAVRAM
+• Robotun Yolunu Bul: Yön komutlarıyla robotu hedefe ulaştır.
+• Komutları Sırala: Adımları doğru sıraya diz, algoritma mantığını öğren.
+• Eğer Böyleyse: Duruma göre doğru komutu seç, koşulları keşfet.
+• Tekrar Et: Tekrarlanan hareketleri tek blokla yap, döngüleri tanı.
+
+ADIM ADIM ZORLAŞAN 80 SEVİYE
+Her oyunda kolay, orta, zor ve uzman olmak üzere dört zorluk grubu, toplam 80 seviye vardır. Takılan çocuk ipucu alabilir, seviyeyi tekrar deneyerek daha çok yıldız toplayabilir.
+
+ÖDÜLLER VE KARAKTERLER
+• Seviyeleri bitirdikçe yıldız, rozet ve kupa kazanılır.
+• Robi ve arkadaşları arasından istediğin robot karakterini seç.
+
+AİLELER İÇİN
+• Reklam yok.
+• Hesap açmak gerekmez; hiçbir kişisel veri toplanmaz ve paylaşılmaz.
+• İlerleme yalnızca cihazda saklanır, internet olmadan da oynanır.
+• Uygulama içi satın almalar yalnızca bir yetişkinin cevaplayabileceği bir sorudan sonra başlar.
+• Türkçe ve İngilizce oynanabilir.
+
+Gizlilik politikası: https://sezertanci.github.io/robi-codes/privacy.html
+
+## Sürüm notu (1.1.0)
+
+- Uygulama artık İngilizce de oynanabiliyor. Cihazın diline göre açılır; dil Ayarlar'dan değiştirilebilir.
+
+## Sürüm notu (1.0.0)
+
+Robi Kodluyor'un ilk sürümü.
