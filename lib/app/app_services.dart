@@ -23,6 +23,7 @@ import '../games/bug_hunter/bug_hunter_module.dart';
 import '../games/command_order/command_order_module.dart';
 import '../games/game_registry.dart';
 import '../games/if_then/if_then_module.dart';
+import '../games/my_command/my_command_module.dart';
 import '../games/path_finder/path_finder_module.dart';
 import '../games/repeat/repeat_module.dart';
 
@@ -59,7 +60,7 @@ final class AppServices {
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
   }) => AppServices(
     catalog: buildContentCatalog(),
-    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule(), BugHunterModule()]),
+    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule(), BugHunterModule(), MyCommandModule()]),
     store: store,
     parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
     soundPlayer: soundPlayer,

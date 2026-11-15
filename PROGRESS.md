@@ -228,7 +228,12 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   `GameIconBadge` ana ekrandaki oyun kartıyla paylaşılıyor. Tablete bir sonraki Play sürümüyle gelecek.
 - Mağaza metinlerinde "Türkçe ve İngilizce oynanabilir" ifadesi eskidi (8 dil var); güncellenmedi.
 - Üretime başvuru için kapalı testte 12 test kullanıcısı ve 14 gün gerekiyor (şu an 11 kullanıcı).
-- Sırada: Kendi Komutunu Oluştur, ardından iki oyunu kapsayan bundle. Sonraki oyunlar: Değişken Kutusu →
+- **Kendi Komutunu Oluştur kodlandı, commit edilmedi (15.11.2026).** `lib/games/my_command/`, ortak program
+  düzeni `lib/games/repeat/` altında (`ProgramGameLayout`, `CallChip`, `program_models`, `program_editor`).
+  20 seviye, ürün `pack.my_command.base`, turkuaz tema, ikon `assets/icons/game-command.svg`, 8 dilde metinler.
+  `flutter analyze` temiz, 636 test geçiyor; emülatörde 1. seviye 3 yıldızla bitirildi. Kalanlar: pubspec
+  sürüm yükseltme, ürün simgesi `store/robi-codes/products/my-command-512.png`, Play Console'da ürün ve sürüm.
+- Sırada: iki oyunu kapsayan bundle. Sonraki oyunlar: Değişken Kutusu →
   Desen Bulmacası → Devre → Akış Şeması.
 
 ## Kararlar

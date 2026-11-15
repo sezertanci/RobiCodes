@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../app/app_assets.dart';
@@ -5,7 +7,7 @@ import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/image_button.dart';
 import '../../path_finder/ui/direction_pad.dart';
 import '../../../l10n/l10n.dart';
-import '../repeat_controller.dart';
+import '../program_models.dart';
 import '../repeat_texts.dart';
 import 'program_strip.dart';
 import 'repeat_block_view.dart';
@@ -14,14 +16,24 @@ import 'repeat_block_view.dart';
 /// kurallarında Temizle "Baştan al" olur; Tekrarla düğmesi yalnızca seviye izin veriyorsa görünür.
 /// Geniş ekranda düğmeler yön tuşlarının altında durur: üstte tam satır Tekrarla, altında üç düğme.
 /// Dar ekranda yön tuşlarının sağında Tekrarla üstte, Başlat ile İpucu ortada, Temizle altta durur.
+/// [commandButton] verilirse (ör. "Komut") Tekrarla'nın üstünde aynı genişlikte bir satır daha olur.
 final class RepeatControls extends StatelessWidget {
-  const RepeatControls({required this.controller, required this.buttonSize, required this.stacked, super.key});
+  const RepeatControls({
+    required this.controller,
+    required this.buttonSize,
+    required this.stacked,
+    this.commandButton,
+    super.key,
+  });
 
-  final RepeatController controller;
+  final ProgramControlsModel controller;
   final double buttonSize;
 
   /// `true` ise düğmeler yön tuşlarının altında dizilir.
   final bool stacked;
+
+  /// Verilen genişlik ve yükseklikte geniş bir düğme çizer.
+  final Widget Function(double width, double height)? commandButton;
 
   static const _stackedGap = 16.0;
   static const _rowGap = 24.0;
@@ -32,12 +44,22 @@ final class RepeatControls extends StatelessWidget {
   /// Alt alta düzende düğme boyunda satır sayısı: yön tuşlarının üç satırı ve eylem düğmeleri.
   static const _stackedRows = 4;
 
-  /// Alt alta düzenin [height] yüksekliğe sığması için düğme boyu.
-  static double stackedButtonSizeFor(double height) =>
-      (height - _stackedGap - ImageButton.padding * 2 * (_stackedRows + 1)) / (_stackedRows + _repeatHeightRatio);
+  /// Dar ekranın sağ sütununda Başlat/İpucu ve Temizle satırları.
+  static const _actionRows = 2;
 
-  /// Yan yana düzenin verilen düğme boyundaki yüksekliği; en uzun parça yön tuşlarıdır.
-  static double rowHeight(double buttonSize) => DirectionPad.extent(buttonSize);
+  /// Alt alta düzenin [height] yüksekliğe sığması için düğme boyu. [wideRows], Tekrarla gibi geniş
+  /// düğmelerin satır sayısıdır; yer her zaman en az bir geniş satır için ayrılır.
+  static double stackedButtonSizeFor(double height, {int wideRows = 1}) =>
+      (height - _stackedGap - ImageButton.padding * 2 * (_stackedRows + wideRows)) /
+      (_stackedRows + _repeatHeightRatio * wideRows);
+
+  /// Yan yana düzenin verilen düğme boyundaki yüksekliği: yön tuşları ya da sağdaki sütun, hangisi uzunsa.
+  static double rowHeight(double buttonSize, {int wideRows = 1}) => max(
+    DirectionPad.extent(buttonSize),
+    _wideHeight(buttonSize) * wideRows + (buttonSize + ImageButton.padding * 2) * _actionRows,
+  );
+
+  static double _wideHeight(double buttonSize) => buttonSize * _repeatHeightRatio + ImageButton.padding * 2;
 
   /// Alt alta düzenin verilen düğme boyundaki genişliği.
   static double stackedWidth(double buttonSize) => DirectionPad.extent(buttonSize);
@@ -67,6 +89,7 @@ final class RepeatControls extends StatelessWidget {
         children: [
           pad,
           const SizedBox(height: _stackedGap),
+          if (commandButton case final button?) _wideButton(button, columns: DirectionPad.gridSize),
           if (controller.allowsRepeat) _repeatButton(columns: DirectionPad.gridSize),
           Row(mainAxisSize: MainAxisSize.min, children: [run, hint, clear]),
         ],
@@ -80,6 +103,7 @@ final class RepeatControls extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (commandButton case final button?) _wideButton(button, columns: 2),
             if (controller.allowsRepeat) _repeatButton(columns: 2),
             Row(mainAxisSize: MainAxisSize.min, children: [run, hint]),
             clear,
@@ -92,14 +116,19 @@ final class RepeatControls extends StatelessWidget {
   Widget _action(String asset, String label, VoidCallback onPressed) =>
       ImageButton(asset: asset, label: label, size: buttonSize, onPressed: controller.isRunning ? null : onPressed);
 
-  Widget _repeatButton({required int columns}) => Padding(
-    padding: const EdgeInsets.all(ImageButton.padding),
-    child: RepeatButton(
-      leaving: controller.target != null,
-      width: _cell * columns - ImageButton.padding * 2,
-      height: buttonSize * _repeatHeightRatio,
+  Widget _repeatButton({required int columns}) => _wideButton(
+    (width, height) => RepeatButton(
+      leaving: controller.isInsideRepeat,
+      width: width,
+      height: height,
       onPressed: controller.canUseRepeatButton ? controller.pressRepeatButton : null,
     ),
+    columns: columns,
+  );
+
+  Widget _wideButton(Widget Function(double width, double height) build, {required int columns}) => Padding(
+    padding: const EdgeInsets.all(ImageButton.padding),
+    child: build(_cell * columns - ImageButton.padding * 2, buttonSize * _repeatHeightRatio),
   );
 }
 
@@ -120,52 +149,90 @@ final class RepeatButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   static const _navyDark = Color(0xFF111A30);
-  static const _disabledOpacity = 0.4;
 
   @override
   Widget build(BuildContext context) {
-    final color = leaving ? AppColors.navy : AppColors.orange;
-    final dark = leaving ? _navyDark : AppColors.orangeDark;
     final t = context.l10n;
-    return Semantics(
-      button: true,
-      enabled: onPressed != null,
+    return WideActionButton(
+      tone: leaving ? const ColorTone(AppColors.navy, _navyDark) : AppTones.orange,
+      icon: leaving ? null : RepeatIcon(size: height * WideActionButton.iconRatio),
+      text: leaving ? t.repeatLeaveRepeat : t.repeatAddRepeat,
       label: leaving ? t.repeatLeaveRepeatLabel : t.repeatAddRepeatLabel,
-      excludeSemantics: true,
-      onTap: onPressed,
-      child: Opacity(
-        opacity: onPressed == null ? _disabledOpacity : 1,
-        child: GestureDetector(
-          onTap: onPressed,
-          child: Container(
-            width: width,
-            height: height,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: dark, offset: const Offset(0, 4))],
-            ),
-            child: FittedBox(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (!leaving) ...[RepeatIcon(size: height * 0.6), const SizedBox(width: 8)],
-                  Text(
-                    leaving ? t.repeatLeaveRepeat : t.repeatAddRepeat,
-                    style: TextStyle(
-                      fontSize: height * 0.36,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      shadows: [Shadow(color: dark, offset: const Offset(0, 2))],
-                    ),
+      width: width,
+      height: height,
+      onPressed: onPressed,
+    );
+  }
+}
+
+/// Renkli, kabarık kenarlı geniş düğme: solda isteğe bağlı simge, yanında kalın beyaz yazı.
+/// Tekrarla ve Komut düğmeleri ortak kullanır.
+final class WideActionButton extends StatelessWidget {
+  const WideActionButton({
+    required this.tone,
+    required this.text,
+    required this.label,
+    required this.width,
+    required this.height,
+    required this.onPressed,
+    this.icon,
+    super.key,
+  });
+
+  final ColorTone tone;
+  final Widget? icon;
+  final String text;
+
+  /// Ekran okuyucu etiketi.
+  final String label;
+  final double width;
+  final double height;
+  final VoidCallback? onPressed;
+
+  /// Simgenin düğme yüksekliğine oranı.
+  static const iconRatio = 0.6;
+  static const _textRatio = 0.36;
+  static const _disabledOpacity = 0.4;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    enabled: onPressed != null,
+    label: label,
+    excludeSemantics: true,
+    onTap: onPressed,
+    child: Opacity(
+      opacity: onPressed == null ? _disabledOpacity : 1,
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Container(
+          width: width,
+          height: height,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: tone.base,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [BoxShadow(color: tone.dark, offset: const Offset(0, 4))],
+          ),
+          child: FittedBox(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon case final icon?) ...[icon, const SizedBox(width: 8)],
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: height * _textRatio,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    shadows: [Shadow(color: tone.dark, offset: const Offset(0, 2))],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

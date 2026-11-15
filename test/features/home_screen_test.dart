@@ -47,8 +47,9 @@ void main() {
     expect(find.text(texts.gameRepeatTitle), findsOneWidget);
     final playable = services.catalog.games.where((game) => services.games.isPlayable(game.id)).length;
     expect(find.text(texts.gameBugHunterTitle), findsOneWidget);
-    expect(find.text(texts.homeLocked), findsOneWidget);
-    expect(playable, 5);
+    expect(find.text(texts.gameMyCommandTitle), findsOneWidget);
+    expect(find.text(texts.homeLocked), findsNWidgets(2));
+    expect(playable, 6);
     expect(find.text(texts.homeComingSoon), findsNWidgets(services.catalog.games.length - playable));
   });
 

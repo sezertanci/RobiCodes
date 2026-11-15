@@ -209,6 +209,20 @@ class AppLocalizationsFr extends AppLocalizations {
       'Tu as trouvé même les bugs les plus difficiles !';
 
   @override
+  String get gameMyCommandTitle => 'Crée ta commande';
+
+  @override
+  String get gameMyCommandDescription =>
+      'Fabrique ta propre commande avec des flèches et utilise-la encore et encore.';
+
+  @override
+  String get gameMyCommandTrophy => 'Architecte des commandes';
+
+  @override
+  String get gameMyCommandTrophyDescription =>
+      'Tu as résolu les chemins les plus difficiles avec tes propres commandes !';
+
+  @override
   String get characterTitle => 'Choisis ton personnage';
 
   @override
@@ -1320,6 +1334,164 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get bugHunterL20Hint =>
       'D’abord à droite, puis en bas. Compte les cases de chaque partie droite.';
+
+  @override
+  String get myCommandIntro =>
+      'Dans la bande turquoise du haut, fabrique ta commande avec des flèches. Ensuite, dans le programme principal en bas, utilise le bloc Commande ; chaque bloc Commande fait toutes les flèches de la commande.';
+
+  @override
+  String get myCommandCommandEmpty =>
+      'Fabrique ta commande : ajoute des flèches ici.';
+
+  @override
+  String get myCommandMainEmpty =>
+      'Programme principal : ajoute un bloc Commande et des flèches.';
+
+  @override
+  String get myCommandButton => 'Commande';
+
+  @override
+  String get myCommandButtonLabel =>
+      'Ajouter un bloc Commande au programme principal';
+
+  @override
+  String myCommandCallLabel(Object number) {
+    return 'Bloc $number : commande';
+  }
+
+  @override
+  String get myCommandEmptyCommand =>
+      'Ta commande est vide. Touche la bande turquoise du haut et ajoute-y des flèches.';
+
+  @override
+  String get myCommandEmptyMain =>
+      'Le programme principal est vide. Ajoute un bloc Commande avec le bouton turquoise Commande.';
+
+  @override
+  String get myCommandEditCommand =>
+      'Les flèches que tu ajoutes maintenant iront dans la commande.';
+
+  @override
+  String get myCommandEditMain =>
+      'Les blocs que tu ajoutes maintenant iront dans le programme principal.';
+
+  @override
+  String get myCommandCallAdded =>
+      'Le bloc Commande est ajouté au programme principal. Ici, le robot fera toutes les flèches de la commande.';
+
+  @override
+  String get myCommandUseHint =>
+      'Ta commande est prête. Touche le bouton turquoise Commande pour l’utiliser dans le programme principal.';
+
+  @override
+  String get myCommandFullHint =>
+      'Tu as atteint la limite de blocs. Change ta commande, ou remplace des flèches du programme principal par un bloc Commande.';
+
+  @override
+  String get myCommandMissedGoal =>
+      'Le robot n’a pas atteint le drapeau. Essaie de changer les flèches de la commande ou le nombre de blocs Commande.';
+
+  @override
+  String myCommandOffPath(Object place) {
+    return '$place dans la commande fait sortir le robot du chemin.';
+  }
+
+  @override
+  String myCommandFixCount(Object number) {
+    return 'Essaie de changer le nombre de répétitions du bloc $number de la commande ou les flèches qu’il contient.';
+  }
+
+  @override
+  String get myCommandL1Intro =>
+      'Crée ta commande ! Mets deux flèches vers la droite dans la bande turquoise du haut. Ensuite, ajoute ta commande au programme principal avec le bouton Commande.';
+
+  @override
+  String get myCommandL1Hint =>
+      'Le robot doit aller 6 fois vers la droite. Si ta commande a 2 flèches vers la droite, combien de fois dois-tu l’utiliser ?';
+
+  @override
+  String get myCommandL2Hint =>
+      'Descends comme un escalier. Une marche : une fois à droite, une fois en bas. Que ce soit ta commande.';
+
+  @override
+  String get myCommandL3Intro =>
+      'Dans le programme principal, tu peux aussi ajouter des flèches à côté du bloc Commande.';
+
+  @override
+  String get myCommandL3Hint =>
+      'Il y a un escalier entre les pierres : à droite, en bas. À la fin, il faut encore un pas de plus.';
+
+  @override
+  String get myCommandL4Hint =>
+      'Deux fois à droite, une fois en haut. Combien de fois ce motif se répète-t-il ?';
+
+  @override
+  String get myCommandL5Hint =>
+      'Le robot grimpe vers la gauche : une fois en haut, une fois à gauche. Les pièces sont aussi sur ce chemin.';
+
+  @override
+  String get myCommandL6Hint =>
+      'Chaque marche fait deux cases de large et une case de haut.';
+
+  @override
+  String get myCommandL7Hint =>
+      'Deux fois à droite, deux fois en bas. Les pièces sont sur ce motif.';
+
+  @override
+  String get myCommandL8Hint =>
+      'Passe sous les pierres : d’abord en bas, puis deux fois à droite.';
+
+  @override
+  String get myCommandL9Hint =>
+      'Que la commande aille quatre fois à droite. Entre les deux blocs Commande, le robot doit descendre.';
+
+  @override
+  String get myCommandL10Hint =>
+      'Ramasse les pièces entre les pierres : en bas, deux fois à droite, en haut.';
+
+  @override
+  String get myCommandL11Intro =>
+      'Tu peux aussi mettre un bloc Répéter dans ta commande ! Ainsi, une petite commande parcourt un long chemin.';
+
+  @override
+  String get myCommandL11Hint =>
+      'Que la commande aille trois fois à droite. Entre les commandes, le robot va une fois en bas, une fois en haut.';
+
+  @override
+  String get myCommandL12Hint =>
+      'Chaque morceau fait deux fois à droite, une fois en bas. À un endroit, il y a un pas de plus vers le bas.';
+
+  @override
+  String get myCommandL13Hint =>
+      'Chaque marche : une fois en haut, deux fois à droite. N’oublie pas la pièce.';
+
+  @override
+  String get myCommandL14Hint =>
+      'Chaque morceau fait deux fois à droite, une fois en haut. Regarde aussi les pas entre les commandes.';
+
+  @override
+  String get myCommandL15Hint =>
+      'Chaque morceau fait une fois en bas, deux fois à droite. Entre les commandes, le chemin va parfois tout droit.';
+
+  @override
+  String get myCommandL16Hint =>
+      'Commande : trois fois à droite, une fois en bas. Après la première commande, tu dois tourner une fois à gauche.';
+
+  @override
+  String get myCommandL17Hint =>
+      'Chaque morceau fait une fois en haut, trois fois à droite. Entre les commandes, monte encore une fois.';
+
+  @override
+  String get myCommandL18Hint =>
+      'Ta commande peut contenir deux blocs Répéter : deux fois en bas, deux fois à droite.';
+
+  @override
+  String get myCommandL19Hint =>
+      'Commande : une fois à droite, deux fois en haut, une fois à droite. Trouve les flèches du milieu en comptant les cases.';
+
+  @override
+  String get myCommandL20Hint =>
+      'Dans la commande, il y a d’abord deux marches : à droite, en bas. Puis encore un pas à droite.';
 
   @override
   String get ifThenL1Intro =>

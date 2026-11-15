@@ -202,6 +202,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gameBugHunterTrophyDescription => 'En zor hataları bile buldun!';
 
   @override
+  String get gameMyCommandTitle => 'Kendi Komutunu Oluştur';
+
+  @override
+  String get gameMyCommandDescription =>
+      'Oklarla kendi komutunu yap, tekrar tekrar kullan.';
+
+  @override
+  String get gameMyCommandTrophy => 'Komut Mimarı';
+
+  @override
+  String get gameMyCommandTrophyDescription =>
+      'Kendi komutlarınla en zor yolları çözdün!';
+
+  @override
   String get characterTitle => 'Karakterini seç';
 
   @override
@@ -1284,6 +1298,159 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get bugHunterL20Hint =>
       'Önce sağa, sonra aşağı. Her düz parçadaki kareleri say.';
+
+  @override
+  String get myCommandIntro =>
+      'Üstteki turkuaz şeride oklarla kendi komutunu yap. Sonra alttaki ana programda Komut bloğunu kullan; her Komut bloğu komuttaki okların hepsini yapar.';
+
+  @override
+  String get myCommandCommandEmpty => 'Komutunu yap: buraya ok ekle.';
+
+  @override
+  String get myCommandMainEmpty => 'Ana program: Komut bloğu ve ok ekle.';
+
+  @override
+  String get myCommandButton => 'Komut';
+
+  @override
+  String get myCommandButtonLabel => 'Ana programa Komut bloğu ekle';
+
+  @override
+  String myCommandCallLabel(Object number) {
+    return '$number. blok: komut';
+  }
+
+  @override
+  String get myCommandEmptyCommand =>
+      'Komutun boş. Üstteki turkuaz şeride dokun ve içine ok ekle.';
+
+  @override
+  String get myCommandEmptyMain =>
+      'Ana program boş. Turkuaz Komut düğmesiyle Komut bloğunu ekle.';
+
+  @override
+  String get myCommandEditCommand => 'Şimdi eklediğin oklar komuta girecek.';
+
+  @override
+  String get myCommandEditMain =>
+      'Şimdi eklediğin bloklar ana programa girecek.';
+
+  @override
+  String get myCommandCallAdded =>
+      'Komut bloğu ana programa eklendi. Robot burada komuttaki okların hepsini yapacak.';
+
+  @override
+  String get myCommandUseHint =>
+      'Komutun hazır. Turkuaz Komut düğmesine basıp onu ana programda kullan.';
+
+  @override
+  String get myCommandFullHint =>
+      'Blok sınırın doldu. Komutu değiştir ya da ana programdaki okların yerine Komut bloğu koy.';
+
+  @override
+  String get myCommandMissedGoal =>
+      'Robot bayrağa ulaşamadı. Komuttaki okları ya da Komut bloğu sayısını değiştirmeyi dene.';
+
+  @override
+  String myCommandOffPath(Object place) {
+    return 'Komuttaki $place robotu yoldan çıkarıyor.';
+  }
+
+  @override
+  String myCommandFixCount(Object number) {
+    return 'Komuttaki $number. bloğun tekrar sayısını ya da içindeki okları değiştirmeyi dene.';
+  }
+
+  @override
+  String get myCommandL1Intro =>
+      'Kendi komutunu yap! Üstteki turkuaz şeride iki sağ ok koy. Sonra Komut düğmesiyle komutunu ana programa ekle.';
+
+  @override
+  String get myCommandL1Hint =>
+      'Robot 6 kez sağa gitmeli. Komutun 2 sağ ok olursa onu kaç kez kullanmalısın?';
+
+  @override
+  String get myCommandL2Hint =>
+      'Merdiven gibi in. Bir basamak: bir sağa, bir aşağı. Komutun bu olsun.';
+
+  @override
+  String get myCommandL3Intro =>
+      'Ana programa Komut bloğunun yanında ok da ekleyebilirsin.';
+
+  @override
+  String get myCommandL3Hint =>
+      'Taşların arasında bir merdiven var: sağa, aşağı. Sonunda bir adım daha gerekiyor.';
+
+  @override
+  String get myCommandL4Hint =>
+      'İki sağa, bir yukarı. Bu desen kaç kez tekrar ediyor?';
+
+  @override
+  String get myCommandL5Hint =>
+      'Robot sola doğru tırmanıyor: bir yukarı, bir sola. Altınlar da bu yolda.';
+
+  @override
+  String get myCommandL6Hint => 'Her basamak iki kare geniş, bir kare yüksek.';
+
+  @override
+  String get myCommandL7Hint =>
+      'İki sağa, iki aşağı. Altınlar bu desenin üstünde.';
+
+  @override
+  String get myCommandL8Hint =>
+      'Taşların altından geç: önce aşağı, sonra iki sağa.';
+
+  @override
+  String get myCommandL9Hint =>
+      'Komut dört kez sağa gitsin. İki Komut bloğunun arasında robot aşağı inmeli.';
+
+  @override
+  String get myCommandL10Hint =>
+      'Taşların arasındaki altınları al: aşağı, iki sağa, yukarı.';
+
+  @override
+  String get myCommandL11Intro =>
+      'Komutun içine Tekrarla bloğu da koyabilirsin! Böylece kısa bir komut uzun bir yol yürür.';
+
+  @override
+  String get myCommandL11Hint =>
+      'Komut üç kez sağa gitsin. Komutların arasında robot bir kez aşağı, bir kez yukarı gidiyor.';
+
+  @override
+  String get myCommandL12Hint =>
+      'Her parça iki sağa, bir aşağı. Bir yerde araya bir aşağı adım daha giriyor.';
+
+  @override
+  String get myCommandL13Hint =>
+      'Her basamak bir yukarı, iki sağa. Altını unutma.';
+
+  @override
+  String get myCommandL14Hint =>
+      'Her parça iki sağa, bir yukarı. Komutların arasındaki adımlara da bak.';
+
+  @override
+  String get myCommandL15Hint =>
+      'Her parça bir aşağı, iki sağa. Komutların arasında yol bazen düz gidiyor.';
+
+  @override
+  String get myCommandL16Hint =>
+      'Komut: üç sağa, bir aşağı. İlk komuttan sonra bir sola dönmen gerekiyor.';
+
+  @override
+  String get myCommandL17Hint =>
+      'Her parça bir yukarı, üç sağa. Komutların arasında bir kez daha yukarı çık.';
+
+  @override
+  String get myCommandL18Hint =>
+      'Komutun içinde iki Tekrarla bloğu olabilir: iki aşağı, iki sağa.';
+
+  @override
+  String get myCommandL19Hint =>
+      'Komut: bir sağa, iki yukarı, bir sağa. Aradaki okları kareleri sayarak bul.';
+
+  @override
+  String get myCommandL20Hint =>
+      'Komutta önce iki basamak var: sağa, aşağı. Sonra bir adım daha sağa.';
 
   @override
   String get ifThenL1Intro =>

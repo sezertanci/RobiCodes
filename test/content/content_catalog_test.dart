@@ -28,9 +28,12 @@ void main() {
       final totalLevels = catalog.packs.fold(0, (sum, pack) => sum + pack.levelCount);
 
       // Assert
-      expect(catalog.games, hasLength(5));
-      expect(totalLevels, 100);
-      expect(catalog.packs.where((pack) => !catalog.isFree(pack.id)).map((pack) => pack.gameId), [GameIds.bugHunter]);
+      expect(catalog.games, hasLength(6));
+      expect(totalLevels, 120);
+      expect(catalog.packs.where((pack) => !catalog.isFree(pack.id)).map((pack) => pack.gameId), [
+        GameIds.bugHunter,
+        GameIds.myCommand,
+      ]);
     });
   });
 

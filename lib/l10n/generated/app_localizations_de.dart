@@ -210,6 +210,20 @@ class AppLocalizationsDe extends AppLocalizations {
       'Du hast sogar die kniffligsten Fehler gefunden!';
 
   @override
+  String get gameMyCommandTitle => 'Eigener Befehl';
+
+  @override
+  String get gameMyCommandDescription =>
+      'Baue mit Pfeilen deinen eigenen Befehl und nutze ihn immer wieder.';
+
+  @override
+  String get gameMyCommandTrophy => 'Befehlsarchitekt';
+
+  @override
+  String get gameMyCommandTrophyDescription =>
+      'Du hast die schwierigsten Wege mit deinen eigenen Befehlen gelöst!';
+
+  @override
   String get characterTitle => 'Wähle deine Figur';
 
   @override
@@ -1326,6 +1340,164 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get bugHunterL20Hint =>
       'Zuerst nach rechts, dann nach unten. Zähl die Felder in jedem geraden Stück.';
+
+  @override
+  String get myCommandIntro =>
+      'Baue im türkisen Streifen oben mit Pfeilen deinen eigenen Befehl. Nutze dann den Befehl-Block im Hauptprogramm unten; jeder Befehl-Block macht alle Pfeile des Befehls.';
+
+  @override
+  String get myCommandCommandEmpty =>
+      'Baue deinen Befehl: Füge hier einen Pfeil hinzu.';
+
+  @override
+  String get myCommandMainEmpty =>
+      'Hauptprogramm: Füge einen Befehl-Block und Pfeile hinzu.';
+
+  @override
+  String get myCommandButton => 'Befehl';
+
+  @override
+  String get myCommandButtonLabel =>
+      'Befehl-Block zum Hauptprogramm hinzufügen';
+
+  @override
+  String myCommandCallLabel(Object number) {
+    return 'Block $number: Befehl';
+  }
+
+  @override
+  String get myCommandEmptyCommand =>
+      'Dein Befehl ist leer. Tippe auf den türkisen Streifen oben und füge Pfeile hinzu.';
+
+  @override
+  String get myCommandEmptyMain =>
+      'Das Hauptprogramm ist leer. Füge den Befehl-Block mit der türkisen Befehl-Taste hinzu.';
+
+  @override
+  String get myCommandEditCommand =>
+      'Die Pfeile, die du jetzt hinzufügst, kommen in den Befehl.';
+
+  @override
+  String get myCommandEditMain =>
+      'Die Blöcke, die du jetzt hinzufügst, kommen ins Hauptprogramm.';
+
+  @override
+  String get myCommandCallAdded =>
+      'Der Befehl-Block wurde zum Hauptprogramm hinzugefügt. Hier macht der Roboter alle Pfeile des Befehls.';
+
+  @override
+  String get myCommandUseHint =>
+      'Dein Befehl ist fertig. Tippe auf die türkise Befehl-Taste, um ihn im Hauptprogramm zu nutzen.';
+
+  @override
+  String get myCommandFullHint =>
+      'Du hast das Blocklimit erreicht. Ändere den Befehl oder ersetze die Pfeile im Hauptprogramm durch einen Befehl-Block.';
+
+  @override
+  String get myCommandMissedGoal =>
+      'Der Roboter hat die Flagge nicht erreicht. Ändere die Pfeile im Befehl oder die Anzahl der Befehl-Blöcke.';
+
+  @override
+  String myCommandOffPath(Object place) {
+    return '$place im Befehl bringt den Roboter vom Weg ab.';
+  }
+
+  @override
+  String myCommandFixCount(Object number) {
+    return 'Ändere die Wiederholungszahl von Block $number im Befehl oder die Pfeile darin.';
+  }
+
+  @override
+  String get myCommandL1Intro =>
+      'Baue deinen eigenen Befehl! Setze zwei Pfeile nach rechts in den türkisen Streifen oben. Füge deinen Befehl dann mit der Befehl-Taste zum Hauptprogramm hinzu.';
+
+  @override
+  String get myCommandL1Hint =>
+      'Der Roboter muss 6-mal nach rechts gehen. Wenn dein Befehl aus 2 Pfeilen nach rechts besteht, wie oft musst du ihn nutzen?';
+
+  @override
+  String get myCommandL2Hint =>
+      'Geh wie eine Treppe nach unten. Eine Stufe: einmal rechts, einmal runter. Das ist dein Befehl.';
+
+  @override
+  String get myCommandL3Intro =>
+      'Im Hauptprogramm kannst du neben dem Befehl-Block auch Pfeile hinzufügen.';
+
+  @override
+  String get myCommandL3Hint =>
+      'Zwischen den Steinen ist eine Treppe: rechts, runter. Am Ende fehlt noch ein Schritt.';
+
+  @override
+  String get myCommandL4Hint =>
+      'Zweimal rechts, einmal hoch. Wie oft wiederholt sich dieses Muster?';
+
+  @override
+  String get myCommandL5Hint =>
+      'Der Roboter klettert nach links: einmal hoch, einmal links. Das Gold liegt auch auf diesem Weg.';
+
+  @override
+  String get myCommandL6Hint =>
+      'Jede Stufe ist zwei Felder breit und ein Feld hoch.';
+
+  @override
+  String get myCommandL7Hint =>
+      'Zweimal rechts, zweimal runter. Das Gold liegt an diesem Muster.';
+
+  @override
+  String get myCommandL8Hint =>
+      'Geh unter den Steinen durch: erst runter, dann zweimal rechts.';
+
+  @override
+  String get myCommandL9Hint =>
+      'Der Befehl soll viermal nach rechts gehen. Zwischen den zwei Befehl-Blöcken muss der Roboter nach unten gehen.';
+
+  @override
+  String get myCommandL10Hint =>
+      'Sammle das Gold zwischen den Steinen: runter, zweimal rechts, hoch.';
+
+  @override
+  String get myCommandL11Intro =>
+      'Du kannst in deinen Befehl auch einen Wiederholen-Block setzen! So läuft ein kurzer Befehl einen langen Weg.';
+
+  @override
+  String get myCommandL11Hint =>
+      'Der Befehl soll dreimal nach rechts gehen. Zwischen den Befehlen geht der Roboter einmal runter und einmal hoch.';
+
+  @override
+  String get myCommandL12Hint =>
+      'Jedes Stück ist zweimal rechts, einmal runter. An einer Stelle kommt noch ein Schritt nach unten dazu.';
+
+  @override
+  String get myCommandL13Hint =>
+      'Jede Stufe ist einmal hoch, zweimal rechts. Vergiss das Gold nicht.';
+
+  @override
+  String get myCommandL14Hint =>
+      'Jedes Stück ist zweimal rechts, einmal hoch. Schau dir auch die Schritte zwischen den Befehlen an.';
+
+  @override
+  String get myCommandL15Hint =>
+      'Jedes Stück ist einmal runter, zweimal rechts. Zwischen den Befehlen geht der Weg manchmal geradeaus.';
+
+  @override
+  String get myCommandL16Hint =>
+      'Befehl: dreimal rechts, einmal runter. Nach dem ersten Befehl musst du einmal nach links gehen.';
+
+  @override
+  String get myCommandL17Hint =>
+      'Jedes Stück ist einmal hoch, dreimal rechts. Zwischen den Befehlen musst du noch einmal hoch.';
+
+  @override
+  String get myCommandL18Hint =>
+      'Im Befehl können zwei Wiederholen-Blöcke sein: zweimal runter, zweimal rechts.';
+
+  @override
+  String get myCommandL19Hint =>
+      'Befehl: einmal rechts, zweimal hoch, einmal rechts. Finde die Pfeile dazwischen, indem du die Felder zählst.';
+
+  @override
+  String get myCommandL20Hint =>
+      'Der Befehl beginnt mit zwei Stufen: rechts, runter. Danach kommt noch ein Schritt nach rechts.';
 
   @override
   String get ifThenL1Intro =>

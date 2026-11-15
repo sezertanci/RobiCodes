@@ -209,6 +209,20 @@ class AppLocalizationsId extends AppLocalizations {
       'Kamu menemukan kesalahan yang paling sulit sekalipun!';
 
   @override
+  String get gameMyCommandTitle => 'Buat Perintahmu';
+
+  @override
+  String get gameMyCommandDescription =>
+      'Buat perintahmu sendiri dengan panah, lalu pakai berulang-ulang.';
+
+  @override
+  String get gameMyCommandTrophy => 'Arsitek Perintah';
+
+  @override
+  String get gameMyCommandTrophyDescription =>
+      'Kamu menyelesaikan jalur tersulit dengan perintahmu sendiri!';
+
+  @override
   String get characterTitle => 'Pilih karaktermu';
 
   @override
@@ -1320,6 +1334,163 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get bugHunterL20Hint =>
       'Pertama ke kanan, lalu ke bawah. Hitung kotak di setiap bagian lurus.';
+
+  @override
+  String get myCommandIntro =>
+      'Di jalur turkuaz di atas, buat perintahmu dengan panah. Lalu di program utama di bawah, pakai blok Perintah; setiap blok Perintah menjalankan semua panah di dalam perintah.';
+
+  @override
+  String get myCommandCommandEmpty =>
+      'Buat perintahmu: tambahkan panah di sini.';
+
+  @override
+  String get myCommandMainEmpty =>
+      'Program utama: tambahkan blok Perintah dan panah.';
+
+  @override
+  String get myCommandButton => 'Perintah';
+
+  @override
+  String get myCommandButtonLabel => 'Tambahkan blok Perintah ke program utama';
+
+  @override
+  String myCommandCallLabel(Object number) {
+    return 'Blok $number: perintah';
+  }
+
+  @override
+  String get myCommandEmptyCommand =>
+      'Perintahmu masih kosong. Ketuk jalur turkuaz di atas dan tambahkan panah.';
+
+  @override
+  String get myCommandEmptyMain =>
+      'Program utama masih kosong. Tambahkan blok Perintah dengan tombol turkuaz Perintah.';
+
+  @override
+  String get myCommandEditCommand =>
+      'Panah yang kamu tambahkan sekarang akan masuk ke dalam perintah.';
+
+  @override
+  String get myCommandEditMain =>
+      'Blok yang kamu tambahkan sekarang akan masuk ke program utama.';
+
+  @override
+  String get myCommandCallAdded =>
+      'Blok Perintah sudah ditambahkan ke program utama. Di sini robot akan menjalankan semua panah di dalam perintah.';
+
+  @override
+  String get myCommandUseHint =>
+      'Perintahmu sudah siap. Ketuk tombol turkuaz Perintah untuk memakainya di program utama.';
+
+  @override
+  String get myCommandFullHint =>
+      'Kamu sudah mencapai batas blok. Ubah perintahmu, atau ganti beberapa panah di program utama dengan blok Perintah.';
+
+  @override
+  String get myCommandMissedGoal =>
+      'Robot belum sampai di bendera. Coba ubah panah di dalam perintah atau jumlah blok Perintah.';
+
+  @override
+  String myCommandOffPath(Object place) {
+    return '$place di dalam perintah membuat robot keluar dari jalur.';
+  }
+
+  @override
+  String myCommandFixCount(Object number) {
+    return 'Coba ubah jumlah ulangan blok $number di dalam perintah atau panah di dalamnya.';
+  }
+
+  @override
+  String get myCommandL1Intro =>
+      'Buat perintahmu sendiri! Taruh dua panah kanan di jalur turkuaz di atas. Lalu tambahkan perintahmu ke program utama dengan tombol Perintah.';
+
+  @override
+  String get myCommandL1Hint =>
+      'Robot harus ke kanan 6 kali. Kalau perintahmu berisi 2 panah kanan, berapa kali kamu harus memakainya?';
+
+  @override
+  String get myCommandL2Hint =>
+      'Turunlah seperti tangga. Satu anak tangga: satu ke kanan, satu ke bawah. Jadikan itu perintahmu.';
+
+  @override
+  String get myCommandL3Intro =>
+      'Di program utama, kamu juga bisa menambahkan panah di samping blok Perintah.';
+
+  @override
+  String get myCommandL3Hint =>
+      'Ada tangga di antara batu-batu: kanan, bawah. Di akhir, masih butuh satu langkah lagi.';
+
+  @override
+  String get myCommandL4Hint =>
+      'Dua ke kanan, satu ke atas. Pola ini berulang berapa kali?';
+
+  @override
+  String get myCommandL5Hint =>
+      'Robot mendaki ke kiri: satu ke atas, satu ke kiri. Koin-koin juga ada di jalur ini.';
+
+  @override
+  String get myCommandL6Hint =>
+      'Setiap anak tangga lebarnya dua petak dan tingginya satu petak.';
+
+  @override
+  String get myCommandL7Hint =>
+      'Dua ke kanan, dua ke bawah. Koin-koin ada di pola ini.';
+
+  @override
+  String get myCommandL8Hint =>
+      'Lewati bagian bawah batu-batu: pertama ke bawah, lalu dua ke kanan.';
+
+  @override
+  String get myCommandL9Hint =>
+      'Buat perintah ini ke kanan empat kali. Di antara dua blok Perintah, robot harus turun.';
+
+  @override
+  String get myCommandL10Hint =>
+      'Ambil koin di antara batu-batu: bawah, dua ke kanan, atas.';
+
+  @override
+  String get myCommandL11Intro =>
+      'Kamu juga bisa menaruh blok Ulangi di dalam perintahmu! Jadi perintah yang pendek bisa menempuh jalur yang panjang.';
+
+  @override
+  String get myCommandL11Hint =>
+      'Buat perintah ini ke kanan tiga kali. Di antara perintah, robot turun satu kali dan naik satu kali.';
+
+  @override
+  String get myCommandL12Hint =>
+      'Setiap bagian dua ke kanan, satu ke bawah. Di satu tempat ada satu langkah ke bawah lagi.';
+
+  @override
+  String get myCommandL13Hint =>
+      'Setiap anak tangga satu ke atas, dua ke kanan. Jangan lupa koinnya.';
+
+  @override
+  String get myCommandL14Hint =>
+      'Setiap bagian dua ke kanan, satu ke atas. Lihat juga langkah-langkah di antara perintah.';
+
+  @override
+  String get myCommandL15Hint =>
+      'Setiap bagian satu ke bawah, dua ke kanan. Di antara perintah, jalurnya kadang lurus.';
+
+  @override
+  String get myCommandL16Hint =>
+      'Perintah: tiga ke kanan, satu ke bawah. Setelah perintah pertama, kamu harus berbelok satu kali ke kiri.';
+
+  @override
+  String get myCommandL17Hint =>
+      'Setiap bagian satu ke atas, tiga ke kanan. Di antara perintah, naik sekali lagi.';
+
+  @override
+  String get myCommandL18Hint =>
+      'Di dalam perintah bisa ada dua blok Ulangi: dua ke bawah, dua ke kanan.';
+
+  @override
+  String get myCommandL19Hint =>
+      'Perintah: satu ke kanan, dua ke atas, satu ke kanan. Temukan panah di tengah dengan menghitung petak.';
+
+  @override
+  String get myCommandL20Hint =>
+      'Di dalam perintah, pertama ada dua anak tangga: kanan, bawah. Lalu satu langkah lagi ke kanan.';
 
   @override
   String get ifThenL1Intro =>

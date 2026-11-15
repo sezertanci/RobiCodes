@@ -11,6 +11,7 @@ abstract final class AppColors {
   static const orange = Color(0xFFFFA24A);
   static const red = Color(0xFFFF6E6E);
   static const navy = Color(0xFF1F2D4F);
+  static const teal = Color(0xFF2EC4B6);
 
   // Aynı renklerin koyu tonları; kabarık kenar ve yazı gölgesi için.
   static const greenDark = Color(0xFF3DA845);
@@ -19,6 +20,7 @@ abstract final class AppColors {
   static const redDark = Color(0xFFD94848);
   static const orangeDark = Color(0xFFE8781C);
   static const yellowDark = Color(0xFFE8A920);
+  static const tealDark = Color(0xFF1C9A8F);
 
   /// Düğme ve kartların altındaki yumuşak gölge.
   static const shadow = Color(0x261F2D4F);
@@ -60,6 +62,7 @@ abstract final class AppTones {
   static const purple = ColorTone(AppColors.purple, AppColors.purpleDark);
   static const orange = ColorTone(AppColors.orange, AppColors.orangeDark);
   static const red = ColorTone(AppColors.red, AppColors.redDark);
+  static const teal = ColorTone(AppColors.teal, AppColors.tealDark);
   static const pink = ColorTone(Color(0xFFFF8FB7), Color(0xFFE0608E));
   static const navy = ColorTone(Color(0xFF3A4D7A), AppColors.navy);
   static const gold = ColorTone(AppColors.yellow, AppColors.yellowDark);

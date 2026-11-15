@@ -1,6 +1,6 @@
 import '../../path_finder/engine/path_finder_board.dart';
 
-/// Programın bir bloğu: tek bir yön oku ya da "N kez tekrarla" bloğu.
+/// Programın bir bloğu: tek bir yön oku, "N kez tekrarla" bloğu ya da tanımlanan komutu çağıran blok.
 /// Tekrar bloğunun içinde yalnızca oklar bulunur; iç içe tekrar yoktur (7 yaş için sade tutuldu).
 sealed class ProgramBlock {
   const ProgramBlock();
@@ -48,6 +48,21 @@ final class RepeatBlock extends ProgramBlock {
 
   @override
   int get hashCode => Object.hash(times, Object.hashAll(body));
+}
+
+/// Oyuncunun tanımladığı komutu çağıran turkuaz yapboz bloğu ("Kendi Komutunu Oluştur"). Yalnızca ana
+/// programda bulunur; komutun okları ayrı bir şeritte tanımlanır.
+final class CallBlock extends ProgramBlock {
+  const CallBlock();
+
+  @override
+  int get size => 1;
+
+  @override
+  bool operator ==(Object other) => other is CallBlock;
+
+  @override
+  int get hashCode => (CallBlock).hashCode;
 }
 
 /// Şeritteki bir yer. [inner] üst düzey blok için [ProgramPlace.topLevel], tekrar bloğunun

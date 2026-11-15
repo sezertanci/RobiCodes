@@ -428,6 +428,30 @@ abstract class AppLocalizations {
   /// **'En zor hataları bile buldun!'**
   String get gameBugHunterTrophyDescription;
 
+  /// No description provided for @gameMyCommandTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendi Komutunu Oluştur'**
+  String get gameMyCommandTitle;
+
+  /// No description provided for @gameMyCommandDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oklarla kendi komutunu yap, tekrar tekrar kullan.'**
+  String get gameMyCommandDescription;
+
+  /// No description provided for @gameMyCommandTrophy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut Mimarı'**
+  String get gameMyCommandTrophy;
+
+  /// No description provided for @gameMyCommandTrophyDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendi komutlarınla en zor yolları çözdün!'**
+  String get gameMyCommandTrophyDescription;
+
   /// No description provided for @characterTitle.
   ///
   /// In tr, this message translates to:
@@ -1969,6 +1993,240 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Önce sağa, sonra aşağı. Her düz parçadaki kareleri say.'**
   String get bugHunterL20Hint;
+
+  /// No description provided for @myCommandIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Üstteki turkuaz şeride oklarla kendi komutunu yap. Sonra alttaki ana programda Komut bloğunu kullan; her Komut bloğu komuttaki okların hepsini yapar.'**
+  String get myCommandIntro;
+
+  /// No description provided for @myCommandCommandEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komutunu yap: buraya ok ekle.'**
+  String get myCommandCommandEmpty;
+
+  /// No description provided for @myCommandMainEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana program: Komut bloğu ve ok ekle.'**
+  String get myCommandMainEmpty;
+
+  /// No description provided for @myCommandButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut'**
+  String get myCommandButton;
+
+  /// No description provided for @myCommandButtonLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana programa Komut bloğu ekle'**
+  String get myCommandButtonLabel;
+
+  /// No description provided for @myCommandCallLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{number}. blok: komut'**
+  String myCommandCallLabel(Object number);
+
+  /// No description provided for @myCommandEmptyCommand.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komutun boş. Üstteki turkuaz şeride dokun ve içine ok ekle.'**
+  String get myCommandEmptyCommand;
+
+  /// No description provided for @myCommandEmptyMain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana program boş. Turkuaz Komut düğmesiyle Komut bloğunu ekle.'**
+  String get myCommandEmptyMain;
+
+  /// No description provided for @myCommandEditCommand.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi eklediğin oklar komuta girecek.'**
+  String get myCommandEditCommand;
+
+  /// No description provided for @myCommandEditMain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi eklediğin bloklar ana programa girecek.'**
+  String get myCommandEditMain;
+
+  /// No description provided for @myCommandCallAdded.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut bloğu ana programa eklendi. Robot burada komuttaki okların hepsini yapacak.'**
+  String get myCommandCallAdded;
+
+  /// No description provided for @myCommandUseHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komutun hazır. Turkuaz Komut düğmesine basıp onu ana programda kullan.'**
+  String get myCommandUseHint;
+
+  /// No description provided for @myCommandFullHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Blok sınırın doldu. Komutu değiştir ya da ana programdaki okların yerine Komut bloğu koy.'**
+  String get myCommandFullHint;
+
+  /// No description provided for @myCommandMissedGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot bayrağa ulaşamadı. Komuttaki okları ya da Komut bloğu sayısını değiştirmeyi dene.'**
+  String get myCommandMissedGoal;
+
+  /// No description provided for @myCommandOffPath.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komuttaki {place} robotu yoldan çıkarıyor.'**
+  String myCommandOffPath(Object place);
+
+  /// No description provided for @myCommandFixCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komuttaki {number}. bloğun tekrar sayısını ya da içindeki okları değiştirmeyi dene.'**
+  String myCommandFixCount(Object number);
+
+  /// No description provided for @myCommandL1Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendi komutunu yap! Üstteki turkuaz şeride iki sağ ok koy. Sonra Komut düğmesiyle komutunu ana programa ekle.'**
+  String get myCommandL1Intro;
+
+  /// No description provided for @myCommandL1Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot 6 kez sağa gitmeli. Komutun 2 sağ ok olursa onu kaç kez kullanmalısın?'**
+  String get myCommandL1Hint;
+
+  /// No description provided for @myCommandL2Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Merdiven gibi in. Bir basamak: bir sağa, bir aşağı. Komutun bu olsun.'**
+  String get myCommandL2Hint;
+
+  /// No description provided for @myCommandL3Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana programa Komut bloğunun yanında ok da ekleyebilirsin.'**
+  String get myCommandL3Intro;
+
+  /// No description provided for @myCommandL3Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşların arasında bir merdiven var: sağa, aşağı. Sonunda bir adım daha gerekiyor.'**
+  String get myCommandL3Hint;
+
+  /// No description provided for @myCommandL4Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İki sağa, bir yukarı. Bu desen kaç kez tekrar ediyor?'**
+  String get myCommandL4Hint;
+
+  /// No description provided for @myCommandL5Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot sola doğru tırmanıyor: bir yukarı, bir sola. Altınlar da bu yolda.'**
+  String get myCommandL5Hint;
+
+  /// No description provided for @myCommandL6Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her basamak iki kare geniş, bir kare yüksek.'**
+  String get myCommandL6Hint;
+
+  /// No description provided for @myCommandL7Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İki sağa, iki aşağı. Altınlar bu desenin üstünde.'**
+  String get myCommandL7Hint;
+
+  /// No description provided for @myCommandL8Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşların altından geç: önce aşağı, sonra iki sağa.'**
+  String get myCommandL8Hint;
+
+  /// No description provided for @myCommandL9Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut dört kez sağa gitsin. İki Komut bloğunun arasında robot aşağı inmeli.'**
+  String get myCommandL9Hint;
+
+  /// No description provided for @myCommandL10Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşların arasındaki altınları al: aşağı, iki sağa, yukarı.'**
+  String get myCommandL10Hint;
+
+  /// No description provided for @myCommandL11Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komutun içine Tekrarla bloğu da koyabilirsin! Böylece kısa bir komut uzun bir yol yürür.'**
+  String get myCommandL11Intro;
+
+  /// No description provided for @myCommandL11Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut üç kez sağa gitsin. Komutların arasında robot bir kez aşağı, bir kez yukarı gidiyor.'**
+  String get myCommandL11Hint;
+
+  /// No description provided for @myCommandL12Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her parça iki sağa, bir aşağı. Bir yerde araya bir aşağı adım daha giriyor.'**
+  String get myCommandL12Hint;
+
+  /// No description provided for @myCommandL13Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her basamak bir yukarı, iki sağa. Altını unutma.'**
+  String get myCommandL13Hint;
+
+  /// No description provided for @myCommandL14Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her parça iki sağa, bir yukarı. Komutların arasındaki adımlara da bak.'**
+  String get myCommandL14Hint;
+
+  /// No description provided for @myCommandL15Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her parça bir aşağı, iki sağa. Komutların arasında yol bazen düz gidiyor.'**
+  String get myCommandL15Hint;
+
+  /// No description provided for @myCommandL16Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut: üç sağa, bir aşağı. İlk komuttan sonra bir sola dönmen gerekiyor.'**
+  String get myCommandL16Hint;
+
+  /// No description provided for @myCommandL17Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her parça bir yukarı, üç sağa. Komutların arasında bir kez daha yukarı çık.'**
+  String get myCommandL17Hint;
+
+  /// No description provided for @myCommandL18Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komutun içinde iki Tekrarla bloğu olabilir: iki aşağı, iki sağa.'**
+  String get myCommandL18Hint;
+
+  /// No description provided for @myCommandL19Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut: bir sağa, iki yukarı, bir sağa. Aradaki okları kareleri sayarak bul.'**
+  String get myCommandL19Hint;
+
+  /// No description provided for @myCommandL20Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komutta önce iki basamak var: sağa, aşağı. Sonra bir adım daha sağa.'**
+  String get myCommandL20Hint;
 
   /// No description provided for @ifThenL1Intro.
   ///

@@ -17,11 +17,12 @@ final class EmptyRepeatHint extends RepeatHint {
   final int block;
 }
 
-/// Robotu yoldan çıkaran hareketin yeri ve turu.
+/// Robotu yoldan çıkaran hareketin yeri ve turu. [index] hareketin açılmış programdaki sırasıdır.
 final class FixPlaceHint extends RepeatHint {
-  const FixPlaceHint(this.step);
+  const FixPlaceHint(this.step, this.index);
 
   final ProgramStep step;
+  final int index;
 }
 
 /// Sıradaki doğru hareket ve robotun gideceği kare.
@@ -44,10 +45,15 @@ abstract final class RepeatEngine {
   /// Tekrar bloğunun sınırsız sayılabilmesi için ipucuna verilen komut sınırı.
   static const _unlimited = 1 << 30;
 
-  /// "3(RD) U" gibi bir çözüm metnini bloklara çevirir.
+  /// Çözüm metninde komut bloğunun ([CallBlock]) kısaltması.
+  static const callToken = 'C';
+
+  /// "3(RD) U" gibi bir çözüm metnini bloklara çevirir; "C" komut bloğudur.
   static List<ProgramBlock> parseSolution(String text) => [
     for (final token in text.trim().split(RegExp(r'\s+')))
-      if (_repeatToken.firstMatch(token) case final match?)
+      if (token == callToken)
+        const CallBlock()
+      else if (_repeatToken.firstMatch(token) case final match?)
         RepeatBlock(int.parse(match[1]!), Direction.parseSolution(match[2]!))
       else
         ...Direction.parseSolution(token).map(MoveBlock.new),
@@ -56,11 +62,16 @@ abstract final class RepeatEngine {
   /// Blok sayısı: her ok ve her tekrar bloğu bir sayılır; tekrar bloğunun içindekiler de sayılır.
   static int countBlocks(List<ProgramBlock> program) => program.fold(0, (sum, block) => sum + block.size);
 
-  /// Programı tek tek hareketlere açar.
-  static List<ProgramStep> expand(List<ProgramBlock> program) => [
+  /// Programı tek tek hareketlere açar. Komut bloğu [command] programının hareketlerine açılır; bu
+  /// hareketler komut bloğunun yerinden gelmiş sayılır.
+  static List<ProgramStep> expand(List<ProgramBlock> program, {List<ProgramBlock> command = const []}) => [
     for (final (index, block) in program.indexed)
       ...switch (block) {
         MoveBlock(:final direction) => [(direction: direction, block: index, inner: Places.topLevel, round: 0)],
+        CallBlock() => [
+          for (final step in expand(command))
+            (direction: step.direction, block: index, inner: Places.topLevel, round: 0),
+        ],
         RepeatBlock(:final times, :final body) => [
           for (var round = 0; round < times; round++)
             for (final (inner, direction) in body.indexed)
@@ -69,8 +80,8 @@ abstract final class RepeatEngine {
       },
   ];
 
-  static RepeatRun run(PathFinderBoard board, List<ProgramBlock> program) {
-    final trace = expand(program);
+  static RepeatRun run(PathFinderBoard board, List<ProgramBlock> program, {List<ProgramBlock> command = const []}) {
+    final trace = expand(program, command: command);
     return (result: PathFinderEngine.run(board, _directions(trace)), trace: trace);
   }
 
@@ -81,13 +92,13 @@ abstract final class RepeatEngine {
   }
 
   /// İpucu: önce boş tekrar bloğu, sonra robotu yoldan çıkaran hareket, yoksa sıradaki doğru hareket.
-  static RepeatHint hint(PathFinderBoard board, List<ProgramBlock> program) {
+  static RepeatHint hint(PathFinderBoard board, List<ProgramBlock> program, {List<ProgramBlock> command = const []}) {
     if (findEmptyRepeat(program) case final block?) {
       return EmptyRepeatHint(block);
     }
-    final trace = expand(program);
+    final trace = expand(program, command: command);
     return switch (PathFinderEngine.hint(board, _directions(trace), _unlimited)) {
-      FixCommandHint(:final index) => FixPlaceHint(trace[index]),
+      FixCommandHint(:final index) => FixPlaceHint(trace[index], index),
       final NextMoveHint move => NextStepHint(move),
       SolvedHint() => const RepeatSolvedHint(),
       // Sınır olmadığı için yalnızca bayrağa yol yoksa olur; geçerli seviyelerde bu durum yoktur.

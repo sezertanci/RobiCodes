@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Kendi Komutunu Oluştur</title>
+  <desc>Oyun ikonu. İçinde sağa ve aşağı bakan iki beyaz ok olan turkuaz bir yapboz parçası.</desc>
+  <ellipse cx="64" cy="118" rx="40" ry="6" fill="#1F2D4F" opacity="0.12"/>
+  <!-- Yapboz parçası: üstte ve sağda çıkıntı -->
+  <path d="M18 40 H44 A13 13 0 1 1 70 40 H96 V60 A13 13 0 1 1 96 86 V110 H18 Z"
+        fill="#2EC4B6" stroke="#1C9A8F" stroke-width="6" stroke-linejoin="round"/>
+  <!-- Parlama -->
+  <path d="M28 52 V70" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+  <!-- Sağ ok -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M34 66 H62"/>
+    <path d="M52 55 L63 66 L52 77"/>
+    <!-- Aşağı ok -->
+    <path d="M78 58 V94"/>
+    <path d="M67 83 L78 94 L89 83"/>
+  </g>
+</svg>

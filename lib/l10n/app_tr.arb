@@ -131,6 +131,10 @@
   "gameBugHunterDescription": "Bozuk kodu bul ve düzelt.",
   "gameBugHunterTrophy": "Usta Hata Avcısı",
   "gameBugHunterTrophyDescription": "En zor hataları bile buldun!",
+  "gameMyCommandTitle": "Kendi Komutunu Oluştur",
+  "gameMyCommandDescription": "Oklarla kendi komutunu yap, tekrar tekrar kullan.",
+  "gameMyCommandTrophy": "Komut Mimarı",
+  "gameMyCommandTrophyDescription": "Kendi komutlarınla en zor yolları çözdün!",
   "characterTitle": "Karakterini seç",
   "characterName": "{id, select, robi{Robi} fiyo{Fiyo} pervane{Pervane} isil{Işıl} kahraman{Kahraman} pembe{Pembe} sovalye{Şövalye} piril{Pırıl} other{Robi}}",
   "@characterName": {
@@ -858,6 +862,66 @@
   "bugHunterL20Hint": "Önce sağa, sonra aşağı. Her düz parçadaki kareleri say.",
   "@bugHunterInsertLabel": {"description": "Hata Avcısı'nda seçili bloğun önüne ok ekleme düğmesinin erişilebilirlik etiketi."},
   "@bugHunterReset": {"description": "Hata Avcısı'nda Temizle düğmesinin yerini alan, bozuk koda geri dönen düğme."},
+  "myCommandIntro": "Üstteki turkuaz şeride oklarla kendi komutunu yap. Sonra alttaki ana programda Komut bloğunu kullan; her Komut bloğu komuttaki okların hepsini yapar.",
+  "myCommandCommandEmpty": "Komutunu yap: buraya ok ekle.",
+  "myCommandMainEmpty": "Ana program: Komut bloğu ve ok ekle.",
+  "myCommandButton": "Komut",
+  "myCommandButtonLabel": "Ana programa Komut bloğu ekle",
+  "myCommandCallLabel": "{number}. blok: komut",
+  "@myCommandCallLabel": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "myCommandEmptyCommand": "Komutun boş. Üstteki turkuaz şeride dokun ve içine ok ekle.",
+  "myCommandEmptyMain": "Ana program boş. Turkuaz Komut düğmesiyle Komut bloğunu ekle.",
+  "myCommandEditCommand": "Şimdi eklediğin oklar komuta girecek.",
+  "myCommandEditMain": "Şimdi eklediğin bloklar ana programa girecek.",
+  "myCommandCallAdded": "Komut bloğu ana programa eklendi. Robot burada komuttaki okların hepsini yapacak.",
+  "myCommandUseHint": "Komutun hazır. Turkuaz Komut düğmesine basıp onu ana programda kullan.",
+  "myCommandFullHint": "Blok sınırın doldu. Komutu değiştir ya da ana programdaki okların yerine Komut bloğu koy.",
+  "myCommandMissedGoal": "Robot bayrağa ulaşamadı. Komuttaki okları ya da Komut bloğu sayısını değiştirmeyi dene.",
+  "myCommandOffPath": "Komuttaki {place} robotu yoldan çıkarıyor.",
+  "@myCommandOffPath": {
+    "placeholders": {
+      "place": {
+        "type": "Object"
+      }
+    }
+  },
+  "myCommandFixCount": "Komuttaki {number}. bloğun tekrar sayısını ya da içindeki okları değiştirmeyi dene.",
+  "@myCommandFixCount": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "myCommandL1Intro": "Kendi komutunu yap! Üstteki turkuaz şeride iki sağ ok koy. Sonra Komut düğmesiyle komutunu ana programa ekle.",
+  "myCommandL1Hint": "Robot 6 kez sağa gitmeli. Komutun 2 sağ ok olursa onu kaç kez kullanmalısın?",
+  "myCommandL2Hint": "Merdiven gibi in. Bir basamak: bir sağa, bir aşağı. Komutun bu olsun.",
+  "myCommandL3Intro": "Ana programa Komut bloğunun yanında ok da ekleyebilirsin.",
+  "myCommandL3Hint": "Taşların arasında bir merdiven var: sağa, aşağı. Sonunda bir adım daha gerekiyor.",
+  "myCommandL4Hint": "İki sağa, bir yukarı. Bu desen kaç kez tekrar ediyor?",
+  "myCommandL5Hint": "Robot sola doğru tırmanıyor: bir yukarı, bir sola. Altınlar da bu yolda.",
+  "myCommandL6Hint": "Her basamak iki kare geniş, bir kare yüksek.",
+  "myCommandL7Hint": "İki sağa, iki aşağı. Altınlar bu desenin üstünde.",
+  "myCommandL8Hint": "Taşların altından geç: önce aşağı, sonra iki sağa.",
+  "myCommandL9Hint": "Komut dört kez sağa gitsin. İki Komut bloğunun arasında robot aşağı inmeli.",
+  "myCommandL10Hint": "Taşların arasındaki altınları al: aşağı, iki sağa, yukarı.",
+  "myCommandL11Intro": "Komutun içine Tekrarla bloğu da koyabilirsin! Böylece kısa bir komut uzun bir yol yürür.",
+  "myCommandL11Hint": "Komut üç kez sağa gitsin. Komutların arasında robot bir kez aşağı, bir kez yukarı gidiyor.",
+  "myCommandL12Hint": "Her parça iki sağa, bir aşağı. Bir yerde araya bir aşağı adım daha giriyor.",
+  "myCommandL13Hint": "Her basamak bir yukarı, iki sağa. Altını unutma.",
+  "myCommandL14Hint": "Her parça iki sağa, bir yukarı. Komutların arasındaki adımlara da bak.",
+  "myCommandL15Hint": "Her parça bir aşağı, iki sağa. Komutların arasında yol bazen düz gidiyor.",
+  "myCommandL16Hint": "Komut: üç sağa, bir aşağı. İlk komuttan sonra bir sola dönmen gerekiyor.",
+  "myCommandL17Hint": "Her parça bir yukarı, üç sağa. Komutların arasında bir kez daha yukarı çık.",
+  "myCommandL18Hint": "Komutun içinde iki Tekrarla bloğu olabilir: iki aşağı, iki sağa.",
+  "myCommandL19Hint": "Komut: bir sağa, iki yukarı, bir sağa. Aradaki okları kareleri sayarak bul.",
+  "myCommandL20Hint": "Komutta önce iki basamak var: sağa, aşağı. Sonra bir adım daha sağa.",
   "ifThenL1Intro": "Önünde taş varsa robot ne yapmalı? Boş kutuya bir hareket koy.",
   "ifThenL2Intro": "Robot yüzemez. Önünde su varsa ne yapmalı?",
   "ifThenL3Intro": "Yolda kapalı bir kapı var. Kapının önüne gelince ne yapmalı?",

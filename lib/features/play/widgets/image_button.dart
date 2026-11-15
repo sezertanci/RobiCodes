@@ -44,17 +44,20 @@ final class ImageButton extends StatelessWidget {
         excludeSemantics: true,
         child: GestureDetector(
           onTap: onPressed,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(size / 3),
-              boxShadow: highlighted
-                  ? const [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)]
-                  : null,
+          // Boy anında uygulanır; yalnızca ışık geçişlidir. Boy da geçişli olsaydı düzen yeni boya göre
+          // hesaplanırken düğme bir an eski boyda kalır ve satır taşardı.
+          child: SizedBox.square(
+            dimension: size,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(size / 3),
+                boxShadow: highlighted
+                    ? const [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)]
+                    : null,
+              ),
+              child: Opacity(opacity: onPressed == null ? _disabledOpacity : 1, child: SvgPicture.asset(asset)),
             ),
-            child: Opacity(opacity: onPressed == null ? _disabledOpacity : 1, child: SvgPicture.asset(asset)),
           ),
         ),
       ),

@@ -13,11 +13,13 @@ abstract final class GameIds {
   static const ifThen = 'if-then';
   static const repeat = 'repeat';
   static const bugHunter = 'bug-hunter';
+  static const myCommand = 'my-command';
 }
 
 /// Play Console'daki ürün kimlikleri. Yayından sonra değiştirilmez.
 abstract final class ProductIds {
   static const bugHunterBase = 'pack.bug_hunter.base';
+  static const myCommandBase = 'pack.my_command.base';
 }
 
 /// Mevcut oyunlardaki seviye düzeni: her zorluk grubunda 5 seviye.
@@ -87,6 +89,14 @@ final _paidGames = [
     icon: AppAssets.gameBug,
     trophy: GameTrophy(title: (t) => t.gameBugHunterTrophy, description: (t) => t.gameBugHunterTrophyDescription),
   ),
+  GameDefinition(
+    id: GameIds.myCommand,
+    title: (t) => t.gameMyCommandTitle,
+    description: (t) => t.gameMyCommandDescription,
+    tone: AppTones.teal,
+    icon: AppAssets.gameCommand,
+    trophy: GameTrophy(title: (t) => t.gameMyCommandTrophy, description: (t) => t.gameMyCommandTrophyDescription),
+  ),
 ];
 
 /// Uygulamanın içerik kataloğu: ücretsiz oyunların temel paketleri ve ücretli oyunların satın alınan
@@ -102,6 +112,11 @@ ContentCatalog buildContentCatalog() => ContentCatalog(
       id: ProductIds.bugHunterBase,
       title: (t) => t.gameBugHunterTitle,
       packIds: [basePackId(GameIds.bugHunter)],
+    ),
+    StoreProduct(
+      id: ProductIds.myCommandBase,
+      title: (t) => t.gameMyCommandTitle,
+      packIds: [basePackId(GameIds.myCommand)],
     ),
   ],
 );

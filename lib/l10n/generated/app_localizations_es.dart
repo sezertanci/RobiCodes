@@ -208,6 +208,20 @@ class AppLocalizationsEs extends AppLocalizations {
       '¡Encontraste hasta los errores más difíciles!';
 
   @override
+  String get gameMyCommandTitle => 'Crea tu comando';
+
+  @override
+  String get gameMyCommandDescription =>
+      'Haz tu propio comando con flechas y úsalo una y otra vez.';
+
+  @override
+  String get gameMyCommandTrophy => 'Arquitecto de comandos';
+
+  @override
+  String get gameMyCommandTrophyDescription =>
+      '¡Resolviste los caminos más difíciles con tus propios comandos!';
+
+  @override
   String get characterTitle => 'Elige tu personaje';
 
   @override
@@ -1321,6 +1335,163 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get bugHunterL20Hint =>
       'Primero a la derecha y luego abajo. Cuenta las casillas de cada tramo recto.';
+
+  @override
+  String get myCommandIntro =>
+      'Haz tu propio comando con flechas en la franja turquesa de arriba. Luego usa el bloque Comando en el programa principal de abajo; cada bloque Comando hace todas las flechas del comando.';
+
+  @override
+  String get myCommandCommandEmpty => 'Haz tu comando: añade una flecha aquí.';
+
+  @override
+  String get myCommandMainEmpty =>
+      'Programa principal: añade un bloque Comando y flechas.';
+
+  @override
+  String get myCommandButton => 'Comando';
+
+  @override
+  String get myCommandButtonLabel =>
+      'Añadir un bloque Comando al programa principal';
+
+  @override
+  String myCommandCallLabel(Object number) {
+    return 'Bloque $number: comando';
+  }
+
+  @override
+  String get myCommandEmptyCommand =>
+      'Tu comando está vacío. Toca la franja turquesa de arriba y añade flechas.';
+
+  @override
+  String get myCommandEmptyMain =>
+      'El programa principal está vacío. Añade el bloque Comando con el botón turquesa Comando.';
+
+  @override
+  String get myCommandEditCommand =>
+      'Las flechas que añadas ahora entrarán en el comando.';
+
+  @override
+  String get myCommandEditMain =>
+      'Los bloques que añadas ahora entrarán en el programa principal.';
+
+  @override
+  String get myCommandCallAdded =>
+      'El bloque Comando se añadió al programa principal. Aquí el robot hará todas las flechas del comando.';
+
+  @override
+  String get myCommandUseHint =>
+      'Tu comando está listo. Toca el botón turquesa Comando para usarlo en el programa principal.';
+
+  @override
+  String get myCommandFullHint =>
+      'Llegaste al límite de bloques. Cambia el comando o sustituye las flechas del programa principal por un bloque Comando.';
+
+  @override
+  String get myCommandMissedGoal =>
+      'El robot no llegó a la bandera. Prueba a cambiar las flechas del comando o el número de bloques Comando.';
+
+  @override
+  String myCommandOffPath(Object place) {
+    return '$place en el comando saca al robot del camino.';
+  }
+
+  @override
+  String myCommandFixCount(Object number) {
+    return 'Prueba a cambiar el número de repeticiones del bloque $number del comando o las flechas que tiene dentro.';
+  }
+
+  @override
+  String get myCommandL1Intro =>
+      '¡Crea tu propio comando! Pon dos flechas a la derecha en la franja turquesa de arriba. Luego añade tu comando al programa principal con el botón Comando.';
+
+  @override
+  String get myCommandL1Hint =>
+      'El robot debe ir 6 veces a la derecha. Si tu comando son 2 flechas a la derecha, ¿cuántas veces debes usarlo?';
+
+  @override
+  String get myCommandL2Hint =>
+      'Baja como por una escalera. Un escalón: una a la derecha, una abajo. Que ese sea tu comando.';
+
+  @override
+  String get myCommandL3Intro =>
+      'En el programa principal también puedes añadir flechas junto al bloque Comando.';
+
+  @override
+  String get myCommandL3Hint =>
+      'Entre las piedras hay una escalera: derecha, abajo. Al final falta un paso más.';
+
+  @override
+  String get myCommandL4Hint =>
+      'Dos a la derecha, una arriba. ¿Cuántas veces se repite este patrón?';
+
+  @override
+  String get myCommandL5Hint =>
+      'El robot sube hacia la izquierda: una arriba, una a la izquierda. El oro también está en este camino.';
+
+  @override
+  String get myCommandL6Hint =>
+      'Cada escalón mide dos casillas de ancho y una de alto.';
+
+  @override
+  String get myCommandL7Hint =>
+      'Dos a la derecha, dos abajo. El oro está a lo largo de este patrón.';
+
+  @override
+  String get myCommandL8Hint =>
+      'Pasa por debajo de las piedras: primero abajo, luego dos a la derecha.';
+
+  @override
+  String get myCommandL9Hint =>
+      'Que el comando vaya cuatro veces a la derecha. Entre los dos bloques Comando, el robot debe bajar.';
+
+  @override
+  String get myCommandL10Hint =>
+      'Recoge el oro entre las piedras: abajo, dos a la derecha, arriba.';
+
+  @override
+  String get myCommandL11Intro =>
+      '¡También puedes poner un bloque Repetir dentro de tu comando! Así, un comando corto recorre un camino largo.';
+
+  @override
+  String get myCommandL11Hint =>
+      'Que el comando vaya tres veces a la derecha. Entre los comandos, el robot baja una vez y sube una vez.';
+
+  @override
+  String get myCommandL12Hint =>
+      'Cada parte es dos a la derecha, una abajo. En un sitio se cuela un paso más hacia abajo.';
+
+  @override
+  String get myCommandL13Hint =>
+      'Cada escalón es una arriba, dos a la derecha. No olvides el oro.';
+
+  @override
+  String get myCommandL14Hint =>
+      'Cada parte es dos a la derecha, una arriba. Fíjate también en los pasos entre los comandos.';
+
+  @override
+  String get myCommandL15Hint =>
+      'Cada parte es una abajo, dos a la derecha. Entre los comandos, el camino a veces sigue recto.';
+
+  @override
+  String get myCommandL16Hint =>
+      'Comando: tres a la derecha, una abajo. Después del primer comando tienes que girar una vez a la izquierda.';
+
+  @override
+  String get myCommandL17Hint =>
+      'Cada parte es una arriba, tres a la derecha. Entre los comandos, sube una vez más.';
+
+  @override
+  String get myCommandL18Hint =>
+      'Dentro del comando puede haber dos bloques Repetir: dos abajo, dos a la derecha.';
+
+  @override
+  String get myCommandL19Hint =>
+      'Comando: una a la derecha, dos arriba, una a la derecha. Encuentra las flechas del medio contando casillas.';
+
+  @override
+  String get myCommandL20Hint =>
+      'El comando empieza con dos escalones: derecha, abajo. Después, un paso más a la derecha.';
 
   @override
   String get ifThenL1Intro =>

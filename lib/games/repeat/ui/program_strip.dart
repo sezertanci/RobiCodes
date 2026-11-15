@@ -4,22 +4,55 @@ import '../../../app/app_theme.dart';
 import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
 import '../../../l10n/l10n.dart';
-import '../repeat_controller.dart';
+import '../program_models.dart';
 import '../repeat_texts.dart';
+import 'call_chip.dart';
 import 'repeat_block_view.dart';
 
 /// Blok şeridi: oklar ve turuncu tekrar blokları sırayla tek satırda durur, sığmazsa yatay kayar.
 /// Bir bloğa dokunmak onu seçer; seçiliyken sağda, sayacın altında "Sil" ve (bloğun içindeki ok için) "Dışarı çıkar"
 /// düğmeleri çıkar. Şeridin ve yön tuşlarının ([tapGroup]) dışına dokunulunca seçim kalkar. Çalışan,
-/// hatalı, seçili ya da açık blok görünür tutulur.
+/// hatalı, seçili ya da açık blok görünür tutulur. Komut bloğu ([CallBlock]) turkuaz yapboz çipiyle gösterilir.
 final class ProgramStrip extends StatefulWidget {
-  const ProgramStrip({required this.controller, required this.chipSize, required this.compact, super.key});
+  const ProgramStrip({
+    required this.controller,
+    required this.chipSize,
+    required this.compact,
+    this.emptyText,
+    this.showCounter = true,
+    this.active = false,
+    this.onActivate,
+    this.leading,
+    super.key,
+  });
 
-  final RepeatController controller;
+  final ProgramStripModel controller;
   final double chipSize;
 
   /// Dar ekranda bloğun etiketi kısalır.
   final bool compact;
+
+  /// Şerit boşken yazan metin; verilmezse "Tekrar Et" metni kullanılır.
+  final String? emptyText;
+
+  /// Sağ sütunda blok sayacı gösterilir mi.
+  final bool showCounter;
+
+  /// Yön tuşları bu şeride ekliyorsa turkuaz çerçeve alır (iki şeritli ekranda).
+  final bool active;
+
+  /// Şeride dokunulunca çağrılır; iki şeritli ekranda yön tuşlarını bu şeride yönlendirir.
+  final VoidCallback? onActivate;
+
+  /// Şeridin solundaki başlık (ör. komut simgesi).
+  final Widget? leading;
+
+  /// Etkin şeridin çerçeve rengi ve kalınlığı.
+  static const activeColor = AppColors.teal;
+  static const _activeBorder = 4.0;
+
+  /// Material kartının varsayılan köşe yarıçapı; çerçeveli kart da aynı köşede kalır.
+  static const _cardRadius = 12.0;
 
   /// Seçimi kaldırmayan dokunma bölgelerinin ortak grubu; yön tuşu seçili oku değiştirebilsin diye
   /// yön tuşları da bu gruptadır.
@@ -41,7 +74,7 @@ final class _ProgramStripState extends State<ProgramStrip> {
   final Map<ProgramPlace, GlobalKey> _keys = {};
   ProgramPlace? _lastFocus;
 
-  RepeatController get _controller => widget.controller;
+  ProgramStripModel get _controller => widget.controller;
 
   /// Düzenleme düğmelerinin blok boyuna oranı; iki düğme ile sayaç şeridin yüksekliğine sığar.
   static const _editButtonRatio = 0.8;
@@ -75,31 +108,44 @@ final class _ProgramStripState extends State<ProgramStrip> {
   @override
   Widget build(BuildContext context) {
     _revealFocus();
-    return TapRegion(
+    final strip = TapRegion(
       groupId: ProgramStrip.tapGroup,
       onTapOutside: (_) => _controller.clearSelection(),
       child: Card(
         margin: EdgeInsets.zero,
+        shape: widget.active
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(ProgramStrip._cardRadius),
+                side: const BorderSide(color: ProgramStrip.activeColor, width: ProgramStrip._activeBorder),
+              )
+            : null,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
             children: [
+              if (widget.leading case final leading?) ...[leading, const SizedBox(width: 8)],
               Expanded(
                 child: SizedBox(height: ProgramStrip.heightFor(widget.chipSize), child: _list()),
               ),
               const SizedBox(width: 8),
-              _SidePanel(controller: _controller, buttonSize: widget.chipSize * _editButtonRatio),
+              _SidePanel(
+                controller: _controller,
+                buttonSize: widget.chipSize * _editButtonRatio,
+                showCounter: widget.showCounter,
+              ),
             ],
           ),
         ),
       ),
     );
+    final onActivate = widget.onActivate;
+    return onActivate == null ? strip : Listener(onPointerDown: (_) => onActivate(), child: strip);
   }
 
   Widget _list() {
     final program = _controller.program;
     if (program.isEmpty) {
-      return Align(alignment: Alignment.centerLeft, child: Text(context.l10n.repeatEmptyStrip));
+      return Align(alignment: Alignment.centerLeft, child: Text(widget.emptyText ?? context.l10n.repeatEmptyStrip));
     }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -138,6 +184,16 @@ final class _ProgramStripState extends State<ProgramStrip> {
         compact: widget.compact,
         keyOf: _keyOf,
       ),
+      CallBlock() => CallChip(
+        key: _keyOf(place),
+        label: context.l10n.myCommandCallLabel(index + 1),
+        number: index + 1,
+        size: widget.chipSize,
+        selected: _controller.selected == place,
+        active: _controller.activeStep?.block == index,
+        wrong: _controller.wrongPlace == place,
+        onTap: _controller.isRunning ? null : () => _controller.toggleSelection(place),
+      ),
     };
   }
 }
@@ -146,10 +202,11 @@ final class _ProgramStripState extends State<ProgramStrip> {
 /// içindeki ok için dışarı çıkar ve hazır programı düzeltme kurallarında önüne ekle). Düğmeler şeridin yanında durduğu için seçim yapınca ekranın
 /// düzeni değişmez; dar telefonda da harita ve kontroller yerinde kalır.
 final class _SidePanel extends StatelessWidget {
-  const _SidePanel({required this.controller, required this.buttonSize});
+  const _SidePanel({required this.controller, required this.buttonSize, required this.showCounter});
 
-  final RepeatController controller;
+  final ProgramStripModel controller;
   final double buttonSize;
+  final bool showCounter;
 
   static const _gap = 6.0;
 
@@ -160,12 +217,13 @@ final class _SidePanel extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          '${controller.blockCount} / ${controller.maxBlocks}',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.navy),
-        ),
+        if (showCounter)
+          Text(
+            '${controller.blockCount} / ${controller.maxBlocks}',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.navy),
+          ),
         if (selected != null) ...[
-          const SizedBox(height: _gap),
+          if (showCounter) const SizedBox(height: _gap),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [

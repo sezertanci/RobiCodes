@@ -42,6 +42,22 @@
   görünür. "Temizle" yerine "Baştan al" düğmesi bozuk koda geri döner. Tekrarla düğmesi yalnızca tekrarlı
   seviyelerde (11–20) görünür.
 
+### İkinci ücretli oyun: Kendi Komutunu Oluştur (15.11.2026)
+
+- "Tekrar Et" haritalarıyla oynanır. Ekranda iki alan vardır: üstte oklar dizilerek tek bir komut tanımlanır,
+  altta ana program yazılır. Ana programın blok sınırı dar tutulur; çocuk tekrar eden hareketi komuta taşımak
+  zorunda kalır.
+- Komut, ana programda adı yazmayan turkuaz bir yapboz bloğu olarak görünür.
+- Tekrarla bloğu yalnızca 11–20. seviyelerde açılır; 1–10 yalnızca oklar ve komutla oynanır.
+- 20 seviye, 4 zorluk grubu. Deneme Hata Avcısı ile aynıdır: her grubun ilk seviyesi ücretsiz (toplam 4).
+- Görünüm: turkuaz renk, ikonda içinde oklar olan yapboz parçası.
+- Adlar: Kendi Komutunu Oluştur (tr), Make Your Own Command (en), Eigener Befehl (de), Crea tu comando (es),
+  Crée ta commande (fr), Crie seu comando (pt), Crea il tuo comando (it), Buat Perintahmu (id).
+- Ürün kimliği `pack.my_command.base`; fiyat Hata Avcısı ile aynı (müşteri 29,99 TL, yurt dışı 1,99 USD).
+- Ana sayfa kartındaki oyun adı iki satıra sığmazsa yazı boyu 24 → 21 → 18 olarak küçülür; ad kesilmez.
+- Görselli düğmelerde (`ImageButton`) boy anında değişir, yalnızca sarı ışık geçişlidir. Boy geçişi, program
+  dolup düğmeler küçülürken tablette yan yana düzenin bir an taşmasına yol açıyordu.
+
 ## Ses efektleri
 
 - Web sürümünde sesler kodla üretilir. Flutter sürümünde bu sesler **dosya olarak** hazırlanır ve

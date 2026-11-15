@@ -16,11 +16,15 @@ import 'engine/repeat_engine.dart';
 import 'engine/repeat_level.dart';
 import 'engine/repeat_program.dart';
 import 'engine/starting_program.dart';
+import 'program_editor.dart';
+import 'program_models.dart';
 import 'repeat_texts.dart';
 
 /// Bir seviyenin oynanış durumu: bloklar, açık tekrar bloğu, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
-final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRunScene {
+final class RepeatController extends ChangeNotifier
+    with LevelLifecycle, BoardRunScene
+    implements ProgramStripModel, ProgramControlsModel {
   RepeatController({
     required this.level,
     required this.onCompleted,
@@ -30,9 +34,8 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
     this.startingProgram,
   }) : boardRun = BoardRun(level.board),
        voice = RobotVoice(feedback: feedback, intro: _introOf(level)),
-       targetBlocks = RepeatEngine.countBlocks(RepeatEngine.parseSolution(level.solution)) {
-    _program.addAll(startingProgram?.blocks ?? const []);
-  }
+       targetBlocks = RepeatEngine.countBlocks(RepeatEngine.parseSolution(level.solution)),
+       _editor = ProgramEditor(startingProgram?.blocks ?? const []);
 
   static const defaultStepDuration = PathFinderController.defaultStepDuration;
   static const reducedStepDuration = PathFinderController.reducedStepDuration;
@@ -60,81 +63,79 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
   @override
   final RobotVoice voice;
 
-  final List<ProgramBlock> _program = [];
-  int? _target;
-  ProgramPlace? _selected;
+  final ProgramEditor _editor;
   ProgramStep? _activeStep;
   ProgramPlace? _wrongPlace;
   bool _hintUsed = false;
   bool _running = false;
-  bool _inserting = false;
 
-  List<ProgramBlock> get program => List.unmodifiable(_program);
-  int get blockCount => RepeatEngine.countBlocks(_program);
+  @override
+  List<ProgramBlock> get program => _editor.program;
+  @override
+  int get blockCount => _editor.blockCount;
+  @override
   int get maxBlocks => level.maxBlocks;
+  @override
   bool get isFull => blockCount >= maxBlocks;
+  @override
   bool get isRunning => _running;
 
-  /// Okların içine eklendiği (açık) tekrar bloğunun sırası.
-  int? get target => _target;
-  ProgramPlace? get selected => _selected;
+  @override
+  int? get target => _editor.target;
+  @override
+  bool get isInsideRepeat => target != null;
+  @override
+  ProgramPlace? get selected => _editor.selected;
 
-  /// Çalışırken o anki hareketin geldiği yer ve tur.
+  @override
   ProgramStep? get activeStep => _activeStep;
 
-  /// Robotu yoldan çıkaran yer (kırmızıyla gösterilir).
+  @override
   ProgramPlace? get wrongPlace => _wrongPlace;
   bool get hintUsed => _hintUsed;
 
   /// Hazır programı düzeltme kuralları geçerli mi (bkz. [StartingProgram]).
+  @override
   bool get fixesProgram => startingProgram != null;
 
-  /// Tekrarla düğmesi gösterilir mi.
+  @override
   bool get allowsRepeat => startingProgram?.allowsRepeat ?? true;
 
-  /// "Önüne ekle" seçili: sonraki yön, seçili bloğun önüne eklenir.
-  bool get isInserting => _inserting;
+  @override
+  bool get isInserting => _editor.isInserting;
 
-  /// Seçili bloğun önüne ok eklenebilir mi.
-  bool get canInsert => fixesProgram && !_running && _selected != null && !isFull;
+  @override
+  bool get canInsert => fixesProgram && !_running && selected != null && !isFull;
 
   /// Yön tuşu seçili oku değiştirir mi.
-  bool get _replacesSelection => fixesProgram && !_inserting && _selectedMove != null;
-
-  /// Seçili yerdeki ok; seçili yer tekrar bloğuysa ya da seçim yoksa `null`.
-  Direction? get _selectedMove => switch (_selected) {
-    null => null,
-    final place when Places.isInner(place) => (_program[place.block] as RepeatBlock).body[place.inner],
-    final place => switch (_program[place.block]) {
-      MoveBlock(:final direction) => direction,
-      RepeatBlock() => null,
-    },
-  };
+  bool get _replacesSelection => fixesProgram && !isInserting && _editor.selectedMove != null;
 
   /// Ok değiştirmek blok sayısını artırmadığı için sınır doluyken de yapılabilir.
+  @override
   bool get canAddMove => !_running && (!isFull || _replacesSelection);
 
   /// Tekrarla düğmesi blok açıkken bloktan çıkarır; kapalıyken ancak blok ve içine bir ok sığıyorsa ekler.
+  @override
   bool get canUseRepeatButton =>
-      allowsRepeat && !_running && (_target != null || blockCount + repeatWithMove <= maxBlocks);
+      allowsRepeat && !_running && (target != null || blockCount + repeatWithMove <= maxBlocks);
 
   LocalizedText get message => voice.message;
   RobotMood get mood => voice.mood;
 
   /// Düzeltme kurallarında seçili oku değiştirir ya da "Önüne ekle" seçiliyse oku seçili bloğun önüne
   /// ekler. Bunların dışında oku açık tekrar bloğunun içine, yoksa programın sonuna ekler.
+  @override
   void addMove(Direction direction) {
     if (!canAddMove) {
       return;
     }
-    final selected = _selected;
+    final replace = _replacesSelection;
+    final insert = isInserting && selected != null;
     _changeProgram(() {
-      if (_replacesSelection) {
-        _putMove(selected!, direction, replace: true);
-      } else if (_inserting && selected != null) {
-        _putMove(selected, direction, replace: false);
+      if (replace || insert) {
+        _editor.putMove(direction, replace: replace);
       } else {
-        _appendMove(direction);
+        _editor.appendMove(direction);
       }
     });
     if (isFull) {
@@ -143,167 +144,118 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
     notifyListeners();
   }
 
-  void _appendMove(Direction direction) {
-    final target = _target;
-    if (target == null) {
-      _program.add(MoveBlock(direction));
-    } else {
-      final block = _program[target] as RepeatBlock;
-      _program[target] = block.copyWith(body: [...block.body, direction]);
-    }
-  }
-
-  /// Oku [place] yerine koyar ([replace]) ya da o yerin önüne ekler. Önüne eklemede açık blok kayar.
-  void _putMove(ProgramPlace place, Direction direction, {required bool replace}) {
-    final remove = replace ? 1 : 0;
-    if (Places.isInner(place)) {
-      final block = _program[place.block] as RepeatBlock;
-      final body = [...block.body]..replaceRange(place.inner, place.inner + remove, [direction]);
-      _program[place.block] = block.copyWith(body: body);
-      return;
-    }
-    _program.replaceRange(place.block, place.block + remove, [MoveBlock(direction)]);
-    final target = _target;
-    if (!replace && target != null && target >= place.block) _target = target + 1;
-  }
-
   /// "Önüne ekle" düğmesi: sonraki yönün seçili bloğun önüne eklenmesini açar ya da kapatır.
+  @override
   void toggleInserting() {
     if (!canInsert) {
       return;
     }
-    _inserting = !_inserting;
-    voice.say((t) => _inserting ? t.bugHunterPickInsert : t.bugHunterSelected);
+    _editor.toggleInserting();
+    voice.say((t) => isInserting ? t.bugHunterPickInsert : t.bugHunterSelected);
     notifyListeners();
   }
 
   /// Tekrarla düğmesi: blok açıksa bloktan çıkar, değilse yeni bir tekrar bloğu ekleyip açar.
+  @override
   void pressRepeatButton() {
     if (!canUseRepeatButton) {
       return;
     }
-    if (_target != null) {
-      _target = null;
+    if (target != null) {
+      _editor.closeTarget();
       voice.say((t) => t.repeatOutsideRepeat);
       notifyListeners();
       return;
     }
-    _changeProgram(() => _program.add(const RepeatBlock(RepeatBlock.defaultTimes, [])));
-    _target = _program.length - 1;
+    _changeProgram(() => _editor.appendBlock(const RepeatBlock(RepeatBlock.defaultTimes, [])));
     voice.say((t) => isFull ? t.repeatFull : t.repeatInsideRepeat);
     notifyListeners();
   }
 
   /// Tekrar sayısını bir azaltır (-1) ya da artırır (+1); sayı sınırlar içinde kalır.
+  @override
   void changeTimes(int index, int offset) {
-    final block = _program[index];
-    if (_running || block is! RepeatBlock) {
-      return;
+    if (!_running && program[index] is RepeatBlock) {
+      _changeProgram(() => _editor.changeTimes(index, offset));
+      notifyListeners();
     }
-    final times = (block.times + offset).clamp(RepeatBlock.minTimes, RepeatBlock.maxTimes);
-    _changeProgram(() => _program[index] = block.copyWith(times: times));
-    notifyListeners();
   }
 
   /// Tekrar bloğunun etiketine dokunulunca blok açılır (oklar içine eklenir) ya da kapanır.
+  @override
   void toggleTarget(int index) {
     if (_running) {
       return;
     }
-    final leaving = _target == index;
-    _target = leaving ? null : index;
-    _selected = leaving ? null : Places.top(index);
-    _inserting = false;
+    final leaving = _editor.toggleTarget(index);
     voice.say((t) => leaving ? t.repeatOutsideRepeat : t.repeatInsideRepeat);
     notifyListeners();
   }
 
+  @override
   void toggleSelection(ProgramPlace place) {
     if (_running) {
       return;
     }
-    _selected = _selected == place ? null : place;
-    _inserting = false;
-    if (fixesProgram && _selected != null) {
+    _editor.toggleSelection(place);
+    if (fixesProgram && selected != null) {
       voice.say((t) => t.bugHunterSelected);
     }
     notifyListeners();
   }
 
+  @override
   void clearSelection() {
-    if (_selected != null) {
-      _selected = null;
-      _inserting = false;
+    if (_editor.clearSelection()) {
       notifyListeners();
     }
   }
 
+  @override
   void deleteSelected() {
-    final place = _selected;
-    if (_running || place == null) {
-      return;
+    if (!_running && selected != null) {
+      _changeProgram(_editor.deleteSelected);
+      notifyListeners();
     }
-    _changeProgram(() {
-      if (Places.isInner(place)) {
-        final block = _program[place.block] as RepeatBlock;
-        _program[place.block] = block.copyWith(body: [...block.body]..removeAt(place.inner));
-        return;
-      }
-      _program.removeAt(place.block);
-      _target = switch (_target) {
-        final target? when target == place.block => null,
-        final target? when target > place.block => target - 1,
-        final target => target,
-      };
-    });
-    notifyListeners();
   }
 
   /// Bloğun içindeki seçili oku bloğun hemen arkasına taşır; sonraki oklar da dışarıya eklenir.
+  @override
   void moveSelectedOut() {
-    final place = _selected;
+    final place = selected;
     if (_running || place == null || !Places.isInner(place)) {
       return;
     }
-    _changeProgram(() {
-      final block = _program[place.block] as RepeatBlock;
-      _program[place.block] = block.copyWith(body: [...block.body]..removeAt(place.inner));
-      _program.insert(place.block + 1, MoveBlock(block.body[place.inner]));
-      _target = null;
-    });
+    _changeProgram(_editor.moveSelectedOut);
     voice.say((t) => t.repeatMovedOut);
     notifyListeners();
   }
 
   /// Programı boşaltır; düzeltme kurallarında hazır programa geri döner ("Baştan al").
+  @override
   void clear() {
     if (_running) {
       return;
     }
-    _changeProgram(() {
-      _program
-        ..clear()
-        ..addAll(startingProgram?.blocks ?? const []);
-      _target = null;
-    });
+    _changeProgram(() => _editor.reset(startingProgram?.blocks ?? const []));
     voice.say(_introOf(level));
     notifyListeners();
   }
 
   /// İpucu ister. İpucu bir kez kullanılınca seviyeden en fazla 1 yıldız alınır.
+  @override
   void showHint() {
     if (_running) {
       return;
     }
     _hintUsed = true;
     boardRun.hint = null;
-    switch (RepeatEngine.hint(board, _program)) {
+    switch (RepeatEngine.hint(board, program)) {
       case EmptyRepeatHint(:final block):
-        _target = block;
-        _selected = null;
+        _editor.openTarget(block);
         voice.say((t) => t.repeatEmptyRepeat);
       case FixPlaceHint(:final step):
-        _selected = Places.of(step);
+        _editor.select(Places.of(step));
         _wrongPlace = Places.of(step);
         voice.say(RepeatTexts.fixHint(step));
       case NextStepHint(:final move):
@@ -321,29 +273,30 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
   }
 
   /// Blokları çalıştırır ve robotu adım adım yürütür. Başarıda kutlamadan sonra yıldızları bildirir.
+  @override
   Future<void> run() async {
     if (_running) {
       return;
     }
-    if (_program.isEmpty) {
+    if (_editor.isEmpty) {
       voice.say((t) => t.repeatEmpty);
       notifyListeners();
       return;
     }
-    if (RepeatEngine.findEmptyRepeat(_program) case final empty?) {
-      _target = empty;
+    if (RepeatEngine.findEmptyRepeat(program) case final empty?) {
+      _editor.openTarget(empty);
       voice.say((t) => t.repeatEmptyRepeat);
       notifyListeners();
       return;
     }
     _running = true;
-    _target = null;
-    _selected = null;
-    _inserting = false;
+    _editor
+      ..closeTarget()
+      ..clearSelection();
     _resetBoard();
     voice.say((t) => t.gameRobotRunning);
     notifyListeners();
-    final run = RepeatEngine.run(board, _program);
+    final run = RepeatEngine.run(board, program);
     final played = await boardRun.play(
       run.result,
       directions: [for (final step in run.trace) step.direction],
@@ -386,8 +339,7 @@ final class RepeatController extends ChangeNotifier with LevelLifecycle, BoardRu
   /// Bloklar değişince robot başa döner, eski ipucu ve işaretler silinir.
   void _changeProgram(VoidCallback update) {
     update();
-    _selected = null;
-    _inserting = false;
+    _editor.clearSelection();
     _resetBoard();
   }
 

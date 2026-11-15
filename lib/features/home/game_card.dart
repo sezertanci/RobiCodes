@@ -52,6 +52,12 @@ final class GameCard extends StatelessWidget {
   static const _iconSize = 64.0;
   static const _narrowBadgeSize = 68.0;
   static const _narrowIconSize = 52.0;
+  static const _titleLines = 2;
+
+  /// Başlık iki satıra sığana kadar sırayla denenen yazı boyları; en küçüğü de sığmazsa üç noktayla kesilir.
+  static const _titleSizes = [24.0, 21.0, 18.0];
+
+  static TextStyle _titleStyleOf(double size) => TextStyle(fontSize: size, fontWeight: FontWeight.w900, height: 1.1);
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +78,13 @@ final class GameCard extends StatelessWidget {
               iconSize: narrow ? _narrowIconSize : _iconSize,
             ),
             const SizedBox(height: _gap),
-            Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, height: 1.1),
+            LayoutBuilder(
+              builder: (context, constraints) => Text(
+                title,
+                maxLines: _titleLines,
+                overflow: TextOverflow.ellipsis,
+                style: _fittingTitleStyle(context, title, constraints.maxWidth),
+              ),
             ),
             const SizedBox(height: _gap),
             Expanded(
@@ -102,6 +110,26 @@ final class GameCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Uzun başlıklar (ör. "Kendi Komutunu Oluştur") iki satıra sığsın diye yazı boyu gerekirse küçülür.
+TextStyle _fittingTitleStyle(BuildContext context, String title, double maxWidth) {
+  final base = DefaultTextStyle.of(context).style;
+  for (final size in GameCard._titleSizes) {
+    final style = GameCard._titleStyleOf(size);
+    final painter = TextPainter(
+      text: TextSpan(text: title, style: base.merge(style)),
+      maxLines: GameCard._titleLines,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout(maxWidth: maxWidth);
+    final fits = !painter.didExceedMaxLines;
+    painter.dispose();
+    if (fits) {
+      return style;
+    }
+  }
+  return GameCard._titleStyleOf(GameCard._titleSizes.last);
 }
 
 /// Beyaz ilerleme çubuğu, altında seviye metni ve yıldız sayısı.

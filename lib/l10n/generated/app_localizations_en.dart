@@ -206,6 +206,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'You found even the trickiest bugs!';
 
   @override
+  String get gameMyCommandTitle => 'Make Your Own Command';
+
+  @override
+  String get gameMyCommandDescription =>
+      'Make your own command with arrows and use it again and again.';
+
+  @override
+  String get gameMyCommandTrophy => 'Command Architect';
+
+  @override
+  String get gameMyCommandTrophyDescription =>
+      'You solved the trickiest paths with your own commands!';
+
+  @override
   String get characterTitle => 'Choose your character';
 
   @override
@@ -1306,6 +1320,162 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bugHunterL20Hint =>
       'First right, then down. Count the squares in each straight part.';
+
+  @override
+  String get myCommandIntro =>
+      'Make your own command with arrows in the turquoise strip at the top. Then use the Command block in the main program below; every Command block does all the arrows in the command.';
+
+  @override
+  String get myCommandCommandEmpty => 'Make your command: add an arrow here.';
+
+  @override
+  String get myCommandMainEmpty =>
+      'Main program: add a Command block and arrows.';
+
+  @override
+  String get myCommandButton => 'Command';
+
+  @override
+  String get myCommandButtonLabel => 'Add a Command block to the main program';
+
+  @override
+  String myCommandCallLabel(Object number) {
+    return 'Block $number: command';
+  }
+
+  @override
+  String get myCommandEmptyCommand =>
+      'Your command is empty. Tap the turquoise strip at the top and add arrows to it.';
+
+  @override
+  String get myCommandEmptyMain =>
+      'The main program is empty. Add the Command block with the turquoise Command button.';
+
+  @override
+  String get myCommandEditCommand =>
+      'The arrows you add now will go into the command.';
+
+  @override
+  String get myCommandEditMain =>
+      'The blocks you add now will go into the main program.';
+
+  @override
+  String get myCommandCallAdded =>
+      'The Command block was added to the main program. Here the robot will do all the arrows in the command.';
+
+  @override
+  String get myCommandUseHint =>
+      'Your command is ready. Tap the turquoise Command button to use it in the main program.';
+
+  @override
+  String get myCommandFullHint =>
+      'You have reached the block limit. Change the command, or replace the arrows in the main program with a Command block.';
+
+  @override
+  String get myCommandMissedGoal =>
+      'The robot did not reach the flag. Try changing the arrows in the command or the number of Command blocks.';
+
+  @override
+  String myCommandOffPath(Object place) {
+    return '$place in the command takes the robot off the path.';
+  }
+
+  @override
+  String myCommandFixCount(Object number) {
+    return 'Try changing the repeat count of block $number in the command or the arrows inside it.';
+  }
+
+  @override
+  String get myCommandL1Intro =>
+      'Make your own command! Put two right arrows in the turquoise strip at the top. Then add your command to the main program with the Command button.';
+
+  @override
+  String get myCommandL1Hint =>
+      'The robot must go right 6 times. If your command is 2 right arrows, how many times must you use it?';
+
+  @override
+  String get myCommandL2Hint =>
+      'Go down like a staircase. One step: one right, one down. Make that your command.';
+
+  @override
+  String get myCommandL3Intro =>
+      'In the main program you can add arrows next to the Command block, too.';
+
+  @override
+  String get myCommandL3Hint =>
+      'There is a staircase between the rocks: right, down. One more step is needed at the end.';
+
+  @override
+  String get myCommandL4Hint =>
+      'Two right, one up. How many times does this pattern repeat?';
+
+  @override
+  String get myCommandL5Hint =>
+      'The robot is climbing to the left: one up, one left. The gold is on this path, too.';
+
+  @override
+  String get myCommandL6Hint =>
+      'Each step is two squares wide and one square tall.';
+
+  @override
+  String get myCommandL7Hint =>
+      'Two right, two down. The gold is along this pattern.';
+
+  @override
+  String get myCommandL8Hint =>
+      'Go past the rocks: first down, then two right.';
+
+  @override
+  String get myCommandL9Hint =>
+      'Let the command go right four times. Between the two Command blocks, the robot must go down.';
+
+  @override
+  String get myCommandL10Hint =>
+      'Collect the gold between the rocks: down, two right, up.';
+
+  @override
+  String get myCommandL11Intro =>
+      'You can put a Repeat block inside your command, too! That way a short command walks a long path.';
+
+  @override
+  String get myCommandL11Hint =>
+      'Let the command go right three times. Between the commands, the robot goes down once and up once.';
+
+  @override
+  String get myCommandL12Hint =>
+      'Each part is two right, one down. In one place, an extra step down comes in between.';
+
+  @override
+  String get myCommandL13Hint =>
+      'Each step is one up, two right. Don\'t forget the gold.';
+
+  @override
+  String get myCommandL14Hint =>
+      'Each part is two right, one up. Also look at the steps between the commands.';
+
+  @override
+  String get myCommandL15Hint =>
+      'Each part is one down, two right. Between the commands, the path sometimes goes straight.';
+
+  @override
+  String get myCommandL16Hint =>
+      'Command: three right, one down. After the first command you need to turn left once.';
+
+  @override
+  String get myCommandL17Hint =>
+      'Each part is one up, three right. Between the commands, go up one more time.';
+
+  @override
+  String get myCommandL18Hint =>
+      'You can have two Repeat blocks inside the command: two down, two right.';
+
+  @override
+  String get myCommandL19Hint =>
+      'Command: one right, two up, one right. Find the arrows in between by counting squares.';
+
+  @override
+  String get myCommandL20Hint =>
+      'The command starts with two steps: right, down. Then one more step right.';
 
   @override
   String get ifThenL1Intro =>

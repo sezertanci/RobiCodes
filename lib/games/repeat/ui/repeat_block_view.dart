@@ -7,7 +7,7 @@ import '../../path_finder/engine/path_finder_board.dart';
 import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
 import '../../../l10n/l10n.dart';
-import '../repeat_controller.dart';
+import '../program_models.dart';
 import '../repeat_texts.dart';
 import 'repeat_assets.dart';
 
@@ -26,7 +26,7 @@ final class RepeatBlockView extends StatelessWidget {
     super.key,
   });
 
-  final RepeatController controller;
+  final ProgramStripModel controller;
   final int index;
   final RepeatBlock block;
   final double chipSize;
