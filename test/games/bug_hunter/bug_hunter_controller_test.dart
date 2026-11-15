@@ -34,6 +34,15 @@ const _roomyLevel = RepeatLevel(
   intro: _intro,
 );
 
+/// Bayrak üç kare sağda; çözüm üç turlu tekrar bloğu.
+const _repeatLevel = RepeatLevel(
+  map: ['....', 'S..G', '....'],
+  solution: '3(R)',
+  maxBlocks: 3,
+  hint: _levelHint,
+  intro: _intro,
+);
+
 RepeatController _controller(String bugged, {RepeatLevel level = _roomyLevel, bool allowsRepeat = false}) =>
     RepeatController(
       level: level,
@@ -140,6 +149,44 @@ void main() {
 
     expect(controller.allowsRepeat, isFalse);
     expect(controller.canUseRepeatButton, isFalse);
+  });
+
+  test('showHint_WrongArrowWithoutBump_MarksArrowInsteadOfAddingMove', () {
+    // Arrange: yukarı ok robotu çarptırmadan yoldan çıkarır.
+    final controller = _controller('RUR');
+
+    // Act
+    controller.showHint();
+
+    // Assert
+    expect(controller.wrongPlace, Places.top(1));
+    expect(controller.selected, Places.top(1));
+    expect(controller.boardRun.hint, isNull);
+    expect(controller.message(texts), texts.repeatFixHint(texts.repeatOffPath(texts.repeatBlockName(2))));
+  });
+
+  test('showHint_WrongRepeatCount_SaysChangeCount', () {
+    // Arrange
+    final controller = _controller('2(R)', level: _repeatLevel, allowsRepeat: true);
+
+    // Act
+    controller.showHint();
+
+    // Assert
+    expect(controller.wrongPlace, Places.top(0));
+    expect(controller.message(texts), texts.repeatFixHint(texts.repeatFixCount(1)));
+  });
+
+  test('showHint_MissingArrowAtEnd_SuggestsNextMove', () {
+    // Arrange
+    final controller = _controller('RR');
+
+    // Act
+    controller.showHint();
+
+    // Assert
+    expect(controller.wrongPlace, isNull);
+    expect(controller.boardRun.hint?.direction, _right);
   });
 
   test('run_FixedCode_CompletesLevel', () async {

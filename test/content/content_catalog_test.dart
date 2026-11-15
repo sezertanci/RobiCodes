@@ -35,6 +35,19 @@ void main() {
         GameIds.myCommand,
       ]);
     });
+
+    test('buildContentCatalog_StarterBundle_UnlocksBothPaidGames', () {
+      // Arrange
+      final catalog = buildContentCatalog();
+
+      // Act
+      final bundle = catalog.products.singleWhere((product) => product.id == ProductIds.starterBundle);
+
+      // Assert
+      expect(bundle.isBundle, isTrue);
+      expect(bundle.packIds, [basePackId(GameIds.bugHunter), basePackId(GameIds.myCommand)]);
+      expect(catalog.purchaseFor(basePackId(GameIds.myCommand))?.id, ProductIds.myCommandBase);
+    });
   });
 
   group('ContentCatalog', () {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
+import '../../path_finder/path_finder_controller.dart';
 import '../engine/repeat_level.dart';
 import '../engine/starting_program.dart';
 import '../repeat_controller.dart';
@@ -48,8 +49,8 @@ final class _RepeatViewState extends State<RepeatView> {
       feedback: widget.feedback,
       startingProgram: widget.startingProgram,
       stepDuration: MediaQuery.disableAnimationsOf(context)
-          ? RepeatController.reducedStepDuration
-          : RepeatController.defaultStepDuration,
+          ? PathFinderController.reducedStepDuration
+          : PathFinderController.defaultStepDuration,
     );
   }
 

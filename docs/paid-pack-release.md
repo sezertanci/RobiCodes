@@ -84,5 +84,9 @@ etiketi var. Bu etiket olmadan `in_app_purchase` ürünü bulamaz.
 
 ## Bundle için notlar
 
-- Bundle'ın kimliği, fiyatı ve nasıl tanımlanacağı henüz kararlaştırılmadı; o aşamada kullanıcıya sorulur.
+- İlk bundle: **Başlangıç Seti** (`bundle.starter`, 15.11.2026), Hata Avcısı ve Kendi Komutunu Oluştur'u açar.
+  Play'de sıradan bir tek seferlik üründür; hangi paketleri açtığı katalogdaki `StoreProduct.packIds` ile bilinir.
+- Fiyat: tek tek alınınca 59,98 TL olan iki oyun 49,99 TL. Türkiye'ye vergisiz 41,66 TRY, diğer ülkelere
+  aynı oranla 3,29 USD girilir. Simge `store/robi-codes/products/starter-bundle-512.png`.
+- Oyunlardan birine sahip olan kullanıcıya bundle satılmaz; eksik oyun tek başına önerilir (`OfferPolicy`).
 - Fiyat kuralı (vergisiz giriş, Türkiye ve yurt dışı için ayrı fiyat) bundle için de geçerlidir.

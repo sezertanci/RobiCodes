@@ -3,9 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../features/play/game_feedback.dart';
 import '../../features/play/level_lifecycle.dart';
 import '../../features/play/robot_voice.dart';
-import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
-import '../../features/progress/star_rule.dart';
 import '../../l10n/l10n.dart';
 import '../path_finder/board_run.dart';
 import '../path_finder/board_scene.dart';
@@ -18,56 +16,56 @@ import 'engine/repeat_program.dart';
 import 'engine/starting_program.dart';
 import 'program_editor.dart';
 import 'program_models.dart';
+import 'program_runner.dart';
 import 'repeat_texts.dart';
 
 /// Bir seviyenin oynanış durumu: bloklar, açık tekrar bloğu, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
 final class RepeatController extends ChangeNotifier
-    with LevelLifecycle, BoardRunScene
+    with LevelLifecycle, BoardRunScene, ProgramRunner
     implements ProgramStripModel, ProgramControlsModel {
   RepeatController({
     required this.level,
     required this.onCompleted,
     this.feedback = const SilentGameFeedback(),
-    this.stepDuration = defaultStepDuration,
-    this.celebrateDuration = defaultCelebrateDuration,
+    this.stepDuration = PathFinderController.defaultStepDuration,
+    this.celebrateDuration = PathFinderController.defaultCelebrateDuration,
     this.startingProgram,
   }) : boardRun = BoardRun(level.board),
        voice = RobotVoice(feedback: feedback, intro: _introOf(level)),
-       targetBlocks = RepeatEngine.countBlocks(RepeatEngine.parseSolution(level.solution)),
+       _solution = RepeatEngine.parseSolution(level.solution),
        _editor = ProgramEditor(startingProgram?.blocks ?? const []);
 
-  static const defaultStepDuration = PathFinderController.defaultStepDuration;
-  static const reducedStepDuration = PathFinderController.reducedStepDuration;
-  static const defaultCelebrateDuration = PathFinderController.defaultCelebrateDuration;
-
-  /// Tekrarla bloğu ile içindeki bir ok en az iki blok yer kaplar.
-  static const repeatWithMove = 2;
-
   final RepeatLevel level;
+  @override
   final ValueChanged<int> onCompleted;
 
   /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
   final GameFeedback feedback;
   @override
   final Duration stepDuration;
+  @override
   final Duration celebrateDuration;
 
   /// Verilirse program bu bloklarla açılır ve okları seçip düzeltme kuralları geçerli olur.
   final StartingProgram? startingProgram;
 
   /// 3 yıldız için en fazla blok sayısı: önerilen çözümün blok sayısı.
-  final int targetBlocks;
+  @override
+  late final int targetBlocks = RepeatEngine.countBlocks(_solution);
   @override
   final BoardRun boardRun;
   @override
   final RobotVoice voice;
 
+  /// Önerilen çözüm; düzeltme kurallarında ipucu bozuk kodun ondan ayrıldığı yeri gösterir.
+  final List<ProgramBlock> _solution;
   final ProgramEditor _editor;
   ProgramStep? _activeStep;
+
+  /// Son çalıştırmanın hareketleri; robot yürürken etkin hareketi göstermek için tutulur.
+  List<ProgramStep> _trace = const [];
   ProgramPlace? _wrongPlace;
-  bool _hintUsed = false;
-  bool _running = false;
 
   @override
   List<ProgramBlock> get program => _editor.program;
@@ -77,8 +75,6 @@ final class RepeatController extends ChangeNotifier
   int get maxBlocks => level.maxBlocks;
   @override
   bool get isFull => blockCount >= maxBlocks;
-  @override
-  bool get isRunning => _running;
 
   @override
   int? get target => _editor.target;
@@ -92,7 +88,6 @@ final class RepeatController extends ChangeNotifier
 
   @override
   ProgramPlace? get wrongPlace => _wrongPlace;
-  bool get hintUsed => _hintUsed;
 
   /// Hazır programı düzeltme kuralları geçerli mi (bkz. [StartingProgram]).
   @override
@@ -105,22 +100,14 @@ final class RepeatController extends ChangeNotifier
   bool get isInserting => _editor.isInserting;
 
   @override
-  bool get canInsert => fixesProgram && !_running && selected != null && !isFull;
+  bool get canInsert => fixesProgram && !isRunning && selected != null && !isFull;
 
   /// Yön tuşu seçili oku değiştirir mi.
   bool get _replacesSelection => fixesProgram && !isInserting && _editor.selectedMove != null;
 
   /// Ok değiştirmek blok sayısını artırmadığı için sınır doluyken de yapılabilir.
   @override
-  bool get canAddMove => !_running && (!isFull || _replacesSelection);
-
-  /// Tekrarla düğmesi blok açıkken bloktan çıkarır; kapalıyken ancak blok ve içine bir ok sığıyorsa ekler.
-  @override
-  bool get canUseRepeatButton =>
-      allowsRepeat && !_running && (target != null || blockCount + repeatWithMove <= maxBlocks);
-
-  LocalizedText get message => voice.message;
-  RobotMood get mood => voice.mood;
+  bool get canAddMove => !isRunning && (!isFull || _replacesSelection);
 
   /// Düzeltme kurallarında seçili oku değiştirir ya da "Önüne ekle" seçiliyse oku seçili bloğun önüne
   /// ekler. Bunların dışında oku açık tekrar bloğunun içine, yoksa programın sonuna ekler.
@@ -175,7 +162,7 @@ final class RepeatController extends ChangeNotifier
   /// Tekrar sayısını bir azaltır (-1) ya da artırır (+1); sayı sınırlar içinde kalır.
   @override
   void changeTimes(int index, int offset) {
-    if (!_running && program[index] is RepeatBlock) {
+    if (!isRunning && program[index] is RepeatBlock) {
       _changeProgram(() => _editor.changeTimes(index, offset));
       notifyListeners();
     }
@@ -184,7 +171,7 @@ final class RepeatController extends ChangeNotifier
   /// Tekrar bloğunun etiketine dokunulunca blok açılır (oklar içine eklenir) ya da kapanır.
   @override
   void toggleTarget(int index) {
-    if (_running) {
+    if (isRunning) {
       return;
     }
     final leaving = _editor.toggleTarget(index);
@@ -194,7 +181,7 @@ final class RepeatController extends ChangeNotifier
 
   @override
   void toggleSelection(ProgramPlace place) {
-    if (_running) {
+    if (isRunning) {
       return;
     }
     _editor.toggleSelection(place);
@@ -213,7 +200,7 @@ final class RepeatController extends ChangeNotifier
 
   @override
   void deleteSelected() {
-    if (!_running && selected != null) {
+    if (!isRunning && selected != null) {
       _changeProgram(_editor.deleteSelected);
       notifyListeners();
     }
@@ -223,7 +210,7 @@ final class RepeatController extends ChangeNotifier
   @override
   void moveSelectedOut() {
     final place = selected;
-    if (_running || place == null || !Places.isInner(place)) {
+    if (isRunning || place == null || !Places.isInner(place)) {
       return;
     }
     _changeProgram(_editor.moveSelectedOut);
@@ -234,7 +221,7 @@ final class RepeatController extends ChangeNotifier
   /// Programı boşaltır; düzeltme kurallarında hazır programa geri döner ("Baştan al").
   @override
   void clear() {
-    if (_running) {
+    if (isRunning) {
       return;
     }
     _changeProgram(() => _editor.reset(startingProgram?.blocks ?? const []));
@@ -245,22 +232,28 @@ final class RepeatController extends ChangeNotifier
   /// İpucu ister. İpucu bir kez kullanılınca seviyeden en fazla 1 yıldız alınır.
   @override
   void showHint() {
-    if (_running) {
+    if (isRunning) {
       return;
     }
-    _hintUsed = true;
-    boardRun.hint = null;
+    useHint();
     switch (RepeatEngine.hint(board, program)) {
       case EmptyRepeatHint(:final block):
         _editor.openTarget(block);
         voice.say((t) => t.repeatEmptyRepeat);
       case FixPlaceHint(:final step):
-        _editor.select(Places.of(step));
-        _wrongPlace = Places.of(step);
-        voice.say(RepeatTexts.fixHint(step));
+        // Hata Avcısı'nda robotu çarptıran yer fazlaysa çarptığı yer yerine onu silmesi söylenir.
+        if (_differenceFromSolution() case final difference? when difference.kind == DifferenceKind.extraBlock) {
+          _showDifference(difference);
+        } else {
+          _markWrong(Places.of(step));
+          voice.say(RepeatTexts.fixHint(step));
+        }
       case NextStepHint(:final move):
-        // Blok sınırı doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
-        if (isFull) {
+        // Hata Avcısı'nda robot çarpmadan yoldan çıkıyorsa ok eklemek yerine bozuk yer gösterilir. Blok sınırı
+        // doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
+        if (_differenceFromSolution() case final difference?) {
+          _showDifference(difference);
+        } else if (isFull) {
           voice.say(RepeatTexts.fullLevelHint(level.hint));
         } else {
           boardRun.hint = move;
@@ -272,82 +265,73 @@ final class RepeatController extends ChangeNotifier
     notifyListeners();
   }
 
-  /// Blokları çalıştırır ve robotu adım adım yürütür. Başarıda kutlamadan sonra yıldızları bildirir.
+  /// Düzeltme kurallarında programın önerilen çözümden ayrıldığı ilk yer; diğer oyunlarda `null`.
+  SolutionDifference? _differenceFromSolution() =>
+      fixesProgram ? RepeatEngine.firstDifference(program, _solution) : null;
+
+  void _showDifference(SolutionDifference difference) {
+    _markWrong(difference.place);
+    voice.say(RepeatTexts.differenceHint(difference));
+  }
+
+  void _markWrong(ProgramPlace place) {
+    _editor.select(place);
+    _wrongPlace = place;
+  }
+
   @override
-  Future<void> run() async {
-    if (_running) {
-      return;
-    }
+  LocalizedText get missedGoalText =>
+      (t) => t.repeatMissedGoal;
+
+  @override
+  bool readyToRun() {
     if (_editor.isEmpty) {
       voice.say((t) => t.repeatEmpty);
-      notifyListeners();
-      return;
+      return false;
     }
     if (RepeatEngine.findEmptyRepeat(program) case final empty?) {
       _editor.openTarget(empty);
       voice.say((t) => t.repeatEmptyRepeat);
-      notifyListeners();
-      return;
+      return false;
     }
-    _running = true;
-    _editor
-      ..closeTarget()
-      ..clearSelection();
-    _resetBoard();
-    voice.say((t) => t.gameRobotRunning);
-    notifyListeners();
-    final run = RepeatEngine.run(board, program);
-    final played = await boardRun.play(
-      run.result,
-      directions: [for (final step in run.trace) step.direction],
-      stepDuration: stepDuration,
-      onStep: (index) => _activeStep = run.trace[index],
-      notify: notifyListeners,
-      isStopped: () => isDisposed,
-    );
-    if (played) {
-      await _finish(run);
-    }
+    return true;
   }
 
-  Future<void> _finish(RepeatRun run) async {
-    _activeStep = null;
-    final result = run.result;
-    switch (result.outcome) {
-      case RunOutcome.success:
-        voice.say((t) => t.gameRobotReachedFlag, RobotMood.happy);
-        voice.react(RobotReaction.celebrate);
-        notifyListeners();
-        final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: blockCount <= targetBlocks);
-        await completeAfter(celebrateDuration, onCompleted, stars);
-        return;
-      case RunOutcome.blocked:
-        final step = run.trace[result.failedIndex!];
-        _wrongPlace = Places.of(step);
-        boardRun.bumpDirection = step.direction;
-        voice.react(RobotReaction.bump);
-        voice.say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
-      case RunOutcome.missedGoal || RunOutcome.missingCoins:
-        voice.react(RobotReaction.shake);
-        final missingCoins = result.outcome == RunOutcome.missingCoins;
-        voice.say((t) => missingCoins ? t.gameMissingCoins : t.repeatMissedGoal, RobotMood.sad);
-    }
-    _running = false;
-    notifyListeners();
+  @override
+  void prepareRun() => _editor
+    ..closeTarget()
+    ..clearSelection();
+
+  @override
+  RepeatRun startRun() {
+    final run = RepeatEngine.run(board, program);
+    _trace = run.trace;
+    return run;
+  }
+
+  @override
+  void showStep(int index) => _activeStep = _trace[index];
+
+  @override
+  void clearActiveStep() => _activeStep = null;
+
+  @override
+  void showBlocked(RunResult result, ProgramStep step, int index) {
+    _wrongPlace = Places.of(step);
+    voice.say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
   }
 
   /// Bloklar değişince robot başa döner, eski ipucu ve işaretler silinir.
   void _changeProgram(VoidCallback update) {
     update();
     _editor.clearSelection();
-    _resetBoard();
+    resetBoard();
   }
 
-  void _resetBoard() {
-    boardRun.reset();
+  @override
+  void clearRunMarks() {
     _activeStep = null;
     _wrongPlace = null;
-    voice.calm();
   }
 
   /// Açılış mesajı: seviyenin kendi mesajı, yoksa altın olup olmamasına göre genel mesaj.

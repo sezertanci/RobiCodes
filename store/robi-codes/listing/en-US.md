@@ -34,6 +34,16 @@ FOR FAMILIES
 
 Privacy policy: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.4.1)
+
+- New bundle: Starter Set. Get Bug Hunter and Make Your Own Command together at a lower price.
+
+## Sürüm notu (1.4.0)
+
+- New game: Make Your Own Command. Children build their own command with arrows and reuse it in the main program.
+- The first level of each difficulty group can be tried for free. All 20 levels unlock with a one-time purchase.
+- Small fixes: long game names show in full on the home screen, and buttons fit better on tablets.
+
 ## Sürüm notu (1.3.0)
 
 - New game: Bug Hunter. Robi's code has a mistake; children run the code, find the bug and fix it.

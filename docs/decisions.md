@@ -58,6 +58,13 @@
 - Görselli düğmelerde (`ImageButton`) boy anında değişir, yalnızca sarı ışık geçişlidir. Boy geçişi, program
   dolup düğmeler küçülürken tablette yan yana düzenin bir an taşmasına yol açıyordu.
 
+### Başlangıç Seti (15.11.2026)
+
+- Hata Avcısı ve Kendi Komutunu Oluştur'u birlikte açan ilk avantajlı paket. Kimlik `bundle.starter`.
+- Fiyat: müşteri 49,99 TL görür (Play'e vergisiz 41,66 TRY); yurt dışı 3,29 USD.
+- Adı 8 dilde: Başlangıç Seti, Starter Set, Starter-Set, Pack de inicio, Pack de démarrage, Pacote inicial,
+  Pacchetto iniziale, Paket Pemula.
+
 ## Ses efektleri
 
 - Web sürümünde sesler kodla üretilir. Flutter sürümünde bu sesler **dosya olarak** hazırlanır ve

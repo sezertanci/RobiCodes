@@ -20,6 +20,9 @@ abstract final class GameIds {
 abstract final class ProductIds {
   static const bugHunterBase = 'pack.bug_hunter.base';
   static const myCommandBase = 'pack.my_command.base';
+
+  /// Başlangıç Seti: açıldığı gün var olan iki ücretli oyunu (Hata Avcısı, Kendi Komutunu Oluştur) birlikte açar.
+  static const starterBundle = 'bundle.starter';
 }
 
 /// Mevcut oyunlardaki seviye düzeni: her zorluk grubunda 5 seviye.
@@ -100,7 +103,8 @@ final _paidGames = [
 ];
 
 /// Uygulamanın içerik kataloğu: ücretsiz oyunların temel paketleri ve ücretli oyunların satın alınan
-/// paketleri. Avantajlı paketler (bundle) Play Console'da ürün açıldığında `products` listesine eklenir.
+/// paketleri. Avantajlı paket (bundle) yalnızca açıldığı gün var olan paketleri kapsar; sonradan eklenen
+/// paketler için yeni bundle açılır.
 ContentCatalog buildContentCatalog() => ContentCatalog(
   games: [..._games, ..._paidGames],
   packs: [
@@ -117,6 +121,11 @@ ContentCatalog buildContentCatalog() => ContentCatalog(
       id: ProductIds.myCommandBase,
       title: (t) => t.gameMyCommandTitle,
       packIds: [basePackId(GameIds.myCommand)],
+    ),
+    StoreProduct(
+      id: ProductIds.starterBundle,
+      title: (t) => t.storeStarterBundleTitle,
+      packIds: [basePackId(GameIds.bugHunter), basePackId(GameIds.myCommand)],
     ),
   ],
 );

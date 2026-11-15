@@ -27,6 +27,9 @@ MyCommandController _controller({MyCommandLevel level = _level, ValueChanged<int
   celebrateDuration: Duration.zero,
 );
 
+/// Beşinci karede taş var; komutun ilk kullanımı geçer, ikinci kullanımının ikinci oku taşa çarpar.
+const _laterStoneLevel = MyCommandLevel(map: ['S...#.G'], command: 'RR', main: 'C C C', maxBlocks: 5, hint: _levelHint);
+
 /// Komut şeridine iki sağ ok, ana programa [calls] komut bloğu ekler.
 void _build(MyCommandController controller, {int calls = 3}) {
   controller
@@ -174,6 +177,34 @@ void main() {
     // Assert
     expect(controller.commandStrip.wrongPlace, isNotNull);
     expect(controller.mainStrip.wrongPlace, isNotNull);
+  });
+
+  test('run_BlockedInLaterCall_MarksCommandArrowAndSaysChangeEither', () async {
+    // Arrange
+    final controller = _controller(level: _laterStoneLevel);
+    _build(controller);
+
+    // Act
+    await controller.run();
+
+    // Assert
+    expect(controller.commandStrip.wrongPlace, Places.top(1));
+    expect(controller.mainStrip.wrongPlace, Places.top(1));
+    expect(controller.message(texts), contains(texts.myCommandLaterCall));
+  });
+
+  test('showHint_WrongInLaterCall_MarksCommandArrowAndSaysChangeEither', () {
+    // Arrange
+    final controller = _controller(level: _laterStoneLevel);
+    _build(controller);
+
+    // Act
+    controller.showHint();
+
+    // Assert
+    expect(controller.commandStrip.wrongPlace, Places.top(1));
+    expect(controller.mainStrip.wrongPlace, Places.top(1));
+    expect(controller.message(texts), texts.repeatFixHint(texts.myCommandLaterCall));
   });
 
   test('showHint_CommandReadyNoCall_SaysUseHint', () {

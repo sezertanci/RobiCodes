@@ -4,6 +4,7 @@ import '../../../app/app_theme.dart';
 import '../../../features/play/game_feedback.dart';
 import '../../../features/play/widgets/speech_bubble.dart';
 import '../../../l10n/l10n.dart';
+import '../../path_finder/path_finder_controller.dart';
 import '../../repeat/ui/program_game_layout.dart';
 import '../../repeat/ui/program_strip.dart';
 import '../../repeat/ui/repeat_controls.dart';
@@ -51,8 +52,8 @@ final class _MyCommandViewState extends State<MyCommandView> {
       onCompleted: widget.onCompleted,
       feedback: widget.feedback,
       stepDuration: MediaQuery.disableAnimationsOf(context)
-          ? MyCommandController.reducedStepDuration
-          : MyCommandController.defaultStepDuration,
+          ? PathFinderController.reducedStepDuration
+          : PathFinderController.defaultStepDuration,
     );
   }
 

@@ -3,9 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../features/play/game_feedback.dart';
 import '../../features/play/level_lifecycle.dart';
 import '../../features/play/robot_voice.dart';
-import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
-import '../../features/progress/star_rule.dart';
 import '../../l10n/l10n.dart';
 import '../path_finder/board_run.dart';
 import '../path_finder/board_scene.dart';
@@ -16,6 +14,7 @@ import '../repeat/engine/repeat_engine.dart';
 import '../repeat/engine/repeat_program.dart';
 import '../repeat/program_editor.dart';
 import '../repeat/program_models.dart';
+import '../repeat/program_runner.dart';
 import '../repeat/repeat_texts.dart';
 import 'my_command_level.dart';
 import 'my_command_texts.dart';
@@ -29,30 +28,33 @@ typedef CommandStep = ({ProgramStep step, bool firstCall});
 /// "Kendi Komutunu Oluştur" seviyesinin oynanış durumu: komut ve ana program şeritleri, etkin şerit,
 /// ipucu ve robotun yolculuğu. Blok sınırı iki şeridin toplamına uygulanır. Ekrandan bağımsızdır.
 final class MyCommandController extends ChangeNotifier
-    with LevelLifecycle, BoardRunScene
+    with LevelLifecycle, BoardRunScene, ProgramRunner
     implements ProgramControlsModel {
   MyCommandController({
     required this.level,
     required this.onCompleted,
     this.feedback = const SilentGameFeedback(),
-    this.stepDuration = defaultStepDuration,
-    this.celebrateDuration = defaultCelebrateDuration,
+    this.stepDuration = PathFinderController.defaultStepDuration,
+    this.celebrateDuration = PathFinderController.defaultCelebrateDuration,
   }) : boardRun = BoardRun(level.board),
-       voice = RobotVoice(feedback: feedback, intro: _introOf(level));
-
-  static const defaultStepDuration = PathFinderController.defaultStepDuration;
-  static const reducedStepDuration = PathFinderController.reducedStepDuration;
-  static const defaultCelebrateDuration = PathFinderController.defaultCelebrateDuration;
-
-  /// Tekrarla bloğu ile içindeki bir ok en az iki blok yer kaplar.
-  static const repeatWithMove = 2;
+       voice = RobotVoice(feedback: feedback, intro: _introOf(level)),
+       allowsRepeat = level.allowsRepeat,
+       targetBlocks = level.targetBlocks;
 
   final MyCommandLevel level;
+  @override
   final ValueChanged<int> onCompleted;
   final GameFeedback feedback;
   @override
   final Duration stepDuration;
+  @override
   final Duration celebrateDuration;
+
+  /// Seviye verisinden bir kez hesaplanır; ekran her çizimde okur.
+  @override
+  final bool allowsRepeat;
+  @override
+  final int targetBlocks;
   @override
   final BoardRun boardRun;
   @override
@@ -65,8 +67,10 @@ final class MyCommandController extends ChangeNotifier
   final Map<CommandLane, ProgramStep> _activeSteps = {};
   final Map<CommandLane, ProgramPlace> _wrongPlaces = {};
   CommandLane _lane = CommandLane.command;
-  bool _hintUsed = false;
-  bool _running = false;
+
+  /// Son çalıştırmanın hareketleri ve her hareketin komuttaki karşılığı.
+  List<ProgramStep> _trace = const [];
+  List<CommandStep?> _runCommandSteps = const [];
 
   ProgramEditor get _command => _editors[CommandLane.command]!;
   ProgramEditor get _main => _editors[CommandLane.main]!;
@@ -75,31 +79,23 @@ final class MyCommandController extends ChangeNotifier
   CommandLane get lane => _lane;
   List<ProgramBlock> get command => _command.program;
   List<ProgramBlock> get main => _main.program;
+  @override
   int get blockCount => _command.blockCount + _main.blockCount;
+  @override
   int get maxBlocks => level.maxBlocks;
   bool get isFull => blockCount >= maxBlocks;
-  bool get hintUsed => _hintUsed;
-  LocalizedText get message => voice.message;
-  RobotMood get mood => voice.mood;
 
-  @override
-  bool get isRunning => _running;
   @override
   bool get fixesProgram => false;
   @override
-  bool get allowsRepeat => level.allowsRepeat;
-  @override
   bool get isInsideRepeat => _active.target != null;
   @override
-  bool get canAddMove => !_running && !isFull;
-  @override
-  bool get canUseRepeatButton =>
-      allowsRepeat && !_running && (isInsideRepeat || blockCount + repeatWithMove <= maxBlocks);
-  bool get canAddCommand => !_running && !isFull;
+  bool get canAddMove => !isRunning && !isFull;
+  bool get canAddCommand => !isRunning && !isFull;
 
   /// Yön tuşlarını [lane] şeridine yönlendirir; diğer şeritteki açık blok ve seçim kapanır.
   void activate(CommandLane lane) {
-    if (_running || lane == _lane) {
+    if (isRunning || lane == _lane) {
       return;
     }
     _setLane(lane);
@@ -149,7 +145,7 @@ final class MyCommandController extends ChangeNotifier
   /// İki şeridi de boşaltır; yön tuşları yeniden komuta ekler.
   @override
   void clear() {
-    if (_running) {
+    if (isRunning) {
       return;
     }
     _changeProgram(() {
@@ -165,11 +161,10 @@ final class MyCommandController extends ChangeNotifier
   /// İpucu ister. İpucu bir kez kullanılınca seviyeden en fazla 1 yıldız alınır.
   @override
   void showHint() {
-    if (_running) {
+    if (isRunning) {
       return;
     }
-    _hintUsed = true;
-    boardRun.hint = null;
+    useHint();
     if (RepeatEngine.findEmptyRepeat(command) case final empty?) {
       _openEmpty(CommandLane.command, empty);
     } else {
@@ -204,14 +199,21 @@ final class MyCommandController extends ChangeNotifier
     }
   }
 
-  /// Hata komutun ilk kullanımındaysa sorun komuttadır; sonraki bir kullanımdaysa ana programdadır.
+  /// Hata komutun ilk kullanımındaysa sorun komuttadır. Sonraki bir kullanımdaysa komut ilk kullanımda
+  /// doğru çalışmıştır; sorun komutta da ana programın oklarında da olabilir. O zaman komuttaki ok ile
+  /// ana programdaki komut bloğu işaretlenir ve ikisinden birini değiştirmesi söylenir.
   void _showFix(ProgramStep step, CommandStep? inCommand) {
-    if (inCommand != null && inCommand.firstCall) {
-      _markWrong(CommandLane.command, Places.of(inCommand.step));
-      voice.say(MyCommandTexts.fixHintInCommand(inCommand.step));
-    } else {
-      _markWrong(CommandLane.main, Places.of(step));
-      voice.say(RepeatTexts.fixHint(step));
+    switch (inCommand) {
+      case (step: final commandStep, firstCall: true):
+        _markWrong(CommandLane.command, Places.of(commandStep));
+        voice.say(MyCommandTexts.fixHintInCommand(commandStep));
+      case (step: final commandStep, firstCall: false):
+        _markWrong(CommandLane.command, Places.of(commandStep));
+        _wrongPlaces[CommandLane.main] = Places.of(step);
+        voice.say(MyCommandTexts.fixHintInLaterCall());
+      case null:
+        _markWrong(CommandLane.main, Places.of(step));
+        voice.say(RepeatTexts.fixHint(step));
     }
   }
 
@@ -221,42 +223,13 @@ final class MyCommandController extends ChangeNotifier
     _wrongPlaces[lane] = place;
   }
 
-  /// Ana programı çalıştırır ve robotu adım adım yürütür. Başarıda kutlamadan sonra yıldızları bildirir.
   @override
-  Future<void> run() async {
-    if (_running) {
-      return;
-    }
-    if (!_readyToRun()) {
-      notifyListeners();
-      return;
-    }
-    _running = true;
-    for (final editor in _editors.values) {
-      editor
-        ..closeTarget()
-        ..clearSelection();
-    }
-    _resetBoard();
-    voice.say((t) => t.gameRobotRunning);
-    notifyListeners();
-    final run = RepeatEngine.run(board, main, command: command);
-    final commandSteps = _commandSteps();
-    final played = await boardRun.play(
-      run.result,
-      directions: [for (final step in run.trace) step.direction],
-      stepDuration: stepDuration,
-      onStep: (index) => _showStep(run.trace[index], commandSteps[index]),
-      notify: notifyListeners,
-      isStopped: () => isDisposed,
-    );
-    if (played) {
-      await _finish(run, commandSteps);
-    }
-  }
+  LocalizedText get missedGoalText =>
+      (t) => t.myCommandMissedGoal;
 
   /// Çalıştırmadan önce eksikleri söyler: boş ana program, boş komut ya da içi boş tekrar bloğu.
-  bool _readyToRun() {
+  @override
+  bool readyToRun() {
     if (_main.isEmpty) {
       _setLane(CommandLane.main);
       voice.say((t) => t.myCommandEmptyMain);
@@ -276,46 +249,51 @@ final class MyCommandController extends ChangeNotifier
     return true;
   }
 
-  void _showStep(ProgramStep step, CommandStep? inCommand) {
-    _activeSteps[CommandLane.main] = step;
-    if (inCommand == null) {
-      _activeSteps.remove(CommandLane.command);
-    } else {
+  @override
+  void prepareRun() {
+    for (final editor in _editors.values) {
+      editor
+        ..closeTarget()
+        ..clearSelection();
+    }
+  }
+
+  @override
+  RepeatRun startRun() {
+    final run = RepeatEngine.run(board, main, command: command);
+    _trace = run.trace;
+    _runCommandSteps = _commandSteps();
+    return run;
+  }
+
+  @override
+  void showStep(int index) {
+    _activeSteps[CommandLane.main] = _trace[index];
+    if (_runCommandSteps[index] case final inCommand?) {
       _activeSteps[CommandLane.command] = inCommand.step;
-    }
-  }
-
-  Future<void> _finish(RepeatRun run, List<CommandStep?> commandSteps) async {
-    _activeSteps.clear();
-    final result = run.result;
-    switch (result.outcome) {
-      case RunOutcome.success:
-        voice.say((t) => t.gameRobotReachedFlag, RobotMood.happy);
-        voice.react(RobotReaction.celebrate);
-        notifyListeners();
-        final stars = StarRule.calculate(hintUsed: _hintUsed, targetMet: blockCount <= level.targetBlocks);
-        await completeAfter(celebrateDuration, onCompleted, stars);
-        return;
-      case RunOutcome.blocked:
-        _showBlocked(result, run.trace[result.failedIndex!], commandSteps[result.failedIndex!]);
-      case RunOutcome.missedGoal || RunOutcome.missingCoins:
-        voice.react(RobotReaction.shake);
-        final missingCoins = result.outcome == RunOutcome.missingCoins;
-        voice.say((t) => missingCoins ? t.gameMissingCoins : t.myCommandMissedGoal, RobotMood.sad);
-    }
-    _running = false;
-    notifyListeners();
-  }
-
-  void _showBlocked(RunResult result, ProgramStep step, CommandStep? inCommand) {
-    _wrongPlaces[CommandLane.main] = Places.of(step);
-    boardRun.bumpDirection = step.direction;
-    voice.react(RobotReaction.bump);
-    if (inCommand != null && inCommand.firstCall) {
-      _wrongPlaces[CommandLane.command] = Places.of(inCommand.step);
-      voice.say(MyCommandTexts.blockedInCommand(result.obstacle!, inCommand.step), RobotMood.sad);
     } else {
-      voice.say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
+      _activeSteps.remove(CommandLane.command);
+    }
+  }
+
+  @override
+  void clearActiveStep() => _activeSteps.clear();
+
+  /// Çarpan hareket komuttan geliyorsa komuttaki ok da işaretlenir. Komutun sonraki bir kullanımında
+  /// çarptıysa sorun komutta da ana programın oklarında da olabilir.
+  @override
+  void showBlocked(RunResult result, ProgramStep step, int index) {
+    _wrongPlaces[CommandLane.main] = Places.of(step);
+    final obstacle = result.obstacle!;
+    switch (_runCommandSteps[index]) {
+      case (step: final commandStep, firstCall: true):
+        _wrongPlaces[CommandLane.command] = Places.of(commandStep);
+        voice.say(MyCommandTexts.blockedInCommand(obstacle, commandStep), RobotMood.sad);
+      case (step: final commandStep, firstCall: false):
+        _wrongPlaces[CommandLane.command] = Places.of(commandStep);
+        voice.say(MyCommandTexts.blockedInLaterCall(obstacle, step), RobotMood.sad);
+      case null:
+        voice.say(RepeatTexts.blocked(obstacle, step), RobotMood.sad);
     }
   }
 
@@ -357,14 +335,14 @@ final class MyCommandController extends ChangeNotifier
 
   void _changeTimes(CommandLane lane, int index, int offset) {
     final editor = _editors[lane]!;
-    if (!_running && editor.program[index] is RepeatBlock) {
+    if (!isRunning && editor.program[index] is RepeatBlock) {
       _changeProgram(() => editor.changeTimes(index, offset));
       notifyListeners();
     }
   }
 
   void _toggleTarget(CommandLane lane, int index) {
-    if (_running) {
+    if (isRunning) {
       return;
     }
     _setLane(lane);
@@ -374,7 +352,7 @@ final class MyCommandController extends ChangeNotifier
   }
 
   void _toggleSelection(CommandLane lane, ProgramPlace place) {
-    if (_running) {
+    if (isRunning) {
       return;
     }
     _editors[_otherLane(lane)]!.clearSelection();
@@ -390,7 +368,7 @@ final class MyCommandController extends ChangeNotifier
 
   void _deleteSelected(CommandLane lane) {
     final editor = _editors[lane]!;
-    if (!_running && editor.selected != null) {
+    if (!isRunning && editor.selected != null) {
       _changeProgram(editor.deleteSelected);
       notifyListeners();
     }
@@ -399,7 +377,7 @@ final class MyCommandController extends ChangeNotifier
   void _moveSelectedOut(CommandLane lane) {
     final editor = _editors[lane]!;
     final place = editor.selected;
-    if (_running || place == null || !Places.isInner(place)) {
+    if (isRunning || place == null || !Places.isInner(place)) {
       return;
     }
     _changeProgram(editor.moveSelectedOut);
@@ -413,14 +391,13 @@ final class MyCommandController extends ChangeNotifier
     for (final editor in _editors.values) {
       editor.clearSelection();
     }
-    _resetBoard();
+    resetBoard();
   }
 
-  void _resetBoard() {
-    boardRun.reset();
+  @override
+  void clearRunMarks() {
     _activeSteps.clear();
     _wrongPlaces.clear();
-    voice.calm();
   }
 
   static LocalizedText _introOf(MyCommandLevel level) => level.intro ?? (t) => t.myCommandIntro;

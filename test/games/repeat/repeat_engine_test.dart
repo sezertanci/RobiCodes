@@ -94,6 +94,70 @@ void main() {
     expect(hint, isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _right));
   });
 
+  group('firstDifference', () {
+    List<ProgramBlock> parse(String code) => RepeatEngine.parseSolution(code);
+
+    test('firstDifference_PrefixOfSolution_ReturnsNull', () {
+      expect(RepeatEngine.firstDifference(parse('RRD'), parse('RRDD')), isNull);
+    });
+
+    test('firstDifference_WrongArrow_ReportsWrongBlock', () {
+      expect(RepeatEngine.firstDifference(parse('RUR'), parse('RRR')), (
+        place: Places.top(1),
+        kind: DifferenceKind.wrongBlock,
+      ));
+    });
+
+    test('firstDifference_WrongArrowInsteadOfNext_ReportsWrongBlock', () {
+      expect(RepeatEngine.firstDifference(parse('RDL'), parse('RDDR')), (
+        place: Places.top(2),
+        kind: DifferenceKind.wrongBlock,
+      ));
+    });
+
+    test('firstDifference_ExtraArrowAtEnd_ReportsExtraBlock', () {
+      expect(RepeatEngine.firstDifference(parse('RDDRD'), parse('RDDR')), (
+        place: Places.top(4),
+        kind: DifferenceKind.extraBlock,
+      ));
+    });
+
+    test('firstDifference_ExtraArrowInMiddle_ReportsExtraBlock', () {
+      expect(RepeatEngine.firstDifference(parse('RDDDR'), parse('RDDR')), (
+        place: Places.top(3),
+        kind: DifferenceKind.extraBlock,
+      ));
+    });
+
+    test('firstDifference_ExtraInnerArrow_ReportsExtraBlock', () {
+      expect(RepeatEngine.firstDifference(parse('2(RRD)'), parse('2(RD)')), (
+        place: (block: 0, inner: 1),
+        kind: DifferenceKind.extraBlock,
+      ));
+    });
+
+    test('firstDifference_SameArrowsOtherCount_ReportsWrongCount', () {
+      expect(RepeatEngine.firstDifference(parse('2(RD)'), parse('3(RD)')), (
+        place: Places.top(0),
+        kind: DifferenceKind.wrongCount,
+      ));
+    });
+
+    test('firstDifference_WrongInnerArrow_PointsToInnerArrow', () {
+      expect(RepeatEngine.firstDifference(parse('2(RD)'), parse('2(RRD)')), (
+        place: (block: 0, inner: 1),
+        kind: DifferenceKind.wrongBlock,
+      ));
+    });
+
+    test('firstDifference_MissingInnerArrow_PointsToRepeatBlock', () {
+      expect(RepeatEngine.firstDifference(parse('2(R)'), parse('2(RD)')), (
+        place: Places.top(0),
+        kind: DifferenceKind.wrongBlock,
+      ));
+    });
+  });
+
   test('hint_SolvedProgram_ReportsSolved', () {
     expect(
       RepeatEngine.hint(_line, const [

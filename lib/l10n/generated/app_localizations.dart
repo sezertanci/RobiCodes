@@ -920,6 +920,12 @@ abstract class AppLocalizations {
   /// **'Avantajlı paket'**
   String get storeBundle;
 
+  /// Hata Avcısı ve Kendi Komutunu Oluştur oyunlarını birlikte açan avantajlı paketin adı.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlangıç Seti'**
+  String get storeStarterBundleTitle;
+
   /// No description provided for @storeOwned.
   ///
   /// In tr, this message translates to:
@@ -1604,6 +1610,12 @@ abstract class AppLocalizations {
   /// **'{place} robotu yoldan çıkarıyor.'**
   String repeatOffPath(Object place);
 
+  /// No description provided for @repeatExtraBlock.
+  ///
+  /// In tr, this message translates to:
+  /// **'{place} fazla. Onu silmeyi dene.'**
+  String repeatExtraBlock(Object place);
+
   /// No description provided for @repeatBlocked.
   ///
   /// In tr, this message translates to:
@@ -2089,6 +2101,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Komuttaki {number}. bloğun tekrar sayısını ya da içindeki okları değiştirmeyi dene.'**
   String myCommandFixCount(Object number);
+
+  /// No description provided for @myCommandLaterCall.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komut bu kullanımda robotu yoldan çıkarıyor; komutu ya da ana programdaki okları değiştir.'**
+  String get myCommandLaterCall;
 
   /// No description provided for @myCommandL1Intro.
   ///

@@ -1,8 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/features/play/game_feedback.dart';
 import 'package:robi_codes/games/bug_hunter/bug_hunter_levels.dart';
 import 'package:robi_codes/games/path_finder/engine/path_finder_engine.dart';
 import 'package:robi_codes/games/repeat/engine/repeat_engine.dart';
 import 'package:robi_codes/games/repeat/engine/repeat_program.dart';
+import 'package:robi_codes/games/repeat/repeat_controller.dart';
+
+import '../../support/test_l10n.dart';
 
 bool _usesRepeat(String code) => RepeatEngine.parseSolution(code).any((block) => block is RepeatBlock);
 
@@ -44,6 +48,50 @@ void main() {
       expect(level.startingProgram.allowsRepeat, _usesRepeat(level.bugged) || _usesRepeat(level.solution));
     });
   }
+
+  test('showHint_BuggedCode_MarksBugUnlessOnlyLastArrowIsMissing', () {
+    // Arrange: ipucu bozuk yeri göstermeli; ok ekletmesi yalnızca bozuk kodun sonunda ok eksikse doğrudur.
+    final levelsSuggestingMove = <int>[];
+
+    // Act
+    for (final (index, level) in bugHunterBaseLevels.indexed) {
+      final controller = RepeatController(
+        level: level.puzzle,
+        startingProgram: level.startingProgram,
+        onCompleted: (_) {},
+        feedback: const SilentGameFeedback(),
+      )..showHint();
+      if (controller.wrongPlace == null) {
+        levelsSuggestingMove.add(index + 1);
+      }
+    }
+
+    // Assert: 3. seviyede ("RRD", çözüm "RRDD") yalnızca son ok eksik.
+    expect(levelsSuggestingMove, [3]);
+  });
+
+  test('showHint_ExtraArrowLevels_SaysDeleteExtraArrow', () {
+    for (final number in [9, 15]) {
+      // Arrange: bu seviyelerde bozuk kod, fazla bir ok silinince çözüme uyuyor.
+      final level = bugHunterBaseLevels[number - 1];
+      final controller = RepeatController(
+        level: level.puzzle,
+        startingProgram: level.startingProgram,
+        onCompleted: (_) {},
+        feedback: const SilentGameFeedback(),
+      );
+
+      // Act
+      controller.showHint();
+
+      // Assert
+      final place = controller.wrongPlace!;
+      final name = Places.isInner(place)
+          ? texts.repeatInnerArrowName(place.block + 1, place.inner + 1)
+          : texts.repeatBlockName(place.block + 1);
+      expect(controller.message(texts), texts.repeatFixHint(texts.repeatExtraBlock(name)), reason: 'Seviye $number');
+    }
+  });
 
   test('allowsRepeat_EasyAndMediumLevels_IsFalse', () {
     expect(bugHunterBaseLevels.take(10).map((level) => level.startingProgram.allowsRepeat), everyElement(isFalse));

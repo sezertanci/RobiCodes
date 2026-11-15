@@ -34,6 +34,16 @@ AİLELER İÇİN
 
 Gizlilik politikası: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.4.1)
+
+- Yeni avantajlı paket: Başlangıç Seti. Hata Avcısı ve Kendi Komutunu Oluştur birlikte, daha uygun fiyata alınabilir.
+
+## Sürüm notu (1.4.0)
+
+- Yeni oyun: Kendi Komutunu Oluştur. Çocuk oklarla kendi komutunu yapar ve onu ana programda tekrar tekrar kullanır.
+- Her zorluk grubunun ilk seviyesi ücretsiz denenebilir. 20 seviyenin tamamı tek seferlik satın alımla açılır.
+- Küçük düzeltmeler: uzun oyun adları ana sayfada tam görünür, tablette düğmeler daha düzgün yerleşir.
+
 ## Sürüm notu (1.3.0)
 
 - Yeni oyun: Hata Avcısı. Robi'nin kodunda bir hata var; çocuk kodu çalıştırıp hatayı bulur ve düzeltir.

@@ -531,6 +531,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get storeBundle => 'Bundel';
 
   @override
+  String get storeStarterBundleTitle => 'Paket Pemula';
+
+  @override
   String get storeOwned => 'Dimiliki';
 
   @override
@@ -1073,6 +1076,11 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String repeatExtraBlock(Object place) {
+    return '$place kelebihan. Coba hapus bagian itu.';
+  }
+
+  @override
   String repeatBlocked(Object obstacle, Object advice) {
     return 'Robot terhalang $obstacle. $advice';
   }
@@ -1399,6 +1407,10 @@ class AppLocalizationsId extends AppLocalizations {
   String myCommandFixCount(Object number) {
     return 'Coba ubah jumlah ulangan blok $number di dalam perintah atau panah di dalamnya.';
   }
+
+  @override
+  String get myCommandLaterCall =>
+      'Kali ini perintah membuat robot keluar dari jalur; ubah perintahnya atau panah di program utama.';
 
   @override
   String get myCommandL1Intro =>

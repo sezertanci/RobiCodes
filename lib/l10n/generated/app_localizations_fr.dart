@@ -532,6 +532,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get storeBundle => 'Lot';
 
   @override
+  String get storeStarterBundleTitle => 'Pack de démarrage';
+
+  @override
   String get storeOwned => 'Acheté';
 
   @override
@@ -1075,6 +1078,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String repeatExtraBlock(Object place) {
+    return '$place est en trop. Essaie de l’enlever.';
+  }
+
+  @override
   String repeatBlocked(Object obstacle, Object advice) {
     return 'Le robot a heurté $obstacle. $advice';
   }
@@ -1400,6 +1408,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String myCommandFixCount(Object number) {
     return 'Essaie de changer le nombre de répétitions du bloc $number de la commande ou les flèches qu’il contient.';
   }
+
+  @override
+  String get myCommandLaterCall =>
+      'Cette fois, la commande fait sortir le robot du chemin ; change la commande ou les flèches du programme principal.';
 
   @override
   String get myCommandL1Intro =>

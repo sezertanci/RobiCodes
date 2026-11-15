@@ -530,6 +530,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get storeBundle => 'Combo';
 
   @override
+  String get storeStarterBundleTitle => 'Pacote inicial';
+
+  @override
   String get storeOwned => 'Comprado';
 
   @override
@@ -1073,6 +1076,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String repeatExtraBlock(Object place) {
+    return '$place está sobrando. Tente apagar essa peça.';
+  }
+
+  @override
   String repeatBlocked(Object obstacle, Object advice) {
     return 'O robô deu de cara com $obstacle. $advice';
   }
@@ -1398,6 +1406,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String myCommandFixCount(Object number) {
     return 'Tente trocar o número de repetições do bloco $number do comando ou as setas dentro dele.';
   }
+
+  @override
+  String get myCommandLaterCall =>
+      'Desta vez o comando tira o robô do caminho; troque o comando ou as setas do programa principal.';
 
   @override
   String get myCommandL1Intro =>

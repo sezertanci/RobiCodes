@@ -233,7 +233,8 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   20 seviye, ürün `pack.my_command.base`, turkuaz tema, ikon `assets/icons/game-command.svg`, 8 dilde metinler.
   `flutter analyze` temiz, 636 test geçiyor; emülatörde 1. seviye 3 yıldızla bitirildi. Kalanlar: pubspec
   sürüm yükseltme, ürün simgesi `store/robi-codes/products/my-command-512.png`, Play Console'da ürün ve sürüm.
-- Sırada: iki oyunu kapsayan bundle. Sonraki oyunlar: Değişken Kutusu →
+- **Başlangıç Seti (`bundle.starter`) kodlandı (15.11.2026):** iki ücretli oyunu birlikte açar; sürüm `1.4.1+6` (1.4.0+5 kapalı teste yüklendi),
+  release AAB hazır. Play Console'da ürünlerin açılması ve kapalı test sürümü kullanıcıda. Sonraki oyunlar: Değişken Kutusu →
   Desen Bulmacası → Devre → Akış Şeması.
 
 ## Kararlar

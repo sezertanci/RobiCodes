@@ -324,6 +324,10 @@
   "storeFreeSection": "Ücretsiz paketler",
   "storeNoProducts": "Şu an satın alınabilir paket yok.",
   "storeBundle": "Avantajlı paket",
+  "storeStarterBundleTitle": "Başlangıç Seti",
+  "@storeStarterBundleTitle": {
+    "description": "Hata Avcısı ve Kendi Komutunu Oluştur oyunlarını birlikte açan avantajlı paketin adı."
+  },
   "storeOwned": "Sahipsiniz",
   "storeUnlocks": "Satın alındığında açılanlar:",
   "storePriceLoading": "Fiyat Google Play'den alınıyor…",
@@ -755,6 +759,14 @@
       }
     }
   },
+  "repeatExtraBlock": "{place} fazla. Onu silmeyi dene.",
+  "@repeatExtraBlock": {
+    "placeholders": {
+      "place": {
+        "type": "Object"
+      }
+    }
+  },
   "repeatBlocked": "Robot {obstacle} çarptı. {advice}",
   "@repeatBlocked": {
     "placeholders": {
@@ -899,6 +911,7 @@
       }
     }
   },
+  "myCommandLaterCall": "Komut bu kullanımda robotu yoldan çıkarıyor; komutu ya da ana programdaki okları değiştir.",
   "myCommandL1Intro": "Kendi komutunu yap! Üstteki turkuaz şeride iki sağ ok koy. Sonra Komut düğmesiyle komutunu ana programa ekle.",
   "myCommandL1Hint": "Robot 6 kez sağa gitmeli. Komutun 2 sağ ok olursa onu kaç kez kullanmalısın?",
   "myCommandL2Hint": "Merdiven gibi in. Bir basamak: bir sağa, bir aşağı. Komutun bu olsun.",

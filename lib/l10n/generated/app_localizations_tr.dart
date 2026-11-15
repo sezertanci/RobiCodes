@@ -514,6 +514,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get storeBundle => 'Avantajlı paket';
 
   @override
+  String get storeStarterBundleTitle => 'Başlangıç Seti';
+
+  @override
   String get storeOwned => 'Sahipsiniz';
 
   @override
@@ -1045,6 +1048,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String repeatExtraBlock(Object place) {
+    return '$place fazla. Onu silmeyi dene.';
+  }
+
+  @override
   String repeatBlocked(Object obstacle, Object advice) {
     return 'Robot $obstacle çarptı. $advice';
   }
@@ -1360,6 +1368,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String myCommandFixCount(Object number) {
     return 'Komuttaki $number. bloğun tekrar sayısını ya da içindeki okları değiştirmeyi dene.';
   }
+
+  @override
+  String get myCommandLaterCall =>
+      'Komut bu kullanımda robotu yoldan çıkarıyor; komutu ya da ana programdaki okları değiştir.';
 
   @override
   String get myCommandL1Intro =>
