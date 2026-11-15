@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import '../language/language_service.dart';
 
-/// Ayarlardaki dil satırı: desteklenen diller, her biri kendi dilindeki adıyla listelenir
-/// (ör. "Türkçe", "English"). Seçim hemen uygulanır ve saklanır. Yeni bir dil ARB dosyasıyla
-/// eklendiğinde listede kendiliğinden görünür.
+/// Ayarlardaki dil satırı: sağda yalnızca seçili dilin adı yazar; satıra dokununca desteklenen
+/// diller, her biri kendi dilindeki adıyla (ör. "Türkçe", "English") bir pencerede listelenir.
+/// Satırın genişliği en uzun dil adına bağlı olmadığı için dar ekranlarda başlık sıkışmaz.
+/// Seçim hemen uygulanır ve saklanır. Yeni bir dil ARB dosyasıyla eklendiğinde listede kendiliğinden görünür.
 final class LanguageTile extends StatelessWidget {
   const LanguageTile({required this.language, super.key});
 
@@ -15,21 +16,31 @@ final class LanguageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final current = Localizations.localeOf(context);
+    final l10n = context.l10n;
     return ListTile(
       leading: const Icon(Icons.language_rounded),
-      title: Text(context.l10n.settingsLanguage),
-      trailing: DropdownButton<String>(
-        value: current.languageCode,
-        underline: const SizedBox.shrink(),
-        items: [
+      title: Text(l10n.settingsLanguage),
+      trailing: Text(l10n.languageName),
+      onTap: () => unawaited(_pickLanguage(context)),
+    );
+  }
+
+  Future<void> _pickLanguage(BuildContext context) async {
+    final current = Localizations.localeOf(context).languageCode;
+    final code = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(context.l10n.settingsLanguage),
+        children: [
           for (final locale in AppLocalizations.supportedLocales)
-            DropdownMenuItem(value: locale.languageCode, child: Text(lookupAppLocalizations(locale).languageName)),
+            ListTile(
+              title: Text(lookupAppLocalizations(locale).languageName),
+              trailing: locale.languageCode == current ? const Icon(Icons.check_rounded) : null,
+              onTap: () => Navigator.of(context).pop(locale.languageCode),
+            ),
         ],
-        onChanged: (code) {
-          if (code != null) unawaited(language.select(Locale(code)));
-        },
       ),
     );
+    if (code != null && code != current) await language.select(Locale(code));
   }
 }

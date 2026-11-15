@@ -199,7 +199,7 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
 ## Dil desteği (15.11.2026)
 
 - Uygulama Türkçe ve İngilizce oynanır; ayrıntılar README'deki "Dil desteği" bölümünde ve
-  [docs/decisions.md](docs/decisions.md) içinde. Sürüm `1.1.0+2`.
+  [docs/decisions.md](docs/decisions.md) içinde. İlk dil sürümü `1.1.0+2`; 6 yeni dille `1.2.0+3`.
 - Mağaza metinleri `store/robi-codes/listing/` altında (tr-TR, en-US); öne çıkan görsel her dil için ayrı.
 - Ekran görüntüleri dile göre ayrıldı: `store/robi-codes/screenshots/<tr-TR|en-US>/<phone|tablet-7|tablet-10>`.
   İngilizce görüntüler emülatörde çekildi (telefon 1080x1920/420, 7 inç 1200x1920/320, 10 inç 1600x2560/360).
