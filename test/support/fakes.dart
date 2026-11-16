@@ -57,6 +57,7 @@ final class RecordingGameFeedback implements GameFeedback {
   final List<RobotMood> moods = [];
   final List<int> stars = [];
   int levelCompleteCount = 0;
+  int stepCount = 0;
 
   /// Ses çalınan anlar: robotun konuştuğu anlarda ses çalınmaz.
   List<RobotMood> get audibleMoods => [
@@ -72,6 +73,9 @@ final class RecordingGameFeedback implements GameFeedback {
 
   @override
   void levelComplete() => levelCompleteCount++;
+
+  @override
+  void step() => stepCount++;
 }
 
 /// Sonuçları testte ayarlanan mağaza.

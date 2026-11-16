@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'parental_gate.dart';
 import 'protected_action_runner.dart';
+import '../sound/tap_sound.dart';
 
 /// Ebeveyn doğrulamasını gerçek bir işlem başlatmadan denemek için ayarlardaki giriş.
 /// Yalnızca debug derlemelerinde gösterilir (bkz. `SettingsDialog`); release derlemesinde
@@ -50,7 +51,7 @@ final class _ParentalGateTrialState extends State<ParentalGateTrial> {
         true => ParentalGateTrial.passed,
         false => ParentalGateTrial.blocked,
       }),
-      onTap: _try,
+      onTap: context.withTapSound(_try),
     );
   }
 }

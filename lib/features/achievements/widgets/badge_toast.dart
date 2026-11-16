@@ -8,6 +8,7 @@ import '../../../l10n/l10n.dart';
 import '../achievement.dart';
 import 'celebration_label.dart';
 import 'reward_emblem.dart';
+import '../../sound/tap_sound.dart';
 
 /// Yeni rozet bildirimi: ekranın üstünden kayarak gelen beyaz kart. Kendiliğinden kapanır, dokununca
 /// hemen kapanır. Süreler web sürümündeki `celebration.js` ve `achievements.css` ile aynıdır.
@@ -136,7 +137,7 @@ final class _BadgeToastState extends State<BadgeToast> with SingleTickerProvider
       label: '${t.achievementNewBadge} ${status.achievement.title(t)}. ${status.achievement.description(t)}',
       excludeSemantics: true,
       child: GestureDetector(
-        onTap: _close,
+        onTap: context.withTapSound(_close),
         child: Material(
           color: Colors.transparent,
           child: DecoratedBox(

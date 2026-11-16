@@ -243,6 +243,8 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   Debug'da ayarlarda "Tüm kilitleri aç" anahtarı var (yalnızca bellekte). `flutter analyze` temiz, 774 test geçiyor.
   Kalanlar: pubspec sürüm yükseltme, ürün simgesi `store/robi-codes/products/variable-box-512.png` (kahverengi
   oyun simgesinden), Play Console'da ürün ve sürüm.
+- **Tuş ve adım sesleri eklendi (16.11.2026, commit edilmedi).** Bütün tuşlar tıklama sesi, robot her
+  karede adım sesi çalar; ayrıntı docs/decisions.md "Ses efektleri".
 
 ## Kararlar
 

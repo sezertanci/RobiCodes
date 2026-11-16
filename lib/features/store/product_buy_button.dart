@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../content/models/store_product.dart';
 import '../../l10n/l10n.dart';
 import 'listing_service.dart';
+import '../sound/tap_sound.dart';
 
 /// Henüz sahip olunmayan ürünün fiyatlı satın alma düğmesi. Fiyat yüklenirken, yüklenemediğinde
 /// (yeniden deneme düğmesiyle) ve ürün Play'de bulunmadığında bunu anlatan metin gösterilir.
@@ -37,7 +38,7 @@ final class ProductBuyButton extends StatelessWidget {
         spacing: _gap,
         children: [
           Expanded(child: Text(t.storePriceUnavailable)),
-          TextButton(onPressed: () => unawaited(listings.load()), child: Text(t.storeRetry)),
+          TextButton(onPressed: context.withTapSound(() => unawaited(listings.load())), child: Text(t.storeRetry)),
         ],
       );
     }
@@ -45,6 +46,9 @@ final class ProductBuyButton extends StatelessWidget {
     if (listing == null) {
       return Text(t.storeNotInStore);
     }
-    return FilledButton(onPressed: isBusy ? null : () => onBuy(product), child: Text(t.storeBuy(listing.price)));
+    return FilledButton(
+      onPressed: context.withTapSound(isBusy ? null : () => onBuy(product)),
+      child: Text(t.storeBuy(listing.price)),
+    );
   }
 }

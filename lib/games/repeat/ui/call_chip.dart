@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
 import '../../path_finder/ui/command_chip.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Ana programdaki komut bloğu: turkuaz zeminde beyaz yapboz parçası. Adı yazmaz; çocuk komutu
 /// rengiyle ve simgesiyle tanır. Durumları yön kutusuyla ([CommandChip]) aynıdır: seçiliyse lacivert,
@@ -43,9 +44,9 @@ final class CallChip extends StatelessWidget {
     selected: selected,
     label: label,
     excludeSemantics: true,
-    onTap: onTap,
+    onTap: context.withTapSound(onTap),
     child: GestureDetector(
-      onTap: onTap,
+      onTap: context.withTapSound(onTap),
       child: Stack(
         clipBehavior: Clip.none,
         children: [

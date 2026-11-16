@@ -8,6 +8,7 @@ import '../progress/star_rule.dart';
 import 'game_feedback.dart';
 import 'widgets/confetti.dart';
 import 'widgets/star_row.dart';
+import '../sound/tap_sound.dart';
 
 /// Seviye bitince açılan sonuç paneli. Panel açılınca seviye sonu sesi çalar; yıldızlar web sürümündeki
 /// gibi sırayla belirir ve kazanılan her yıldızda tonu yükselen yıldız sesi çalar.
@@ -98,9 +99,12 @@ final class _ResultPanelState extends State<ResultPanel> {
                     runSpacing: 12,
                     alignment: WrapAlignment.center,
                     children: [
-                      OutlinedButton(onPressed: widget.onBackToLevels, child: Text(t.commonBackToLevels)),
+                      OutlinedButton(
+                        onPressed: context.withTapSound(widget.onBackToLevels),
+                        child: Text(t.commonBackToLevels),
+                      ),
                       if (widget.onNextLevel case final onNext?)
-                        FilledButton(onPressed: onNext, child: Text(t.commonNextLevel)),
+                        FilledButton(onPressed: context.withTapSound(onNext), child: Text(t.commonNextLevel)),
                     ],
                   ),
                 ],

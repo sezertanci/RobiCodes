@@ -14,6 +14,7 @@ import 'purchase_flow.dart';
 import 'store_texts.dart';
 import 'widgets/free_pack_card.dart';
 import 'widgets/product_card.dart';
+import '../sound/tap_sound.dart';
 
 /// Paket mağazası: ücretli ürünler, fiyatları, sahiplik durumu, ücretsiz paketler ve geri yükleme.
 /// Satın alma `PurchaseFlow` ile ebeveyn onayından geçer.
@@ -143,7 +144,7 @@ final class _StoreScreenState extends State<StoreScreen> {
           spacing: _gap / 2,
           children: [
             OutlinedButton.icon(
-              onPressed: _isBusy ? null : _restore,
+              onPressed: context.withTapSound(_isBusy ? null : _restore),
               icon: const Icon(Icons.restore_rounded),
               label: Text(t.storeRestore),
             ),

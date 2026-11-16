@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/l10n.dart';
 import '../language/language_service.dart';
+import '../sound/tap_sound.dart';
 
 /// Ayarlardaki dil satırı: sağda yalnızca seçili dilin adı yazar; satıra dokununca desteklenen
 /// diller, her biri kendi dilindeki adıyla (ör. "Türkçe", "English") bir pencerede listelenir.
@@ -21,7 +22,7 @@ final class LanguageTile extends StatelessWidget {
       leading: const Icon(Icons.language_rounded),
       title: Text(l10n.settingsLanguage),
       trailing: Text(l10n.languageName),
-      onTap: () => unawaited(_pickLanguage(context)),
+      onTap: context.withTapSound(() => unawaited(_pickLanguage(context))),
     );
   }
 
@@ -36,7 +37,7 @@ final class LanguageTile extends StatelessWidget {
             ListTile(
               title: Text(lookupAppLocalizations(locale).languageName),
               trailing: locale.languageCode == current ? const Icon(Icons.check_rounded) : null,
-              onTap: () => Navigator.of(context).pop(locale.languageCode),
+              onTap: context.withTapSound(() => Navigator.of(context).pop(locale.languageCode)),
             ),
         ],
       ),

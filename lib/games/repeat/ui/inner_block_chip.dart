@@ -9,6 +9,7 @@ import '../program_models.dart';
 import '../repeat_texts.dart';
 import 'repeat_assets.dart';
 import 'stepper_button.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Tekrar bloğunun içine de konabilen blok: ok ([CommandChip]) ya da kutu bloğu ([BoxChip]). Seçim, çalışma
 /// ve hata durumunu [controller]dan okur. [number] verilirse sıra rozeti görünür (üst düzey bloklar).
@@ -108,7 +109,7 @@ final class BoxChip extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         GestureDetector(
-          onTap: onTap,
+          onTap: context.withTapSound(onTap),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
             height: size,
@@ -124,7 +125,7 @@ final class BoxChip extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (value != null) ...[_stepper(t.variableBoxDecrease, -1, value), const SizedBox(width: _gap)],
-                _face(t),
+                _face(context, t),
                 if (value != null) ...[const SizedBox(width: _gap), _stepper(t.variableBoxIncrease, 1, value)],
               ],
             ),
@@ -135,12 +136,12 @@ final class BoxChip extends StatelessWidget {
     );
   }
 
-  Widget _face(AppLocalizations t) => Semantics(
+  Widget _face(BuildContext context, AppLocalizations t) => Semantics(
     button: true,
     selected: controller.selected == place,
     label: RepeatTexts.boxChip(t, place, block),
     excludeSemantics: true,
-    onTap: onTap,
+    onTap: context.withTapSound(onTap),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [

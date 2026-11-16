@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_theme.dart';
+import '../../features/sound/tap_sound.dart';
 
 /// Renkli kart (web sürümündeki oyun kartı zemini): tonun renginde, üstten alta solan parlaklık,
 /// yarı saydam beyaz halka ve koyu tonda kalın alt kenar. İçindeki yazılar beyaz ve koyu tonda
@@ -35,7 +36,7 @@ final class ToneCard extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: onTap,
+          onTap: context.withTapSound(onTap),
           borderRadius: radius,
           child: Padding(
             padding: padding,

@@ -8,6 +8,7 @@ import '../../../l10n/l10n.dart';
 import '../command_order_texts.dart';
 import 'card_metrics.dart';
 import 'draggable_order_card.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Numaralı kutular. Zor ve Uzman seviyelerinde kutular aşama başlıklarıyla gruplanır.
 final class SlotBoard extends StatelessWidget {
@@ -129,9 +130,9 @@ final class _EmptySlot extends StatelessWidget {
     enabled: onTap != null,
     label: CommandOrderTexts.emptySlot(context.l10n, slot),
     excludeSemantics: true,
-    onTap: onTap,
+    onTap: context.withTapSound(onTap),
     child: GestureDetector(
-      onTap: onTap,
+      onTap: context.withTapSound(onTap),
       child: Container(
         width: metrics.width,
         height: metrics.height,

@@ -9,7 +9,13 @@ enum SoundEffect {
   star('star'),
   levelComplete('level-complete'),
   badge('badge'),
-  trophy('trophy');
+  trophy('trophy'),
+
+  /// Tuşa basılınca çalan kısa tıklama (bkz. `withTapSound`).
+  tap('tap'),
+
+  /// Robot haritada bir kare ilerleyince çalan yumuşak adım sesi.
+  step('step');
 
   const SoundEffect(this.fileName);
 

@@ -12,6 +12,9 @@ abstract interface class GameFeedback {
   void star(int index);
 
   void levelComplete();
+
+  /// Robot haritada bir kare ilerledi.
+  void step();
 }
 
 /// Ses çalmayan geri bildirim; oyunların tek başına denendiği testlerde kullanılır.
@@ -26,6 +29,9 @@ final class SilentGameFeedback implements GameFeedback {
 
   @override
   void levelComplete() {}
+
+  @override
+  void step() {}
 }
 
 /// Ses servisiyle çalışan geri bildirim. Ses kapalıysa servis hiçbir şey çalmaz.
@@ -51,4 +57,7 @@ final class SoundGameFeedback implements GameFeedback {
 
   @override
   void levelComplete() => _sound.play(SoundEffect.levelComplete);
+
+  @override
+  void step() => _sound.play(SoundEffect.step);
 }

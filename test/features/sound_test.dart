@@ -139,6 +139,17 @@ void main() {
         'assets/sounds/star-1.wav',
       ]);
     });
+
+    test('step_Called_PlaysStepFile', () {
+      // Arrange
+      final feedback = SoundGameFeedback(createService());
+
+      // Act
+      feedback.step();
+
+      // Assert
+      expect(player.played, ['assets/sounds/step.wav']);
+    });
   });
 
   group('SettingsDialog', () {
@@ -159,6 +170,8 @@ void main() {
       expect(services.sound.isEnabled, isFalse);
       expect(find.byType(SettingsDialog), findsNothing);
       expect(createService().isEnabled, isFalse);
+      // Ayarlar tuşu ve anahtar tıklama sesi çalar; ses kapandıktan sonra Kapat tuşu sessizdir.
+      expect(player.played, [SoundEffect.tap.assetFor(), SoundEffect.tap.assetFor()]);
     });
   });
 }

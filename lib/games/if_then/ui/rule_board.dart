@@ -9,6 +9,7 @@ import '../../../l10n/l10n.dart';
 import '../if_then_texts.dart';
 import 'block_tile.dart';
 import 'if_then_metrics.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Kural satırları ve en sonda "Değilse" satırı. Her satırda üstte mavi "Eğer ... varsa" başlığı,
 /// altında içeri girmiş hareket kutusu bulunur. Çalışan kural sarı, yanlış kural kırmızı halkayla,
@@ -182,9 +183,9 @@ final class _SlotBox extends StatelessWidget {
           enabled: onTap != null,
           label: IfThenTexts.slot(context.l10n, condition: condition, value: value, locked: locked),
           excludeSemantics: true,
-          onTap: onTap,
+          onTap: context.withTapSound(onTap),
           child: GestureDetector(
-            onTap: onTap,
+            onTap: context.withTapSound(onTap),
             child: SizedBox.fromSize(
               size: size,
               child: value == null

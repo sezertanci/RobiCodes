@@ -7,6 +7,7 @@ import '../developer/developer_unlock_tile.dart';
 import '../parental_gate/parental_gate_trial.dart';
 import '../store/store_screen.dart';
 import 'language_tile.dart';
+import '../sound/tap_sound.dart';
 
 /// Ayarlar penceresi: sesi açıp kapatma, dil seçimi ve paket mağazasına giriş. Ayar hemen kaydedilir; pencere kapatılınca da geçerli kalır.
 /// Debug derlemelerinde ayrıca ebeveyn doğrulamasını deneme girişi ve bütün kilitleri açan anahtar gösterilir.
@@ -36,14 +37,14 @@ final class SettingsDialog extends StatelessWidget {
                 title: Text(t.settingsSound),
                 secondary: Icon(sound.isEnabled ? Icons.volume_up_rounded : Icons.volume_off_rounded),
                 value: sound.isEnabled,
-                onChanged: sound.setEnabled,
+                onChanged: context.withTapSoundValue(sound.setEnabled),
               ),
             ),
             LanguageTile(language: services.language),
             ListTile(
               leading: const Icon(Icons.storefront_rounded),
               title: Text(t.storeTitle),
-              onTap: () => StoreScreen.open(context),
+              onTap: context.withTapSound(() => StoreScreen.open(context)),
             ),
             // Release derlemesinde `kDebugMode` sabit `false` olduğundan bu girişler derlemeden çıkarılır.
             if (kDebugMode) ...[
@@ -53,7 +54,9 @@ final class SettingsDialog extends StatelessWidget {
           ],
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(t.commonClose))],
+      actions: [
+        TextButton(onPressed: context.withTapSound(() => Navigator.of(context).pop()), child: Text(t.commonClose)),
+      ],
     );
   }
 }

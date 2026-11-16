@@ -15,6 +15,10 @@ final class AppScope extends InheritedWidget {
     return scope!.services;
   }
 
+  /// Servisleri ağaca bağımlılık kurmadan okur; geri çağırmalarda (ör. dokunma anında) kullanılır.
+  /// Ağaçta [AppScope] yoksa (bileşenlerin tek başına denendiği testlerde) `null` döner.
+  static AppServices? read(BuildContext context) => context.getInheritedWidgetOfExactType<AppScope>()?.services;
+
   @override
   bool updateShouldNotify(AppScope oldWidget) => services != oldWidget.services;
 }

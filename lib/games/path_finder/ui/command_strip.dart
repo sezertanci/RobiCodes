@@ -6,6 +6,7 @@ import '../engine/path_finder_board.dart';
 import '../path_finder_controller.dart';
 import '../path_finder_texts.dart';
 import 'command_chip.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Komut şeridi: eklenen komutlar sırayla görünür. Komuta dokunmak onu seçer; seçili komut
 /// sola/sağa taşınabilir ya da silinebilir. Komuta basılı tutup sürükleyerek de yeri değişir.
@@ -154,18 +155,21 @@ final class _EditBar extends StatelessWidget {
         alignment: WrapAlignment.center,
         children: [
           _button(
+            context,
             label: t.pathFinderMoveLeft,
             text: PathFinderTexts.direction(t, Direction.left),
             icon: Icons.arrow_back_rounded,
             onPressed: index == 0 ? null : () => controller.moveSelected(-1),
           ),
           _button(
+            context,
             label: t.pathFinderMoveRight,
             text: PathFinderTexts.direction(t, Direction.right),
             icon: Icons.arrow_forward_rounded,
             onPressed: index == controller.commands.length - 1 ? null : () => controller.moveSelected(1),
           ),
           _button(
+            context,
             label: t.commonDelete,
             text: t.commonDelete,
             icon: Icons.close_rounded,
@@ -177,7 +181,8 @@ final class _EditBar extends StatelessWidget {
     );
   }
 
-  static Widget _button({
+  static Widget _button(
+    BuildContext context, {
     required String label,
     required String text,
     required IconData icon,
@@ -186,7 +191,7 @@ final class _EditBar extends StatelessWidget {
   }) => Tooltip(
     message: label,
     child: FilledButton.tonalIcon(
-      onPressed: onPressed,
+      onPressed: context.withTapSound(onPressed),
       icon: Icon(icon),
       label: Text(text),
       style: color == null ? null : FilledButton.styleFrom(foregroundColor: color),

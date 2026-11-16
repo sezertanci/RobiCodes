@@ -86,6 +86,11 @@
   uygulama varlıklarından (assets) çalınır.
 - Sesleri çalmak için uygun ve hafif tek bir ses paketi kullanılır.
 - Ses çalma ayrı bir modüldür; oyun mekanikleri ses paketine veya dosyalara doğrudan bağlı olmaz.
+- Uygulamadaki bütün tuşlar dokunulunca kısa bir tıklama sesi (`tap`) çalar; sürükle-bırak ses çıkarmaz.
+  Tuşlar geri çağırmalarını `context.withTapSound` ile sarar (`lib/features/sound/tap_sound.dart`).
+- Robot haritada her kareye geçtiğinde yumuşak bir adım sesi (`step`) çalar. Tıklama ve adım sesleri
+  `tool/make_sounds.py` ile üretilir ve yalnızca uygulamada vardır. Ayrı bir ayar yoktur; ikisi de tek
+  "Ses" anahtarına uyar.
 
 ## Rozet ve kupalar
 

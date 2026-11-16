@@ -10,13 +10,14 @@ final _board = PathFinderBoard.parse(['S*G']);
 
 void main() {
   group('BoardRun', () {
-    Future<bool> play(BoardRun run, {bool Function()? isStopped, List<int>? steps}) {
+    Future<bool> play(BoardRun run, {bool Function()? isStopped, List<int>? steps, List<GridPoint>? moves}) {
       const commands = [_right, _right];
       return run.play(
         PathFinderEngine.run(_board, commands),
         directions: commands,
         stepDuration: Duration.zero,
         onStep: (index) => steps?.add(index),
+        onMove: () => moves?.add(run.robot),
         notify: () {},
         isStopped: isStopped ?? () => false,
       );
@@ -36,6 +37,18 @@ void main() {
       expect(run.robot, _board.goal);
       expect(run.trail, {_board.start: _right, _board.coins.first: _right});
       expect(run.collectedCoins, {0});
+    });
+
+    test('play_FullRun_ReportsEachMoveAfterRobotMoves', () async {
+      // Arrange
+      final run = BoardRun(_board);
+      final moves = <GridPoint>[];
+
+      // Act
+      await play(run, moves: moves);
+
+      // Assert
+      expect(moves, [_board.coins.first, _board.goal]);
     });
 
     test('play_StoppedWhileWaiting_ReturnsFalseAfterFirstStep', () async {

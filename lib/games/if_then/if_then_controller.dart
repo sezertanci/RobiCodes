@@ -250,6 +250,7 @@ final class IfThenController extends ChangeNotifier with LevelLifecycle {
       _jumpPending = false;
     }
     _robotCell = cell;
+    feedback.step();
   }
 
   void _fail(LaneStep step) {

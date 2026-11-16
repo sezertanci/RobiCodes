@@ -6,6 +6,7 @@ import '../../../l10n/l10n.dart';
 import '../engine/command_order_engine.dart';
 import 'card_metrics.dart';
 import 'step_image.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Adım kartı: üstte eylemi anlatan büyük görsel, altta kısa yazı. Kartın rengi karışık sıradaki
 /// yerine göre beş renkten biridir (web sürümündeki gibi).
@@ -48,9 +49,9 @@ final class OrderCardTile extends StatelessWidget {
       enabled: onTap != null,
       label: label,
       excludeSemantics: true,
-      onTap: onTap,
+      onTap: context.withTapSound(onTap),
       child: GestureDetector(
-        onTap: onTap,
+        onTap: context.withTapSound(onTap),
         child: Container(
           width: metrics.width,
           height: metrics.height,

@@ -183,7 +183,8 @@ void main() {
     // Assert
     expect(find.text(trophies.first.achievement.title(texts)), findsNothing);
     expect(find.text(trophies.elementAt(1).achievement.title(texts)), findsWidgets);
-    expect(player.played, [SoundEffect.trophy.assetFor(), SoundEffect.trophy.assetFor()]);
+    // Harika tuşu önce tıklama sesini çalar.
+    expect(player.played, [SoundEffect.trophy.assetFor(), SoundEffect.tap.assetFor(), SoundEffect.trophy.assetFor()]);
   });
 
   testWidgets('TrophyCelebration_Shown_ConfettiKeepsFalling', (tester) async {

@@ -7,6 +7,7 @@ import '../program_models.dart';
 import 'call_chip.dart';
 import 'inner_block_chip.dart';
 import 'repeat_block_view.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Blok şeridi: oklar ve turuncu tekrar blokları sırayla tek satırda durur, sığmazsa yatay kayar.
 /// Bir bloğa dokunmak onu seçer; seçiliyken sağda, sayacın altında "Sil" ve (bloğun içindeki ok için) "Dışarı çıkar"
@@ -223,14 +224,15 @@ final class _SidePanel extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _button(t.repeatDeleteLabel, Icons.delete_outline, AppColors.red, controller.deleteSelected),
+              _button(context, t.repeatDeleteLabel, Icons.delete_outline, AppColors.red, controller.deleteSelected),
               if (Places.isInner(selected)) ...[
                 const SizedBox(width: _gap),
-                _button(t.repeatMoveOutLabel, Icons.logout, AppColors.orangeDark, controller.moveSelectedOut),
+                _button(context, t.repeatMoveOutLabel, Icons.logout, AppColors.orangeDark, controller.moveSelectedOut),
               ],
               if (controller.fixesProgram) ...[
                 const SizedBox(width: _gap),
                 _button(
+                  context,
                   t.bugHunterInsertLabel,
                   controller.isInserting ? Icons.add_circle : Icons.add_circle_outline,
                   AppColors.greenDark,
@@ -244,15 +246,16 @@ final class _SidePanel extends StatelessWidget {
     );
   }
 
-  Widget _button(String label, IconData icon, Color color, VoidCallback? onPressed) => SizedBox.square(
-    dimension: buttonSize,
-    child: IconButton.filledTonal(
-      tooltip: label,
-      onPressed: onPressed,
-      padding: EdgeInsets.zero,
-      iconSize: buttonSize * 0.6,
-      color: color,
-      icon: Icon(icon),
-    ),
-  );
+  Widget _button(BuildContext context, String label, IconData icon, Color color, VoidCallback? onPressed) =>
+      SizedBox.square(
+        dimension: buttonSize,
+        child: IconButton.filledTonal(
+          tooltip: label,
+          onPressed: context.withTapSound(onPressed),
+          padding: EdgeInsets.zero,
+          iconSize: buttonSize * 0.6,
+          color: color,
+          icon: Icon(icon),
+        ),
+      );
 }

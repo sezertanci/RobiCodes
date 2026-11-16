@@ -11,6 +11,7 @@ import '../program_models.dart';
 import '../repeat_texts.dart';
 import 'program_strip.dart';
 import 'repeat_block_view.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Yön tuşları, Tekrarla düğmesi ile Başlat, İpucu ve Temizle düğmeleri. Hazır programı düzeltme
 /// kurallarında Temizle "Baştan al" olur; Tekrarla düğmesi yalnızca seviye izin veriyorsa görünür.
@@ -208,11 +209,11 @@ final class WideActionButton extends StatelessWidget {
     enabled: onPressed != null,
     label: label,
     excludeSemantics: true,
-    onTap: onPressed,
+    onTap: context.withTapSound(onPressed),
     child: Opacity(
       opacity: onPressed == null ? _disabledOpacity : 1,
       child: GestureDetector(
-        onTap: onPressed,
+        onTap: context.withTapSound(onPressed),
         child: Container(
           width: width,
           height: height,

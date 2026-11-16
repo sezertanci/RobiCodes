@@ -11,6 +11,7 @@ import '../repeat_texts.dart';
 import 'inner_block_chip.dart';
 import 'repeat_assets.dart';
 import 'stepper_button.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Turuncu "N kez tekrarla" bloğu. Başlıkta sıra rozeti, −/+ düğmeleri, etiket ve çalışırken tur
 /// rozeti; yanında gövdede içindeki oklar ve kutu blokları durur. Etikete dokunmak bloğu açar (oklar içine eklenir),
@@ -68,7 +69,7 @@ final class RepeatBlockView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ring = _ringColor;
     return GestureDetector(
-      onTap: controller.isRunning ? null : () => controller.toggleSelection(_place),
+      onTap: context.withTapSound(controller.isRunning ? null : () => controller.toggleSelection(_place)),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
@@ -109,7 +110,7 @@ final class RepeatBlockView extends StatelessWidget {
                   : null,
             ),
             const SizedBox(width: 6),
-            _label(t, editable),
+            _label(context, t, editable),
             const SizedBox(width: 6),
             StepperButton(
               text: StepperButton.increase,
@@ -125,13 +126,13 @@ final class RepeatBlockView extends StatelessWidget {
     );
   }
 
-  Widget _label(AppLocalizations t, bool editable) => Semantics(
+  Widget _label(BuildContext context, AppLocalizations t, bool editable) => Semantics(
     button: true,
     selected: _isTarget,
     label: RepeatTexts.repeatLabel(t, index, block.times),
     excludeSemantics: true,
     child: GestureDetector(
-      onTap: editable ? () => controller.toggleTarget(index) : null,
+      onTap: context.withTapSound(editable ? () => controller.toggleTarget(index) : null),
       child: Container(
         height: chipSize * 0.88,
         padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 12),

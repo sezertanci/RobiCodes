@@ -45,6 +45,7 @@ final class RepeatController extends ChangeNotifier
   final ValueChanged<int> onCompleted;
 
   /// Robot sevindiğinde veya üzüldüğünde çalınan ses; verilmezse ses çalınmaz.
+  @override
   final GameFeedback feedback;
   @override
   final Duration stepDuration;

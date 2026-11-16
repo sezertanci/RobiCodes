@@ -2,7 +2,7 @@
 
 Web sürümü ses dosyası kullanmaz; notaları tarayıcıda Web Audio ile üretir. Bu betik aynı notaları,
 aynı dalga biçimini ve aynı ses zarfını (kısa yükseliş, üstel sönme) kullanarak dosyaya yazar.
-Böylece uygulamadaki sesler web sürümüyle aynı olur. Yalnızca Python'un standart kütüphanesi gerekir.
+Böylece uygulamadaki sesler web sürümüyle aynı olur. Tuş ve adım sesleri yalnızca uygulamada vardır. Yalnızca Python'un standart kütüphanesi gerekir.
 
 Kullanım: python tool/make_sounds.py assets/sounds
 """
@@ -30,10 +30,13 @@ MELODIES = {
     'wrong': [(440, 0, 0.2), (370, 0.18, 0.3)],
     'star': [(880, 0, 0.12), (1319, 0.06, 0.22)],
     'level-complete': [(523, 0, 0.12), (659, 0.1, 0.12), (784, 0.2, 0.12), (1047, 0.3, 0.4)],
+    # Web sürümünde olmayan, yalnızca uygulamaya eklenen sesler: tuş tıklaması ve robotun her adımı.
+    'tap': [(1047, 0, 0.06)],
+    'step': [(392, 0, 0.08)],
 }
 
 # Yumuşak (sinüs) dalgayla çalınan efektler; diğerleri daha parlak üçgen dalgayla çalınır.
-SOFT_SOUNDS = {'wrong'}
+SOFT_SOUNDS = {'wrong', 'tap', 'step'}
 
 
 def sine(phase):

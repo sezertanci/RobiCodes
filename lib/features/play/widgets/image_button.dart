@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_theme.dart';
+import '../../sound/tap_sound.dart';
 
 /// Görselli oyun düğmesi (web sürümünün SVG düğmeleri). Pasifken soluk görünür;
 /// [highlighted] ise sarı ışıkla parlar (ör. ipucunun önerdiği tuş).
@@ -40,10 +41,10 @@ final class ImageButton extends StatelessWidget {
         button: true,
         enabled: onPressed != null,
         label: label,
-        onTap: onPressed,
+        onTap: context.withTapSound(onPressed),
         excludeSemantics: true,
         child: GestureDetector(
-          onTap: onPressed,
+          onTap: context.withTapSound(onPressed),
           // Boy anında uygulanır; yalnızca ışık geçişlidir. Boy da geçişli olsaydı düzen yeni boya göre
           // hesaplanırken düğme bir an eski boyda kalır ve satır taşardı.
           child: SizedBox.square(

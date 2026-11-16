@@ -7,6 +7,7 @@ import '../../l10n/l10n.dart';
 import '../character/character_dialog.dart';
 import '../character/character_scope.dart';
 import '../play/widgets/idle_sway.dart';
+import '../sound/tap_sound.dart';
 
 /// Ana ekrandaki seçili karakter; beklerken hafifçe sallanır. Dokununca karakter seçme penceresi açılır; seçilen karakter hemen görünür.
 final class CharacterButton extends StatelessWidget {
@@ -28,7 +29,7 @@ final class CharacterButton extends StatelessWidget {
         excludeSemantics: true,
         child: InkWell(
           customBorder: const StadiumBorder(),
-          onTap: () => CharacterDialog.show(context, AppScope.of(context).character),
+          onTap: context.withTapSound(() => CharacterDialog.show(context, AppScope.of(context).character)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

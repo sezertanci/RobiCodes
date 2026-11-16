@@ -135,6 +135,7 @@ void main() {
 
       await controller.run();
 
+      expect(feedback.stepCount, 3);
       expect(completed, [2]);
     });
 
@@ -158,6 +159,7 @@ void main() {
       await controller.run();
 
       expect(controller.wrongIndex, 2);
+      expect(feedback.stepCount, 2);
       expect(controller.reaction, RobotReaction.bump);
       expect(controller.message(texts), PathFinderTexts.blocked(Obstacle.rock, 2)(texts));
       expect(feedback.audibleMoods, [RobotMood.sad]);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Bir sayıyı azaltan ya da artıran beyaz yuvarlak − / + düğmesi. Tekrar bloğunun tekrar sayısında ve
 /// "kutu = N" bloğunun sayısında kullanılır; [color] yazının ve gölgenin rengidir.
@@ -32,7 +33,7 @@ final class StepperButton extends StatelessWidget {
     label: label,
     excludeSemantics: true,
     child: GestureDetector(
-      onTap: onPressed,
+      onTap: context.withTapSound(onPressed),
       child: Opacity(
         opacity: onPressed == null ? 0.4 : 1,
         child: Container(

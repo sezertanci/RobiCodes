@@ -7,6 +7,7 @@ import '../../../l10n/l10n.dart';
 import '../if_then_texts.dart';
 import 'block_tile.dart';
 import 'if_then_metrics.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Seçilebilecek bloklar: "Nesneler" (koşul kutusu açıksa) ve "Hareketler". Dokunulan blok
 /// seçili veya ilk uygun boş kutuya gider; uzun basınca blok bir kutuya sürüklenebilir.
@@ -76,9 +77,9 @@ final class _PaletteBlock extends StatelessWidget {
       enabled: editable,
       label: IfThenTexts.paletteBlock(context.l10n, block),
       excludeSemantics: true,
-      onTap: editable ? () => controller.tapBlock(block) : null,
+      onTap: context.withTapSound(editable ? () => controller.tapBlock(block) : null),
       child: GestureDetector(
-        onTap: editable ? () => controller.tapBlock(block) : null,
+        onTap: context.withTapSound(editable ? () => controller.tapBlock(block) : null),
         child: hinted ? HintGlow(radius: IfThenMetrics.radius, child: tile) : tile,
       ),
     );

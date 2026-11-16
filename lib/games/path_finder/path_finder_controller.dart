@@ -179,6 +179,7 @@ final class PathFinderController extends ChangeNotifier with LevelLifecycle, Boa
       directions: _commands,
       stepDuration: stepDuration,
       onStep: (index) => _activeIndex = index,
+      onMove: feedback.step,
       notify: notifyListeners,
       isStopped: () => isDisposed,
     );

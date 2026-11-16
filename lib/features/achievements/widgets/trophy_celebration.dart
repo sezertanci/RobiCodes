@@ -9,6 +9,7 @@ import '../../play/widgets/confetti.dart';
 import '../achievement.dart';
 import 'celebration_label.dart';
 import 'reward_emblem.dart';
+import '../../sound/tap_sound.dart';
 
 /// Yeni kupa penceresi: lacivert zeminde durmadan yağan konfeti, arkasında dönen ışıklarla büyüyerek
 /// gelen kupa, kupanın adı ve "Harika!" düğmesi. Ölçüler web sürümündeki `achievements.css` ile aynıdır.
@@ -99,7 +100,7 @@ final class _TrophyCelebrationState extends State<TrophyCelebration> with Ticker
                             textStyle: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
                           ),
                           autofocus: true,
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: context.withTapSound(() => Navigator.of(context).pop()),
                           child: Text(t.achievementGreat),
                         ),
                       ],

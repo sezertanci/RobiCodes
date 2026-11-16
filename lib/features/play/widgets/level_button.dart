@@ -6,6 +6,7 @@ import '../../../app/app_theme.dart';
 import '../../../l10n/l10n.dart';
 import 'group_tone.dart';
 import 'star_row.dart';
+import '../../sound/tap_sound.dart';
 
 /// Seviye seçimindeki hap biçimli satır: solda grubun renginde numara, sağda yıldızlar veya kilit.
 /// Sıradaki seviye sarı bir halkayla vurgulanır.
@@ -73,7 +74,7 @@ final class LevelButton extends StatelessWidget {
         type: MaterialType.transparency,
         child: InkWell(
           customBorder: shape,
-          onTap: _tapAction,
+          onTap: context.withTapSound(_tapAction),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: _minHeight * ratio),
             child: Padding(
@@ -103,7 +104,7 @@ final class LevelButton extends StatelessWidget {
       enabled: _tapAction != null,
       label: _label(context.l10n),
       excludeSemantics: true,
-      onTap: _tapAction,
+      onTap: context.withTapSound(_tapAction),
       child: unlocked ? button : Opacity(opacity: _lockedOpacity, child: button),
     );
   }

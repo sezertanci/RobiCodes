@@ -6,6 +6,7 @@ import '../../app/app_theme.dart';
 import '../../l10n/l10n.dart';
 import 'parental_gate.dart';
 import 'parental_question.dart';
+import '../sound/tap_sound.dart';
 
 /// Ebeveyn doğrulama penceresi. Yazıyla verilen bir çarpma sorusu sorulur, cevap rakam tuşlarıyla
 /// girilir. Doğru cevapta `true`, vazgeçmede `false` ile kapanır. Yanlış cevapta yeni bir soru
@@ -107,7 +108,12 @@ final class _ParentalGateDialogState extends State<ParentalGateDialog> {
                 children: [_questionColumn(context, t), keypad],
               ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(t.parentalGateCancel))],
+      actions: [
+        TextButton(
+          onPressed: context.withTapSound(() => Navigator.of(context).pop(false)),
+          child: Text(t.parentalGateCancel),
+        ),
+      ],
     );
   }
 
@@ -232,7 +238,7 @@ final class _Key extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FilledButton.tonal(
-    onPressed: onPressed,
+    onPressed: context.withTapSound(onPressed),
     style: FilledButton.styleFrom(padding: EdgeInsets.zero),
     child: icon == null
         ? Text(

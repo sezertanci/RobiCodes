@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../app/app_theme.dart';
 import '../engine/path_finder_board.dart';
 import 'path_finder_assets.dart';
+import '../../../features/sound/tap_sound.dart';
 
 /// Komut şeridindeki yön kutusu. Seçiliyse lacivert, hatalıysa kırmızı çerçeve alır; çalışırken
 /// sarı zeminle parlar. [number] verilirse sol üst köşede sıra rozeti görünür.
@@ -44,9 +45,9 @@ final class CommandChip extends StatelessWidget {
     selected: selected,
     label: label,
     excludeSemantics: true,
-    onTap: onTap,
+    onTap: context.withTapSound(onTap),
     child: GestureDetector(
-      onTap: onTap,
+      onTap: context.withTapSound(onTap),
       child: Stack(
         clipBehavior: Clip.none,
         children: [

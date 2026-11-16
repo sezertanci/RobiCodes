@@ -150,6 +150,7 @@ void main() {
     expect(controller.reaction, RobotReaction.celebrate);
     expect(controller.mood, RobotMood.happy);
     expect(feedback.audibleMoods, [RobotMood.happy]);
+    expect(feedback.stepCount, controller.lane.length);
     expect(controller.message(texts), texts.ifThenSuccess);
     expect(stars, [3]);
   });

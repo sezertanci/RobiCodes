@@ -7,6 +7,7 @@ import '../../app/app_theme.dart';
 import '../../l10n/l10n.dart';
 import 'character.dart';
 import 'character_service.dart';
+import '../sound/tap_sound.dart';
 
 /// Karakter seçme penceresi: bütün karakterler resimleriyle listelenir, seçili olan sarı çerçeveyle
 /// gösterilir. Bir karaktere dokununca seçim kaydedilir ve pencere kapanır.
@@ -63,7 +64,9 @@ final class CharacterDialog extends StatelessWidget {
           ),
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(t.commonClose))],
+      actions: [
+        TextButton(onPressed: context.withTapSound(() => Navigator.of(context).pop()), child: Text(t.commonClose)),
+      ],
     );
   }
 }
@@ -100,7 +103,7 @@ final class _CharacterOption extends StatelessWidget {
         ),
         child: InkWell(
           borderRadius: _radius,
-          onTap: onTap,
+          onTap: context.withTapSound(onTap),
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(

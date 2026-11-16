@@ -44,6 +44,7 @@ final class MyCommandController extends ChangeNotifier
   final MyCommandLevel level;
   @override
   final ValueChanged<int> onCompleted;
+  @override
   final GameFeedback feedback;
   @override
   final Duration stepDuration;

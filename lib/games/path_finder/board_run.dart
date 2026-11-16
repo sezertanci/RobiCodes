@@ -35,13 +35,15 @@ final class BoardRun {
   }
 
   /// [result] adımlarını [stepDuration] arayla oynatır. [directions] her adımda robotun gittiği
-  /// yöndür; [onStep] adım başlarken çağrılır, [notify] ekranı günceller. Bekleme sırasında
+  /// yöndür; [onStep] adım başlarken, [onMove] robot yeni kareye geçince (adım sesi için) çağrılır,
+  /// [notify] ekranı günceller. Bekleme sırasında
   /// [isStopped] `true` olursa (ekran kapandıysa) oynatma durur ve `false` döner.
   Future<bool> play(
     RunResult result, {
     required List<Direction> directions,
     required Duration stepDuration,
     required ValueChanged<int> onStep,
+    required VoidCallback onMove,
     required VoidCallback notify,
     required ValueGetter<bool> isStopped,
   }) async {
@@ -49,6 +51,7 @@ final class BoardRun {
       onStep(index);
       _trail[_robot] = directions[index];
       _robot = step.position;
+      onMove();
       notify();
       await Future<void>.delayed(stepDuration);
       if (isStopped()) {

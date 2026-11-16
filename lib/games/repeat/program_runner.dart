@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/play/game_feedback.dart';
 import '../../features/play/level_lifecycle.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import '../../features/play/widgets/speech_bubble.dart';
@@ -22,6 +23,7 @@ mixin ProgramRunner on LevelLifecycle, BoardRunScene {
   bool _hintUsed = false;
 
   ValueChanged<int> get onCompleted;
+  GameFeedback get feedback;
   Duration get celebrateDuration;
   int get blockCount;
   int get maxBlocks;
@@ -100,6 +102,7 @@ mixin ProgramRunner on LevelLifecycle, BoardRunScene {
       directions: [for (final step in run.trace) step.direction],
       stepDuration: stepDuration,
       onStep: showStep,
+      onMove: feedback.step,
       notify: notifyListeners,
       isStopped: () => isDisposed,
     );

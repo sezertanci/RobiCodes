@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'developer_unlock.dart';
+import '../sound/tap_sound.dart';
 
 /// Ayarlardaki "Tüm kilitleri aç" anahtarı. Yalnızca debug derlemelerinde gösterilir (bkz. `SettingsDialog`).
 /// Metinleri yalnızca geliştirici gördüğü için ARB'ye eklenmez, burada Türkçe sabit olarak durur (bkz. CLAUDE.md).
@@ -20,7 +21,7 @@ final class DeveloperUnlockTile extends StatelessWidget {
       title: const Text(label),
       subtitle: const Text(hint),
       value: unlock.isEnabled,
-      onChanged: unlock.setEnabled,
+      onChanged: context.withTapSoundValue(unlock.setEnabled),
     ),
   );
 }
