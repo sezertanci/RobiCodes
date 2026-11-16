@@ -1622,6 +1622,21 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String variableBoxNextSetHint(Object levelHint, int value) {
+    return '$levelHint Lege jetzt $value in die Box: Füge mit dem leuchtenden Knopf einen Box-Block hinzu und stelle seine Zahl auf $value.';
+  }
+
+  @override
+  String variableBoxNextIncreaseHint(Object levelHint) {
+    return '$levelHint Addiere jetzt 1 zur Box: Tippe auf den leuchtenden Knopf +1.';
+  }
+
+  @override
+  String variableBoxNextDecreaseHint(Object levelHint) {
+    return '$levelHint Nimm jetzt 1 aus der Box: Tippe auf den leuchtenden Knopf −1.';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'Die Flagge ist 6 Felder entfernt, aber du darfst nur 2 Blöcke benutzen. Leg zuerst 6 in die Box und tippe dann auf den Rechtspfeil.';
 

@@ -145,6 +145,37 @@ void main() {
       );
     });
 
+    test('hint_FollowsSolutionNextArrow_TargetsSquareBoxStepsAway', () {
+      final board = PathFinderBoard.parse(['S.....', '......', '.....G']);
+
+      final hint = RepeatEngine.hint(board, parse('=5'), solution: parse('=5 R =2 D'), followsSolution: true);
+
+      expect(
+        hint,
+        isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _right).having(
+          (hint) => hint.move.target,
+          'target',
+          (x: 5, y: 0),
+        ),
+      );
+    });
+
+    test('hint_FollowsSolutionNextBoxBlock_SuggestsBoxBlock', () {
+      final board = PathFinderBoard.parse(['S.....', '......', '.....G']);
+
+      final hint = RepeatEngine.hint(board, parse('=5 R'), solution: parse('=5 R =2 D'), followsSolution: true);
+
+      expect(hint, isA<NextBoxHint>().having((hint) => hint.block, 'block', const SetBoxBlock(2)));
+    });
+
+    test('hint_OpenRepeatNextInnerBoxBlock_SuggestsBoxBlock', () {
+      final board = PathFinderBoard.parse(['S.##', '#...', '###.', '###G']);
+
+      final hint = RepeatEngine.hint(board, parse('2(RD)'), solution: parse('2(RD+)'), openBlock: 0);
+
+      expect(hint, isA<NextBoxHint>().having((hint) => hint.block, 'block', AddBoxBlock.increment));
+    });
+
     test('hint_ClosedRepeatMissingInnerArrow_ReportsDifference', () {
       final hint = RepeatEngine.hint(stairs, parse('3(R)'), solution: parse('3(RD)'));
 

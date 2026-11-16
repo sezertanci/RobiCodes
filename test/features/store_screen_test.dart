@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/app/app_scope.dart';
 import 'package:robi_codes/app/app_services.dart';
+import 'package:robi_codes/app/widgets/game_icon_badge.dart';
 import 'package:robi_codes/app/robi_codes_app.dart';
 import 'package:robi_codes/content/content_catalog.dart';
 import 'package:robi_codes/features/store/purchase_gateway.dart';
 import 'package:robi_codes/features/store/store_screen.dart';
 import 'package:robi_codes/features/store/store_texts.dart';
+import 'package:robi_codes/features/store/widgets/bundle_highlight.dart';
 import 'package:robi_codes/games/game_registry.dart';
 
 import '../support/test_l10n.dart';
@@ -33,8 +35,13 @@ void main() {
     parentalGate: FakeParentalGate(approves: approves),
   );
 
-  Future<AppServices> openStore(WidgetTester tester, {bool approves = true, ContentCatalog? catalog}) async {
-    useScreen(tester, TestScreens.tablet);
+  Future<AppServices> openStore(
+    WidgetTester tester, {
+    bool approves = true,
+    ContentCatalog? catalog,
+    Size screen = TestScreens.tablet,
+  }) async {
+    useScreen(tester, screen);
     final services = createServices(approves: approves, catalog: catalog);
     await services.entitlements.refresh();
     await tester.pumpWidget(AppScope(services: services, child: localizedApp(const StoreScreen())));
@@ -67,6 +74,36 @@ void main() {
     expect(find.text(texts.storeBuy(_priceB)), findsOneWidget);
     expect(find.text(texts.storeBuy(_priceBundle)), findsOneWidget);
     expect(find.text(texts.storeBundle), findsOneWidget);
+  });
+
+  testWidgets('StoreScreen_BundleAndSingleProducts_HighlightsOnlyBundle', (tester) async {
+    // Act
+    await openStore(tester);
+
+    // Assert
+    expect(find.byType(BundleHighlight), findsOneWidget);
+    expect(find.descendant(of: find.byType(BundleHighlight), matching: find.text('Paket A')), findsNothing);
+  });
+
+  /// Ürün adının üst kenarı, ilk kartın ikonunun alt kenarının altındaysa ikonlar ayrı satıra geçmiştir.
+  bool titleBelowIcons(WidgetTester tester, String title) =>
+      tester.getTopLeft(find.text(title)).dy >= tester.getBottomLeft(find.byType(GameIconBadge).first).dy;
+
+  testWidgets('StoreScreen_FourGameBundleOnPhone_PutsIconsAboveTitle', (tester) async {
+    // Act
+    await openStore(tester, catalog: TestCatalog.withFourGameBundle(), screen: TestScreens.phone);
+
+    // Assert
+    expect(titleBelowIcons(tester, TestCatalog.wideBundleTitle), isTrue);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('StoreScreen_SingleGameProductOnPhone_KeepsIconBesideTitle', (tester) async {
+    // Act
+    await openStore(tester, screen: TestScreens.phone);
+
+    // Assert
+    expect(titleBelowIcons(tester, 'Paket A'), isFalse);
   });
 
   testWidgets('StoreScreen_ParentRejects_ShowsMessageAndStoreNotReached', (tester) async {

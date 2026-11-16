@@ -1596,6 +1596,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String variableBoxNextSetHint(Object levelHint, int value) {
+    return '$levelHint Now put $value in the box: add a box block with the glowing button, then make its number $value.';
+  }
+
+  @override
+  String variableBoxNextIncreaseHint(Object levelHint) {
+    return '$levelHint Now add 1 to the box: tap the glowing +1 button.';
+  }
+
+  @override
+  String variableBoxNextDecreaseHint(Object levelHint) {
+    return '$levelHint Now take 1 out of the box: tap the glowing −1 button.';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'The flag is 6 squares away, but you can only use 2 blocks. First put 6 in the box, then tap the right arrow.';
 

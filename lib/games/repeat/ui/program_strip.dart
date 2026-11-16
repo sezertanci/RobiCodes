@@ -24,6 +24,7 @@ final class ProgramStrip extends StatefulWidget {
     this.active = false,
     this.onActivate,
     this.leading,
+    this.holdsRepeat = true,
     super.key,
   });
 
@@ -51,6 +52,9 @@ final class ProgramStrip extends StatefulWidget {
   /// Şeridin solundaki başlık (ör. komut simgesi).
   final Widget? leading;
 
+  /// Şeride tekrar bloğu eklenebilir mi; eklenemiyorsa şerit onun için yer ayırmaz ve daha alçak olur.
+  final bool holdsRepeat;
+
   /// Etkin şeridin çerçeve rengi ve kalınlığı.
   static const activeColor = AppColors.teal;
   static const _activeBorder = 4.0;
@@ -67,8 +71,10 @@ final class ProgramStrip extends StatefulWidget {
   /// Sıra rozetleri için şeridin üstünde bırakılan boşluk.
   static const _badgeRoom = 12.0;
 
-  /// Şeridin yüksekliği; tekrar bloğu olsa da olmasa da sabittir.
-  static double heightFor(double chipSize) => chipSize + RepeatBlockView.extraHeight + _badgeRoom * 2;
+  /// Şeridin yüksekliği; tekrar bloğu eklense de eklenmese de sabittir. Seviyede tekrar bloğu yoksa
+  /// ([holdsRepeat] kapalı) onun için yer ayrılmaz.
+  static double heightFor(double chipSize, {bool holdsRepeat = true}) =>
+      chipSize + (holdsRepeat ? RepeatBlockView.extraHeight : 0) + _badgeRoom * 2;
 
   @override
   State<ProgramStrip> createState() => _ProgramStripState();
@@ -129,7 +135,10 @@ final class _ProgramStripState extends State<ProgramStrip> {
             children: [
               if (widget.leading case final leading?) ...[leading, const SizedBox(width: 8)],
               Expanded(
-                child: SizedBox(height: ProgramStrip.heightFor(widget.chipSize), child: _list()),
+                child: SizedBox(
+                  height: ProgramStrip.heightFor(widget.chipSize, holdsRepeat: widget.holdsRepeat),
+                  child: _list(),
+                ),
               ),
               const SizedBox(width: 8),
               _SidePanel(

@@ -50,6 +50,13 @@ final class NextStepHint extends RepeatHint {
   final NextMoveHint move;
 }
 
+/// Çözümdeki sıradaki blok bir kutu bloğu ([SetBoxBlock] ya da [AddBoxBlock]); ekranda o kutu tuşu parlar.
+final class NextBoxHint extends RepeatHint {
+  const NextBoxHint(this.block);
+
+  final InnerBlock block;
+}
+
 /// Program önerilen çözümden ayrılıyor. Yalnızca ipucuna çözüm verilince (düzeltme kuralları) oluşur.
 final class DifferenceHint extends RepeatHint {
   const DifferenceHint(this.difference);
@@ -160,13 +167,16 @@ abstract final class RepeatEngine {
 
   /// İpucu: önce boş tekrar bloğu, sonra robotu yoldan çıkaran hareket, yoksa sıradaki doğru hareket.
   /// [solution] verilirse (düzeltme kuralları) program önerilen çözümle de karşılaştırılır (bkz.
-  /// [_solutionHint]); [openBlock] okların eklendiği açık tekrar bloğudur.
+  /// [_solutionHint]); [openBlock] okların eklendiği açık tekrar bloğudur. [followsSolution] ise (kutu
+  /// kuralları) program çözümün başıyken en kısa yol yerine çözümdeki sıradaki blok önerilir; kutudaki sayı
+  /// hesaba katılır (bkz. [_nextSolutionBlock]).
   static RepeatHint hint(
     PathFinderBoard board,
     List<ProgramBlock> program, {
     List<ProgramBlock> command = const [],
     List<ProgramBlock>? solution,
     int? openBlock,
+    bool followsSolution = false,
   }) {
     if (findEmptyRepeat(program) case final block?) {
       return EmptyRepeatHint(block);
@@ -174,8 +184,16 @@ abstract final class RepeatEngine {
     final trace = expand(program, command: command);
     final pathHint = PathFinderEngine.hint(board, _directions(trace), _unlimited);
     if (solution != null) {
-      if (_solutionHint(board, program, pathHint, solution, openBlock) case final hint?) {
+      if (_nextInner(board, program, solution, openBlock) case final hint?) {
         return hint;
+      }
+      if (followsSolution && openBlock == null && pathHint is NextMoveHint) {
+        if (_nextSolutionBlock(board, program, solution) case final hint?) {
+          return hint;
+        }
+      }
+      if (_solutionHint(board, program, pathHint, solution) case final difference?) {
+        return DifferenceHint(difference);
       }
     }
     return switch (pathHint) {
@@ -187,32 +205,49 @@ abstract final class RepeatEngine {
     };
   }
 
-  /// Düzeltme kurallarına özgü ipucu; genel ipucu yeterliyse `null`.
-  /// - Açık tekrar bloğu yazılırken bloğun okları çözümdeki okların başıysa sıradaki iç ok önerilir.
+  /// Programın çözümden ayrıldığı yer; genel ipucu yeterliyse `null`.
   /// - Robot çarpıyor ama programda fazla bir blok varsa çarptıran yer yerine fazla blok gösterilir.
   /// - Robot çarpmıyorsa programın çözümden ayrıldığı yer gösterilir; robot başka bir doğru yoldaysa
   ///   gösterilmez (bkz. [_offRoute]).
-  static RepeatHint? _solutionHint(
+  static SolutionDifference? _solutionHint(
     PathFinderBoard board,
     List<ProgramBlock> program,
     PathHint pathHint,
     List<ProgramBlock> solution,
-    int? openBlock,
+  ) => switch (pathHint) {
+    FixCommandHint() => _extraBlock(program, solution),
+    NextMoveHint() => _offRoute(board, program, solution),
+    _ => null,
+  };
+
+  /// Program çözümün başıysa çözümdeki sıradaki blok: ok ise robotun kutudaki sayı kadar yürüyünce varacağı
+  /// kare, kutu bloğu ise o blok önerilir. Sıradaki blok tekrar bloğuysa ya da program çözümün başı değilse `null`.
+  static RepeatHint? _nextSolutionBlock(
+    PathFinderBoard board,
+    List<ProgramBlock> program,
+    List<ProgramBlock> solution,
   ) {
-    if (_nextInnerMove(board, program, solution, openBlock) case final move?) {
-      return NextStepHint(move);
+    if (program.length >= solution.length || _firstMismatch(program, solution) != null) {
+      return null;
     }
-    final difference = switch (pathHint) {
-      FixCommandHint() => _extraBlock(program, solution),
-      NextMoveHint() => _offRoute(board, program, solution),
-      _ => null,
-    };
-    return difference == null ? null : DifferenceHint(difference);
+    return _blockHint(board, solution[program.length], program);
   }
 
-  /// Açık tekrar bloğunun okları çözümdeki aynı bloğun oklarının başıysa ve önceki bloklar çözüme uyuyorsa
-  /// çözümdeki sıradaki iç ok; robotun gideceği kare bloğun ilk turuna göredir. Aksi halde `null`.
-  static NextMoveHint? _nextInnerMove(
+  /// [block] eklenecek sıradaki blokken ipucu; [before] bloğun önündeki programdır. Ok için robotun gideceği
+  /// kare, kutu bloğu için bloğun kendisi; tekrar ve komut blokları için `null`.
+  static RepeatHint? _blockHint(PathFinderBoard board, ProgramBlock block, List<ProgramBlock> before) =>
+      switch (block) {
+        MoveBlock(:final direction) => NextStepHint(
+          NextMoveHint(direction, PathFinderEngine.run(board, _directions(expand([...before, block]))).position),
+        ),
+        final SetBoxBlock box => NextBoxHint(box),
+        final AddBoxBlock box => NextBoxHint(box),
+        _ => null,
+      };
+
+  /// Açık tekrar bloğunun iç blokları çözümdeki aynı bloğunkilerin başıysa ve önceki bloklar çözüme uyuyorsa
+  /// çözümdeki sıradaki iç blok önerilir; robotun gideceği kare bloğun ilk turuna göredir. Aksi halde `null`.
+  static RepeatHint? _nextInner(
     PathFinderBoard board,
     List<ProgramBlock> program,
     List<ProgramBlock> solution,
@@ -226,12 +261,7 @@ abstract final class RepeatEngine {
         when block.body.length < want.length &&
             _startsWith(want, block.body) &&
             _firstMismatch(before, solution) == null) {
-      // Sıradaki iç blok kutu bloğuysa robotun gideceği kare yoktur; genel ipucu kullanılır.
-      if (want[block.body.length] case MoveBlock(:final direction)) {
-        final firstRound = [...before, block.copyWith(times: 1)];
-        final position = PathFinderEngine.run(board, _directions(expand(firstRound))).position;
-        return NextMoveHint(direction, direction.from(position));
-      }
+      return _blockHint(board, want[block.body.length], [...before, block.copyWith(times: 1)]);
     }
     return null;
   }

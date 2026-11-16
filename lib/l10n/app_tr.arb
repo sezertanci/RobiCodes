@@ -1023,6 +1023,36 @@
       }
     }
   },
+  "variableBoxNextSetHint": "{levelHint} Şimdi kutuya {value} koy: parlayan düğmeyle kutu bloğu ekle, sonra bloktaki sayıyı {value} yap.",
+  "@variableBoxNextSetHint": {
+    "description": "İpucu: çözümdeki sıradaki blok kutuya bir sayı koyuyor; kutu tuşu parlar.",
+    "placeholders": {
+      "levelHint": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "variableBoxNextIncreaseHint": "{levelHint} Şimdi kutuya 1 ekle: parlayan +1 düğmesine dokun.",
+  "@variableBoxNextIncreaseHint": {
+    "description": "İpucu: çözümdeki sıradaki blok kutuya 1 ekliyor; +1 tuşu parlar.",
+    "placeholders": {
+      "levelHint": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableBoxNextDecreaseHint": "{levelHint} Şimdi kutudan 1 çıkar: parlayan −1 düğmesine dokun.",
+  "@variableBoxNextDecreaseHint": {
+    "description": "İpucu: çözümdeki sıradaki blok kutudan 1 çıkarıyor; −1 tuşu parlar.",
+    "placeholders": {
+      "levelHint": {
+        "type": "Object"
+      }
+    }
+  },
   "variableBoxL1Intro": "Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.",
   "variableBoxL1Hint": "Kutu = bloğuyla kutuya 6 koy; sonra tek bir sağ ok robotu 6 kare yürütür.",
   "variableBoxL2Hint": "Robot 3 sağa, 3 aşağı gitmeli. Kutuya 3 koy; sonra her ok 3 kare yürütür.",

@@ -229,6 +229,31 @@ abstract final class TestCatalog {
     );
   }
 
+  /// Dört oyunun birer paketini birlikte açan tek bir avantajlı paket; mağaza kartının dar ekran düzeni için.
+  static const wideBundle = 'bundle_four';
+  static const wideBundleTitle = 'Dörtlü Set';
+
+  static ContentCatalog withFourGameBundle() {
+    final ids = [for (var i = 1; i <= 4; i++) 'game$i'];
+    return ContentCatalog(
+      games: [
+        for (final id in ids)
+          GameDefinition(
+            id: id,
+            title: fixedText(id),
+            description: fixedText('Açıklama'),
+            tone: AppTones.blue,
+            icon: AppAssets.gamePath,
+            trophy: GameTrophy(title: fixedText('Kupa'), description: fixedText('Açıklama')),
+          ),
+      ],
+      packs: [for (final id in ids) _pack('$id.a', gameId: id)],
+      products: [
+        StoreProduct(id: wideBundle, title: fixedText(wideBundleTitle), packIds: [for (final id in ids) '$id.a']),
+      ],
+    );
+  }
+
   static LevelPack _pack(String id, {String gameId = gameId, bool freePreview = false}) => LevelPack(
     id: id,
     gameId: gameId,

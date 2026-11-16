@@ -117,6 +117,14 @@ abstract final class RepeatTexts {
   static LocalizedText nextMoveHint(LocalizedText levelHint, Direction direction) =>
       (t) => t.repeatNextMoveHint(levelHint(t), PathFinderTexts.direction(t, direction).toLowerCase());
 
+  /// Çözümdeki sıradaki kutu bloğunu ([SetBoxBlock] ya da [AddBoxBlock]) öneren ipucu.
+  static LocalizedText nextBoxHint(LocalizedText levelHint, InnerBlock block) =>
+      (t) => switch (block) {
+        SetBoxBlock(:final value) => t.variableBoxNextSetHint(levelHint(t), value),
+        AddBoxBlock(:final amount) when amount > 0 => t.variableBoxNextIncreaseHint(levelHint(t)),
+        _ => t.variableBoxNextDecreaseHint(levelHint(t)),
+      };
+
   static bool _laterRound(ProgramStep step) => Places.isInner(Places.of(step)) && step.round > 0;
 }
 

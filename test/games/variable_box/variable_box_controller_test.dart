@@ -123,6 +123,30 @@ void main() {
     expect(controller.message(texts), texts.variableBoxMissedGoal);
   });
 
+  test('showHint_EmptyProgram_HighlightsSetBoxButtonAndSaysValue', () {
+    final controller = _controller([]);
+
+    controller.showHint();
+
+    expect(controller.boxHint, const SetBoxBlock(3));
+    expect(controller.hint, isNull);
+    expect(controller.message(texts), texts.variableBoxNextSetHint(_levelHint(texts), 3));
+  });
+
+  test('showHint_BoxSetArrowMissing_HighlightsSquareBoxStepsAway', () {
+    final controller = _controller([])..showHint();
+    controller
+      ..addInner(const SetBoxBlock(SetBoxBlock.defaultValue))
+      ..changeBoxValue(_first, 1);
+    expect(controller.boxHint, isNull);
+
+    controller.showHint();
+
+    expect(controller.hint?.direction, _right);
+    expect(controller.hint?.target, (x: 3, y: 0));
+    expect(controller.boxHint, isNull);
+  });
+
   test('arrowSteps_WithoutBox_IsNull', () {
     final controller = RepeatController(level: _line, onCompleted: (_) {});
     controller.addMove(_right);

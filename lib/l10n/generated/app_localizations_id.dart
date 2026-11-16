@@ -1611,6 +1611,21 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String variableBoxNextSetHint(Object levelHint, int value) {
+    return '$levelHint Sekarang taruh $value di kotak: tambahkan blok kotak dengan tombol yang bersinar, lalu ubah angkanya menjadi $value.';
+  }
+
+  @override
+  String variableBoxNextIncreaseHint(Object levelHint) {
+    return '$levelHint Sekarang tambah 1 ke kotak: ketuk tombol +1 yang bersinar.';
+  }
+
+  @override
+  String variableBoxNextDecreaseHint(Object levelHint) {
+    return '$levelHint Sekarang kurangi 1 dari kotak: ketuk tombol −1 yang bersinar.';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'Bendera ada 6 petak jauhnya, tapi kamu hanya boleh memakai 2 blok. Taruh 6 di kotak dulu, lalu ketuk panah kanan.';
 

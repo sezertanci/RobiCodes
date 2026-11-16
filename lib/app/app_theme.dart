@@ -62,7 +62,7 @@ final class ColorTone {
   final Color dark;
 }
 
-/// Oyunların ve ödüllerin kullandığı renk tonları. Pembe, lacivert ve altın yalnızca ödüllerde kullanılır.
+/// Oyunların, ödüllerin ve mağaza kartlarının kullandığı renk tonları. Pembe ve altın yalnızca ödüllerde kullanılır.
 abstract final class AppTones {
   static const blue = ColorTone(AppColors.blue, AppColors.blueDark);
   static const green = ColorTone(AppColors.green, AppColors.greenDark);
@@ -74,6 +74,9 @@ abstract final class AppTones {
   static const navy = ColorTone(Color(0xFF3A4D7A), AppColors.navy);
   static const gold = ColorTone(AppColors.yellow, AppColors.yellowDark);
   static const brown = ColorTone(AppColors.cardboard, AppColors.brown);
+
+  /// Çivit mavisi: yalnızca birden fazla oyunu açan bileşik paketlerin (bundle) mağaza kartları kullanır.
+  static const indigo = ColorTone(Color(0xFF5C6BC0), Color(0xFF3949AB));
 
   /// Koyu altın: sarı zeminde beyaz yazı ve simge zor okunduğu için "Değişken Kutusu" düğmeleri kullanır.
   static const amber = ColorTone(AppColors.yellowDark, AppColors.amberDark);

@@ -1567,6 +1567,21 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String variableBoxNextSetHint(Object levelHint, int value) {
+    return '$levelHint Şimdi kutuya $value koy: parlayan düğmeyle kutu bloğu ekle, sonra bloktaki sayıyı $value yap.';
+  }
+
+  @override
+  String variableBoxNextIncreaseHint(Object levelHint) {
+    return '$levelHint Şimdi kutuya 1 ekle: parlayan +1 düğmesine dokun.';
+  }
+
+  @override
+  String variableBoxNextDecreaseHint(Object levelHint) {
+    return '$levelHint Şimdi kutudan 1 çıkar: parlayan −1 düğmesine dokun.';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.';
 

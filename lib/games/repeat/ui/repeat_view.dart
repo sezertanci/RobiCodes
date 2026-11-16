@@ -100,6 +100,7 @@ final class _RepeatViewState extends State<RepeatView> {
                   ? BoxBadge(value: controller.box, size: chipSize, active: controller.activeStep != null)
                   : null,
               emptyText: usesBox ? context.l10n.variableBoxEmptyStrip : null,
+              holdsRepeat: controller.allowsRepeat,
             ),
           ],
         ),
@@ -112,6 +113,14 @@ final class _RepeatViewState extends State<RepeatView> {
       ),
     );
   }
+
+  /// [button] düğmesi ipucunun önerdiği [hint] bloğunu ekliyor mu? "=" düğmesi her sayıyı ekler; sayı sonra
+  /// şeritte değiştirilir.
+  static bool _addsHinted(InnerBlock? hint, InnerBlock button) => switch ((hint, button)) {
+    (SetBoxBlock(), SetBoxBlock()) => true,
+    (AddBoxBlock(amount: final want), AddBoxBlock(:final amount)) => want == amount,
+    _ => false,
+  };
 
   /// Kutu düğmeleri alttaki görsel düğmelerle (Başlat, İpucu, Temizle) aynı hücrelere bölünür ve her biri
   /// hücredeki görselin görünen kenarlarına oturur; böylece dik ekranda tam üstlerine hizalanır. Satır zaten
@@ -136,6 +145,7 @@ final class _RepeatViewState extends State<RepeatView> {
                 colorFilter: const ColorFilter.mode(AppColors.brown, BlendMode.srcIn),
               ),
               iconAbove: true,
+              highlighted: _addsHinted(controller.boxHint, block),
               text: RepeatTexts.boxSign(block),
               label: switch (block) {
                 SetBoxBlock() => t.variableBoxSetLabel,

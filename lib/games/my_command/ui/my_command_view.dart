@@ -101,6 +101,7 @@ final class _MyCommandViewState extends State<MyCommandView> {
           active: controller.lane == CommandLane.command,
           onActivate: () => controller.activate(CommandLane.command),
           leading: Icon(Icons.extension, color: AppColors.teal, size: chipSize * _iconRatio),
+          holdsRepeat: controller.allowsRepeat,
         ),
         const SizedBox(height: _gap),
         ProgramStrip(
@@ -110,6 +111,7 @@ final class _MyCommandViewState extends State<MyCommandView> {
           emptyText: t.myCommandMainEmpty,
           active: controller.lane == CommandLane.main,
           onActivate: () => controller.activate(CommandLane.main),
+          holdsRepeat: controller.allowsRepeat,
         ),
       ],
     );

@@ -186,7 +186,8 @@ final class RepeatButton extends StatelessWidget {
   }
 }
 
-/// Renkli, kabarık kenarlı geniş düğme: solda isteğe bağlı simge, yanında kalın beyaz yazı.
+/// Renkli, kabarık kenarlı geniş düğme: solda isteğe bağlı simge, yanında kalın beyaz yazı. [highlighted] ise
+/// ipucunun önerdiği düğme olarak sarı ışıkla parlar.
 /// Tekrarla ve Komut düğmeleri ortak kullanır. [iconAbove] ise simge yazının üstünde durur; dar
 /// düğmelerde (ör. yan yana üç kutu düğmesi) yazı böylece küçülmeden sığar.
 final class WideActionButton extends StatelessWidget {
@@ -199,12 +200,16 @@ final class WideActionButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.iconAbove = false,
+    this.highlighted = false,
     super.key,
   });
 
   final ColorTone tone;
   final Widget? icon;
   final bool iconAbove;
+
+  /// `true` ise ipucunun önerdiği düğme olarak sarı ışıkla parlar.
+  final bool highlighted;
   final String text;
 
   /// Ekran okuyucu etiketi.
@@ -241,7 +246,10 @@ final class WideActionButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: tone.base,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: tone.dark, offset: const Offset(0, 4))],
+            boxShadow: [
+              if (highlighted) ...ImageButton.highlightGlow,
+              BoxShadow(color: tone.dark, offset: const Offset(0, 4)),
+            ],
           ),
           child: FittedBox(child: _content()),
         ),

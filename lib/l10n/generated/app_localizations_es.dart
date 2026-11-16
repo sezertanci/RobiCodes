@@ -1614,6 +1614,21 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String variableBoxNextSetHint(Object levelHint, int value) {
+    return '$levelHint Ahora mete $value en la caja: añade un bloque de caja con el botón que brilla y luego cambia su número a $value.';
+  }
+
+  @override
+  String variableBoxNextIncreaseHint(Object levelHint) {
+    return '$levelHint Ahora suma 1 a la caja: toca el botón +1 que brilla.';
+  }
+
+  @override
+  String variableBoxNextDecreaseHint(Object levelHint) {
+    return '$levelHint Ahora quita 1 de la caja: toca el botón −1 que brilla.';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'La bandera está 6 casillas más allá, pero solo puedes poner 2 bloques. Primero mete 6 en la caja y luego toca la flecha derecha.';
 

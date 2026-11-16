@@ -77,6 +77,7 @@ final class RepeatController extends ChangeNotifier
   /// Son çalıştırmanın hareketleri; robot yürürken etkin hareketi göstermek için tutulur.
   List<ProgramStep> _trace = const [];
   ProgramPlace? _wrongPlace;
+  InnerBlock? _boxHint;
   int _box = BoxRules.start;
 
   /// Çalışan okun bu turda robotu daha kaç kare yürüteceği.
@@ -84,6 +85,9 @@ final class RepeatController extends ChangeNotifier
 
   /// Kutudaki sayı: robot yürürken o anki hareketin kutusu, aksi halde başlangıç değeri.
   int get box => _box;
+
+  /// İpucunun önerdiği kutu bloğu; ekranda bu bloğu ekleyen kutu tuşu parlar.
+  InnerBlock? get boxHint => _boxHint;
 
   @override
   int get maxBlocks => level.maxBlocks;
@@ -208,8 +212,9 @@ final class RepeatController extends ChangeNotifier
       return;
     }
     useHint();
+    _boxHint = null;
     final solution = fixesProgram || usesBox ? _solution : null;
-    switch (RepeatEngine.hint(board, program, solution: solution, openBlock: target)) {
+    switch (RepeatEngine.hint(board, program, solution: solution, openBlock: target, followsSolution: usesBox)) {
       case EmptyRepeatHint(:final block):
         editor.openTarget(block);
         voice.say((t) => t.repeatEmptyRepeat);
@@ -227,6 +232,9 @@ final class RepeatController extends ChangeNotifier
           boardRun.hint = move;
           voice.say(RepeatTexts.nextMoveHint(level.hint, move.direction));
         }
+      case NextBoxHint(:final block):
+        _boxHint = block;
+        voice.say(RepeatTexts.nextBoxHint(level.hint, block));
       case RepeatSolvedHint():
         voice.say((t) => t.repeatSolved);
     }
@@ -299,6 +307,7 @@ final class RepeatController extends ChangeNotifier
   void clearRunMarks() {
     _activeStep = null;
     _wrongPlace = null;
+    _boxHint = null;
     _box = BoxRules.start;
   }
 

@@ -185,8 +185,8 @@ final class MyCommandController extends ChangeNotifier
       case RepeatSolvedHint():
         voice.say((t) => t.repeatSolved);
       // Yalnızca ipucuna önerilen çözüm verilince oluşur; bu oyun çözüm vermez.
-      case DifferenceHint():
-        throw StateError('Komut oyununda çözüm farkı ipucu oluşmaz.');
+      case DifferenceHint() || NextBoxHint():
+        throw StateError('Komut oyununda çözüme dayalı ipucu oluşmaz.');
     }
   }
 

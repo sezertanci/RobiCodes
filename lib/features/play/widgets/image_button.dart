@@ -24,6 +24,9 @@ final class ImageButton extends StatelessWidget {
 
   static const padding = 2.0;
 
+  /// İpucunun önerdiği düğmenin sarı ışığı; başka düğmeler de aynı ışıkla parlar.
+  static const highlightGlow = [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)];
+
   /// Düğme görsellerinde (128 birimlik SVG) düğmenin kenarı ile görselin kenarı arasındaki şeffaf pay.
   static const _artInsetRatio = 6 / 128;
 
@@ -53,9 +56,7 @@ final class ImageButton extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(size / 3),
-                boxShadow: highlighted
-                    ? const [BoxShadow(color: AppColors.yellow, blurRadius: 12, spreadRadius: 4)]
-                    : null,
+                boxShadow: highlighted ? highlightGlow : null,
               ),
               child: Opacity(opacity: onPressed == null ? _disabledOpacity : 1, child: SvgPicture.asset(asset)),
             ),

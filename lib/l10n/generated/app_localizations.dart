@@ -2390,6 +2390,24 @@ abstract class AppLocalizations {
   /// **'{count, plural, other{{label}. Robotu {count} kare yürütür.}}'**
   String variableBoxArrowSteps(String label, int count);
 
+  /// İpucu: çözümdeki sıradaki blok kutuya bir sayı koyuyor; kutu tuşu parlar.
+  ///
+  /// In tr, this message translates to:
+  /// **'{levelHint} Şimdi kutuya {value} koy: parlayan düğmeyle kutu bloğu ekle, sonra bloktaki sayıyı {value} yap.'**
+  String variableBoxNextSetHint(Object levelHint, int value);
+
+  /// İpucu: çözümdeki sıradaki blok kutuya 1 ekliyor; +1 tuşu parlar.
+  ///
+  /// In tr, this message translates to:
+  /// **'{levelHint} Şimdi kutuya 1 ekle: parlayan +1 düğmesine dokun.'**
+  String variableBoxNextIncreaseHint(Object levelHint);
+
+  /// İpucu: çözümdeki sıradaki blok kutudan 1 çıkarıyor; −1 tuşu parlar.
+  ///
+  /// In tr, this message translates to:
+  /// **'{levelHint} Şimdi kutudan 1 çıkar: parlayan −1 düğmesine dokun.'**
+  String variableBoxNextDecreaseHint(Object levelHint);
+
   /// No description provided for @variableBoxL1Intro.
   ///
   /// In tr, this message translates to:
