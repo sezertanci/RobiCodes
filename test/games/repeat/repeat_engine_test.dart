@@ -94,6 +94,70 @@ void main() {
     expect(hint, isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _right));
   });
 
+  group('hint with solution', () {
+    List<ProgramBlock> parse(String code) => RepeatEngine.parseSolution(code);
+
+    /// Bayrak sağ alt köşede; çözüm "RRDD", "DDRR" de aynı uzunlukta doğru bir yol.
+    final square = PathFinderBoard.parse(['S..', '...', '..G']);
+
+    /// Bayrak çapraz merdivenin sonunda; çözüm "3(RD)".
+    final stairs = PathFinderBoard.parse(['S...', '....', '....', '...G']);
+
+    test('hint_AlternativeRouteOnTrack_SuggestsNextMove', () {
+      final hint = RepeatEngine.hint(square, parse('DD'), solution: parse('RRDD'));
+
+      expect(hint, isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _right));
+    });
+
+    test('hint_AlternativeRouteLooksLikeExtraArrow_SuggestsNextMove', () {
+      // "DRR" yolu doğru; ilk ok silinince program çözümün başı olsa da fazla ok sayılmaz.
+      final hint = RepeatEngine.hint(square, parse('DRR'), solution: parse('RRDD'));
+
+      expect(hint, isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _down));
+    });
+
+    test('hint_RobotLeavesRouteWithoutBump_ReportsDifference', () {
+      final hint = RepeatEngine.hint(
+        PathFinderBoard.parse(['....', 'S..G', '....']),
+        parse('RUR'),
+        solution: parse('RRR'),
+      );
+
+      expect(
+        hint,
+        isA<DifferenceHint>().having((hint) => hint.difference, 'difference', (
+          place: Places.top(1),
+          kind: DifferenceKind.wrongBlock,
+        )),
+      );
+    });
+
+    test('hint_OpenRepeatIsStartOfSolutionBlock_SuggestsNextInnerArrow', () {
+      final hint = RepeatEngine.hint(stairs, parse('3(R)'), solution: parse('3(RD)'), openBlock: 0);
+
+      expect(
+        hint,
+        isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _down).having(
+          (hint) => hint.move.target,
+          'target',
+          (x: 1, y: 1),
+        ),
+      );
+    });
+
+    test('hint_ClosedRepeatMissingInnerArrow_ReportsDifference', () {
+      final hint = RepeatEngine.hint(stairs, parse('3(R)'), solution: parse('3(RD)'));
+
+      expect(
+        hint,
+        isA<DifferenceHint>().having((hint) => hint.difference, 'difference', (
+          place: Places.top(0),
+          kind: DifferenceKind.wrongBlock,
+        )),
+      );
+    });
+  });
+
   group('firstDifference', () {
     List<ProgramBlock> parse(String code) => RepeatEngine.parseSolution(code);
 

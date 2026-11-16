@@ -5,12 +5,26 @@ import 'package:flutter/foundation.dart';
 
 import '../../content/content_catalog.dart';
 import '../../content/models/level_pack.dart';
+import '../../content/models/store_product.dart';
 import '../../core/json_utils.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../core/storage/storage_keys.dart';
 import '../parental_gate/parental_gate.dart';
 import '../parental_gate/protected_action_runner.dart';
 import 'purchase_gateway.dart';
+
+/// Bir ürünün kullanıcıya satılıp satılamayacağı.
+enum OfferStatus {
+  /// Ürünün açtığı paketlerin hiçbiri kullanıcıda yok; satılabilir.
+  available,
+
+  /// Ürünün açtığı bütün paketlere zaten erişim var; satılmaz.
+  alreadyOwned,
+
+  /// Avantajlı paketteki paketlerin bir kısmına zaten erişim var. Google Play fiyatı sahipliğe göre
+  /// düşürmediği için bu durumda avantajlı paket satılmaz; eksik paketler tek tek önerilir.
+  partiallyOwned,
+}
 
 /// Hangi paketlere erişim olduğunu bilen servis.
 ///
@@ -47,6 +61,15 @@ final class EntitlementService extends ChangeNotifier {
   bool canPlayPack(String packId) =>
       _catalog.isFree(packId) || _catalog.productsGranting(packId).any((product) => ownsProduct(product.id));
 
+  /// Ürünün satılıp satılamayacağı; çifte ücretlendirmeyi önleyen kural (bkz. [OfferStatus]).
+  OfferStatus offerStatusOf(StoreProduct product) {
+    final ownedCount = product.packIds.where(canPlayPack).length;
+    if (ownedCount == 0) {
+      return OfferStatus.available;
+    }
+    return ownedCount == product.packIds.length ? OfferStatus.alreadyOwned : OfferStatus.partiallyOwned;
+  }
+
   /// Paket satın alınmamış ama deneme seviyeleriyle oynanabiliyor mu?
   bool isPreviewOnly(LevelPack pack) => pack.freePreview && !canPlayPack(pack.id);
 
@@ -82,7 +105,8 @@ final class EntitlementService extends ChangeNotifier {
   /// Satın almayı başlatır. Yalnızca `ProtectedActionRunner`'ın verdiği, satın alma için geçerli ve
   /// kullanılmamış bir [approval] ile mağazaya gidilir; aksi halde [PurchaseOutcome.notApproved] döner.
   /// Google Play'in kendi satın alma onayı (ör. aile grubu onayı) bundan ayrıca uygulanır.
-  /// Ürünün açtığı bütün paketlere zaten erişim varsa mağazaya gidilmez.
+  /// Ürünün açtığı paketlerin hepsine ya da bir kısmına zaten erişim varsa mağazaya gidilmez (bkz.
+  /// [offerStatusOf]); böylece aynı içerik için iki kez ödeme alınmaz.
   Future<PurchaseOutcome> purchase(String productId, {required ParentalApproval approval}) async {
     if (!approval.consume(ParentalAction.purchase)) {
       return PurchaseOutcome.notApproved;
@@ -91,8 +115,13 @@ final class EntitlementService extends ChangeNotifier {
     if (product == null) {
       return PurchaseOutcome.productNotFound;
     }
-    if (product.packIds.every(canPlayPack)) {
-      return PurchaseOutcome.alreadyOwned;
+    switch (offerStatusOf(product)) {
+      case OfferStatus.alreadyOwned:
+        return PurchaseOutcome.alreadyOwned;
+      case OfferStatus.partiallyOwned:
+        return PurchaseOutcome.partiallyOwned;
+      case OfferStatus.available:
+        break;
     }
     final result = await _gateway.purchase(productId);
     switch (result) {

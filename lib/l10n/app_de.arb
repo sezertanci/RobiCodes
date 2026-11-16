@@ -155,6 +155,7 @@
   "storePending": "Die Zahlung steht noch aus. Das Paket wird automatisch freigeschaltet, sobald die Zahlung abgeschlossen ist.",
   "storeCancelled": "Kauf abgebrochen.",
   "storeAlreadyOwned": "Dieses Paket hast du schon; es wurde nicht noch einmal gekauft.",
+  "storeBundlePartiallyOwned": "Du besitzt bereits einen Teil der Inhalte dieses Pakets. Damit du nicht zweimal für dieselben Inhalte bezahlst, wurde der Kauf nicht gestartet.",
   "storeOffline": "Keine Internetverbindung. Prüfe die Verbindung und versuche es erneut.",
   "storeUnavailable": "Keine Verbindung zu Google Play. Bitte versuche es später erneut.",
   "storeFailed": "Der Kauf konnte nicht abgeschlossen werden.",

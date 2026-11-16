@@ -155,6 +155,7 @@
   "storePending": "Pembayaran sedang diproses. Paket akan terbuka sendiri saat pembayaran selesai.",
   "storeCancelled": "Pembelian dibatalkan.",
   "storeAlreadyOwned": "Kamu sudah memiliki paket ini; paket tidak dibeli lagi.",
+  "storeBundlePartiallyOwned": "Kamu sudah memiliki sebagian konten dalam paket ini, jadi pembelian tidak dimulai agar kamu tidak membayar dua kali untuk konten yang sama.",
   "storeOffline": "Tidak ada koneksi internet. Periksa koneksi lalu coba lagi.",
   "storeUnavailable": "Tidak bisa terhubung ke Google Play. Coba lagi nanti, ya.",
   "storeFailed": "Pembelian tidak dapat diselesaikan.",

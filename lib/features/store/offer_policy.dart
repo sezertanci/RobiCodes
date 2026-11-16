@@ -2,33 +2,18 @@ import '../../content/content_catalog.dart';
 import '../../content/models/store_product.dart';
 import 'entitlement_service.dart';
 
-/// Bir ürünün kullanıcıya satılıp satılamayacağı.
-enum OfferStatus {
-  /// Ürünün açtığı paketlerin hiçbiri kullanıcıda yok; satılabilir.
-  available,
+export 'entitlement_service.dart' show OfferStatus;
 
-  /// Ürünün açtığı bütün paketlere zaten erişim var; satılmaz.
-  alreadyOwned,
-
-  /// Avantajlı paketteki paketlerin bir kısmına zaten erişim var. Google Play fiyatı sahipliğe göre
-  /// düşürmediği için bu durumda avantajlı paket satılmaz; eksik paketler tek tek önerilir.
-  partiallyOwned,
-}
-
-/// Çifte ücretlendirmeyi önleyen satış kuralı. Mağaza ekranı yalnızca `available` ürünleri gösterir.
+/// Mağaza ekranının satış kuralı. Ürünün durumu [EntitlementService.offerStatusOf]'tan gelir; satın alma
+/// da aynı kuralla engellendiği için çifte ücretlendirme ekrana bağlı kalmaz. Ekran yalnızca `available`
+/// ürünlere satın alma düğmesi gösterir.
 final class OfferPolicy {
   const OfferPolicy(this._catalog, this._entitlements);
 
   final ContentCatalog _catalog;
   final EntitlementService _entitlements;
 
-  OfferStatus statusOf(StoreProduct product) {
-    final ownedCount = product.packIds.where(_entitlements.canPlayPack).length;
-    if (ownedCount == 0) {
-      return OfferStatus.available;
-    }
-    return ownedCount == product.packIds.length ? OfferStatus.alreadyOwned : OfferStatus.partiallyOwned;
-  }
+  OfferStatus statusOf(StoreProduct product) => _entitlements.offerStatusOf(product);
 
   /// Avantajlı paketin, kullanıcıda olmayan paketlerini tek başına satan ürünler.
   List<StoreProduct> missingPartsOf(StoreProduct bundle) => [

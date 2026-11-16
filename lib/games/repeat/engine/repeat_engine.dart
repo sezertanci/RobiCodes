@@ -47,6 +47,13 @@ final class NextStepHint extends RepeatHint {
   final NextMoveHint move;
 }
 
+/// Program önerilen çözümden ayrılıyor. Yalnızca ipucuna çözüm verilince (düzeltme kuralları) oluşur.
+final class DifferenceHint extends RepeatHint {
+  const DifferenceHint(this.difference);
+
+  final SolutionDifference difference;
+}
+
 /// Bloklar zaten doğru.
 final class RepeatSolvedHint extends RepeatHint {
   const RepeatSolvedHint();
@@ -107,12 +114,26 @@ abstract final class RepeatEngine {
   }
 
   /// İpucu: önce boş tekrar bloğu, sonra robotu yoldan çıkaran hareket, yoksa sıradaki doğru hareket.
-  static RepeatHint hint(PathFinderBoard board, List<ProgramBlock> program, {List<ProgramBlock> command = const []}) {
+  /// [solution] verilirse (düzeltme kuralları) program önerilen çözümle de karşılaştırılır (bkz.
+  /// [_solutionHint]); [openBlock] okların eklendiği açık tekrar bloğudur.
+  static RepeatHint hint(
+    PathFinderBoard board,
+    List<ProgramBlock> program, {
+    List<ProgramBlock> command = const [],
+    List<ProgramBlock>? solution,
+    int? openBlock,
+  }) {
     if (findEmptyRepeat(program) case final block?) {
       return EmptyRepeatHint(block);
     }
     final trace = expand(program, command: command);
-    return switch (PathFinderEngine.hint(board, _directions(trace), _unlimited)) {
+    final pathHint = PathFinderEngine.hint(board, _directions(trace), _unlimited);
+    if (solution != null) {
+      if (_solutionHint(board, program, pathHint, solution, openBlock) case final hint?) {
+        return hint;
+      }
+    }
+    return switch (pathHint) {
       FixCommandHint(:final index) => FixPlaceHint(trace[index], index),
       final NextMoveHint move => NextStepHint(move),
       SolvedHint() => const RepeatSolvedHint(),
@@ -120,6 +141,76 @@ abstract final class RepeatEngine {
       TooManyCommandsHint() => throw StateError('Haritada bayrağa giden yol yok.'),
     };
   }
+
+  /// Düzeltme kurallarına özgü ipucu; genel ipucu yeterliyse `null`.
+  /// - Açık tekrar bloğu yazılırken bloğun okları çözümdeki okların başıysa sıradaki iç ok önerilir.
+  /// - Robot çarpıyor ama programda fazla bir blok varsa çarptıran yer yerine fazla blok gösterilir.
+  /// - Robot çarpmıyorsa programın çözümden ayrıldığı yer gösterilir; robot başka bir doğru yoldaysa
+  ///   gösterilmez (bkz. [_offRoute]).
+  static RepeatHint? _solutionHint(
+    PathFinderBoard board,
+    List<ProgramBlock> program,
+    PathHint pathHint,
+    List<ProgramBlock> solution,
+    int? openBlock,
+  ) {
+    if (_nextInnerMove(board, program, solution, openBlock) case final move?) {
+      return NextStepHint(move);
+    }
+    final difference = switch (pathHint) {
+      FixCommandHint() => _extraBlock(program, solution),
+      NextMoveHint() => _offRoute(board, program, solution),
+      _ => null,
+    };
+    return difference == null ? null : DifferenceHint(difference);
+  }
+
+  /// Açık tekrar bloğunun okları çözümdeki aynı bloğun oklarının başıysa ve önceki bloklar çözüme uyuyorsa
+  /// çözümdeki sıradaki iç ok; robotun gideceği kare bloğun ilk turuna göredir. Aksi halde `null`.
+  static NextMoveHint? _nextInnerMove(
+    PathFinderBoard board,
+    List<ProgramBlock> program,
+    List<ProgramBlock> solution,
+    int? openBlock,
+  ) {
+    if (openBlock == null || openBlock >= solution.length) {
+      return null;
+    }
+    final before = program.sublist(0, openBlock);
+    if ((program[openBlock], solution[openBlock]) case (RepeatBlock(:final body), RepeatBlock(body: final want))
+        when body.length < want.length && _startsWith(want, body) && _firstMismatch(before, solution) == null) {
+      final direction = want[body.length];
+      final position = PathFinderEngine.run(board, [..._directions(expand(before)), ...body]).position;
+      return NextMoveHint(direction, direction.from(position));
+    }
+    return null;
+  }
+
+  static bool _startsWith(List<Direction> list, List<Direction> prefix) =>
+      prefix.indexed.every((entry) => list[entry.$1] == entry.$2);
+
+  /// Programın çözümden ayrıldığı yer fazla bir bloksa o fark; değilse `null`.
+  static SolutionDifference? _extraBlock(List<ProgramBlock> program, List<ProgramBlock> solution) {
+    final difference = firstDifference(program, solution);
+    return difference?.kind == DifferenceKind.extraBlock ? difference : null;
+  }
+
+  /// Robot çarpmadığında programın çözümden farkı. Fark üst düzeydeki bir oktaysa ve robot yolu çözümün
+  /// hareket sayısını aşmadan bitirebiliyorsa robot başka bir doğru yoldadır; fark sayılmaz. Tekrar
+  /// bloğundaki farklar (tekrar sayısı, iç ok) yol seçimi değil bozuk desendir; her zaman gösterilir.
+  static SolutionDifference? _offRoute(PathFinderBoard board, List<ProgramBlock> program, List<ProgramBlock> solution) {
+    final difference = firstDifference(program, solution);
+    if (difference == null) {
+      return null;
+    }
+    final place = difference.place;
+    final isRouteChoice = !Places.isInner(place) && program[place.block] is MoveBlock;
+    return isRouteChoice && _fitsSolution(board, program, solution) ? null : difference;
+  }
+
+  /// Robot programın sonundan bayrağa, çözümün hareket sayısını aşmadan ulaşabiliyor mu?
+  static bool _fitsSolution(PathFinderBoard board, List<ProgramBlock> program, List<ProgramBlock> solution) =>
+      PathFinderEngine.hint(board, _directions(expand(program)), expand(solution).length) is NextMoveHint;
 
   /// Programın [solution]dan ayrıldığı ilk yer; program çözümün başıysa `null`. Aynı yerdeki iki tekrar
   /// bloğunun okları aynıysa yanlış olan tekrar sayısıdır. O yer silinince program çözüme uyuyorsa fazladır.

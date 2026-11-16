@@ -183,6 +183,9 @@ final class MyCommandController extends ChangeNotifier
         _showNextMove(move);
       case RepeatSolvedHint():
         voice.say((t) => t.repeatSolved);
+      // Yalnızca ipucuna önerilen çözüm verilince oluşur; bu oyun çözüm vermez.
+      case DifferenceHint():
+        throw StateError('Komut oyununda çözüm farkı ipucu oluşmaz.');
     }
   }
 

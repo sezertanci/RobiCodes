@@ -236,24 +236,19 @@ final class RepeatController extends ChangeNotifier
       return;
     }
     useHint();
-    switch (RepeatEngine.hint(board, program)) {
+    switch (RepeatEngine.hint(board, program, solution: fixesProgram ? _solution : null, openBlock: target)) {
       case EmptyRepeatHint(:final block):
         _editor.openTarget(block);
         voice.say((t) => t.repeatEmptyRepeat);
       case FixPlaceHint(:final step):
-        // Hata Avcısı'nda robotu çarptıran yer fazlaysa çarptığı yer yerine onu silmesi söylenir.
-        if (_differenceFromSolution() case final difference? when difference.kind == DifferenceKind.extraBlock) {
-          _showDifference(difference);
-        } else {
-          _markWrong(Places.of(step));
-          voice.say(RepeatTexts.fixHint(step));
-        }
+        _markWrong(Places.of(step));
+        voice.say(RepeatTexts.fixHint(step));
+      case DifferenceHint(:final difference):
+        _markWrong(difference.place);
+        voice.say(RepeatTexts.differenceHint(difference));
       case NextStepHint(:final move):
-        // Hata Avcısı'nda robot çarpmadan yoldan çıkıyorsa ok eklemek yerine bozuk yer gösterilir. Blok sınırı
-        // doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
-        if (_differenceFromSolution() case final difference?) {
-          _showDifference(difference);
-        } else if (isFull) {
+        // Blok sınırı doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
+        if (isFull) {
           voice.say(RepeatTexts.fullLevelHint(level.hint));
         } else {
           boardRun.hint = move;
@@ -263,15 +258,6 @@ final class RepeatController extends ChangeNotifier
         voice.say((t) => t.repeatSolved);
     }
     notifyListeners();
-  }
-
-  /// Düzeltme kurallarında programın önerilen çözümden ayrıldığı ilk yer; diğer oyunlarda `null`.
-  SolutionDifference? _differenceFromSolution() =>
-      fixesProgram ? RepeatEngine.firstDifference(program, _solution) : null;
-
-  void _showDifference(SolutionDifference difference) {
-    _markWrong(difference.place);
-    voice.say(RepeatTexts.differenceHint(difference));
   }
 
   void _markWrong(ProgramPlace place) {

@@ -594,6 +594,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu pakete zaten sahipsiniz; yeniden satın alınmadı.';
 
   @override
+  String get storeBundlePartiallyOwned =>
+      'Bu paketteki içeriklerin bir kısmına zaten sahipsiniz; aynı içerik için iki kez ödeme yapmamanız adına satın alma başlatılmadı.';
+
+  @override
   String get storeOffline =>
       'İnternet bağlantısı yok. Bağlantıyı kontrol edip tekrar deneyin.';
 

@@ -1040,6 +1040,12 @@ abstract class AppLocalizations {
   /// **'Bu pakete zaten sahipsiniz; yeniden satın alınmadı.'**
   String get storeAlreadyOwned;
 
+  /// No description provided for @storeBundlePartiallyOwned.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu paketteki içeriklerin bir kısmına zaten sahipsiniz; aynı içerik için iki kez ödeme yapmamanız adına satın alma başlatılmadı.'**
+  String get storeBundlePartiallyOwned;
+
   /// No description provided for @storeOffline.
   ///
   /// In tr, this message translates to:

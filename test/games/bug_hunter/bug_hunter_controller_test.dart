@@ -189,6 +189,43 @@ void main() {
     expect(controller.boardRun.hint?.direction, _right);
   });
 
+  test('showHint_AlternativeRouteOnTrack_SuggestsNextMove', () {
+    // Arrange: çözüm "RRDD"; robot aynı uzunluktaki "DDRR" yolunda.
+    final controller = _controller(
+      'DD',
+      level: const RepeatLevel(map: ['S..', '...', '..G'], solution: 'RRDD', maxBlocks: 5, hint: _levelHint),
+    );
+
+    // Act
+    controller.showHint();
+
+    // Assert
+    expect(controller.wrongPlace, isNull);
+    expect(controller.boardRun.hint?.direction, _right);
+  });
+
+  test('showHint_OpenRepeatBeingFilled_SuggestsNextInnerArrow', () {
+    // Arrange: çözüm "3(RD)"; çocuk bloğu açmış, içine yalnızca ilk oku yazmış.
+    final controller = _controller(
+      '3(R)',
+      level: const RepeatLevel(
+        map: ['S...', '....', '....', '...G'],
+        solution: '3(RD)',
+        maxBlocks: 4,
+        hint: _levelHint,
+      ),
+      allowsRepeat: true,
+    );
+    controller.toggleTarget(0);
+
+    // Act
+    controller.showHint();
+
+    // Assert
+    expect(controller.wrongPlace, isNull);
+    expect(controller.boardRun.hint?.direction, _down);
+  });
+
   test('run_FixedCode_CompletesLevel', () async {
     // Arrange
     final stars = <int>[];

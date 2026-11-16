@@ -23,6 +23,7 @@ abstract final class StoreTexts {
     PurchaseOutcome.pending => t.storePending,
     PurchaseOutcome.cancelled => t.storeCancelled,
     PurchaseOutcome.alreadyOwned => t.storeAlreadyOwned,
+    PurchaseOutcome.partiallyOwned => t.storeBundlePartiallyOwned,
     PurchaseOutcome.productNotFound => t.storeNotInStore,
     PurchaseOutcome.offline => t.storeOffline,
     PurchaseOutcome.unavailable => t.storeUnavailable,

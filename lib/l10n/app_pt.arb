@@ -155,6 +155,7 @@
   "storePending": "O pagamento está pendente. O pacote será desbloqueado sozinho quando o pagamento for concluído.",
   "storeCancelled": "Compra cancelada.",
   "storeAlreadyOwned": "Você já tem este pacote; ele não foi comprado de novo.",
+  "storeBundlePartiallyOwned": "Você já tem parte do conteúdo deste pacote, então a compra não foi iniciada para que você não pague duas vezes pelo mesmo conteúdo.",
   "storeOffline": "Sem conexão com a internet. Verifique a conexão e tente de novo.",
   "storeUnavailable": "Não foi possível conectar ao Google Play. Tente de novo mais tarde.",
   "storeFailed": "Não foi possível concluir a compra.",

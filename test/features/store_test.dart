@@ -172,6 +172,23 @@ void main() {
       expect(gateway.purchaseRequests, isEmpty);
     });
 
+    test('purchase_BundlePartiallyOwned_DoesNotReachStore', () async {
+      // Arrange
+      gateway.owned = {TestCatalog.productA};
+      final service = createService();
+      await service.refresh();
+
+      // Act
+      final outcome = await service.purchase(
+        TestCatalog.bundle,
+        approval: await grantApproval(ParentalAction.purchase),
+      );
+
+      // Assert
+      expect(outcome, PurchaseOutcome.partiallyOwned);
+      expect(gateway.purchaseRequests, isEmpty);
+    });
+
     test('purchase_StoreReportsAlreadyOwned_RefreshesOwnership', () async {
       // Arrange: cihazdaki önbellek eski; ürün Play'de zaten kullanıcıya ait.
       gateway.nextOutcome = PurchaseOutcome.alreadyOwned;

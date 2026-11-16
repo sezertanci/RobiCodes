@@ -613,6 +613,10 @@ class AppLocalizationsId extends AppLocalizations {
       'Kamu sudah memiliki paket ini; paket tidak dibeli lagi.';
 
   @override
+  String get storeBundlePartiallyOwned =>
+      'Kamu sudah memiliki sebagian konten dalam paket ini, jadi pembelian tidak dimulai agar kamu tidak membayar dua kali untuk konten yang sama.';
+
+  @override
   String get storeOffline =>
       'Tidak ada koneksi internet. Periksa koneksi lalu coba lagi.';
 

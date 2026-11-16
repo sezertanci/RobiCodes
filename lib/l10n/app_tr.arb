@@ -388,6 +388,7 @@
   "storePending": "Ödeme beklemede. Ödeme tamamlanınca paket kendiliğinden açılır.",
   "storeCancelled": "Satın alma iptal edildi.",
   "storeAlreadyOwned": "Bu pakete zaten sahipsiniz; yeniden satın alınmadı.",
+  "storeBundlePartiallyOwned": "Bu paketteki içeriklerin bir kısmına zaten sahipsiniz; aynı içerik için iki kez ödeme yapmamanız adına satın alma başlatılmadı.",
   "storeOffline": "İnternet bağlantısı yok. Bağlantıyı kontrol edip tekrar deneyin.",
   "storeUnavailable": "Google Play'e bağlanılamadı. Daha sonra tekrar deneyin.",
   "storeFailed": "Satın alma tamamlanamadı.",

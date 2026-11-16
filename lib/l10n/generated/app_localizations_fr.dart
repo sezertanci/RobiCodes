@@ -615,6 +615,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Tu as déjà ce pack ; il n’a pas été racheté.';
 
   @override
+  String get storeBundlePartiallyOwned =>
+      'Vous possédez déjà une partie du contenu de ce pack ; l\'achat n\'a pas été lancé pour vous éviter de payer deux fois le même contenu.';
+
+  @override
   String get storeOffline =>
       'Pas de connexion Internet. Vérifie la connexion et réessaie.';
 

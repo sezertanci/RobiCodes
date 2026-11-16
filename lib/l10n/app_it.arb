@@ -155,6 +155,7 @@
   "storePending": "Il pagamento è in attesa. Il pacchetto si sbloccherà da solo quando il pagamento sarà completato.",
   "storeCancelled": "Acquisto annullato.",
   "storeAlreadyOwned": "Hai già questo pacchetto; non è stato acquistato di nuovo.",
+  "storeBundlePartiallyOwned": "Possiedi già parte dei contenuti di questo pacchetto, quindi l'acquisto non è stato avviato per evitare di pagare due volte gli stessi contenuti.",
   "storeOffline": "Nessuna connessione a Internet. Controlla la connessione e riprova.",
   "storeUnavailable": "Impossibile collegarsi a Google Play. Riprova più tardi.",
   "storeFailed": "Non è stato possibile completare l’acquisto.",

@@ -13,6 +13,10 @@ enum PurchaseOutcome {
   /// Ürün zaten kullanıcıya ait; yeniden ücretlendirilmez.
   alreadyOwned,
 
+  /// Avantajlı paketteki içeriklerin bir kısmı zaten kullanıcıya ait; çifte ücretlendirmemek için
+  /// mağazaya gidilmedi.
+  partiallyOwned,
+
   /// Ürün Google Play'de bulunamadı (Play Console'da tanımlı veya etkin değil).
   productNotFound,
 

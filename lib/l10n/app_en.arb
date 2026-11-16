@@ -155,6 +155,7 @@
   "storePending": "Payment is pending. The pack unlocks by itself when the payment completes.",
   "storeCancelled": "Purchase cancelled.",
   "storeAlreadyOwned": "You already own this pack; it was not bought again.",
+  "storeBundlePartiallyOwned": "You already own some of the content in this bundle, so the purchase was not started to avoid paying twice for the same content.",
   "storeOffline": "No internet connection. Check the connection and try again.",
   "storeUnavailable": "Could not connect to Google Play. Please try again later.",
   "storeFailed": "The purchase could not be completed.",
