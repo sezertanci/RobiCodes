@@ -14,12 +14,14 @@ abstract final class GameIds {
   static const repeat = 'repeat';
   static const bugHunter = 'bug-hunter';
   static const myCommand = 'my-command';
+  static const variableBox = 'variable-box';
 }
 
 /// Play Console'daki ürün kimlikleri. Yayından sonra değiştirilmez.
 abstract final class ProductIds {
   static const bugHunterBase = 'pack.bug_hunter.base';
   static const myCommandBase = 'pack.my_command.base';
+  static const variableBoxBase = 'pack.variable_box.base';
 
   /// Başlangıç Seti: açıldığı gün var olan iki ücretli oyunu (Hata Avcısı, Kendi Komutunu Oluştur) birlikte açar.
   static const starterBundle = 'bundle.starter';
@@ -100,6 +102,14 @@ final _paidGames = [
     icon: AppAssets.gameCommand,
     trophy: GameTrophy(title: (t) => t.gameMyCommandTrophy, description: (t) => t.gameMyCommandTrophyDescription),
   ),
+  GameDefinition(
+    id: GameIds.variableBox,
+    title: (t) => t.gameVariableBoxTitle,
+    description: (t) => t.gameVariableBoxDescription,
+    tone: AppTones.brown,
+    icon: AppAssets.gameBox,
+    trophy: GameTrophy(title: (t) => t.gameVariableBoxTrophy, description: (t) => t.gameVariableBoxTrophyDescription),
+  ),
 ];
 
 /// Uygulamanın içerik kataloğu: ücretsiz oyunların temel paketleri ve ücretli oyunların satın alınan
@@ -121,6 +131,11 @@ ContentCatalog buildContentCatalog() => ContentCatalog(
       id: ProductIds.myCommandBase,
       title: (t) => t.gameMyCommandTitle,
       packIds: [basePackId(GameIds.myCommand)],
+    ),
+    StoreProduct(
+      id: ProductIds.variableBoxBase,
+      title: (t) => t.gameVariableBoxTitle,
+      packIds: [basePackId(GameIds.variableBox)],
     ),
     StoreProduct(
       id: ProductIds.starterBundle,

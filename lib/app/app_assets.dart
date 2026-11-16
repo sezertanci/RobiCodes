@@ -27,4 +27,5 @@ abstract final class AppAssets {
   static const gameRepeat = 'assets/icons/game-repeat.svg';
   static const gameBug = 'assets/icons/game-bug.svg';
   static const gameCommand = 'assets/icons/game-command.svg';
+  static const gameBox = 'assets/icons/game-box.svg';
 }

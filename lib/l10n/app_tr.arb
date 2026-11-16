@@ -135,6 +135,10 @@
   "gameMyCommandDescription": "Oklarla kendi komutunu yap, tekrar tekrar kullan.",
   "gameMyCommandTrophy": "Komut Mimarı",
   "gameMyCommandTrophyDescription": "Kendi komutlarınla en zor yolları çözdün!",
+  "gameVariableBoxTitle": "Değişken Kutusu",
+  "gameVariableBoxDescription": "Kutuya sayı koy, robot o kadar adım atsın.",
+  "gameVariableBoxTrophy": "Değişken Ustası",
+  "gameVariableBoxTrophyDescription": "Kutudaki sayıyla en uzun yolları kısalttın!",
   "characterTitle": "Karakterini seç",
   "characterName": "{id, select, robi{Robi} fiyo{Fiyo} pervane{Pervane} isil{Işıl} kahraman{Kahraman} pembe{Pembe} sovalye{Şövalye} piril{Pırıl} other{Robi}}",
   "@characterName": {
@@ -314,10 +318,6 @@
       }
     }
   },
-  "parentalGateTrialLabel": "Ebeveyn doğrulamasını dene",
-  "parentalGateTrialHint": "Yalnızca test derlemesinde görünür. Gerçek satın alma yapılmaz.",
-  "parentalGateTrialPassed": "Doğrulama geçildi; deneme işlemi çalıştı.",
-  "parentalGateTrialBlocked": "Doğrulama geçilmedi; işlem çalışmadı.",
   "storeTitle": "Paketler",
   "storeIntro": "Satın almalar Google Play üzerinden yapılır ve her satın almadan önce ebeveyn onayı istenir. Google Play promosyon kodunu ödeme ekranındaki \"Kodu kullan\" bağlantısından veya Play Store uygulamasından kullanabilirsiniz; kodla alınan paket de burada sahip olunan olarak görünür.",
   "storePaidSection": "Satın alınabilir paketler",
@@ -936,6 +936,95 @@
   "myCommandL18Hint": "Komutun içinde iki Tekrarla bloğu olabilir: iki aşağı, iki sağa.",
   "myCommandL19Hint": "Komut: bir sağa, iki yukarı, bir sağa. Aradaki okları kareleri sayarak bul.",
   "myCommandL20Hint": "Komutta önce iki basamak var: sağa, aşağı. Sonra bir adım daha sağa.",
+  "variableBoxIntro": "Sarı kutuya bir sayı koy. Her ok robotu kutudaki sayı kadar yürütür. Kutu 1 ile başlar.",
+  "variableBoxEmpty": "Önce bir kutu bloğu ya da ok ekle.",
+  "variableBoxEmptyStrip": "Kutu bloğu ve ok ekle, bloklar burada sıralansın.",
+  "variableBoxMissedGoal": "Robot bayrağa ulaşamadı. Kutudaki sayıyı ya da okları değiştirmeyi dene.",
+  "variableBoxFullHint": "Blok sınırın doldu. Okları tek tek eklemek yerine kutuya daha büyük bir sayı koymayı dene.",
+  "variableBoxWalked": "{box, plural, other{Kutuda {box} vardı; her ok robotu {box} kare yürüttü.}}",
+  "@variableBoxWalked": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      }
+    }
+  },
+  "variableBoxInnerName": "{block}. bloğun içindeki {number}. kutu bloğu",
+  "@variableBoxInnerName": {
+    "placeholders": {
+      "block": {
+        "type": "Object"
+      },
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableBoxSetChip": "{name}: kutuya {value} koy",
+  "@variableBoxSetChip": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableBoxIncreaseChip": "{name}: kutuya 1 ekle",
+  "@variableBoxIncreaseChip": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableBoxDecreaseChip": "{name}: kutudan 1 çıkar",
+  "@variableBoxDecreaseChip": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableBoxDecrease": "Kutuya konacak sayıyı azalt",
+  "variableBoxIncrease": "Kutuya konacak sayıyı artır",
+  "variableBoxSetLabel": "Kutuya sayı koyan blok ekle",
+  "variableBoxIncreaseLabel": "Kutuya 1 ekleyen blok ekle",
+  "variableBoxDecreaseLabel": "Kutudan 1 çıkaran blok ekle",
+  "variableBoxBadge": "Kutuda şimdi {value} var.",
+  "@variableBoxBadge": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableBoxL1Intro": "Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.",
+  "variableBoxL1Hint": "Kutu = bloğuyla kutuya 6 koy; sonra tek bir sağ ok robotu 6 kare yürütür.",
+  "variableBoxL2Hint": "Robot 3 sağa, 3 aşağı gitmeli. Kutuya 3 koy; sonra her ok 3 kare yürütür.",
+  "variableBoxL3Hint": "Sağa da aşağıya da 4 kare var. Kutuya 4 koy, sonra iki ok yeter.",
+  "variableBoxL4Hint": "Önce sağa 5, sonra aşağı 2 kare. Kutuya 5 koy, sağ ok; sonra kutuyu 2 yap, aşağı ok.",
+  "variableBoxL5Intro": "Yeni blok: +1 kutudaki sayıyı bir artırır.",
+  "variableBoxL5Hint": "Sağa 2, aşağı 3 kare. Kutuya 2 koy, sağ ok, sonra +1 ile kutuyu 3 yap ve aşağı ok.",
+  "variableBoxL6Hint": "Yol hep 3 kare: sağa, aşağı, sağa, aşağı. Kutuya bir kez 3 koy; sonraki her ok 3 kare gider.",
+  "variableBoxL7Hint": "Kutu 1 ile başlar. Her adımda yol bir kare uzuyor: ok, +1, ok, +1, ok.",
+  "variableBoxL8Intro": "Yeni blok: −1 kutudaki sayıyı bir azaltır.",
+  "variableBoxL8Hint": "Yollar 4, 3, 2, 1 kare. Kutuya 4 koy, sonra her oktan sonra −1 ekle.",
+  "variableBoxL9Hint": "Aşağı 5, sağa 2, yukarı 5 kare. Her yönden önce kutuya o kadar sayı koy.",
+  "variableBoxL10Hint": "Bütün yollar 3 kare uzunluğunda. Kutuya bir kez 3 koy, sonra beş ok yeter.",
+  "variableBoxL11Intro": "Tekrarla geri döndü! Kutudaki sayı tekrarın her turunda da geçerli.",
+  "variableBoxL11Hint": "Basamaklar 2 kare. Kutuya 2 koy, sonra sağ ve aşağı oku 3 kez tekrarla.",
+  "variableBoxL12Hint": "Basamaklar 3 kare: önce aşağı, sonra sağa. Kutuya 3 koy ve deseni 2 kez tekrarla.",
+  "variableBoxL13Hint": "Kutuya 2 koy; sağ ve yukarı oku 2 kez tekrarla, en sonda bir sağ ok daha.",
+  "variableBoxL14Hint": "Önce sağa 3 kare git. Sonra kutuyu 2 yap ve aşağı-sağ desenini 2 kez tekrarla.",
+  "variableBoxL15Hint": "Önce kutuya 2 koy ve sağ-aşağı desenini 2 kez tekrarla. Son düz yol 3 kare.",
+  "variableBoxL16Intro": "Tekrarın içine +1 koyabilirsin; o zaman her turda yol bir kare uzar.",
+  "variableBoxL16Hint": "Basamaklar 1, 2, 3 kare büyüyor. Sağ ok, aşağı ok ve +1 bloğunu 3 kez tekrarla.",
+  "variableBoxL17Hint": "Basamaklar 3, 2, 1 kare küçülüyor. Kutuya 3 koy; sağ, aşağı ve −1 bloğunu 3 kez tekrarla.",
+  "variableBoxL18Hint": "Her turda sağ ok, +1 ve aşağı ok var; 2 turdan sonra son bir sağ ok ekle.",
+  "variableBoxL19Hint": "Kutuya 4 koy. Sağ ok, −1 ve aşağı ok desenini 2 kez tekrarla.",
+  "variableBoxL20Hint": "Her ok bir öncekinden bir kare uzun. Sağ ok, +1, aşağı ok, +1 desenini 2 kez tekrarla.",
   "ifThenL1Intro": "Önünde taş varsa robot ne yapmalı? Boş kutuya bir hareket koy.",
   "ifThenL2Intro": "Robot yüzemez. Önünde su varsa ne yapmalı?",
   "ifThenL3Intro": "Yolda kapalı bir kapı var. Kapının önüne gelince ne yapmalı?",

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_services.dart';
 import '../../l10n/l10n.dart';
+import '../developer/developer_unlock_tile.dart';
 import '../parental_gate/parental_gate_trial.dart';
 import '../store/store_screen.dart';
 import 'language_tile.dart';
 
 /// Ayarlar penceresi: sesi açıp kapatma, dil seçimi ve paket mağazasına giriş. Ayar hemen kaydedilir; pencere kapatılınca da geçerli kalır.
-/// Debug derlemelerinde ayrıca ebeveyn doğrulamasını deneme girişi gösterilir.
+/// Debug derlemelerinde ayrıca ebeveyn doğrulamasını deneme girişi ve bütün kilitleri açan anahtar gösterilir.
 final class SettingsDialog extends StatelessWidget {
   const SettingsDialog({required this.services, super.key});
 
@@ -44,8 +45,11 @@ final class SettingsDialog extends StatelessWidget {
               title: Text(t.storeTitle),
               onTap: () => StoreScreen.open(context),
             ),
-            // Release derlemesinde `kDebugMode` sabit `false` olduğundan bu giriş derlemeden çıkarılır.
-            if (kDebugMode) ParentalGateTrial(runner: services.protectedActions),
+            // Release derlemesinde `kDebugMode` sabit `false` olduğundan bu girişler derlemeden çıkarılır.
+            if (kDebugMode) ...[
+              ParentalGateTrial(runner: services.protectedActions),
+              DeveloperUnlockTile(unlock: services.developerUnlock),
+            ],
           ],
         ),
       ),

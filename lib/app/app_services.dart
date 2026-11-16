@@ -6,6 +6,7 @@ import '../core/storage/key_value_store.dart';
 import '../features/achievements/achievement_celebration.dart';
 import '../features/achievements/achievement_service.dart';
 import '../features/character/character_service.dart';
+import '../features/developer/developer_unlock.dart';
 import '../features/language/language_service.dart';
 import '../features/parental_gate/dialog_parental_gate.dart';
 import '../features/parental_gate/parental_gate.dart';
@@ -26,6 +27,7 @@ import '../games/if_then/if_then_module.dart';
 import '../games/my_command/my_command_module.dart';
 import '../games/path_finder/path_finder_module.dart';
 import '../games/repeat/repeat_module.dart';
+import '../games/variable_box/variable_box_module.dart';
 
 /// Uygulamanın bütün servisleri tek yerde kurulur (bileşim kökü). Servisler birbirini
 /// arayüzler üzerinden alır; testlerde aynı kurucuya sahte uygulamalar verilir.
@@ -42,8 +44,13 @@ final class AppServices {
        character = CharacterService(store),
        language = LanguageService(store),
        protectedActions = ProtectedActionRunner(parentalGate) {
-    entitlements = EntitlementService(catalog: catalog, gateway: purchaseGateway, store: store);
-    unlockPolicy = UnlockPolicy(progress, entitlements.canPlayPack);
+    entitlements = EntitlementService(
+      catalog: catalog,
+      gateway: purchaseGateway,
+      store: store,
+      developerUnlock: developerUnlock,
+    );
+    unlockPolicy = UnlockPolicy(progress, entitlements.canPlayPack, developerUnlock: developerUnlock);
     listings = ListingService(catalog: catalog, gateway: purchaseGateway);
     offers = OfferPolicy(catalog, entitlements);
     achievements = AchievementService(store: store, catalog: catalog, games: games, progress: progress);
@@ -60,7 +67,15 @@ final class AppServices {
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
   }) => AppServices(
     catalog: buildContentCatalog(),
-    games: GameRegistry([PathFinderModule(), CommandOrderModule(), IfThenModule(), RepeatModule(), BugHunterModule(), MyCommandModule()]),
+    games: GameRegistry([
+      PathFinderModule(),
+      CommandOrderModule(),
+      IfThenModule(),
+      RepeatModule(),
+      BugHunterModule(),
+      MyCommandModule(),
+      VariableBoxModule(),
+    ]),
     store: store,
     parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
     soundPlayer: soundPlayer,
@@ -74,6 +89,9 @@ final class AppServices {
   final CharacterService character;
   final LanguageService language;
   final ProtectedActionRunner protectedActions;
+
+  /// Debug'da bütün kilitleri açan geliştirici anahtarının durumu (bkz. [DeveloperUnlock]).
+  final developerUnlock = DeveloperUnlock();
   late final UnlockPolicy unlockPolicy;
   late final EntitlementService entitlements;
   late final ListingService listings;

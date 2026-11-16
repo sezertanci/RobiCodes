@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app_theme.dart';
-import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
 import '../../../l10n/l10n.dart';
 import '../program_models.dart';
-import '../repeat_texts.dart';
 import 'call_chip.dart';
+import 'inner_block_chip.dart';
 import 'repeat_block_view.dart';
 
 /// Blok şeridi: oklar ve turuncu tekrar blokları sırayla tek satırda durur, sığmazsa yatay kayar.
@@ -164,16 +163,13 @@ final class _ProgramStripState extends State<ProgramStrip> {
   Widget _block(int index, ProgramBlock block) {
     final place = Places.top(index);
     return switch (block) {
-      MoveBlock(:final direction) => CommandChip(
+      InnerBlock() => InnerBlockChip(
         key: _keyOf(place),
-        label: RepeatTexts.moveChip(context.l10n, place, direction),
-        number: index + 1,
-        direction: direction,
+        controller: _controller,
+        place: place,
+        block: block,
         size: widget.chipSize,
-        selected: _controller.selected == place,
-        active: _controller.activeStep?.block == index,
-        wrong: _controller.wrongPlace == place,
-        onTap: _controller.isRunning ? null : () => _controller.toggleSelection(place),
+        number: index + 1,
       ),
       RepeatBlock() => RepeatBlockView(
         key: _keyOf(place),

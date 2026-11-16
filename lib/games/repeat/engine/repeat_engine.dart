@@ -5,6 +5,9 @@ import 'repeat_program.dart';
 /// Programın çalıştırılma sonucu: harita sonucu ve her hareketin geldiği yer.
 typedef RepeatRun = ({RunResult result, List<ProgramStep> trace});
 
+/// Açılan bir bloğun hareketlerinin geldiği yer ve tur.
+typedef _StepPlace = ({int block, int inner, int round});
+
 /// Programın önerilen çözümden nasıl ayrıldığı.
 enum DifferenceKind {
   /// O yerdeki blok ya da ok yanlış.
@@ -62,7 +65,8 @@ final class RepeatSolvedHint extends RepeatHint {
 /// "Tekrar Et" kuralları. Harita ve hareket kuralları "Robotun Yolunu Bul" motorundan gelir;
 /// web sürümündeki `engine.js` ile aynı çalışır.
 abstract final class RepeatEngine {
-  static final _repeatToken = RegExp(r'^(\d+)\(([UDLR]+)\)$');
+  static final _repeatToken = RegExp(r'^(\d+)\((.+)\)$');
+  static final _innerToken = RegExp(r'=\d|[-+]|[UDLR]');
 
   /// Tekrar bloğunun sınırsız sayılabilmesi için ipucuna verilen komut sınırı.
   static const _unlimited = 1 << 30;
@@ -70,37 +74,75 @@ abstract final class RepeatEngine {
   /// Çözüm metninde komut bloğunun ([CallBlock]) kısaltması.
   static const callToken = 'C';
 
-  /// "3(RD) U" gibi bir çözüm metnini bloklara çevirir; "C" komut bloğudur.
+  /// Çözüm metninde kutu bloklarının kısaltmaları: "=3" kutuya 3 koyar, "+" ve "-" bir artırır ya da azaltır.
+  static const setBoxToken = '=';
+  static const incrementToken = '+';
+  static const decrementToken = '-';
+
+  /// "3(RD) U" ya da "=2 3(RD+)" gibi bir çözüm metnini bloklara çevirir; "C" komut bloğudur.
   static List<ProgramBlock> parseSolution(String text) => [
     for (final token in text.trim().split(RegExp(r'\s+')))
       if (token == callToken)
         const CallBlock()
       else if (_repeatToken.firstMatch(token) case final match?)
-        RepeatBlock(int.parse(match[1]!), Direction.parseSolution(match[2]!))
+        RepeatBlock(int.parse(match[1]!), _parseInner(match[2]!))
       else
-        ...Direction.parseSolution(token).map(MoveBlock.new),
+        ..._parseInner(token),
   ];
 
-  /// Blok sayısı: her ok ve her tekrar bloğu bir sayılır; tekrar bloğunun içindekiler de sayılır.
-  static int countBlocks(List<ProgramBlock> program) => program.fold(0, (sum, block) => sum + block.size);
-
-  /// Programı tek tek hareketlere açar. Komut bloğu [command] programının hareketlerine açılır; bu
-  /// hareketler komut bloğunun yerinden gelmiş sayılır.
-  static List<ProgramStep> expand(List<ProgramBlock> program, {List<ProgramBlock> command = const []}) => [
-    for (final (index, block) in program.indexed)
-      ...switch (block) {
-        MoveBlock(:final direction) => [(direction: direction, block: index, inner: Places.topLevel, round: 0)],
-        CallBlock() => [
-          for (final step in expand(command))
-            (direction: step.direction, block: index, inner: Places.topLevel, round: 0),
-        ],
-        RepeatBlock(:final times, :final body) => [
-          for (var round = 0; round < times; round++)
-            for (final (inner, direction) in body.indexed)
-              (direction: direction, block: index, inner: inner, round: round),
-        ],
+  static List<InnerBlock> _parseInner(String text) => [
+    for (final match in _innerToken.allMatches(text))
+      switch (match[0]!) {
+        incrementToken => AddBoxBlock.increment,
+        decrementToken => AddBoxBlock.decrement,
+        final token when token.startsWith(setBoxToken) => SetBoxBlock(int.parse(token.substring(1))),
+        final token => MoveBlock(Direction.parseSolution(token).single),
       },
   ];
+
+  /// Blok sayısı: her ok, kutu bloğu ve tekrar bloğu bir sayılır; tekrar bloğunun içindekiler de sayılır.
+  static int countBlocks(List<ProgramBlock> program) => program.fold(0, (sum, block) => sum + block.size);
+
+  /// Programı tek tek hareketlere açar. Kutu [BoxRules.start] ile başlar; her ok kutudaki sayı kadar
+  /// hareket olur. Komut bloğu [command] programının hareketlerine açılır; bu hareketler komut bloğunun
+  /// yerinden gelmiş sayılır.
+  static List<ProgramStep> expand(List<ProgramBlock> program, {List<ProgramBlock> command = const []}) {
+    final steps = <ProgramStep>[];
+    var box = BoxRules.start;
+    for (final (index, block) in program.indexed) {
+      switch (block) {
+        case CallBlock():
+          for (final step in expand(command)) {
+            steps.add((direction: step.direction, block: index, inner: Places.topLevel, round: 0, box: step.box));
+          }
+        case RepeatBlock(:final times, :final body):
+          for (var round = 0; round < times; round++) {
+            for (final (inner, item) in body.indexed) {
+              box = _expandInner(item, box, steps, (block: index, inner: inner, round: round));
+            }
+          }
+        case final InnerBlock item:
+          box = _expandInner(item, box, steps, (block: index, inner: Places.topLevel, round: 0));
+      }
+    }
+    return steps;
+  }
+
+  /// Ok kutudaki sayı kadar hareket ekler; kutu bloğu kutuyu değiştirir. Kutunun yeni değerini döndürür.
+  static int _expandInner(InnerBlock block, int box, List<ProgramStep> steps, _StepPlace at) {
+    switch (block) {
+      case MoveBlock(:final direction):
+        steps.addAll([
+          for (var i = 0; i < box; i++)
+            (direction: direction, block: at.block, inner: at.inner, round: at.round, box: box),
+        ]);
+        return box;
+      case SetBoxBlock(:final value):
+        return BoxRules.clamp(value);
+      case AddBoxBlock(:final amount):
+        return BoxRules.clamp(box + amount);
+    }
+  }
 
   static RepeatRun run(PathFinderBoard board, List<ProgramBlock> program, {List<ProgramBlock> command = const []}) {
     final trace = expand(program, command: command);
@@ -177,16 +219,21 @@ abstract final class RepeatEngine {
       return null;
     }
     final before = program.sublist(0, openBlock);
-    if ((program[openBlock], solution[openBlock]) case (RepeatBlock(:final body), RepeatBlock(body: final want))
-        when body.length < want.length && _startsWith(want, body) && _firstMismatch(before, solution) == null) {
-      final direction = want[body.length];
-      final position = PathFinderEngine.run(board, [..._directions(expand(before)), ...body]).position;
-      return NextMoveHint(direction, direction.from(position));
+    if ((program[openBlock], solution[openBlock]) case (final RepeatBlock block, RepeatBlock(body: final want))
+        when block.body.length < want.length &&
+            _startsWith(want, block.body) &&
+            _firstMismatch(before, solution) == null) {
+      // Sıradaki iç blok kutu bloğuysa robotun gideceği kare yoktur; genel ipucu kullanılır.
+      if (want[block.body.length] case MoveBlock(:final direction)) {
+        final firstRound = [...before, block.copyWith(times: 1)];
+        final position = PathFinderEngine.run(board, _directions(expand(firstRound))).position;
+        return NextMoveHint(direction, direction.from(position));
+      }
     }
     return null;
   }
 
-  static bool _startsWith(List<Direction> list, List<Direction> prefix) =>
+  static bool _startsWith(List<InnerBlock> list, List<InnerBlock> prefix) =>
       prefix.indexed.every((entry) => list[entry.$1] == entry.$2);
 
   /// Programın çözümden ayrıldığı yer fazla bir bloksa o fark; değilse `null`.
@@ -237,11 +284,11 @@ abstract final class RepeatEngine {
     return null;
   }
 
-  /// İki tekrar bloğunun ilk farklı oku. Program çözümdeki okların yalnızca başını içeriyorsa bloğun
+  /// İki tekrar bloğunun ilk farklı iç bloğu. Program çözümdeki okların yalnızca başını içeriyorsa bloğun
   /// kendisi, oklar aynıysa tekrar sayısı gösterilir.
-  static SolutionDifference _repeatDifference(int index, List<Direction> body, List<Direction> want) {
-    for (final (inner, direction) in body.indexed) {
-      if (inner >= want.length || direction != want[inner]) {
+  static SolutionDifference _repeatDifference(int index, List<InnerBlock> body, List<InnerBlock> want) {
+    for (final (inner, item) in body.indexed) {
+      if (inner >= want.length || item != want[inner]) {
         return (place: (block: index, inner: inner), kind: DifferenceKind.wrongBlock);
       }
     }

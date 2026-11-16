@@ -221,6 +221,20 @@ class AppLocalizationsPt extends AppLocalizations {
       'Você resolveu os caminhos mais difíceis com seus próprios comandos!';
 
   @override
+  String get gameVariableBoxTitle => 'Caixa de variável';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Coloque um número na caixa e o robô dá essa quantidade de passos.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Mestre das Variáveis';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      'Você encurtou os caminhos mais longos com o número da caixa!';
+
+  @override
   String get characterTitle => 'Escolha seu personagem';
 
   @override
@@ -494,21 +508,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return 'Quanto é $first vezes $second?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Testar a verificação dos pais';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Aparece só em versões de teste. Nenhuma compra de verdade é feita.';
-
-  @override
-  String get parentalGateTrialPassed =>
-      'Verificação aprovada; a ação de teste foi executada.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Verificação não aprovada; a ação não foi executada.';
 
   @override
   String get storeTitle => 'Pacotes';
@@ -1506,6 +1505,180 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'No comando há primeiro dois degraus: direita, baixo. Depois mais um passo para a direita.';
+
+  @override
+  String get variableBoxIntro =>
+      'Coloque um número na caixa amarela. Cada seta leva o robô tantos quadrados quanto o número da caixa. A caixa começa com 1.';
+
+  @override
+  String get variableBoxEmpty =>
+      'Primeiro adicione um bloco de caixa ou uma seta.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Adicione um bloco de caixa e setas, e seus blocos vão aparecer em fila aqui.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'O robô não chegou à bandeira. Tente mudar o número da caixa ou as setas.';
+
+  @override
+  String get variableBoxFullHint =>
+      'Você chegou ao limite de blocos. Em vez de adicionar as setas uma por uma, tente colocar um número maior na caixa.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other: 'A caixa tinha $box; cada seta levou o robô $box quadrados.',
+      one: 'A caixa tinha 1; cada seta levou o robô 1 quadrado.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return 'O bloco de caixa $number dentro do bloco $block';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: colocar $value na caixa';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: somar 1 na caixa';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: tirar 1 da caixa';
+  }
+
+  @override
+  String get variableBoxDecrease => 'Diminuir o número que vai na caixa';
+
+  @override
+  String get variableBoxIncrease => 'Aumentar o número que vai na caixa';
+
+  @override
+  String get variableBoxSetLabel =>
+      'Adicionar um bloco que coloca um número na caixa';
+
+  @override
+  String get variableBoxIncreaseLabel =>
+      'Adicionar um bloco que soma 1 na caixa';
+
+  @override
+  String get variableBoxDecreaseLabel =>
+      'Adicionar um bloco que tira 1 da caixa';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'Agora a caixa tem $value.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'A bandeira está 6 quadrados adiante, mas você só pode usar 2 blocos. Primeiro coloque 6 na caixa, depois toque na seta para a direita.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Com o bloco Caixa = coloque 6 na caixa; depois uma única seta para a direita leva o robô 6 quadrados.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'O robô precisa ir 3 para a direita e 3 para baixo. Coloque 3 na caixa; depois cada seta leva 3 quadrados.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'São 4 quadrados para a direita e 4 para baixo. Coloque 4 na caixa e duas setas bastam.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'Primeiro 5 para a direita, depois 2 para baixo. Coloque 5 na caixa e a seta para a direita; depois mude a caixa para 2 e use a seta para baixo.';
+
+  @override
+  String get variableBoxL5Intro =>
+      'Bloco novo: +1 aumenta em um o número da caixa.';
+
+  @override
+  String get variableBoxL5Hint =>
+      '2 para a direita, 3 para baixo. Coloque 2 na caixa, a seta para a direita, depois use +1 para a caixa ficar com 3 e a seta para baixo.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'O caminho tem sempre 3 quadrados: direita, baixo, direita, baixo. Coloque 3 na caixa uma vez só; todas as próximas setas andam 3 quadrados.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'A caixa começa com 1. A cada passo o caminho cresce um quadrado: seta, +1, seta, +1, seta.';
+
+  @override
+  String get variableBoxL8Intro =>
+      'Bloco novo: −1 diminui em um o número da caixa.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'Os caminhos têm 4, 3, 2 e 1 quadrados. Coloque 4 na caixa e depois de cada seta adicione −1.';
+
+  @override
+  String get variableBoxL9Hint =>
+      '5 para baixo, 2 para a direita, 5 para cima. Antes de cada direção, coloque esse número na caixa.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'Todos os caminhos têm 3 quadrados. Coloque 3 na caixa uma vez só e cinco setas bastam.';
+
+  @override
+  String get variableBoxL11Intro =>
+      'O bloco Repetir voltou! O número da caixa vale em todas as voltas da repetição.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'Os degraus têm 2 quadrados. Coloque 2 na caixa e depois repita 3 vezes a seta para a direita e a seta para baixo.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'Os degraus têm 3 quadrados: primeiro para baixo, depois para a direita. Coloque 3 na caixa e repita o desenho 2 vezes.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Coloque 2 na caixa; repita 2 vezes a seta para a direita e a seta para cima e, no final, mais uma seta para a direita.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'Primeiro ande 3 quadrados para a direita. Depois mude a caixa para 2 e repita 2 vezes o desenho seta para baixo e seta para a direita.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'Primeiro coloque 2 na caixa e repita 2 vezes o desenho seta para a direita e seta para baixo. O último trecho reto tem 3 quadrados.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'Você pode colocar +1 dentro da repetição; assim, a cada volta o caminho cresce um quadrado.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'Os degraus crescem: 1, 2 e 3 quadrados. Repita 3 vezes a seta para a direita, a seta para baixo e o bloco +1.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'Os degraus diminuem: 3, 2 e 1 quadrados. Coloque 3 na caixa; repita 3 vezes a seta para a direita, a seta para baixo e o bloco −1.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'Em cada volta há a seta para a direita, +1 e a seta para baixo; depois de 2 voltas, adicione uma última seta para a direita.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Coloque 4 na caixa. Repita 2 vezes o desenho seta para a direita, −1 e seta para baixo.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Cada seta é um quadrado mais longa que a anterior. Repita 2 vezes o desenho seta para a direita, +1, seta para baixo, +1.';
 
   @override
   String get ifThenL1Intro =>

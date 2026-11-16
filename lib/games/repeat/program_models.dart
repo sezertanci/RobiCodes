@@ -32,6 +32,9 @@ abstract interface class ProgramStripModel {
   void moveSelectedOut();
   void toggleInserting();
   void changeTimes(int index, int offset);
+
+  /// "kutu = N" bloğunun sayısını bir azaltır (-1) ya da artırır (+1).
+  void changeBoxValue(ProgramPlace place, int offset);
   void toggleTarget(int index);
 }
 

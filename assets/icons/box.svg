@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Kutu</title>
+  <desc>Kapakları açık kahverengi karton kutu. Kutu bloklarında ve kutu rozetinde kullanılır.</desc>
+  <g stroke="#6B4423" stroke-width="4" stroke-linejoin="round">
+    <path d="M14 24 L20 10 H44 L50 24 Z" fill="#6B4423"/>
+    <path d="M12 24 L3 15 L15 10 L20 24 Z" fill="#C68B55"/>
+    <path d="M52 24 L61 15 L49 10 L44 24 Z" fill="#C68B55"/>
+    <path d="M11 24 H53 V58 H11 Z" fill="#A0693A"/>
+  </g>
+</svg>

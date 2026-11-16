@@ -236,6 +236,13 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
 - **Başlangıç Seti (`bundle.starter`) kodlandı (15.11.2026):** iki ücretli oyunu birlikte açar; sürüm `1.4.1+6` (1.4.0+5 kapalı teste yüklendi),
   release AAB hazır. Play Console'da ürünlerin açılması ve kapalı test sürümü kullanıcıda. Sonraki oyunlar: Değişken Kutusu →
   Desen Bulmacası → Devre → Akış Şeması.
+- **Değişken Kutusu kodlandı ve commit edildi (16.11.2026).** `lib/games/variable_box/`; kutu blokları
+  (`SetBoxBlock`, `AddBoxBlock`, `BoxRules`) ortak program motorunda, kutu çipleri `inner_block_chip.dart`.
+  20 seviye, ürün `pack.variable_box.base`, karton kahvesi teması (`AppTones.brown`), ikon
+  `assets/icons/game-box.svg`, kutu düğmeleri koyu altın (`AppTones.amber`), 8 dilde metinler. Tablette denendi.
+  Debug'da ayarlarda "Tüm kilitleri aç" anahtarı var (yalnızca bellekte). `flutter analyze` temiz, 774 test geçiyor.
+  Kalanlar: pubspec sürüm yükseltme, ürün simgesi `store/robi-codes/products/variable-box-512.png` (kahverengi
+  oyun simgesinden), Play Console'da ürün ve sürüm.
 
 ## Kararlar
 

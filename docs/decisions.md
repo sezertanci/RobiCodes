@@ -65,6 +65,21 @@
 - Adı 8 dilde: Başlangıç Seti, Starter Set, Starter-Set, Pack de inicio, Pack de démarrage, Pacote inicial,
   Pacchetto iniziale, Paket Pemula.
 
+### Üçüncü ücretli oyun: Değişken Kutusu (16.11.2026)
+
+- "Tekrar Et" haritaları ve program şeridiyle oynanır. Şeridin solunda kahverengi bir kutu durur; kutu 1 ile başlar
+  ve her ok robotu kutudaki sayı kadar yürütür. Blok sınırı, kutu kullanılmadan aşılacak kadar dar tutulur.
+- Bloklar: oklar, "kutu = N" (yanındaki −/+ ile 1–9 arası), "+1" ve "−1". Kutu bu sınırların dışına çıkmaz.
+- Tekrarla bloğu yalnızca 11–20. seviyelerde açılır; 16–20'de kutu blokları tekrarın içine konur.
+- 20 seviye, 4 zorluk grubu. Deneme diğer ücretli oyunlarla aynı: her grubun ilk seviyesi ücretsiz (toplam 4).
+- Görünüm: karton kahvesi oyun rengi; ikonda üzerinde büyük beyaz sayı yazan açık kahverengi karton kutu.
+  Kutu düğmeleri (= N, +1, −1) koyu altın renkte, içlerinde yalnızca yan kapakları olan tek renk kahverengi kutu
+  simgesi durur; böylece şeritteki kahverengi kutu bloklarıyla karışmaz.
+- Adlar: Değişken Kutusu (tr), Variable Box (en), Variablen-Box (de), Caja de variables (es), Boîte à variable
+  (fr), Caixa de variável (pt), Scatola variabile (it), Kotak Variabel (id).
+- Ürün kimliği `pack.variable_box.base`; fiyat diğer ücretli oyunlarla aynı (müşteri 29,99 TL, yurt dışı
+  1,99 USD). Şimdilik bundle'a eklenmedi.
+
 ## Ses efektleri
 
 - Web sürümünde sesler kodla üretilir. Flutter sürümünde bu sesler **dosya olarak** hazırlanır ve

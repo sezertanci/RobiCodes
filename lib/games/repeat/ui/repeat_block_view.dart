@@ -3,16 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../features/play/widgets/dashed_frame.dart';
-import '../../path_finder/engine/path_finder_board.dart';
 import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
 import '../../../l10n/l10n.dart';
 import '../program_models.dart';
 import '../repeat_texts.dart';
+import 'inner_block_chip.dart';
 import 'repeat_assets.dart';
+import 'stepper_button.dart';
 
 /// Turuncu "N kez tekrarla" bloğu. Başlıkta sıra rozeti, −/+ düğmeleri, etiket ve çalışırken tur
-/// rozeti; yanında gövdede içindeki oklar durur. Etikete dokunmak bloğu açar (oklar içine eklenir),
+/// rozeti; yanında gövdede içindeki oklar ve kutu blokları durur. Etikete dokunmak bloğu açar (oklar içine eklenir),
 /// bloğun boş yerine dokunmak onu seçer. Kenar halkası: açıksa yeşil, seçiliyse lacivert, çalışıyorsa
 /// sarı, hatalıysa kırmızı.
 final class RepeatBlockView extends StatelessWidget {
@@ -99,8 +100,8 @@ final class RepeatBlockView extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _TimesButton(
-              text: '−',
+            StepperButton(
+              text: StepperButton.decrease,
               label: t.repeatDecrease,
               size: chipSize * 0.8,
               onPressed: editable && block.times > RepeatBlock.minTimes
@@ -110,8 +111,8 @@ final class RepeatBlockView extends StatelessWidget {
             const SizedBox(width: 6),
             _label(t, editable),
             const SizedBox(width: 6),
-            _TimesButton(
-              text: '+',
+            StepperButton(
+              text: StepperButton.increase,
               label: t.repeatIncrease,
               size: chipSize * 0.8,
               onPressed: editable && block.times < RepeatBlock.maxTimes ? () => controller.changeTimes(index, 1) : null,
@@ -170,9 +171,9 @@ final class RepeatBlockView extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final (inner, direction) in block.body.indexed) ...[
+          for (final (inner, item) in block.body.indexed) ...[
             if (inner > 0) const SizedBox(width: _gap),
-            _innerChip(context, inner, direction),
+            _innerChip(inner, item),
           ],
           if (showDrop) ...[
             if (block.body.isNotEmpty) const SizedBox(width: _gap),
@@ -186,19 +187,9 @@ final class RepeatBlockView extends StatelessWidget {
     );
   }
 
-  Widget _innerChip(BuildContext context, int inner, Direction direction) {
+  Widget _innerChip(int inner, InnerBlock item) {
     final place = (block: index, inner: inner);
-    final step = controller.activeStep;
-    return CommandChip(
-      key: keyOf(place),
-      label: RepeatTexts.moveChip(context.l10n, place, direction),
-      direction: direction,
-      size: chipSize,
-      selected: controller.selected == place,
-      active: step != null && Places.of(step) == place,
-      wrong: controller.wrongPlace == place,
-      onTap: controller.isRunning ? null : () => controller.toggleSelection(place),
-    );
+    return InnerBlockChip(key: keyOf(place), controller: controller, place: place, block: item, size: chipSize);
   }
 }
 
@@ -215,44 +206,6 @@ final class RepeatIcon extends StatelessWidget {
     padding: const EdgeInsets.all(2),
     decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
     child: SvgPicture.asset(RepeatAssets.icon),
-  );
-}
-
-/// Tekrar sayısını değiştiren beyaz yuvarlak − / + düğmesi.
-final class _TimesButton extends StatelessWidget {
-  const _TimesButton({required this.text, required this.label, required this.size, required this.onPressed});
-
-  final String text;
-  final String label;
-  final double size;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) => Semantics(
-    button: true,
-    enabled: onPressed != null,
-    label: label,
-    excludeSemantics: true,
-    child: GestureDetector(
-      onTap: onPressed,
-      child: Opacity(
-        opacity: onPressed == null ? 0.4 : 1,
-        child: Container(
-          width: size,
-          height: size,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [BoxShadow(color: AppColors.orangeDark, offset: Offset(0, 3))],
-          ),
-          child: Text(
-            text,
-            style: TextStyle(fontSize: size * 0.6, fontWeight: FontWeight.w900, color: AppColors.orangeDark, height: 1),
-          ),
-        ),
-      ),
-    ),
   );
 }
 

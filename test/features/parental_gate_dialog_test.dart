@@ -201,7 +201,7 @@ void main() {
       await tester.pumpWidget(_settings(const LockedParentalGate()));
 
       // Assert
-      expect(find.text(texts.parentalGateTrialLabel), findsOneWidget);
+      expect(find.text(ParentalGateTrial.label), findsOneWidget);
     });
 
     testWidgets('trial_GateApproves_RunsHarmlessActionOnly', (tester) async {
@@ -210,12 +210,12 @@ void main() {
       await tester.pumpWidget(_settings(gate));
 
       // Act
-      await tester.tap(find.text(texts.parentalGateTrialLabel));
+      await tester.tap(find.text(ParentalGateTrial.label));
       await tester.pumpAndSettle();
 
       // Assert
       expect(gate.requests, [ParentalGateTrial.action]);
-      expect(find.text(texts.parentalGateTrialPassed), findsOneWidget);
+      expect(find.text(ParentalGateTrial.passed), findsOneWidget);
     });
 
     testWidgets('trial_GateRejects_ShowsBlocked', (tester) async {
@@ -223,11 +223,11 @@ void main() {
       await tester.pumpWidget(_settings(FakeParentalGate(approves: false)));
 
       // Act
-      await tester.tap(find.text(texts.parentalGateTrialLabel));
+      await tester.tap(find.text(ParentalGateTrial.label));
       await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text(texts.parentalGateTrialBlocked), findsOneWidget);
+      expect(find.text(ParentalGateTrial.blocked), findsOneWidget);
     });
 
     testWidgets('production_TrialFromSettings_OpensQuestionDialogAndCancelBlocks', (tester) async {
@@ -237,7 +237,7 @@ void main() {
       await settle(tester);
 
       // Act
-      await tester.tap(find.text(texts.parentalGateTrialLabel));
+      await tester.tap(find.text(ParentalGateTrial.label));
       await settle(tester);
 
       // Assert
@@ -245,7 +245,7 @@ void main() {
       await tester.tap(find.text(texts.parentalGateCancel));
       await settle(tester);
       expect(find.byType(ParentalGateDialog), findsNothing);
-      expect(find.text(texts.parentalGateTrialBlocked), findsOneWidget);
+      expect(find.text(ParentalGateTrial.blocked), findsOneWidget);
     });
   });
 }

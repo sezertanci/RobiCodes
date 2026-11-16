@@ -20,7 +20,7 @@ void main() {
       expect(errors, isEmpty);
     });
 
-    test('buildContentCatalog_Default_HasFiveGamesWithHundredLevels', () {
+    test('buildContentCatalog_Default_HasSevenGamesWithHundredFortyLevels', () {
       // Arrange
       final catalog = buildContentCatalog();
 
@@ -28,11 +28,12 @@ void main() {
       final totalLevels = catalog.packs.fold(0, (sum, pack) => sum + pack.levelCount);
 
       // Assert
-      expect(catalog.games, hasLength(6));
-      expect(totalLevels, 120);
+      expect(catalog.games, hasLength(7));
+      expect(totalLevels, 140);
       expect(catalog.packs.where((pack) => !catalog.isFree(pack.id)).map((pack) => pack.gameId), [
         GameIds.bugHunter,
         GameIds.myCommand,
+        GameIds.variableBox,
       ]);
     });
 
@@ -47,6 +48,20 @@ void main() {
       expect(bundle.isBundle, isTrue);
       expect(bundle.packIds, [basePackId(GameIds.bugHunter), basePackId(GameIds.myCommand)]);
       expect(catalog.purchaseFor(basePackId(GameIds.myCommand))?.id, ProductIds.myCommandBase);
+    });
+    test('buildContentCatalog_VariableBox_SoldOnlyByOwnProductWithFreeGroupStarts', () {
+      // Arrange
+      final catalog = buildContentCatalog();
+      final packId = basePackId(GameIds.variableBox);
+
+      // Act
+      final products = catalog.productsGranting(packId).map((product) => product.id);
+      final pack = catalog.packs.singleWhere((pack) => pack.id == packId);
+
+      // Assert
+      expect(products, [ProductIds.variableBoxBase]);
+      expect(pack.levelCount, 20);
+      expect(pack.previewLevels, [1, 6, 11, 16]);
     });
   });
 

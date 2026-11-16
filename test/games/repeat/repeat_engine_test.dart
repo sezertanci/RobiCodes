@@ -15,7 +15,7 @@ final _line = PathFinderBoard.parse(['S..G']);
 void main() {
   test('parseSolution_RepeatAndMoves_ReturnsBlocks', () {
     expect(RepeatEngine.parseSolution('3(RD) U'), [
-      const RepeatBlock(3, [_right, _down]),
+      const RepeatBlock(3, [MoveBlock(_right), MoveBlock(_down)]),
       const MoveBlock(_up),
     ]);
   });
@@ -27,16 +27,16 @@ void main() {
 
   test('expand_RepeatBlock_ListsEveryRoundWithPlace', () {
     final steps = RepeatEngine.expand(const [
-      RepeatBlock(2, [_right, _down]),
+      RepeatBlock(2, [MoveBlock(_right), MoveBlock(_down)]),
       MoveBlock(_up),
     ]);
 
     expect(steps, [
-      (direction: _right, block: 0, inner: 0, round: 0),
-      (direction: _down, block: 0, inner: 1, round: 0),
-      (direction: _right, block: 0, inner: 0, round: 1),
-      (direction: _down, block: 0, inner: 1, round: 1),
-      (direction: _up, block: 1, inner: Places.topLevel, round: 0),
+      (direction: _right, block: 0, inner: 0, round: 0, box: 1),
+      (direction: _down, block: 0, inner: 1, round: 0, box: 1),
+      (direction: _right, block: 0, inner: 0, round: 1, box: 1),
+      (direction: _down, block: 0, inner: 1, round: 1, box: 1),
+      (direction: _up, block: 1, inner: Places.topLevel, round: 0, box: 1),
     ]);
   });
 
@@ -44,7 +44,7 @@ void main() {
     expect(RepeatEngine.findEmptyRepeat(const [MoveBlock(_right), RepeatBlock(2, [])]), 1);
     expect(
       RepeatEngine.findEmptyRepeat(const [
-        RepeatBlock(2, [_right]),
+        RepeatBlock(2, [MoveBlock(_right)]),
       ]),
       isNull,
     );
@@ -52,17 +52,17 @@ void main() {
 
   test('run_TooManyRounds_BlockedAtEdgeInLastRound', () {
     final run = RepeatEngine.run(_line, const [
-      RepeatBlock(4, [_right]),
+      RepeatBlock(4, [MoveBlock(_right)]),
     ]);
 
     expect(run.result.outcome, RunOutcome.blocked);
     expect(run.result.obstacle, Obstacle.edge);
-    expect(run.trace[run.result.failedIndex!], (direction: _right, block: 0, inner: 0, round: 3));
+    expect(run.trace[run.result.failedIndex!], (direction: _right, block: 0, inner: 0, round: 3, box: 1));
   });
 
   test('run_RightRounds_Succeeds', () {
     final run = RepeatEngine.run(_line, const [
-      RepeatBlock(3, [_right]),
+      RepeatBlock(3, [MoveBlock(_right)]),
     ]);
 
     expect(run.result.outcome, RunOutcome.success);
@@ -77,18 +77,18 @@ void main() {
 
   test('hint_WrongMove_PointsToStep', () {
     final hint = RepeatEngine.hint(_line, const [
-      RepeatBlock(2, [_up]),
+      RepeatBlock(2, [MoveBlock(_up)]),
     ]);
 
     expect(
       hint,
-      isA<FixPlaceHint>().having((hint) => hint.step, 'step', (direction: _up, block: 0, inner: 0, round: 0)),
+      isA<FixPlaceHint>().having((hint) => hint.step, 'step', (direction: _up, block: 0, inner: 0, round: 0, box: 1)),
     );
   });
 
   test('hint_ShortProgram_SuggestsNextMove', () {
     final hint = RepeatEngine.hint(_line, const [
-      RepeatBlock(2, [_right]),
+      RepeatBlock(2, [MoveBlock(_right)]),
     ]);
 
     expect(hint, isA<NextStepHint>().having((hint) => hint.move.direction, 'direction', _right));
@@ -225,7 +225,7 @@ void main() {
   test('hint_SolvedProgram_ReportsSolved', () {
     expect(
       RepeatEngine.hint(_line, const [
-        RepeatBlock(3, [_right]),
+        RepeatBlock(3, [MoveBlock(_right)]),
       ]),
       isA<RepeatSolvedHint>(),
     );
@@ -247,4 +247,45 @@ void main() {
       expect(run.trace, hasLength(PathFinderEngine.optimalLength(board)));
     });
   }
+  test('parseSolution_BoxTokens_ReturnsBoxBlocks', () {
+    expect(RepeatEngine.parseSolution('=3 R 2(+D-)'), [
+      const SetBoxBlock(3),
+      const MoveBlock(_right),
+      const RepeatBlock(2, [AddBoxBlock.increment, MoveBlock(_down), AddBoxBlock.decrement]),
+    ]);
+  });
+
+  test('expand_SetBoxThenMove_MovesBoxTimes', () {
+    final steps = RepeatEngine.expand(const [SetBoxBlock(3), MoveBlock(_right)]);
+
+    expect(steps, [
+      for (var i = 0; i < 3; i++) (direction: _right, block: 1, inner: Places.topLevel, round: 0, box: 3),
+    ]);
+  });
+
+  test('expand_IncrementInsideRepeat_GrowsEveryRound', () {
+    final steps = RepeatEngine.expand(const [
+      RepeatBlock(2, [MoveBlock(_right), AddBoxBlock.increment]),
+    ]);
+
+    expect(steps.map((step) => (step.round, step.box)), [(0, 1), (1, 2), (1, 2)]);
+  });
+
+  test('expand_BoxOutOfRange_StaysBetweenMinAndMax', () {
+    final low = RepeatEngine.expand(const [AddBoxBlock.decrement, MoveBlock(_right)]);
+    final high = RepeatEngine.expand(const [SetBoxBlock(BoxRules.maxValue), AddBoxBlock.increment, MoveBlock(_right)]);
+
+    expect(low.single.box, BoxRules.minValue);
+    expect(high, hasLength(BoxRules.maxValue));
+  });
+
+  test('countBlocks_BoxBlocks_CountsEachAsOne', () {
+    expect(RepeatEngine.countBlocks(RepeatEngine.parseSolution('=2 R 3(+D)')), 5);
+  });
+
+  test('run_BoxSolution_ReachesGoal', () {
+    final run = RepeatEngine.run(_line, const [SetBoxBlock(3), MoveBlock(_right)]);
+
+    expect(run.result.outcome, RunOutcome.success);
+  });
 }

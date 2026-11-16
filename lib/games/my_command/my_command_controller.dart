@@ -452,6 +452,10 @@ final class _LaneStrip implements ProgramStripModel {
   void toggleInserting() {}
   @override
   void changeTimes(int index, int offset) => _controller._changeTimes(_lane, index, offset);
+
+  /// Bu oyunda kutu bloğu yoktur.
+  @override
+  void changeBoxValue(ProgramPlace place, int offset) {}
   @override
   void toggleTarget(int index) => _controller._toggleTarget(_lane, index);
 }

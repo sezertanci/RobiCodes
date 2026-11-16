@@ -216,6 +216,20 @@ class AppLocalizationsTr extends AppLocalizations {
       'Kendi komutlarınla en zor yolları çözdün!';
 
   @override
+  String get gameVariableBoxTitle => 'Değişken Kutusu';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Kutuya sayı koy, robot o kadar adım atsın.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Değişken Ustası';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      'Kutudaki sayıyla en uzun yolları kısalttın!';
+
+  @override
   String get characterTitle => 'Karakterini seç';
 
   @override
@@ -478,21 +492,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return '$first çarpı $second kaç eder?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Ebeveyn doğrulamasını dene';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Yalnızca test derlemesinde görünür. Gerçek satın alma yapılmaz.';
-
-  @override
-  String get parentalGateTrialPassed =>
-      'Doğrulama geçildi; deneme işlemi çalıştı.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Doğrulama geçilmedi; işlem çalışmadı.';
 
   @override
   String get storeTitle => 'Paketler';
@@ -1467,6 +1466,173 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'Komutta önce iki basamak var: sağa, aşağı. Sonra bir adım daha sağa.';
+
+  @override
+  String get variableBoxIntro =>
+      'Sarı kutuya bir sayı koy. Her ok robotu kutudaki sayı kadar yürütür. Kutu 1 ile başlar.';
+
+  @override
+  String get variableBoxEmpty => 'Önce bir kutu bloğu ya da ok ekle.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Kutu bloğu ve ok ekle, bloklar burada sıralansın.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'Robot bayrağa ulaşamadı. Kutudaki sayıyı ya da okları değiştirmeyi dene.';
+
+  @override
+  String get variableBoxFullHint =>
+      'Blok sınırın doldu. Okları tek tek eklemek yerine kutuya daha büyük bir sayı koymayı dene.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other: 'Kutuda $box vardı; her ok robotu $box kare yürüttü.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return '$block. bloğun içindeki $number. kutu bloğu';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: kutuya $value koy';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: kutuya 1 ekle';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: kutudan 1 çıkar';
+  }
+
+  @override
+  String get variableBoxDecrease => 'Kutuya konacak sayıyı azalt';
+
+  @override
+  String get variableBoxIncrease => 'Kutuya konacak sayıyı artır';
+
+  @override
+  String get variableBoxSetLabel => 'Kutuya sayı koyan blok ekle';
+
+  @override
+  String get variableBoxIncreaseLabel => 'Kutuya 1 ekleyen blok ekle';
+
+  @override
+  String get variableBoxDecreaseLabel => 'Kutudan 1 çıkaran blok ekle';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'Kutuda şimdi $value var.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Kutu = bloğuyla kutuya 6 koy; sonra tek bir sağ ok robotu 6 kare yürütür.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'Robot 3 sağa, 3 aşağı gitmeli. Kutuya 3 koy; sonra her ok 3 kare yürütür.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'Sağa da aşağıya da 4 kare var. Kutuya 4 koy, sonra iki ok yeter.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'Önce sağa 5, sonra aşağı 2 kare. Kutuya 5 koy, sağ ok; sonra kutuyu 2 yap, aşağı ok.';
+
+  @override
+  String get variableBoxL5Intro => 'Yeni blok: +1 kutudaki sayıyı bir artırır.';
+
+  @override
+  String get variableBoxL5Hint =>
+      'Sağa 2, aşağı 3 kare. Kutuya 2 koy, sağ ok, sonra +1 ile kutuyu 3 yap ve aşağı ok.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'Yol hep 3 kare: sağa, aşağı, sağa, aşağı. Kutuya bir kez 3 koy; sonraki her ok 3 kare gider.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'Kutu 1 ile başlar. Her adımda yol bir kare uzuyor: ok, +1, ok, +1, ok.';
+
+  @override
+  String get variableBoxL8Intro => 'Yeni blok: −1 kutudaki sayıyı bir azaltır.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'Yollar 4, 3, 2, 1 kare. Kutuya 4 koy, sonra her oktan sonra −1 ekle.';
+
+  @override
+  String get variableBoxL9Hint =>
+      'Aşağı 5, sağa 2, yukarı 5 kare. Her yönden önce kutuya o kadar sayı koy.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'Bütün yollar 3 kare uzunluğunda. Kutuya bir kez 3 koy, sonra beş ok yeter.';
+
+  @override
+  String get variableBoxL11Intro =>
+      'Tekrarla geri döndü! Kutudaki sayı tekrarın her turunda da geçerli.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'Basamaklar 2 kare. Kutuya 2 koy, sonra sağ ve aşağı oku 3 kez tekrarla.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'Basamaklar 3 kare: önce aşağı, sonra sağa. Kutuya 3 koy ve deseni 2 kez tekrarla.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Kutuya 2 koy; sağ ve yukarı oku 2 kez tekrarla, en sonda bir sağ ok daha.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'Önce sağa 3 kare git. Sonra kutuyu 2 yap ve aşağı-sağ desenini 2 kez tekrarla.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'Önce kutuya 2 koy ve sağ-aşağı desenini 2 kez tekrarla. Son düz yol 3 kare.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'Tekrarın içine +1 koyabilirsin; o zaman her turda yol bir kare uzar.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'Basamaklar 1, 2, 3 kare büyüyor. Sağ ok, aşağı ok ve +1 bloğunu 3 kez tekrarla.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'Basamaklar 3, 2, 1 kare küçülüyor. Kutuya 3 koy; sağ, aşağı ve −1 bloğunu 3 kez tekrarla.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'Her turda sağ ok, +1 ve aşağı ok var; 2 turdan sonra son bir sağ ok ekle.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Kutuya 4 koy. Sağ ok, −1 ve aşağı ok desenini 2 kez tekrarla.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Her ok bir öncekinden bir kare uzun. Sağ ok, +1, aşağı ok, +1 desenini 2 kez tekrarla.';
 
   @override
   String get ifThenL1Intro =>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Değişken Kutusu</title>
+  <desc>Oyun ikonu. Kapakları açık, önünde büyük beyaz 3 yazan kahverengi bir karton kutu.</desc>
+  <ellipse cx="64" cy="118" rx="40" ry="6" fill="#1F2D4F" opacity="0.12"/>
+  <g stroke="#6B4423" stroke-width="6" stroke-linejoin="round">
+    <!-- Arka kapaklar -->
+    <path d="M28 46 L40 22 H88 L100 46 Z" fill="#6B4423"/>
+    <!-- Sol ve sağ açık kapaklar -->
+    <path d="M24 46 L8 30 L30 22 L40 46 Z" fill="#C68B55"/>
+    <path d="M104 46 L120 30 L98 22 L88 46 Z" fill="#C68B55"/>
+    <!-- Kutunun önü -->
+    <path d="M22 46 H106 V108 H22 Z" fill="#A0693A"/>
+  </g>
+  <!-- Bant -->
+  <path d="M22 54 H106" stroke="#6B4423" stroke-width="4" opacity="0.6"/>
+  <!-- Sayı -->
+  <text x="64" y="100" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="50"
+        font-weight="900" fill="#FFFFFF">3</text>
+</svg>

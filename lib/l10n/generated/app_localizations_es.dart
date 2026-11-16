@@ -222,6 +222,20 @@ class AppLocalizationsEs extends AppLocalizations {
       '¡Resolviste los caminos más difíciles con tus propios comandos!';
 
   @override
+  String get gameVariableBoxTitle => 'Caja de variables';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Mete un número en la caja y el robot dará esos pasos.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Maestro de las variables';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      '¡Acortaste los caminos más largos con el número de la caja!';
+
+  @override
   String get characterTitle => 'Elige tu personaje';
 
   @override
@@ -494,21 +508,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return '¿Cuánto es $first por $second?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Probar la verificación de los padres';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Solo se muestra en versiones de prueba. No se hace ninguna compra real.';
-
-  @override
-  String get parentalGateTrialPassed =>
-      'Verificación superada; la acción de prueba se ejecutó.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Verificación no superada; la acción no se ejecutó.';
 
   @override
   String get storeTitle => 'Paquetes';
@@ -1508,6 +1507,180 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'El comando empieza con dos escalones: derecha, abajo. Después, un paso más a la derecha.';
+
+  @override
+  String get variableBoxIntro =>
+      'Mete un número en la caja amarilla. Cada flecha mueve al robot tantas casillas como indique la caja. La caja empieza en 1.';
+
+  @override
+  String get variableBoxEmpty =>
+      'Primero añade un bloque de caja o una flecha.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Añade un bloque de caja y flechas y tus bloques se pondrán en fila aquí.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'El robot no llegó a la bandera. Prueba a cambiar el número de la caja o las flechas.';
+
+  @override
+  String get variableBoxFullHint =>
+      'Llegaste al límite de bloques. En vez de añadir las flechas una a una, prueba a meter un número más grande en la caja.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other: 'La caja tenía $box; cada flecha movió al robot $box casillas.',
+      one: 'La caja tenía $box; cada flecha movió al robot $box casilla.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return 'El bloque de caja $number dentro del bloque $block';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: meter $value en la caja';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: sumar 1 a la caja';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: quitar 1 de la caja';
+  }
+
+  @override
+  String get variableBoxDecrease => 'Bajar el número que se mete en la caja';
+
+  @override
+  String get variableBoxIncrease => 'Subir el número que se mete en la caja';
+
+  @override
+  String get variableBoxSetLabel =>
+      'Añadir un bloque que mete un número en la caja';
+
+  @override
+  String get variableBoxIncreaseLabel =>
+      'Añadir un bloque que suma 1 a la caja';
+
+  @override
+  String get variableBoxDecreaseLabel =>
+      'Añadir un bloque que quita 1 de la caja';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'Ahora la caja tiene $value.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'La bandera está 6 casillas más allá, pero solo puedes poner 2 bloques. Primero mete 6 en la caja y luego toca la flecha derecha.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Con el bloque caja = mete 6 en la caja; luego una sola flecha derecha mueve al robot 6 casillas.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'El robot debe ir 3 a la derecha y 3 hacia abajo. Mete 3 en la caja; luego cada flecha mueve 3 casillas.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'Hay 4 casillas a la derecha y 4 hacia abajo. Mete 4 en la caja y bastan dos flechas.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'Primero 5 a la derecha y luego 2 hacia abajo. Mete 5 en la caja y toca la flecha derecha; después pon la caja en 2 y toca la flecha abajo.';
+
+  @override
+  String get variableBoxL5Intro =>
+      'Bloque nuevo: +1 sube en uno el número de la caja.';
+
+  @override
+  String get variableBoxL5Hint =>
+      '2 a la derecha y 3 hacia abajo. Mete 2 en la caja, flecha derecha; luego con +1 pon la caja en 3 y flecha abajo.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'El camino es siempre de 3 casillas: derecha, abajo, derecha, abajo. Mete 3 en la caja una sola vez; cada flecha siguiente avanza 3 casillas.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'La caja empieza en 1. En cada paso el camino crece una casilla: flecha, +1, flecha, +1, flecha.';
+
+  @override
+  String get variableBoxL8Intro =>
+      'Bloque nuevo: −1 baja en uno el número de la caja.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'Los caminos son de 4, 3, 2 y 1 casillas. Mete 4 en la caja y después de cada flecha añade −1.';
+
+  @override
+  String get variableBoxL9Hint =>
+      '5 hacia abajo, 2 a la derecha, 5 hacia arriba. Antes de cada dirección mete en la caja el número que toca.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'Todos los caminos miden 3 casillas. Mete 3 en la caja una sola vez y bastan cinco flechas.';
+
+  @override
+  String get variableBoxL11Intro =>
+      '¡Repetir ha vuelto! El número de la caja sirve en cada vuelta de la repetición.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'Los escalones miden 2 casillas. Mete 2 en la caja y repite 3 veces la flecha derecha y la flecha abajo.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'Los escalones miden 3 casillas: primero abajo y luego a la derecha. Mete 3 en la caja y repite el patrón 2 veces.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Mete 2 en la caja; repite 2 veces la flecha derecha y la flecha arriba, y al final una flecha derecha más.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'Primero ve 3 casillas a la derecha. Luego pon la caja en 2 y repite 2 veces el patrón abajo-derecha.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'Primero mete 2 en la caja y repite 2 veces el patrón derecha-abajo. El último tramo recto mide 3 casillas.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'Puedes poner +1 dentro de Repetir; así el camino crece una casilla en cada vuelta.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'Los escalones crecen: 1, 2 y 3 casillas. Repite 3 veces la flecha derecha, la flecha abajo y el bloque +1.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'Los escalones se encogen: 3, 2 y 1 casillas. Mete 3 en la caja y repite 3 veces la flecha derecha, la flecha abajo y el bloque −1.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'En cada vuelta hay flecha derecha, +1 y flecha abajo; después de 2 vueltas añade una última flecha derecha.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Mete 4 en la caja. Repite 2 veces el patrón flecha derecha, −1 y flecha abajo.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Cada flecha es una casilla más larga que la anterior. Repite 2 veces el patrón flecha derecha, +1, flecha abajo, +1.';
 
   @override
   String get ifThenL1Intro =>

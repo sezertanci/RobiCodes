@@ -20,6 +20,13 @@ abstract final class AppColors {
   static const redDark = Color(0xFFD94848);
   static const orangeDark = Color(0xFFE8781C);
   static const yellowDark = Color(0xFFE8A920);
+  static const amberDark = Color(0xFFB07510);
+
+  /// Koyu kahve: koyu altın düğmelerdeki tek renk simgeler (ör. kutu düğmeleri) ve kahverengi kartların gölgesi.
+  static const brown = Color(0xFF6B4423);
+
+  /// Karton kahvesi: kutu görselinin gövdesiyle aynı ton; "Değişken Kutusu" oyununun rengi.
+  static const cardboard = Color(0xFFA0693A);
   static const tealDark = Color(0xFF1C9A8F);
 
   /// Düğme ve kartların altındaki yumuşak gölge.
@@ -66,6 +73,10 @@ abstract final class AppTones {
   static const pink = ColorTone(Color(0xFFFF8FB7), Color(0xFFE0608E));
   static const navy = ColorTone(Color(0xFF3A4D7A), AppColors.navy);
   static const gold = ColorTone(AppColors.yellow, AppColors.yellowDark);
+  static const brown = ColorTone(AppColors.cardboard, AppColors.brown);
+
+  /// Koyu altın: sarı zeminde beyaz yazı ve simge zor okunduğu için "Değişken Kutusu" düğmeleri kullanır.
+  static const amber = ColorTone(AppColors.yellowDark, AppColors.amberDark);
 }
 
 ThemeData buildAppTheme() => ThemeData(

@@ -30,6 +30,7 @@ Finder _inCard(String gameTitle, String text) => find.descendant(
 void main() {
   testWidgets('HomeScreen_DefaultCatalog_ShowsEveryGameWithProgress', (tester) async {
     // Arrange
+    useScreen(tester, TestScreens.tabletPortrait);
     final services = AppServices.production(InMemoryKeyValueStore());
     final packId = basePackId(GameIds.pathFinder);
     await services.progress.completeLevel(packId, 1, 3);
@@ -48,8 +49,9 @@ void main() {
     final playable = services.catalog.games.where((game) => services.games.isPlayable(game.id)).length;
     expect(find.text(texts.gameBugHunterTitle), findsOneWidget);
     expect(find.text(texts.gameMyCommandTitle), findsOneWidget);
-    expect(find.text(texts.homeLocked), findsNWidgets(2));
-    expect(playable, 6);
+    expect(find.text(texts.gameVariableBoxTitle), findsOneWidget);
+    expect(find.text(texts.homeLocked), findsNWidgets(3));
+    expect(playable, 7);
     expect(find.text(texts.homeComingSoon), findsNWidgets(services.catalog.games.length - playable));
   });
 

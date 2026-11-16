@@ -31,8 +31,12 @@ final class RepeatController extends ChangeNotifier
     this.stepDuration = PathFinderController.defaultStepDuration,
     this.celebrateDuration = PathFinderController.defaultCelebrateDuration,
     this.startingProgram,
+    this.usesBox = false,
   }) : boardRun = BoardRun(level.board),
-       voice = RobotVoice(feedback: feedback, intro: _introOf(level)),
+       voice = RobotVoice(
+         feedback: feedback,
+         intro: _introOf(level, usesBox: usesBox),
+       ),
        _solution = RepeatEngine.parseSolution(level.solution),
        _editor = ProgramEditor(startingProgram?.blocks ?? const []);
 
@@ -50,6 +54,10 @@ final class RepeatController extends ChangeNotifier
   /// Verilirse program bu bloklarla açılır ve okları seçip düzeltme kuralları geçerli olur.
   final StartingProgram? startingProgram;
 
+  /// "Değişken Kutusu": kutu blokları eklenebilir ve her ok robotu kutudaki sayı kadar yürütür. Tekrarla
+  /// yalnızca önerilen çözümde tekrar bloğu varsa gösterilir.
+  final bool usesBox;
+
   /// 3 yıldız için en fazla blok sayısı: önerilen çözümün blok sayısı.
   @override
   late final int targetBlocks = RepeatEngine.countBlocks(_solution);
@@ -66,6 +74,10 @@ final class RepeatController extends ChangeNotifier
   /// Son çalıştırmanın hareketleri; robot yürürken etkin hareketi göstermek için tutulur.
   List<ProgramStep> _trace = const [];
   ProgramPlace? _wrongPlace;
+  int _box = BoxRules.start;
+
+  /// Kutudaki sayı: robot yürürken o anki hareketin kutusu, aksi halde başlangıç değeri.
+  int get box => _box;
 
   @override
   List<ProgramBlock> get program => _editor.program;
@@ -94,7 +106,8 @@ final class RepeatController extends ChangeNotifier
   bool get fixesProgram => startingProgram != null;
 
   @override
-  bool get allowsRepeat => startingProgram?.allowsRepeat ?? true;
+  bool get allowsRepeat =>
+      startingProgram?.allowsRepeat ?? (!usesBox || _solution.any((block) => block is RepeatBlock));
 
   @override
   bool get isInserting => _editor.isInserting;
@@ -129,6 +142,29 @@ final class RepeatController extends ChangeNotifier
       voice.say((t) => t.repeatFull);
     }
     notifyListeners();
+  }
+
+  bool get canAddBox => !isRunning && !isFull;
+
+  /// Kutu bloğunu açık tekrar bloğunun içine, yoksa programın sonuna ekler.
+  void addBox(InnerBlock block) {
+    if (!canAddBox) {
+      return;
+    }
+    _changeProgram(() => _editor.appendInner(block));
+    if (isFull) {
+      voice.say((t) => t.repeatFull);
+    }
+    notifyListeners();
+  }
+
+  /// "kutu = N" bloğunun sayısını bir azaltır (-1) ya da artırır (+1); sayı kutu sınırlarında kalır.
+  @override
+  void changeBoxValue(ProgramPlace place, int offset) {
+    if (!isRunning) {
+      _changeProgram(() => _editor.changeBoxValue(place, offset));
+      notifyListeners();
+    }
   }
 
   /// "Önüne ekle" düğmesi: sonraki yönün seçili bloğun önüne eklenmesini açar ya da kapatır.
@@ -225,7 +261,7 @@ final class RepeatController extends ChangeNotifier
       return;
     }
     _changeProgram(() => _editor.reset(startingProgram?.blocks ?? const []));
-    voice.say(_introOf(level));
+    voice.say(_introOf(level, usesBox: usesBox));
     notifyListeners();
   }
 
@@ -236,20 +272,21 @@ final class RepeatController extends ChangeNotifier
       return;
     }
     useHint();
-    switch (RepeatEngine.hint(board, program, solution: fixesProgram ? _solution : null, openBlock: target)) {
+    final solution = fixesProgram || usesBox ? _solution : null;
+    switch (RepeatEngine.hint(board, program, solution: solution, openBlock: target)) {
       case EmptyRepeatHint(:final block):
         _editor.openTarget(block);
         voice.say((t) => t.repeatEmptyRepeat);
       case FixPlaceHint(:final step):
         _markWrong(Places.of(step));
-        voice.say(RepeatTexts.fixHint(step));
+        voice.say(RepeatTexts.withBox(RepeatTexts.fixHint(step), step.box));
       case DifferenceHint(:final difference):
         _markWrong(difference.place);
-        voice.say(RepeatTexts.differenceHint(difference));
+        voice.say(RepeatTexts.differenceHint(difference, _editor.blockAt(difference.place)));
       case NextStepHint(:final move):
         // Blok sınırı doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
         if (isFull) {
-          voice.say(RepeatTexts.fullLevelHint(level.hint));
+          voice.say(RepeatTexts.fullLevelHint(level.hint, usesBox: usesBox));
         } else {
           boardRun.hint = move;
           voice.say(RepeatTexts.nextMoveHint(level.hint, move.direction));
@@ -267,12 +304,12 @@ final class RepeatController extends ChangeNotifier
 
   @override
   LocalizedText get missedGoalText =>
-      (t) => t.repeatMissedGoal;
+      (t) => usesBox ? t.variableBoxMissedGoal : t.repeatMissedGoal;
 
   @override
   bool readyToRun() {
     if (_editor.isEmpty) {
-      voice.say((t) => t.repeatEmpty);
+      voice.say((t) => usesBox ? t.variableBoxEmpty : t.repeatEmpty);
       return false;
     }
     if (RepeatEngine.findEmptyRepeat(program) case final empty?) {
@@ -296,7 +333,11 @@ final class RepeatController extends ChangeNotifier
   }
 
   @override
-  void showStep(int index) => _activeStep = _trace[index];
+  void showStep(int index) {
+    final step = _trace[index];
+    _activeStep = step;
+    _box = step.box;
+  }
 
   @override
   void clearActiveStep() => _activeStep = null;
@@ -304,7 +345,7 @@ final class RepeatController extends ChangeNotifier
   @override
   void showBlocked(RunResult result, ProgramStep step, int index) {
     _wrongPlace = Places.of(step);
-    voice.say(RepeatTexts.blocked(result.obstacle!, step), RobotMood.sad);
+    voice.say(RepeatTexts.withBox(RepeatTexts.blocked(result.obstacle!, step), step.box), RobotMood.sad);
   }
 
   /// Bloklar değişince robot başa döner, eski ipucu ve işaretler silinir.
@@ -318,9 +359,15 @@ final class RepeatController extends ChangeNotifier
   void clearRunMarks() {
     _activeStep = null;
     _wrongPlace = null;
+    _box = BoxRules.start;
   }
 
-  /// Açılış mesajı: seviyenin kendi mesajı, yoksa altın olup olmamasına göre genel mesaj.
-  static LocalizedText _introOf(RepeatLevel level) =>
-      level.intro ?? (t) => level.board.coins.isEmpty ? t.repeatIntro : t.repeatCoinIntro;
+  /// Açılış mesajı: seviyenin kendi mesajı, yoksa oyuna ve altın olup olmamasına göre genel mesaj.
+  static LocalizedText _introOf(RepeatLevel level, {required bool usesBox}) =>
+      level.intro ??
+      (t) => switch ((usesBox, level.board.coins.isEmpty)) {
+        (true, _) => t.variableBoxIntro,
+        (false, true) => t.repeatIntro,
+        (false, false) => t.repeatCoinIntro,
+      };
 }

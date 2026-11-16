@@ -452,6 +452,30 @@ abstract class AppLocalizations {
   /// **'Kendi komutlarınla en zor yolları çözdün!'**
   String get gameMyCommandTrophyDescription;
 
+  /// No description provided for @gameVariableBoxTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişken Kutusu'**
+  String get gameVariableBoxTitle;
+
+  /// No description provided for @gameVariableBoxDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya sayı koy, robot o kadar adım atsın.'**
+  String get gameVariableBoxDescription;
+
+  /// No description provided for @gameVariableBoxTrophy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişken Ustası'**
+  String get gameVariableBoxTrophy;
+
+  /// No description provided for @gameVariableBoxTrophyDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutudaki sayıyla en uzun yolları kısalttın!'**
+  String get gameVariableBoxTrophyDescription;
+
   /// No description provided for @characterTitle.
   ///
   /// In tr, this message translates to:
@@ -859,30 +883,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'{first} çarpı {second} kaç eder?'**
   String parentalGateQuestion(String first, String second);
-
-  /// No description provided for @parentalGateTrialLabel.
-  ///
-  /// In tr, this message translates to:
-  /// **'Ebeveyn doğrulamasını dene'**
-  String get parentalGateTrialLabel;
-
-  /// No description provided for @parentalGateTrialHint.
-  ///
-  /// In tr, this message translates to:
-  /// **'Yalnızca test derlemesinde görünür. Gerçek satın alma yapılmaz.'**
-  String get parentalGateTrialHint;
-
-  /// No description provided for @parentalGateTrialPassed.
-  ///
-  /// In tr, this message translates to:
-  /// **'Doğrulama geçildi; deneme işlemi çalıştı.'**
-  String get parentalGateTrialPassed;
-
-  /// No description provided for @parentalGateTrialBlocked.
-  ///
-  /// In tr, this message translates to:
-  /// **'Doğrulama geçilmedi; işlem çalışmadı.'**
-  String get parentalGateTrialBlocked;
 
   /// No description provided for @storeTitle.
   ///
@@ -2251,6 +2251,252 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Komutta önce iki basamak var: sağa, aşağı. Sonra bir adım daha sağa.'**
   String get myCommandL20Hint;
+
+  /// No description provided for @variableBoxIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sarı kutuya bir sayı koy. Her ok robotu kutudaki sayı kadar yürütür. Kutu 1 ile başlar.'**
+  String get variableBoxIntro;
+
+  /// No description provided for @variableBoxEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce bir kutu bloğu ya da ok ekle.'**
+  String get variableBoxEmpty;
+
+  /// No description provided for @variableBoxEmptyStrip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutu bloğu ve ok ekle, bloklar burada sıralansın.'**
+  String get variableBoxEmptyStrip;
+
+  /// No description provided for @variableBoxMissedGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot bayrağa ulaşamadı. Kutudaki sayıyı ya da okları değiştirmeyi dene.'**
+  String get variableBoxMissedGoal;
+
+  /// No description provided for @variableBoxFullHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Blok sınırın doldu. Okları tek tek eklemek yerine kutuya daha büyük bir sayı koymayı dene.'**
+  String get variableBoxFullHint;
+
+  /// No description provided for @variableBoxWalked.
+  ///
+  /// In tr, this message translates to:
+  /// **'{box, plural, other{Kutuda {box} vardı; her ok robotu {box} kare yürüttü.}}'**
+  String variableBoxWalked(int box);
+
+  /// No description provided for @variableBoxInnerName.
+  ///
+  /// In tr, this message translates to:
+  /// **'{block}. bloğun içindeki {number}. kutu bloğu'**
+  String variableBoxInnerName(Object block, Object number);
+
+  /// No description provided for @variableBoxSetChip.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name}: kutuya {value} koy'**
+  String variableBoxSetChip(Object name, Object value);
+
+  /// No description provided for @variableBoxIncreaseChip.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name}: kutuya 1 ekle'**
+  String variableBoxIncreaseChip(Object name);
+
+  /// No description provided for @variableBoxDecreaseChip.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name}: kutudan 1 çıkar'**
+  String variableBoxDecreaseChip(Object name);
+
+  /// No description provided for @variableBoxDecrease.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya konacak sayıyı azalt'**
+  String get variableBoxDecrease;
+
+  /// No description provided for @variableBoxIncrease.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya konacak sayıyı artır'**
+  String get variableBoxIncrease;
+
+  /// No description provided for @variableBoxSetLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya sayı koyan blok ekle'**
+  String get variableBoxSetLabel;
+
+  /// No description provided for @variableBoxIncreaseLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya 1 ekleyen blok ekle'**
+  String get variableBoxIncreaseLabel;
+
+  /// No description provided for @variableBoxDecreaseLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutudan 1 çıkaran blok ekle'**
+  String get variableBoxDecreaseLabel;
+
+  /// No description provided for @variableBoxBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuda şimdi {value} var.'**
+  String variableBoxBadge(Object value);
+
+  /// No description provided for @variableBoxL1Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.'**
+  String get variableBoxL1Intro;
+
+  /// No description provided for @variableBoxL1Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutu = bloğuyla kutuya 6 koy; sonra tek bir sağ ok robotu 6 kare yürütür.'**
+  String get variableBoxL1Hint;
+
+  /// No description provided for @variableBoxL2Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Robot 3 sağa, 3 aşağı gitmeli. Kutuya 3 koy; sonra her ok 3 kare yürütür.'**
+  String get variableBoxL2Hint;
+
+  /// No description provided for @variableBoxL3Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağa da aşağıya da 4 kare var. Kutuya 4 koy, sonra iki ok yeter.'**
+  String get variableBoxL3Hint;
+
+  /// No description provided for @variableBoxL4Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce sağa 5, sonra aşağı 2 kare. Kutuya 5 koy, sağ ok; sonra kutuyu 2 yap, aşağı ok.'**
+  String get variableBoxL4Hint;
+
+  /// No description provided for @variableBoxL5Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni blok: +1 kutudaki sayıyı bir artırır.'**
+  String get variableBoxL5Intro;
+
+  /// No description provided for @variableBoxL5Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağa 2, aşağı 3 kare. Kutuya 2 koy, sağ ok, sonra +1 ile kutuyu 3 yap ve aşağı ok.'**
+  String get variableBoxL5Hint;
+
+  /// No description provided for @variableBoxL6Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yol hep 3 kare: sağa, aşağı, sağa, aşağı. Kutuya bir kez 3 koy; sonraki her ok 3 kare gider.'**
+  String get variableBoxL6Hint;
+
+  /// No description provided for @variableBoxL7Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutu 1 ile başlar. Her adımda yol bir kare uzuyor: ok, +1, ok, +1, ok.'**
+  String get variableBoxL7Hint;
+
+  /// No description provided for @variableBoxL8Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni blok: −1 kutudaki sayıyı bir azaltır.'**
+  String get variableBoxL8Intro;
+
+  /// No description provided for @variableBoxL8Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yollar 4, 3, 2, 1 kare. Kutuya 4 koy, sonra her oktan sonra −1 ekle.'**
+  String get variableBoxL8Hint;
+
+  /// No description provided for @variableBoxL9Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aşağı 5, sağa 2, yukarı 5 kare. Her yönden önce kutuya o kadar sayı koy.'**
+  String get variableBoxL9Hint;
+
+  /// No description provided for @variableBoxL10Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün yollar 3 kare uzunluğunda. Kutuya bir kez 3 koy, sonra beş ok yeter.'**
+  String get variableBoxL10Hint;
+
+  /// No description provided for @variableBoxL11Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrarla geri döndü! Kutudaki sayı tekrarın her turunda da geçerli.'**
+  String get variableBoxL11Intro;
+
+  /// No description provided for @variableBoxL11Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Basamaklar 2 kare. Kutuya 2 koy, sonra sağ ve aşağı oku 3 kez tekrarla.'**
+  String get variableBoxL11Hint;
+
+  /// No description provided for @variableBoxL12Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Basamaklar 3 kare: önce aşağı, sonra sağa. Kutuya 3 koy ve deseni 2 kez tekrarla.'**
+  String get variableBoxL12Hint;
+
+  /// No description provided for @variableBoxL13Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya 2 koy; sağ ve yukarı oku 2 kez tekrarla, en sonda bir sağ ok daha.'**
+  String get variableBoxL13Hint;
+
+  /// No description provided for @variableBoxL14Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce sağa 3 kare git. Sonra kutuyu 2 yap ve aşağı-sağ desenini 2 kez tekrarla.'**
+  String get variableBoxL14Hint;
+
+  /// No description provided for @variableBoxL15Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce kutuya 2 koy ve sağ-aşağı desenini 2 kez tekrarla. Son düz yol 3 kare.'**
+  String get variableBoxL15Hint;
+
+  /// No description provided for @variableBoxL16Intro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrarın içine +1 koyabilirsin; o zaman her turda yol bir kare uzar.'**
+  String get variableBoxL16Intro;
+
+  /// No description provided for @variableBoxL16Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Basamaklar 1, 2, 3 kare büyüyor. Sağ ok, aşağı ok ve +1 bloğunu 3 kez tekrarla.'**
+  String get variableBoxL16Hint;
+
+  /// No description provided for @variableBoxL17Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Basamaklar 3, 2, 1 kare küçülüyor. Kutuya 3 koy; sağ, aşağı ve −1 bloğunu 3 kez tekrarla.'**
+  String get variableBoxL17Hint;
+
+  /// No description provided for @variableBoxL18Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her turda sağ ok, +1 ve aşağı ok var; 2 turdan sonra son bir sağ ok ekle.'**
+  String get variableBoxL18Hint;
+
+  /// No description provided for @variableBoxL19Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutuya 4 koy. Sağ ok, −1 ve aşağı ok desenini 2 kez tekrarla.'**
+  String get variableBoxL19Hint;
+
+  /// No description provided for @variableBoxL20Hint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her ok bir öncekinden bir kare uzun. Sağ ok, +1, aşağı ok, +1 desenini 2 kez tekrarla.'**
+  String get variableBoxL20Hint;
 
   /// No description provided for @ifThenL1Intro.
   ///

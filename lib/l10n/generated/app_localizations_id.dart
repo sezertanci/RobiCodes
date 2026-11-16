@@ -223,6 +223,20 @@ class AppLocalizationsId extends AppLocalizations {
       'Kamu menyelesaikan jalur tersulit dengan perintahmu sendiri!';
 
   @override
+  String get gameVariableBoxTitle => 'Kotak Variabel';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Taruh angka di kotak, lalu robot berjalan sejauh itu.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Ahli Variabel';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      'Kamu memperpendek jalan yang panjang dengan angka di kotak!';
+
+  @override
   String get characterTitle => 'Pilih karaktermu';
 
   @override
@@ -495,21 +509,6 @@ class AppLocalizationsId extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return 'Berapa $first kali $second?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Coba pemeriksaan orang tua';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Hanya muncul di versi uji. Tidak ada pembelian sungguhan.';
-
-  @override
-  String get parentalGateTrialPassed =>
-      'Pemeriksaan berhasil; tindakan uji dijalankan.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Pemeriksaan gagal; tindakan tidak dijalankan.';
 
   @override
   String get storeTitle => 'Paket';
@@ -1507,6 +1506,179 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'Di dalam perintah, pertama ada dua anak tangga: kanan, bawah. Lalu satu langkah lagi ke kanan.';
+
+  @override
+  String get variableBoxIntro =>
+      'Taruh sebuah angka di kotak kuning. Setiap panah membuat robot berjalan sejauh angka di kotak. Kotak dimulai dari 1.';
+
+  @override
+  String get variableBoxEmpty => 'Tambahkan blok kotak atau panah dulu.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Tambahkan blok kotak dan panah, nanti blok-blokmu berbaris di sini.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'Robot belum sampai di bendera. Coba ubah angka di kotak atau panahnya.';
+
+  @override
+  String get variableBoxFullHint =>
+      'Kamu sudah mencapai batas blok. Daripada menambahkan panah satu per satu, coba taruh angka yang lebih besar di kotak.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other:
+          'Di kotak ada $box; setiap panah membuat robot berjalan $box petak.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return 'Blok kotak $number di dalam blok $block';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: taruh $value di kotak';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: tambah 1 ke kotak';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: kurangi 1 dari kotak';
+  }
+
+  @override
+  String get variableBoxDecrease => 'Kurangi angka yang ditaruh di kotak';
+
+  @override
+  String get variableBoxIncrease => 'Tambah angka yang ditaruh di kotak';
+
+  @override
+  String get variableBoxSetLabel =>
+      'Tambahkan blok yang menaruh angka di kotak';
+
+  @override
+  String get variableBoxIncreaseLabel =>
+      'Tambahkan blok yang menambah 1 ke kotak';
+
+  @override
+  String get variableBoxDecreaseLabel =>
+      'Tambahkan blok yang mengurangi 1 dari kotak';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'Sekarang di kotak ada $value.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'Bendera ada 6 petak jauhnya, tapi kamu hanya boleh memakai 2 blok. Taruh 6 di kotak dulu, lalu ketuk panah kanan.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Taruh 6 di kotak dengan blok kotak =; lalu satu panah kanan membuat robot berjalan 6 petak.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'Robot harus 3 petak ke kanan, 3 petak ke bawah. Taruh 3 di kotak; lalu setiap panah berjalan 3 petak.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'Ke kanan dan ke bawah masing-masing 4 petak. Taruh 4 di kotak, lalu dua panah sudah cukup.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'Pertama 5 petak ke kanan, lalu 2 petak ke bawah. Taruh 5 di kotak, panah kanan; lalu ubah kotak jadi 2, panah bawah.';
+
+  @override
+  String get variableBoxL5Intro =>
+      'Blok baru: +1 menambah angka di kotak sebanyak satu.';
+
+  @override
+  String get variableBoxL5Hint =>
+      '2 petak ke kanan, 3 petak ke bawah. Taruh 2 di kotak, panah kanan, lalu dengan +1 ubah kotak jadi 3 dan panah bawah.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'Jalannya selalu 3 petak: kanan, bawah, kanan, bawah. Taruh 3 di kotak sekali saja; setiap panah berikutnya berjalan 3 petak.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'Kotak dimulai dari 1. Setiap langkah jalannya bertambah satu petak: panah, +1, panah, +1, panah.';
+
+  @override
+  String get variableBoxL8Intro =>
+      'Blok baru: −1 mengurangi angka di kotak sebanyak satu.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'Jalannya 4, 3, 2, 1 petak. Taruh 4 di kotak, lalu tambahkan −1 setelah setiap panah.';
+
+  @override
+  String get variableBoxL9Hint =>
+      '5 petak ke bawah, 2 ke kanan, 5 ke atas. Sebelum setiap arah, taruh angka yang sesuai di kotak.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'Semua jalan panjangnya 3 petak. Taruh 3 di kotak sekali saja, lalu lima panah sudah cukup.';
+
+  @override
+  String get variableBoxL11Intro =>
+      'Ulangi kembali! Angka di kotak juga berlaku di setiap putaran ulangan.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'Anak tangganya 2 petak. Taruh 2 di kotak, lalu ulangi panah kanan dan bawah 3 kali.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'Anak tangganya 3 petak: bawah dulu, lalu kanan. Taruh 3 di kotak dan ulangi polanya 2 kali.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Taruh 2 di kotak; ulangi panah kanan dan atas 2 kali, dan di akhir tambahkan satu panah kanan lagi.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'Pertama berjalan 3 petak ke kanan. Lalu ubah kotak jadi 2 dan ulangi pola bawah-kanan 2 kali.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'Pertama taruh 2 di kotak dan ulangi pola kanan-bawah 2 kali. Jalan lurus terakhir 3 petak.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'Kamu bisa menaruh +1 di dalam ulangan; maka di setiap putaran jalannya bertambah satu petak.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'Anak tangganya membesar 1, 2, 3 petak. Ulangi panah kanan, panah bawah, dan blok +1 sebanyak 3 kali.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'Anak tangganya mengecil 3, 2, 1 petak. Taruh 3 di kotak; ulangi panah kanan, panah bawah, dan blok −1 sebanyak 3 kali.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'Setiap putaran ada panah kanan, +1, dan panah bawah; setelah 2 putaran, tambahkan satu panah kanan terakhir.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Taruh 4 di kotak. Ulangi pola panah kanan, −1, dan panah bawah sebanyak 2 kali.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Setiap panah satu petak lebih panjang dari sebelumnya. Ulangi pola panah kanan, +1, panah bawah, +1 sebanyak 2 kali.';
 
   @override
   String get ifThenL1Intro =>

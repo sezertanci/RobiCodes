@@ -224,6 +224,20 @@ class AppLocalizationsDe extends AppLocalizations {
       'Du hast die schwierigsten Wege mit deinen eigenen Befehlen gelöst!';
 
   @override
+  String get gameVariableBoxTitle => 'Variablen-Box';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Leg eine Zahl in die Box, und der Roboter geht so viele Schritte.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Variablen-Meister';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      'Mit der Zahl in der Box hast du die längsten Wege abgekürzt!';
+
+  @override
   String get characterTitle => 'Wähle deine Figur';
 
   @override
@@ -497,21 +511,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return 'Wie viel ist $first mal $second?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Elternprüfung ausprobieren';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Wird nur in Testversionen angezeigt. Es wird nichts wirklich gekauft.';
-
-  @override
-  String get parentalGateTrialPassed =>
-      'Prüfung bestanden; die Testaktion wurde ausgeführt.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Prüfung nicht bestanden; die Aktion wurde nicht ausgeführt.';
 
   @override
   String get storeTitle => 'Pakete';
@@ -1514,6 +1513,182 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'Der Befehl beginnt mit zwei Stufen: rechts, runter. Danach kommt noch ein Schritt nach rechts.';
+
+  @override
+  String get variableBoxIntro =>
+      'Leg eine Zahl in die gelbe Box. Jeder Pfeil lässt den Roboter so viele Felder gehen, wie in der Box steht. Die Box beginnt mit 1.';
+
+  @override
+  String get variableBoxEmpty =>
+      'Füge zuerst einen Box-Block oder einen Pfeil hinzu.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Füge einen Box-Block und Pfeile hinzu, dann reihen sich deine Blöcke hier auf.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'Der Roboter hat die Flagge nicht erreicht. Ändere die Zahl in der Box oder die Pfeile.';
+
+  @override
+  String get variableBoxFullHint =>
+      'Du hast die Blockgrenze erreicht. Statt Pfeile einzeln hinzuzufügen, leg lieber eine größere Zahl in die Box.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other:
+          'In der Box waren $box; jeder Pfeil hat den Roboter $box Felder gehen lassen.',
+      one:
+          'In der Box war $box; jeder Pfeil hat den Roboter $box Feld gehen lassen.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return 'Box-Block $number in Block $block';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: $value in die Box legen';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: 1 zur Box addieren';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: 1 aus der Box nehmen';
+  }
+
+  @override
+  String get variableBoxDecrease => 'Zahl für die Box verringern';
+
+  @override
+  String get variableBoxIncrease => 'Zahl für die Box erhöhen';
+
+  @override
+  String get variableBoxSetLabel =>
+      'Block hinzufügen, der eine Zahl in die Box legt';
+
+  @override
+  String get variableBoxIncreaseLabel =>
+      'Block hinzufügen, der 1 zur Box addiert';
+
+  @override
+  String get variableBoxDecreaseLabel =>
+      'Block hinzufügen, der 1 aus der Box nimmt';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'In der Box ist jetzt $value.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'Die Flagge ist 6 Felder entfernt, aber du darfst nur 2 Blöcke benutzen. Leg zuerst 6 in die Box und tippe dann auf den Rechtspfeil.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Leg mit dem Block Box = die 6 in die Box; dann lässt ein einziger Rechtspfeil den Roboter 6 Felder gehen.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'Der Roboter muss 3 nach rechts und 3 nach unten. Leg 3 in die Box; dann geht jeder Pfeil 3 Felder.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'Es sind 4 Felder nach rechts und 4 nach unten. Leg 4 in die Box, dann reichen zwei Pfeile.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'Erst 5 Felder nach rechts, dann 2 nach unten. Leg 5 in die Box, Rechtspfeil; dann mach die Box zu 2, Abwärtspfeil.';
+
+  @override
+  String get variableBoxL5Intro =>
+      'Neuer Block: +1 erhöht die Zahl in der Box um eins.';
+
+  @override
+  String get variableBoxL5Hint =>
+      '2 nach rechts, 3 nach unten. Leg 2 in die Box, Rechtspfeil, dann mach die Box mit +1 zu 3 und nimm den Abwärtspfeil.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'Der Weg ist immer 3 Felder lang: rechts, runter, rechts, runter. Leg einmal 3 in die Box; jeder weitere Pfeil geht 3 Felder.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'Die Box beginnt mit 1. Mit jedem Schritt wird der Weg ein Feld länger: Pfeil, +1, Pfeil, +1, Pfeil.';
+
+  @override
+  String get variableBoxL8Intro =>
+      'Neuer Block: −1 verringert die Zahl in der Box um eins.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'Die Wege sind 4, 3, 2, 1 Felder lang. Leg 4 in die Box und füge nach jedem Pfeil −1 hinzu.';
+
+  @override
+  String get variableBoxL9Hint =>
+      '5 nach unten, 2 nach rechts, 5 nach oben. Leg vor jeder Richtung die passende Zahl in die Box.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'Alle Wege sind 3 Felder lang. Leg einmal 3 in die Box, dann reichen fünf Pfeile.';
+
+  @override
+  String get variableBoxL11Intro =>
+      'Wiederholen ist zurück! Die Zahl in der Box gilt auch in jeder Runde der Wiederholung.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'Die Stufen sind 2 Felder breit. Leg 2 in die Box, dann wiederhole den Rechts- und den Abwärtspfeil 3-mal.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'Die Stufen sind 3 Felder lang: erst nach unten, dann nach rechts. Leg 3 in die Box und wiederhole das Muster 2-mal.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Leg 2 in die Box; wiederhole den Rechts- und den Aufwärtspfeil 2-mal, am Ende kommt noch ein Rechtspfeil.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'Geh zuerst 3 Felder nach rechts. Mach dann die Box zu 2 und wiederhole das Muster unten-rechts 2-mal.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'Leg zuerst 2 in die Box und wiederhole das Muster rechts-unten 2-mal. Das letzte gerade Stück ist 3 Felder lang.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'Du kannst +1 in die Wiederholung legen; dann wird der Weg in jeder Runde ein Feld länger.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'Die Stufen wachsen: 1, 2, 3 Felder. Wiederhole Rechtspfeil, Abwärtspfeil und den Block +1 3-mal.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'Die Stufen schrumpfen: 3, 2, 1 Felder. Leg 3 in die Box; wiederhole Rechtspfeil, Abwärtspfeil und den Block −1 3-mal.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'In jeder Runde gibt es Rechtspfeil, +1 und Abwärtspfeil; nach 2 Runden kommt noch ein letzter Rechtspfeil.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Leg 4 in die Box. Wiederhole das Muster Rechtspfeil, −1 und Abwärtspfeil 2-mal.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Jeder Pfeil ist ein Feld länger als der vorherige. Wiederhole das Muster Rechtspfeil, +1, Abwärtspfeil, +1 2-mal.';
 
   @override
   String get ifThenL1Intro =>

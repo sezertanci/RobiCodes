@@ -76,7 +76,7 @@ void main() {
     controller.addMove(_right);
 
     expect(controller.program, [
-      const RepeatBlock(2, [_right]),
+      const RepeatBlock(2, [MoveBlock(_right)]),
     ]);
   });
 
@@ -90,7 +90,7 @@ void main() {
 
     expect(controller.target, isNull);
     expect(controller.program, [
-      const RepeatBlock(2, [_right]),
+      const RepeatBlock(2, [MoveBlock(_right)]),
       const MoveBlock(_right),
     ]);
   });
@@ -177,7 +177,7 @@ void main() {
     controller.deleteSelected();
 
     expect(controller.program, [
-      const RepeatBlock(2, [Direction.down]),
+      const RepeatBlock(2, [MoveBlock(Direction.down)]),
     ]);
   });
 
@@ -191,7 +191,7 @@ void main() {
     controller.moveSelectedOut();
 
     expect(controller.program, [
-      const RepeatBlock(2, [_right]),
+      const RepeatBlock(2, [MoveBlock(_right)]),
       const MoveBlock(Direction.down),
     ]);
     expect(controller.target, isNull);
@@ -285,7 +285,7 @@ void main() {
 
     await controller.run();
 
-    final step = (direction: _right, block: 0, inner: 0, round: 3);
+    final step = (direction: _right, block: 0, inner: 0, round: 3, box: 1);
     expect(controller.reaction, RobotReaction.bump);
     expect(controller.bumpDirection, _right);
     expect(controller.wrongPlace, (block: 0, inner: 0));
@@ -327,7 +327,7 @@ void main() {
 
     controller.showHint();
 
-    final step = (direction: Direction.up, block: 0, inner: 0, round: 0);
+    final step = (direction: Direction.up, block: 0, inner: 0, round: 0, box: 1);
     expect(controller.selected, (block: 0, inner: 0));
     expect(controller.wrongPlace, (block: 0, inner: 0));
     expect(controller.message(texts), RepeatTexts.fixHint(step)(texts));

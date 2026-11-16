@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robi_codes/app/app_services.dart';
 import 'package:robi_codes/app/robi_codes_app.dart';
@@ -151,7 +150,7 @@ void main() {
       await settle(tester);
 
       // Act
-      await tester.tap(find.byType(Switch));
+      await tester.tap(find.text(texts.settingsSound));
       await settle(tester);
       await tester.tap(find.text(texts.commonClose));
       await settle(tester);

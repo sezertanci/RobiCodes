@@ -112,7 +112,7 @@ void main() {
     await tapVisible(tester, find.byTooltip(texts.commonRun));
     await waitForAnimations(tester, steps: 15);
 
-    final step = (direction: Direction.right, block: 0, inner: 0, round: 3);
+    final step = (direction: Direction.right, block: 0, inner: 0, round: 3, box: 1);
     expect(find.text(RepeatTexts.blocked(Obstacle.edge, step)(texts)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

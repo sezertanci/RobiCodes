@@ -9,6 +9,7 @@ import '../../content/models/store_product.dart';
 import '../../core/json_utils.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../core/storage/storage_keys.dart';
+import '../developer/developer_unlock.dart';
 import '../parental_gate/parental_gate.dart';
 import '../parental_gate/protected_action_runner.dart';
 import 'purchase_gateway.dart';
@@ -38,16 +39,23 @@ enum OfferStatus {
 /// - Sahiplik bir ürün kimliği kümesidir; aynı satın almanın tekrar işlenmesi yeni bir hak oluşturmaz.
 /// - Onaylama (acknowledge) satın alma anahtarına göre tekilleştirilir; aynı anda gelen yenileme ve
 ///   satın alma sonucu aynı satın almayı iki kez onaylamaz.
+/// - [DeveloperUnlock] açıksa (yalnızca debug) her paket açık sayılır; sahiplik kaydı değişmez.
 final class EntitlementService extends ChangeNotifier {
-  EntitlementService({required this._catalog, required this._gateway, required KeyValueStore store})
-    : _store = store,
-      _ownedProductIds = _readCache(store) {
+  EntitlementService({
+    required this._catalog,
+    required this._gateway,
+    required KeyValueStore store,
+    this._developerUnlock,
+  }) : _store = store,
+       _ownedProductIds = _readCache(store) {
     _changes = _gateway.purchasesChanged.listen((_) => unawaited(refresh()));
+    _developerUnlock?.addListener(notifyListeners);
   }
 
   final ContentCatalog _catalog;
   final PurchaseGateway _gateway;
   final KeyValueStore _store;
+  final DeveloperUnlock? _developerUnlock;
   Set<String> _ownedProductIds;
   late final StreamSubscription<void> _changes;
 
@@ -59,7 +67,9 @@ final class EntitlementService extends ChangeNotifier {
   bool ownsProduct(String productId) => _ownedProductIds.contains(productId);
 
   bool canPlayPack(String packId) =>
-      _catalog.isFree(packId) || _catalog.productsGranting(packId).any((product) => ownsProduct(product.id));
+      (_developerUnlock?.isEnabled ?? false) ||
+      _catalog.isFree(packId) ||
+      _catalog.productsGranting(packId).any((product) => ownsProduct(product.id));
 
   /// Ürünün satılıp satılamayacağı; çifte ücretlendirmeyi önleyen kural (bkz. [OfferStatus]).
   OfferStatus offerStatusOf(StoreProduct product) {
@@ -139,6 +149,7 @@ final class EntitlementService extends ChangeNotifier {
   @override
   void dispose() {
     unawaited(_changes.cancel());
+    _developerUnlock?.removeListener(notifyListeners);
     super.dispose();
   }
 

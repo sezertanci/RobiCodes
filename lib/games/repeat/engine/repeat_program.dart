@@ -1,27 +1,75 @@
 import '../../path_finder/engine/path_finder_board.dart';
 
-/// Programın bir bloğu: tek bir yön oku, "N kez tekrarla" bloğu ya da tanımlanan komutu çağıran blok.
-/// Tekrar bloğunun içinde yalnızca oklar bulunur; iç içe tekrar yoktur (7 yaş için sade tutuldu).
+/// Programın bir bloğu: tek bir yön oku, kutu bloğu, "N kez tekrarla" bloğu ya da tanımlanan komutu
+/// çağıran blok. Tekrar bloğunun içinde yalnızca oklar ve kutu blokları ([InnerBlock]) bulunur; iç içe
+/// tekrar yoktur (7 yaş için sade tutuldu).
 sealed class ProgramBlock {
   const ProgramBlock();
 
-  /// Bloğun blok sınırından kapladığı yer: ok 1, tekrar bloğu 1 + içindeki ok sayısı.
+  /// Bloğun blok sınırından kapladığı yer: ok ve kutu bloğu 1, tekrar bloğu 1 + içindeki blok sayısı.
   int get size;
 }
 
-final class MoveBlock extends ProgramBlock {
-  const MoveBlock(this.direction);
-
-  final Direction direction;
+/// Tekrar bloğunun içine de konabilen tek parçalı bloklar: ok ve kutu blokları.
+sealed class InnerBlock extends ProgramBlock {
+  const InnerBlock();
 
   @override
   int get size => 1;
+}
+
+/// Robotu kutudaki sayı kadar kare yürüten ok. Kutu kullanılmayan oyunlarda kutu hep 1'dir.
+final class MoveBlock extends InnerBlock {
+  const MoveBlock(this.direction);
+
+  final Direction direction;
 
   @override
   bool operator ==(Object other) => other is MoveBlock && other.direction == direction;
 
   @override
   int get hashCode => direction.hashCode;
+}
+
+/// "Değişken Kutusu" kuralları: kutu 1 ile başlar ve değeri hep [minValue]–[maxValue] arasında kalır.
+abstract final class BoxRules {
+  static const start = 1;
+  static const minValue = 1;
+  static const maxValue = 9;
+
+  static int clamp(int value) => value.clamp(minValue, maxValue);
+}
+
+/// "kutu = N" bloğu: kutuya [value] koyar.
+final class SetBoxBlock extends InnerBlock {
+  const SetBoxBlock(this.value);
+
+  /// Kutu düğmesinin eklediği bloğun değeri.
+  static const defaultValue = 2;
+
+  final int value;
+
+  @override
+  bool operator ==(Object other) => other is SetBoxBlock && other.value == value;
+
+  @override
+  int get hashCode => Object.hash(SetBoxBlock, value);
+}
+
+/// "kutu +1" ya da "kutu −1" bloğu: kutudaki sayıya [amount] ekler.
+final class AddBoxBlock extends InnerBlock {
+  const AddBoxBlock(this.amount);
+
+  static const increment = AddBoxBlock(1);
+  static const decrement = AddBoxBlock(-1);
+
+  final int amount;
+
+  @override
+  bool operator ==(Object other) => other is AddBoxBlock && other.amount == amount;
+
+  @override
+  int get hashCode => Object.hash(AddBoxBlock, amount);
 }
 
 final class RepeatBlock extends ProgramBlock {
@@ -32,12 +80,12 @@ final class RepeatBlock extends ProgramBlock {
   static const defaultTimes = 2;
 
   final int times;
-  final List<Direction> body;
+  final List<InnerBlock> body;
 
   @override
   int get size => 1 + body.length;
 
-  RepeatBlock copyWith({int? times, List<Direction>? body}) => RepeatBlock(times ?? this.times, body ?? this.body);
+  RepeatBlock copyWith({int? times, List<InnerBlock>? body}) => RepeatBlock(times ?? this.times, body ?? this.body);
 
   @override
   bool operator ==(Object other) =>
@@ -69,9 +117,9 @@ final class CallBlock extends ProgramBlock {
 /// içindeki ok için o okun sırasıdır.
 typedef ProgramPlace = ({int block, int inner});
 
-/// Bir hareketin hangi bloktan, bloğun kaçıncı okundan ve kaçıncı turdan geldiği.
-/// Ekran bunu çalışırken bloğu ve tur rozetini vurgulamak için kullanır.
-typedef ProgramStep = ({Direction direction, int block, int inner, int round});
+/// Bir hareketin hangi bloktan, bloğun kaçıncı okundan ve kaçıncı turdan geldiği; [box] o anda kutudaki
+/// sayıdır. Ekran bunu çalışırken bloğu, tur rozetini ve kutuyu göstermek için kullanır.
+typedef ProgramStep = ({Direction direction, int block, int inner, int round, int box});
 
 abstract final class Places {
   /// Üst düzey bloğun [ProgramPlace.inner] değeri.

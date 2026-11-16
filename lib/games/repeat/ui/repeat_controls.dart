@@ -166,7 +166,8 @@ final class RepeatButton extends StatelessWidget {
 }
 
 /// Renkli, kabarık kenarlı geniş düğme: solda isteğe bağlı simge, yanında kalın beyaz yazı.
-/// Tekrarla ve Komut düğmeleri ortak kullanır.
+/// Tekrarla ve Komut düğmeleri ortak kullanır. [iconAbove] ise simge yazının üstünde durur; dar
+/// düğmelerde (ör. yan yana üç kutu düğmesi) yazı böylece küçülmeden sığar.
 final class WideActionButton extends StatelessWidget {
   const WideActionButton({
     required this.tone,
@@ -176,11 +177,13 @@ final class WideActionButton extends StatelessWidget {
     required this.height,
     required this.onPressed,
     this.icon,
+    this.iconAbove = false,
     super.key,
   });
 
   final ColorTone tone;
   final Widget? icon;
+  final bool iconAbove;
   final String text;
 
   /// Ekran okuyucu etiketi.
@@ -191,8 +194,13 @@ final class WideActionButton extends StatelessWidget {
 
   /// Simgenin düğme yüksekliğine oranı.
   static const iconRatio = 0.6;
+
+  /// Simge yazının üstündeyken yüksekliğe oranı; simge ile yazı birlikte düğmeye sığar.
+  static const iconAboveRatio = 0.4;
   static const _textRatio = 0.36;
   static const _disabledOpacity = 0.4;
+  static const _padding = 12.0;
+  static const _iconAbovePadding = 4.0;
 
   @override
   Widget build(BuildContext context) => Semantics(
@@ -208,31 +216,35 @@ final class WideActionButton extends StatelessWidget {
         child: Container(
           width: width,
           height: height,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: EdgeInsets.symmetric(horizontal: iconAbove ? _iconAbovePadding : _padding, vertical: 6),
           decoration: BoxDecoration(
             color: tone.base,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [BoxShadow(color: tone.dark, offset: const Offset(0, 4))],
           ),
-          child: FittedBox(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon case final icon?) ...[icon, const SizedBox(width: 8)],
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: height * _textRatio,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    shadows: [Shadow(color: tone.dark, offset: const Offset(0, 2))],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: FittedBox(child: _content()),
         ),
       ),
     ),
   );
+
+  Widget _content() {
+    final label = Text(
+      text,
+      style: TextStyle(
+        fontSize: height * _textRatio,
+        fontWeight: FontWeight.w900,
+        color: Colors.white,
+        shadows: [Shadow(color: tone.dark, offset: const Offset(0, 2))],
+      ),
+    );
+    final icon = this.icon;
+    if (icon == null) {
+      return label;
+    }
+    if (iconAbove) {
+      return Column(mainAxisSize: MainAxisSize.min, children: [icon, label]);
+    }
+    return Row(mainAxisSize: MainAxisSize.min, children: [icon, const SizedBox(width: 8), label]);
+  }
 }

@@ -220,6 +220,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'You solved the trickiest paths with your own commands!';
 
   @override
+  String get gameVariableBoxTitle => 'Variable Box';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Put a number in the box and the robot takes that many steps.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Variable Master';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      'You made the longest paths shorter with the number in the box!';
+
+  @override
   String get characterTitle => 'Choose your character';
 
   @override
@@ -488,20 +502,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return 'What is $first times $second?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Try the parental check';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Shown only in test builds. No real purchase is made.';
-
-  @override
-  String get parentalGateTrialPassed => 'Check passed; the trial action ran.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Check failed; the action did not run.';
 
   @override
   String get storeTitle => 'Packs';
@@ -1492,6 +1492,177 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'The command starts with two steps: right, down. Then one more step right.';
+
+  @override
+  String get variableBoxIntro =>
+      'Put a number in the yellow box. Each arrow moves the robot as many squares as the number in the box. The box starts at 1.';
+
+  @override
+  String get variableBoxEmpty => 'Add a box block or an arrow first.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Add a box block and arrows and your blocks will line up here.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'The robot didn\'t reach the flag. Try changing the number in the box or the arrows.';
+
+  @override
+  String get variableBoxFullHint =>
+      'You\'ve reached the block limit. Instead of adding arrows one by one, try putting a bigger number in the box.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other: 'The box had $box; each arrow moved the robot $box squares.',
+      one: 'The box had $box; each arrow moved the robot $box square.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return 'Box block $number inside block $block';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: put $value in the box';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: add 1 to the box';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: take 1 out of the box';
+  }
+
+  @override
+  String get variableBoxDecrease => 'Decrease the number to put in the box';
+
+  @override
+  String get variableBoxIncrease => 'Increase the number to put in the box';
+
+  @override
+  String get variableBoxSetLabel => 'Add a block that puts a number in the box';
+
+  @override
+  String get variableBoxIncreaseLabel => 'Add a block that adds 1 to the box';
+
+  @override
+  String get variableBoxDecreaseLabel =>
+      'Add a block that takes 1 out of the box';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'The box now has $value.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'The flag is 6 squares away, but you can only use 2 blocks. First put 6 in the box, then tap the right arrow.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Put 6 in the box with the box = block; then a single right arrow moves the robot 6 squares.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'The robot must go 3 right and 3 down. Put 3 in the box; then each arrow moves 3 squares.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'It\'s 4 squares right and 4 squares down. Put 4 in the box, then two arrows are enough.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'First 5 squares right, then 2 down. Put 5 in the box, right arrow; then make the box 2, down arrow.';
+
+  @override
+  String get variableBoxL5Intro =>
+      'New block: +1 makes the number in the box one bigger.';
+
+  @override
+  String get variableBoxL5Hint =>
+      '2 right, 3 down. Put 2 in the box, right arrow, then use +1 to make the box 3 and add the down arrow.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'Every path is 3 squares: right, down, right, down. Put 3 in the box once; every arrow after that goes 3 squares.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'The box starts at 1. The path gets one square longer each step: arrow, +1, arrow, +1, arrow.';
+
+  @override
+  String get variableBoxL8Intro =>
+      'New block: −1 makes the number in the box one smaller.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'The paths are 4, 3, 2, 1 squares. Put 4 in the box, then add −1 after each arrow.';
+
+  @override
+  String get variableBoxL9Hint =>
+      'Down 5, right 2, up 5 squares. Before each direction, put that number in the box.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'All the paths are 3 squares long. Put 3 in the box once, then five arrows are enough.';
+
+  @override
+  String get variableBoxL11Intro =>
+      'Repeat is back! The number in the box works in every round of the repeat too.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'The steps are 2 squares. Put 2 in the box, then repeat the right and down arrows 3 times.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'The steps are 3 squares: first down, then right. Put 3 in the box and repeat the pattern 2 times.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Put 2 in the box; repeat the right and up arrows 2 times, then add one more right arrow at the end.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'First go 3 squares right. Then make the box 2 and repeat the down-right pattern 2 times.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'First put 2 in the box and repeat the right-down pattern 2 times. The last straight path is 3 squares.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'You can put +1 inside a Repeat; then the path gets one square longer in every round.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'The steps grow: 1, 2, 3 squares. Repeat the right arrow, down arrow and +1 block 3 times.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'The steps shrink: 3, 2, 1 squares. Put 3 in the box; repeat the right, down and −1 blocks 3 times.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'Each round has a right arrow, +1 and a down arrow; after 2 rounds, add one last right arrow.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Put 4 in the box. Repeat the right arrow, −1 and down arrow pattern 2 times.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Each arrow is one square longer than the one before. Repeat the right arrow, +1, down arrow, +1 pattern 2 times.';
 
   @override
   String get ifThenL1Intro =>

@@ -28,22 +28,28 @@ final class ProgramEditor {
 
   /// Seçili yerdeki ok; seçili yer ok değilse ya da seçim yoksa `null`.
   Direction? get selectedMove => switch (_selected) {
-    null => null,
-    final place when Places.isInner(place) => (_program[place.block] as RepeatBlock).body[place.inner],
-    final place => switch (_program[place.block]) {
+    final place? => switch (blockAt(place)) {
       MoveBlock(:final direction) => direction,
-      RepeatBlock() || CallBlock() => null,
+      _ => null,
     },
+    null => null,
   };
 
+  /// [place]daki blok: üst düzey blok ya da tekrar bloğunun içindeki blok.
+  ProgramBlock blockAt(ProgramPlace place) =>
+      Places.isInner(place) ? (_program[place.block] as RepeatBlock).body[place.inner] : _program[place.block];
+
   /// Oku açık tekrar bloğunun içine, yoksa programın sonuna ekler.
-  void appendMove(Direction direction) {
+  void appendMove(Direction direction) => appendInner(MoveBlock(direction));
+
+  /// Oku ya da kutu bloğunu açık tekrar bloğunun içine, yoksa programın sonuna ekler.
+  void appendInner(InnerBlock item) {
     final target = _target;
     if (target == null) {
-      _program.add(MoveBlock(direction));
+      _program.add(item);
     } else {
       final block = _program[target] as RepeatBlock;
-      _program[target] = block.copyWith(body: [...block.body, direction]);
+      _program[target] = block.copyWith(body: [...block.body, item]);
     }
   }
 
@@ -59,7 +65,7 @@ final class ProgramEditor {
     final remove = replace ? 1 : 0;
     if (Places.isInner(place)) {
       final block = _program[place.block] as RepeatBlock;
-      final body = [...block.body]..replaceRange(place.inner, place.inner + remove, [direction]);
+      final body = [...block.body]..replaceRange(place.inner, place.inner + remove, [MoveBlock(direction)]);
       _program[place.block] = block.copyWith(body: body);
       return;
     }
@@ -79,6 +85,25 @@ final class ProgramEditor {
     final times = (block.times + offset).clamp(RepeatBlock.minTimes, RepeatBlock.maxTimes);
     _program[index] = block.copyWith(times: times);
     return true;
+  }
+
+  /// "kutu = N" bloğunun sayısını bir azaltır (-1) ya da artırır (+1); sayı kutu sınırlarında kalır.
+  /// [place]da böyle bir blok yoksa `false`.
+  bool changeBoxValue(ProgramPlace place, int offset) {
+    if (blockAt(place) case SetBoxBlock(:final value)) {
+      _replaceAt(place, SetBoxBlock(BoxRules.clamp(value + offset)));
+      return true;
+    }
+    return false;
+  }
+
+  void _replaceAt(ProgramPlace place, InnerBlock item) {
+    if (Places.isInner(place)) {
+      final block = _program[place.block] as RepeatBlock;
+      _program[place.block] = block.copyWith(body: [...block.body]..[place.inner] = item);
+    } else {
+      _program[place.block] = item;
+    }
   }
 
   /// Tekrar bloğunu açar ya da kapatır. Blok kapandıysa `true`.
@@ -128,12 +153,12 @@ final class ProgramEditor {
     };
   }
 
-  /// Bloğun içindeki seçili oku bloğun hemen arkasına taşır ve bloğu kapatır.
+  /// Bloğun içindeki seçili oku ya da kutu bloğunu bloğun hemen arkasına taşır ve bloğu kapatır.
   void moveSelectedOut() {
     final place = _selected!;
     final block = _program[place.block] as RepeatBlock;
     _program[place.block] = block.copyWith(body: [...block.body]..removeAt(place.inner));
-    _program.insert(place.block + 1, MoveBlock(block.body[place.inner]));
+    _program.insert(place.block + 1, block.body[place.inner]);
     _target = null;
   }
 

@@ -1,4 +1,5 @@
 import '../../content/models/level_pack.dart';
+import '../developer/developer_unlock.dart';
 import 'progress_repository.dart';
 
 /// Paketin tamamına erişim olup olmadığını söyler (bkz. `EntitlementService.canPlayPack`).
@@ -12,11 +13,15 @@ typedef PackAccess = bool Function(String packId);
 /// Erişim yoksa yalnızca paketin deneme seviyeleri (her grubun ilk seviyesi) sırayla açılır: ilki hemen,
 /// sonraki ise önceki deneme seviyesi tamamlanınca. Deneme seviyesi açık olan grup açık görünür.
 /// Erişimin kendisi burada hesaplanmaz; [PackAccess] ile `EntitlementService`'ten alınır.
+/// [DeveloperUnlock] açıksa (yalnızca debug) bütün gruplar ve seviyeler açıktır.
 final class UnlockPolicy {
-  const UnlockPolicy(this._progress, this._canPlayPack);
+  const UnlockPolicy(this._progress, this._canPlayPack, {this._developerUnlock});
 
   final ProgressRepository _progress;
   final PackAccess _canPlayPack;
+  final DeveloperUnlock? _developerUnlock;
+
+  bool get _unlocksAll => _developerUnlock?.isEnabled ?? false;
 
   int groupCompletedCount(LevelPack pack, GroupRange range) {
     var count = 0;
@@ -27,6 +32,9 @@ final class UnlockPolicy {
   }
 
   bool isGroupUnlocked(LevelPack pack, GroupRange range) {
+    if (_unlocksAll) {
+      return true;
+    }
     if (!_canPlayPack(pack.id)) {
       return isLevelUnlocked(pack, range.firstLevel);
     }
@@ -40,6 +48,9 @@ final class UnlockPolicy {
   bool isLevelUnlocked(LevelPack pack, int level) {
     if (!pack.containsLevel(level)) {
       return false;
+    }
+    if (_unlocksAll) {
+      return true;
     }
     if (!_canPlayPack(pack.id)) {
       return _isPreviewUnlocked(pack, level);

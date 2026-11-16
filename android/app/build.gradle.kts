@@ -61,6 +61,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug sürümü ayrı bir uygulama olarak kurulur; cihazdaki Play sürümüne ve verisine dokunmaz.
+            applicationIdSuffix = ".dev"
+        }
         release {
             signingConfig =
                 if (hasReleaseKey) {

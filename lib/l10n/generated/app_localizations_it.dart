@@ -221,6 +221,20 @@ class AppLocalizationsIt extends AppLocalizations {
       'Hai risolto i percorsi più difficili con i tuoi comandi!';
 
   @override
+  String get gameVariableBoxTitle => 'Scatola variabile';
+
+  @override
+  String get gameVariableBoxDescription =>
+      'Metti un numero nella scatola e il robot farà tutti quei passi.';
+
+  @override
+  String get gameVariableBoxTrophy => 'Maestro delle variabili';
+
+  @override
+  String get gameVariableBoxTrophyDescription =>
+      'Con il numero nella scatola hai accorciato i percorsi più lunghi!';
+
+  @override
   String get characterTitle => 'Scegli il tuo personaggio';
 
   @override
@@ -492,21 +506,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String parentalGateQuestion(String first, String second) {
     return 'Quanto fa $first per $second?';
   }
-
-  @override
-  String get parentalGateTrialLabel => 'Prova il controllo dei genitori';
-
-  @override
-  String get parentalGateTrialHint =>
-      'Visibile solo nelle versioni di prova. Non viene fatto nessun acquisto reale.';
-
-  @override
-  String get parentalGateTrialPassed =>
-      'Controllo superato; l’azione di prova è stata eseguita.';
-
-  @override
-  String get parentalGateTrialBlocked =>
-      'Controllo non superato; l’azione non è stata eseguita.';
 
   @override
   String get storeTitle => 'Pacchetti';
@@ -1505,6 +1504,184 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get myCommandL20Hint =>
       'Nel comando ci sono prima due gradini: destra, giù. Poi ancora un passo a destra.';
+
+  @override
+  String get variableBoxIntro =>
+      'Metti un numero nella scatola gialla. Ogni freccia fa camminare il robot di tante caselle quante ne indica la scatola. La scatola parte da 1.';
+
+  @override
+  String get variableBoxEmpty =>
+      'Prima aggiungi un blocco scatola o una freccia.';
+
+  @override
+  String get variableBoxEmptyStrip =>
+      'Aggiungi un blocco scatola e delle frecce e i tuoi blocchi si metteranno in fila qui.';
+
+  @override
+  String get variableBoxMissedGoal =>
+      'Il robot non è arrivato alla bandiera. Prova a cambiare il numero nella scatola o le frecce.';
+
+  @override
+  String get variableBoxFullHint =>
+      'Hai raggiunto il limite di blocchi. Invece di aggiungere le frecce una per una, prova a mettere un numero più grande nella scatola.';
+
+  @override
+  String variableBoxWalked(int box) {
+    String _temp0 = intl.Intl.pluralLogic(
+      box,
+      locale: localeName,
+      other:
+          'Nella scatola c’era $box: ogni freccia ha fatto camminare il robot di $box caselle.',
+      one:
+          'Nella scatola c’era $box: ogni freccia ha fatto camminare il robot di $box casella.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String variableBoxInnerName(Object block, Object number) {
+    return 'Il blocco scatola $number nel blocco $block';
+  }
+
+  @override
+  String variableBoxSetChip(Object name, Object value) {
+    return '$name: metti $value nella scatola';
+  }
+
+  @override
+  String variableBoxIncreaseChip(Object name) {
+    return '$name: aggiungi 1 alla scatola';
+  }
+
+  @override
+  String variableBoxDecreaseChip(Object name) {
+    return '$name: togli 1 dalla scatola';
+  }
+
+  @override
+  String get variableBoxDecrease =>
+      'Diminuisci il numero da mettere nella scatola';
+
+  @override
+  String get variableBoxIncrease =>
+      'Aumenta il numero da mettere nella scatola';
+
+  @override
+  String get variableBoxSetLabel =>
+      'Aggiungi un blocco che mette un numero nella scatola';
+
+  @override
+  String get variableBoxIncreaseLabel =>
+      'Aggiungi un blocco che aggiunge 1 alla scatola';
+
+  @override
+  String get variableBoxDecreaseLabel =>
+      'Aggiungi un blocco che toglie 1 dalla scatola';
+
+  @override
+  String variableBoxBadge(Object value) {
+    return 'Adesso nella scatola c’è $value.';
+  }
+
+  @override
+  String get variableBoxL1Intro =>
+      'La bandiera è 6 caselle più in là, ma puoi usare solo 2 blocchi. Prima metti 6 nella scatola, poi tocca la freccia a destra.';
+
+  @override
+  String get variableBoxL1Hint =>
+      'Con il blocco scatola = metti 6 nella scatola; poi una sola freccia a destra fa camminare il robot di 6 caselle.';
+
+  @override
+  String get variableBoxL2Hint =>
+      'Il robot deve andare 3 a destra e 3 in basso. Metti 3 nella scatola; poi ogni freccia fa 3 caselle.';
+
+  @override
+  String get variableBoxL3Hint =>
+      'Ci sono 4 caselle a destra e 4 in basso. Metti 4 nella scatola, poi bastano due frecce.';
+
+  @override
+  String get variableBoxL4Hint =>
+      'Prima 5 caselle a destra, poi 2 in basso. Metti 5 nella scatola e usa la freccia a destra; poi metti 2 nella scatola e usa la freccia in basso.';
+
+  @override
+  String get variableBoxL5Intro =>
+      'Nuovo blocco: +1 aumenta di uno il numero nella scatola.';
+
+  @override
+  String get variableBoxL5Hint =>
+      '2 caselle a destra, 3 in basso. Metti 2 nella scatola, freccia a destra, poi con +1 porta la scatola a 3 e usa la freccia in basso.';
+
+  @override
+  String get variableBoxL6Hint =>
+      'Il percorso è sempre di 3 caselle: destra, basso, destra, basso. Metti 3 nella scatola una volta sola; ogni freccia dopo farà 3 caselle.';
+
+  @override
+  String get variableBoxL7Hint =>
+      'La scatola parte da 1. A ogni passo il percorso si allunga di una casella: freccia, +1, freccia, +1, freccia.';
+
+  @override
+  String get variableBoxL8Intro =>
+      'Nuovo blocco: −1 diminuisce di uno il numero nella scatola.';
+
+  @override
+  String get variableBoxL8Hint =>
+      'I percorsi sono di 4, 3, 2, 1 caselle. Metti 4 nella scatola, poi aggiungi −1 dopo ogni freccia.';
+
+  @override
+  String get variableBoxL9Hint =>
+      '5 caselle in basso, 2 a destra, 5 in alto. Prima di ogni direzione metti nella scatola il numero giusto.';
+
+  @override
+  String get variableBoxL10Hint =>
+      'Tutti i percorsi sono lunghi 3 caselle. Metti 3 nella scatola una volta sola, poi bastano cinque frecce.';
+
+  @override
+  String get variableBoxL11Intro =>
+      'Il blocco Ripeti è tornato! Il numero nella scatola vale anche a ogni giro della ripetizione.';
+
+  @override
+  String get variableBoxL11Hint =>
+      'I gradini sono di 2 caselle. Metti 2 nella scatola, poi ripeti 3 volte la freccia a destra e quella in basso.';
+
+  @override
+  String get variableBoxL12Hint =>
+      'I gradini sono di 3 caselle: prima in basso, poi a destra. Metti 3 nella scatola e ripeti lo schema 2 volte.';
+
+  @override
+  String get variableBoxL13Hint =>
+      'Metti 2 nella scatola; ripeti 2 volte la freccia a destra e quella in alto, alla fine aggiungi un’altra freccia a destra.';
+
+  @override
+  String get variableBoxL14Hint =>
+      'Prima vai 3 caselle a destra. Poi porta la scatola a 2 e ripeti 2 volte lo schema in basso e a destra.';
+
+  @override
+  String get variableBoxL15Hint =>
+      'Prima metti 2 nella scatola e ripeti 2 volte lo schema a destra e in basso. L’ultimo tratto dritto è di 3 caselle.';
+
+  @override
+  String get variableBoxL16Intro =>
+      'Dentro il blocco Ripeti puoi mettere +1: così a ogni giro il percorso si allunga di una casella.';
+
+  @override
+  String get variableBoxL16Hint =>
+      'I gradini crescono: 1, 2, 3 caselle. Ripeti 3 volte la freccia a destra, la freccia in basso e il blocco +1.';
+
+  @override
+  String get variableBoxL17Hint =>
+      'I gradini si accorciano: 3, 2, 1 caselle. Metti 3 nella scatola; ripeti 3 volte la freccia a destra, quella in basso e il blocco −1.';
+
+  @override
+  String get variableBoxL18Hint =>
+      'A ogni giro ci sono la freccia a destra, +1 e la freccia in basso; dopo 2 giri aggiungi un’ultima freccia a destra.';
+
+  @override
+  String get variableBoxL19Hint =>
+      'Metti 4 nella scatola. Ripeti 2 volte lo schema freccia a destra, −1 e freccia in basso.';
+
+  @override
+  String get variableBoxL20Hint =>
+      'Ogni freccia è più lunga di una casella rispetto alla precedente. Ripeti 2 volte lo schema freccia a destra, +1, freccia in basso, +1.';
 
   @override
   String get ifThenL1Intro =>

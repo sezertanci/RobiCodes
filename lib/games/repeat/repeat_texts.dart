@@ -16,6 +16,24 @@ abstract final class RepeatTexts {
     return t.repeatMoveChip(name, PathFinderTexts.direction(t, direction));
   }
 
+  /// Kutu bloğunun ekran okuyucu etiketi.
+  static String boxChip(AppLocalizations t, ProgramPlace place, InnerBlock block) {
+    final name = _placeName(t, place, isMove: false);
+    return switch (block) {
+      SetBoxBlock(:final value) => t.variableBoxSetChip(name, value),
+      AddBoxBlock(:final amount) when amount > 0 => t.variableBoxIncreaseChip(name),
+      _ => t.variableBoxDecreaseChip(name),
+    };
+  }
+
+  /// Kutu bloğunun üstünde yazan kısa işaret ("= 3", "+1", "−1"); her dilde aynıdır.
+  static String boxSign(InnerBlock block) => switch (block) {
+    SetBoxBlock(:final value) => '= $value',
+    AddBoxBlock(:final amount) when amount > 0 => '+$amount',
+    AddBoxBlock(:final amount) => '−${-amount}',
+    MoveBlock() => '',
+  };
+
   static String repeatLabel(AppLocalizations t, int index, int times) => t.repeatBlockLabel(index + 1, times);
 
   /// Çalışırken gösterilen tur rozeti; her dilde aynı biçimdedir.
@@ -27,9 +45,15 @@ abstract final class RepeatTexts {
   static String _mainOffPath(AppLocalizations t, String place) => t.repeatOffPath(place);
   static String _mainFixCount(AppLocalizations t, int block) => t.repeatFixCount(block);
 
-  static String _placeName(AppLocalizations t, ProgramPlace place) => Places.isInner(place)
-      ? t.repeatInnerArrowName(place.block + 1, place.inner + 1)
-      : t.repeatBlockName(place.block + 1);
+  /// Yerin adı; tekrar bloğunun içindeki kutu bloğu ([isMove] `false`) ok yerine "kutu bloğu" diye anılır.
+  static String _placeName(AppLocalizations t, ProgramPlace place, {bool isMove = true}) {
+    if (!Places.isInner(place)) {
+      return t.repeatBlockName(place.block + 1);
+    }
+    return isMove
+        ? t.repeatInnerArrowName(place.block + 1, place.inner + 1)
+        : t.variableBoxInnerName(place.block + 1, place.inner + 1);
+  }
 
   /// Tekrar bloğu ilk turu sorunsuz geçip sonraki bir turda yoldan çıktıysa sorun büyük olasılıkla
   /// tekrar sayısıdır.
@@ -53,18 +77,24 @@ abstract final class RepeatTexts {
   static LocalizedText fixHintWith(LocalizedText advice) =>
       (t) => t.repeatFixHint(advice(t));
 
-  /// Programın önerilen çözümden ayrıldığı yeri anlatan ipucu (bkz. [SolutionDifference]).
-  static LocalizedText differenceHint(SolutionDifference difference) => fixHintWith((t) {
+  /// Programın önerilen çözümden ayrıldığı yeri anlatan ipucu (bkz. [SolutionDifference]); [block] o yerdeki
+  /// bloktur.
+  static LocalizedText differenceHint(SolutionDifference difference, ProgramBlock block) => fixHintWith((t) {
     final place = difference.place;
+    final name = _placeName(t, place, isMove: block is MoveBlock);
     return switch (difference.kind) {
-      DifferenceKind.wrongBlock => t.repeatOffPath(_placeName(t, place)),
+      DifferenceKind.wrongBlock => t.repeatOffPath(name),
       DifferenceKind.wrongCount => t.repeatFixCount(place.block + 1),
-      DifferenceKind.extraBlock => t.repeatExtraBlock(_placeName(t, place)),
+      DifferenceKind.extraBlock => t.repeatExtraBlock(name),
     };
   });
 
-  static LocalizedText fullLevelHint(LocalizedText levelHint) =>
-      (t) => '${levelHint(t)} ${t.repeatFullHint}';
+  /// Kutuda 1'den farklı bir sayı varken robotun kaç kare yürüdüğünü [text]in sonuna ekler.
+  static LocalizedText withBox(LocalizedText text, int box) =>
+      box == BoxRules.start ? text : (t) => '${text(t)} ${t.variableBoxWalked(box)}';
+
+  static LocalizedText fullLevelHint(LocalizedText levelHint, {bool usesBox = false}) =>
+      (t) => '${levelHint(t)} ${usesBox ? t.variableBoxFullHint : t.repeatFullHint}';
 
   static LocalizedText nextMoveHint(LocalizedText levelHint, Direction direction) =>
       (t) => t.repeatNextMoveHint(levelHint(t), PathFinderTexts.direction(t, direction).toLowerCase());
