@@ -26,6 +26,7 @@ import '../games/game_registry.dart';
 import '../games/if_then/if_then_module.dart';
 import '../games/my_command/my_command_module.dart';
 import '../games/path_finder/path_finder_module.dart';
+import '../games/pattern_puzzle/pattern_puzzle_module.dart';
 import '../games/repeat/repeat_module.dart';
 import '../games/variable_box/variable_box_module.dart';
 
@@ -79,6 +80,7 @@ final class AppServices {
       BugHunterModule(),
       MyCommandModule(),
       VariableBoxModule(),
+      PatternPuzzleModule(),
     ]),
     store: store,
     parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),

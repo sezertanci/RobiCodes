@@ -237,6 +237,20 @@ class AppLocalizationsFr extends AppLocalizations {
       'Tu as raccourci les plus longs chemins avec le nombre de la boîte !';
 
   @override
+  String get gamePatternPuzzleTitle => 'Puzzle de motifs';
+
+  @override
+  String get gamePatternPuzzleDescription =>
+      'Trouve le motif qui se répète et complète les lampes manquantes.';
+
+  @override
+  String get gamePatternPuzzleTrophy => 'Maître des motifs';
+
+  @override
+  String get gamePatternPuzzleTrophyDescription =>
+      'Tu as résolu tous les motifs et allumé les lampes avec les bonnes couleurs !';
+
+  @override
   String get characterTitle => 'Choisis ton personnage';
 
   @override
@@ -1693,6 +1707,158 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get variableBoxL20Hint =>
       'Chaque flèche est plus longue d’une case que la précédente. Répète 2 fois le motif flèche droite, +1, flèche bas, +1.';
+
+  @override
+  String get patternColorRed => 'rouge';
+
+  @override
+  String get patternColorBlue => 'bleu';
+
+  @override
+  String get patternColorYellow => 'jaune';
+
+  @override
+  String get patternColorGreen => 'vert';
+
+  @override
+  String get patternShapeCircle => 'cercle';
+
+  @override
+  String get patternShapeSquare => 'carré';
+
+  @override
+  String get patternShapeTriangle => 'triangle';
+
+  @override
+  String patternLampLabel(String color, String shape) {
+    return 'Lampe $shape de couleur $color';
+  }
+
+  @override
+  String get patternMissingSlot => 'Pièce manquante';
+
+  @override
+  String patternLightChip(String name, String color) {
+    return '$name : allumer une lampe de couleur $color';
+  }
+
+  @override
+  String patternInnerName(Object block, Object number) {
+    return 'Le bloc lampe $number du bloc $block';
+  }
+
+  @override
+  String patternLightLabel(String color) {
+    return 'Ajouter un bloc qui allume une lampe de couleur $color';
+  }
+
+  @override
+  String get patternEmptyStrip =>
+      'Touche les boutons de couleur pour ajouter des blocs';
+
+  @override
+  String get patternIntroEasy =>
+      'Les lampes s’allument selon un motif. Choisis en bas la couleur de la lampe avec le point d’interrogation.';
+
+  @override
+  String get patternIntroMedium =>
+      'Cette fois, il manque plusieurs pièces. Regarde les couleurs et les formes, puis complète les pièces manquantes une par une.';
+
+  @override
+  String get patternIntroHard =>
+      'Ces motifs grandissent ou avancent avec des nombres. Choisis la bonne pièce parmi les choix en bas.';
+
+  @override
+  String get patternIntroExpert =>
+      'C’est toi qui allumes les lampes ! Ajoute des blocs avec les boutons de couleur ; si les couleurs se répètent, utilise le bloc Répéter.';
+
+  @override
+  String get patternHintRepeat =>
+      'Regarde la partie qui se répète. Avec quelles couleurs le motif recommence-t-il ?';
+
+  @override
+  String get patternHintShape =>
+      'Regarde la couleur et la forme. Dans la partie qui se répète, les deux reviennent dans le même ordre.';
+
+  @override
+  String get patternHintGrowing =>
+      'Le motif grandit à chaque fois. Compte les lampes bleues : il y en a une de plus à chaque tour.';
+
+  @override
+  String get patternHintNumbers =>
+      'Regarde l’écart entre les nombres. On ajoute toujours le même nombre.';
+
+  @override
+  String get patternHintGrowingNumbers =>
+      'Regarde l’écart entre les nombres. L’écart augmente de un à chaque fois : 1, 2, 3…';
+
+  @override
+  String get patternHintProgram =>
+      'Trouve le groupe de lampes qui se répète. Mets ces couleurs dans le bloc Répéter et règle le nombre de répétitions.';
+
+  @override
+  String get patternHintProgramTail =>
+      'Quand le groupe qui se répète est fini, il reste une lampe à la fin. Ajoute-la en dehors du bloc Répéter.';
+
+  @override
+  String get patternHintProgramTwo =>
+      'Il y a deux motifs différents sur la bande. Utilise un bloc Répéter pour chacun.';
+
+  @override
+  String get patternWrongLamp =>
+      'Cette pièce ne va pas avec le motif. Regarde la partie qui se répète et réessaie.';
+
+  @override
+  String get patternRightLamp =>
+      'Bravo ! Maintenant, complète le prochain point d’interrogation.';
+
+  @override
+  String get patternSolved => 'Super ! Le motif est complet.';
+
+  @override
+  String get patternLampsDark =>
+      'Certaines lampes sont encore éteintes. Ajoute plus de blocs de couleur ou augmente le nombre de répétitions.';
+
+  @override
+  String get patternTooManyLights =>
+      'Il y a plus de blocs que de lampes. Efface un bloc ou diminue le nombre de répétitions.';
+
+  @override
+  String patternWrongColor(String color) {
+    return 'Cette lampe s’est allumée en $color, mais ça ne va pas avec le motif. Quelle couleur fallait-il ici ?';
+  }
+
+  @override
+  String get patternProgramEmpty =>
+      'Ajoute d’abord des blocs avec les boutons de couleur.';
+
+  @override
+  String patternProgramHintWrong(String color) {
+    return 'Le bloc que j’ai choisi allume la lampe de la mauvaise couleur. Là, la lampe doit être de couleur $color.';
+  }
+
+  @override
+  String get patternInsideRepeat =>
+      'Les couleurs que tu ajoutes maintenant iront dans le bloc orange. Quand tu as fini, touche le bouton bleu foncé Sortir du bloc.';
+
+  @override
+  String get patternOutsideRepeat =>
+      'Les couleurs que tu ajoutes maintenant iront hors du bloc, à la fin.';
+
+  @override
+  String get patternMovedOut =>
+      'La couleur est sortie du bloc. Les couleurs que tu ajoutes maintenant iront aussi dehors, à la fin.';
+
+  @override
+  String get patternEmptyRepeat =>
+      'Le bloc orange est vide. Je l’ai choisi ; ajoute maintenant une couleur dedans.';
+
+  @override
+  String get patternLeaveRepeatLabel =>
+      'Sortir du bloc ; les couleurs suivantes iront dehors';
+
+  @override
+  String get patternDropHere => 'Ajoute des couleurs ici';
 
   @override
   String get ifThenL1Intro =>

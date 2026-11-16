@@ -20,7 +20,7 @@ void main() {
       expect(errors, isEmpty);
     });
 
-    test('buildContentCatalog_Default_HasSevenGamesWithHundredFortyLevels', () {
+    test('buildContentCatalog_Default_HasEightGamesWithHundredSixtyLevels', () {
       // Arrange
       final catalog = buildContentCatalog();
 
@@ -28,12 +28,13 @@ void main() {
       final totalLevels = catalog.packs.fold(0, (sum, pack) => sum + pack.levelCount);
 
       // Assert
-      expect(catalog.games, hasLength(7));
-      expect(totalLevels, 140);
+      expect(catalog.games, hasLength(8));
+      expect(totalLevels, 160);
       expect(catalog.packs.where((pack) => !catalog.isFree(pack.id)).map((pack) => pack.gameId), [
         GameIds.bugHunter,
         GameIds.myCommand,
         GameIds.variableBox,
+        GameIds.patternPuzzle,
       ]);
     });
 

@@ -237,6 +237,20 @@ class AppLocalizationsId extends AppLocalizations {
       'Kamu memperpendek jalan yang panjang dengan angka di kotak!';
 
   @override
+  String get gamePatternPuzzleTitle => 'Teka-teki Pola';
+
+  @override
+  String get gamePatternPuzzleDescription =>
+      'Temukan pola yang berulang dan lengkapi lampu yang hilang.';
+
+  @override
+  String get gamePatternPuzzleTrophy => 'Ahli Pola';
+
+  @override
+  String get gamePatternPuzzleTrophyDescription =>
+      'Kamu sudah menyelesaikan semua pola dan menyalakan lampu dengan warna yang benar!';
+
+  @override
   String get characterTitle => 'Pilih karaktermu';
 
   @override
@@ -1689,6 +1703,156 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get variableBoxL20Hint =>
       'Setiap panah satu petak lebih panjang dari sebelumnya. Ulangi pola panah kanan, +1, panah bawah, +1 sebanyak 2 kali.';
+
+  @override
+  String get patternColorRed => 'merah';
+
+  @override
+  String get patternColorBlue => 'biru';
+
+  @override
+  String get patternColorYellow => 'kuning';
+
+  @override
+  String get patternColorGreen => 'hijau';
+
+  @override
+  String get patternShapeCircle => 'lingkaran';
+
+  @override
+  String get patternShapeSquare => 'persegi';
+
+  @override
+  String get patternShapeTriangle => 'segitiga';
+
+  @override
+  String patternLampLabel(String color, String shape) {
+    return 'Lampu $shape berwarna $color';
+  }
+
+  @override
+  String get patternMissingSlot => 'Bagian yang hilang';
+
+  @override
+  String patternLightChip(String name, String color) {
+    return '$name: nyalakan lampu berwarna $color';
+  }
+
+  @override
+  String patternInnerName(Object block, Object number) {
+    return 'Blok lampu $number di dalam blok $block';
+  }
+
+  @override
+  String patternLightLabel(String color) {
+    return 'Tambahkan blok yang menyalakan lampu berwarna $color';
+  }
+
+  @override
+  String get patternEmptyStrip => 'Sentuh tombol warna untuk menambahkan blok';
+
+  @override
+  String get patternIntroEasy =>
+      'Lampu-lampu menyala mengikuti sebuah pola. Pilih warna lampu yang bertanda tanya di bawah.';
+
+  @override
+  String get patternIntroMedium =>
+      'Kali ini ada beberapa bagian yang hilang. Lihat warna dan bentuknya, lalu lengkapi satu per satu.';
+
+  @override
+  String get patternIntroHard =>
+      'Pola-pola ini makin besar atau berjalan dengan angka. Pilih bagian yang benar dari pilihan di bawah.';
+
+  @override
+  String get patternIntroExpert =>
+      'Kamu yang menyalakan lampunya! Tambahkan blok dengan tombol warna; kalau warnanya berulang, pakai blok Ulangi.';
+
+  @override
+  String get patternHintRepeat =>
+      'Lihat bagian yang berulang. Pola itu mulai lagi dengan warna apa?';
+
+  @override
+  String get patternHintShape =>
+      'Lihat warna dan bentuknya. Di bagian yang berulang, keduanya muncul dengan urutan yang sama.';
+
+  @override
+  String get patternHintGrowing =>
+      'Pola ini makin besar setiap kali. Hitung lampu biru: setiap putaran bertambah satu.';
+
+  @override
+  String get patternHintNumbers =>
+      'Lihat selisih antar angka. Setiap kali yang ditambahkan angka yang sama.';
+
+  @override
+  String get patternHintGrowingNumbers =>
+      'Lihat selisih antar angka. Selisihnya bertambah satu setiap kali: 1, 2, 3…';
+
+  @override
+  String get patternHintProgram =>
+      'Temukan kelompok lampu yang berulang. Masukkan warna-warna itu ke dalam blok Ulangi dan atur jumlah pengulangannya.';
+
+  @override
+  String get patternHintProgramTail =>
+      'Setelah kelompok yang berulang selesai, tersisa satu lampu di akhir. Tambahkan di luar blok Ulangi.';
+
+  @override
+  String get patternHintProgramTwo =>
+      'Di barisan ini ada dua pola yang berbeda. Pakai satu blok Ulangi untuk masing-masing.';
+
+  @override
+  String get patternWrongLamp =>
+      'Bagian ini tidak cocok dengan pola. Lihat bagian yang berulang dan coba lagi.';
+
+  @override
+  String get patternRightLamp =>
+      'Benar! Sekarang lengkapi tanda tanya berikutnya.';
+
+  @override
+  String get patternSolved => 'Hebat! Polanya sudah lengkap.';
+
+  @override
+  String get patternLampsDark =>
+      'Beberapa lampu masih mati. Tambahkan lebih banyak blok warna atau tambah jumlah pengulangan.';
+
+  @override
+  String get patternTooManyLights =>
+      'Blok lebih banyak daripada lampu. Hapus satu blok atau kurangi jumlah pengulangan.';
+
+  @override
+  String patternWrongColor(String color) {
+    return 'Lampu ini menyala berwarna $color, tetapi tidak cocok dengan pola. Warna apa yang seharusnya di sini?';
+  }
+
+  @override
+  String get patternProgramEmpty => 'Tambahkan blok dulu dengan tombol warna.';
+
+  @override
+  String patternProgramHintWrong(String color) {
+    return 'Blok yang aku pilih menyalakan lampu dengan warna yang salah. Di situ lampunya harus berwarna $color.';
+  }
+
+  @override
+  String get patternInsideRepeat =>
+      'Warna yang kamu tambahkan sekarang akan masuk ke dalam blok oranye. Kalau sudah selesai, ketuk tombol biru tua Keluar blok.';
+
+  @override
+  String get patternOutsideRepeat =>
+      'Warna yang kamu tambahkan sekarang akan berada di luar blok, di bagian akhir.';
+
+  @override
+  String get patternMovedOut =>
+      'Warna sudah dikeluarkan dari blok. Warna yang kamu tambahkan sekarang juga akan berada di luar, di bagian akhir.';
+
+  @override
+  String get patternEmptyRepeat =>
+      'Blok oranye masih kosong. Aku sudah memilihnya; sekarang tambahkan warna di dalamnya.';
+
+  @override
+  String get patternLeaveRepeatLabel =>
+      'Keluar dari blok; warna berikutnya ada di luar';
+
+  @override
+  String get patternDropHere => 'Tambahkan warna di sini';
 
   @override
   String get ifThenL1Intro =>

@@ -1,6 +1,7 @@
 import '../../features/play/robot_voice.dart';
 import '../../features/play/widgets/robot_sprite.dart';
 import 'board_run.dart';
+import 'engine/lamp.dart';
 import 'engine/path_finder_board.dart';
 import 'engine/path_finder_engine.dart';
 
@@ -22,6 +23,9 @@ abstract interface class BoardScene {
   /// Her tepkide artar; ekran aynı tepki art arda gelse de animasyonu yeniden başlatır.
   int get reactionCount;
   Direction? get bumpDirection;
+
+  /// Karelerdeki lambalar ("Desen Bulmacası" Uzman grubu); diğer oyunlarda boştur.
+  BoardLamps get lamps;
 }
 
 /// [BoardScene]'i yolculuk ([boardRun]) ve robotun sesi ([voice]) üzerinden sağlar. Denetleyici
@@ -46,4 +50,6 @@ mixin BoardRunScene implements BoardScene {
   RobotReaction get reaction => voice.reaction;
   @override
   int get reactionCount => voice.reactionCount;
+  @override
+  BoardLamps get lamps => const {};
 }

@@ -8,9 +8,10 @@ import '../board_scene.dart';
 import '../../../features/play/widgets/dashed_frame.dart';
 import '../../../features/play/widgets/pulsing_hint_frame.dart';
 import '../../../features/play/widgets/robot_sprite.dart';
+import 'lamp_bulb.dart';
 import 'path_finder_assets.dart';
 
-/// Oyun alanı: çim kareler, engeller, altınlar, bayrak, robotun izi, ipucu karesi ve robot.
+/// Oyun alanı: çim kareler, engeller, altınlar, lambalar, bayrak, robotun izi, ipucu karesi ve robot.
 /// Kare boyu dışarıdan verilir; böylece harita telefonda ve tablette ekrana sığar.
 final class BoardView extends StatelessWidget {
   const BoardView({required this.controller, required this.tileSize, super.key});
@@ -29,6 +30,7 @@ final class BoardView extends StatelessWidget {
   static const _robotScale = 0.72;
   static const _coinScale = 0.6;
   static const _trailScale = 0.4;
+  static const _lampScale = 0.8;
 
   PathFinderBoard get _board => controller.board;
 
@@ -53,6 +55,15 @@ final class BoardView extends StatelessWidget {
             for (final (index, coin) in _board.coins.indexed)
               if (!controller.collectedCoins.contains(index))
                 _cell(coin, _scaled(_coinScale, SvgPicture.asset(PathFinderAssets.coin))),
+            for (final MapEntry(key: point, value: lamp) in controller.lamps.entries) ...[
+              _cell(
+                point,
+                Center(
+                  child: LampBulb(color: lamp.color, lit: lamp.lit, size: tileSize * _lampScale),
+                ),
+              ),
+              if (lamp.wrong) _cell(point, _scaled(_lampScale, const WrongLampFrame())),
+            ],
             _cell(_board.goal, SvgPicture.asset(AppAssets.flag)),
             if (controller.hint case final hint?) _cell(hint.target, const PulsingHintFrame()),
             _robot(),

@@ -25,6 +25,7 @@ final class RepeatBlockView extends StatelessWidget {
     required this.chipSize,
     required this.compact,
     required this.keyOf,
+    this.dropText,
     super.key,
   });
 
@@ -38,6 +39,9 @@ final class RepeatBlockView extends StatelessWidget {
 
   /// Şeridin odaklanan yeri kaydırıp gösterebilmesi için her okun anahtarı.
   final GlobalKey Function(ProgramPlace place) keyOf;
+
+  /// Açık bloğun içinde yazan metin; verilmezse "Okları buraya ekle".
+  final String? dropText;
 
   static const _background = Color(0xFFFFE2C4);
   static const _border = 4.0;
@@ -179,7 +183,9 @@ final class RepeatBlockView extends StatelessWidget {
           if (showDrop) ...[
             if (block.body.isNotEmpty) const SizedBox(width: _gap),
             _DropHint(
-              text: _isTarget && !controller.isFull ? context.l10n.repeatDropHere : context.l10n.repeatEmptyBody,
+              text: _isTarget && !controller.isFull
+                  ? dropText ?? context.l10n.repeatDropHere
+                  : context.l10n.repeatEmptyBody,
               size: chipSize,
             ),
           ],

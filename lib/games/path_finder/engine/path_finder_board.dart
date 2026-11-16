@@ -35,6 +35,9 @@ abstract final class TileSymbols {
   static const rock = '#';
   static const water = '~';
   static const coin = '*';
+
+  /// Boş çim kare; ayrıştırırken tanınmayan her işaret de boş sayılır.
+  static const empty = '.';
 }
 
 /// Harita metninden çözülmüş oyun alanı: boyut, başlangıç, bayrak, engeller ve altınlar.

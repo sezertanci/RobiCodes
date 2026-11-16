@@ -44,40 +44,40 @@ void main() {
     expect(_controller([], level: _stairs).allowsRepeat, isTrue);
   });
 
-  test('addBox_NoOpenBlock_AppendsBoxBlock', () {
+  test('addInner_NoOpenBlock_AppendsBoxBlock', () {
     final controller = _controller([]);
 
-    controller.addBox(const SetBoxBlock(SetBoxBlock.defaultValue));
+    controller.addInner(const SetBoxBlock(SetBoxBlock.defaultValue));
 
     expect(controller.program, [const SetBoxBlock(SetBoxBlock.defaultValue)]);
   });
 
-  test('addBox_OpenRepeat_PutsBoxBlockInside', () {
+  test('addInner_OpenRepeat_PutsBoxBlockInside', () {
     final controller = _controller([], level: _stairs);
     controller.pressRepeatButton();
 
-    controller.addBox(AddBoxBlock.increment);
+    controller.addInner(AddBoxBlock.increment);
 
     expect(controller.program, [
       const RepeatBlock(RepeatBlock.defaultTimes, [AddBoxBlock.increment]),
     ]);
   });
 
-  test('addBox_LimitReached_SaysFullAndIgnoresMore', () {
+  test('addInner_LimitReached_SaysFullAndIgnoresMore', () {
     final controller = _controller([]);
-    controller.addBox(AddBoxBlock.increment);
-    controller.addBox(AddBoxBlock.increment);
+    controller.addInner(AddBoxBlock.increment);
+    controller.addInner(AddBoxBlock.increment);
 
-    controller.addBox(AddBoxBlock.decrement);
+    controller.addInner(AddBoxBlock.decrement);
 
-    expect(controller.canAddBox, isFalse);
+    expect(controller.canAddInner, isFalse);
     expect(controller.message(texts), texts.repeatFull);
     expect(controller.blockCount, 2);
   });
 
   test('changeBoxValue_OutOfRange_StaysBetweenMinAndMax', () {
     final controller = _controller([]);
-    controller.addBox(const SetBoxBlock(BoxRules.minValue));
+    controller.addInner(const SetBoxBlock(BoxRules.minValue));
 
     controller.changeBoxValue(_first, -1);
     final atMin = controller.program.single;
@@ -101,7 +101,7 @@ void main() {
   test('run_BoxSolution_ReachesGoalAndGivesThreeStars', () async {
     final stars = <int>[];
     final controller = _controller(stars);
-    controller.addBox(const SetBoxBlock(SetBoxBlock.defaultValue));
+    controller.addInner(const SetBoxBlock(SetBoxBlock.defaultValue));
     controller.changeBoxValue(_first, 1);
     controller.addMove(_right);
 
@@ -132,7 +132,7 @@ void main() {
 
   test('arrowSteps_Editing_ShowsBoxValueBeforeArrow', () {
     final controller = _controller([]);
-    controller.addBox(const SetBoxBlock(SetBoxBlock.defaultValue));
+    controller.addInner(const SetBoxBlock(SetBoxBlock.defaultValue));
     controller.changeBoxValue(_first, 1);
     controller.addMove(_right);
 
@@ -141,7 +141,7 @@ void main() {
 
   test('arrowSteps_Running_CountsDownRemainingSquares', () async {
     final controller = _controller([]);
-    controller.addBox(const SetBoxBlock(SetBoxBlock.defaultValue));
+    controller.addInner(const SetBoxBlock(SetBoxBlock.defaultValue));
     controller.changeBoxValue(_first, 1);
     controller.addMove(_right);
     const arrow = (block: 1, inner: Places.topLevel);
@@ -163,7 +163,7 @@ void main() {
     controller.pressRepeatButton();
     controller.addMove(_right);
     controller.addMove(_down);
-    controller.addBox(AddBoxBlock.increment);
+    controller.addInner(AddBoxBlock.increment);
     const down = (block: 0, inner: 1);
     final secondRound = <int?>{};
     controller.addListener(() {

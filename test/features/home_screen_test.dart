@@ -50,8 +50,9 @@ void main() {
     expect(find.text(texts.gameBugHunterTitle), findsOneWidget);
     expect(find.text(texts.gameMyCommandTitle), findsOneWidget);
     expect(find.text(texts.gameVariableBoxTitle), findsOneWidget);
-    expect(find.text(texts.homeLocked), findsNWidgets(3));
-    expect(playable, 7);
+    expect(find.text(texts.gamePatternPuzzleTitle), findsOneWidget);
+    expect(find.text(texts.homeLocked), findsNWidgets(4));
+    expect(playable, 8);
     expect(find.text(texts.homeComingSoon), findsNWidgets(services.catalog.games.length - playable));
   });
 

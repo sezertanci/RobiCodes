@@ -476,6 +476,30 @@ abstract class AppLocalizations {
   /// **'Kutudaki sayıyla en uzun yolları kısalttın!'**
   String get gameVariableBoxTrophyDescription;
 
+  /// No description provided for @gamePatternPuzzleTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Desen Bulmacası'**
+  String get gamePatternPuzzleTitle;
+
+  /// No description provided for @gamePatternPuzzleDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar eden deseni bul, eksik lambaları tamamla.'**
+  String get gamePatternPuzzleDescription;
+
+  /// No description provided for @gamePatternPuzzleTrophy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Desen Ustası'**
+  String get gamePatternPuzzleTrophy;
+
+  /// No description provided for @gamePatternPuzzleTrophyDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün desenleri çözdün, lambaları doğru renklerle yaktın!'**
+  String get gamePatternPuzzleTrophyDescription;
+
   /// No description provided for @characterTitle.
   ///
   /// In tr, this message translates to:
@@ -2503,6 +2527,240 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Her ok bir öncekinden bir kare uzun. Sağ ok, +1, aşağı ok, +1 desenini 2 kez tekrarla.'**
   String get variableBoxL20Hint;
+
+  /// No description provided for @patternColorRed.
+  ///
+  /// In tr, this message translates to:
+  /// **'kırmızı'**
+  String get patternColorRed;
+
+  /// No description provided for @patternColorBlue.
+  ///
+  /// In tr, this message translates to:
+  /// **'mavi'**
+  String get patternColorBlue;
+
+  /// No description provided for @patternColorYellow.
+  ///
+  /// In tr, this message translates to:
+  /// **'sarı'**
+  String get patternColorYellow;
+
+  /// No description provided for @patternColorGreen.
+  ///
+  /// In tr, this message translates to:
+  /// **'yeşil'**
+  String get patternColorGreen;
+
+  /// No description provided for @patternShapeCircle.
+  ///
+  /// In tr, this message translates to:
+  /// **'daire'**
+  String get patternShapeCircle;
+
+  /// No description provided for @patternShapeSquare.
+  ///
+  /// In tr, this message translates to:
+  /// **'kare'**
+  String get patternShapeSquare;
+
+  /// No description provided for @patternShapeTriangle.
+  ///
+  /// In tr, this message translates to:
+  /// **'üçgen'**
+  String get patternShapeTriangle;
+
+  /// No description provided for @patternLampLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{color} {shape} lamba'**
+  String patternLampLabel(String color, String shape);
+
+  /// No description provided for @patternMissingSlot.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eksik parça'**
+  String get patternMissingSlot;
+
+  /// No description provided for @patternLightChip.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name}: {color} lamba yak'**
+  String patternLightChip(String name, String color);
+
+  /// No description provided for @patternInnerName.
+  ///
+  /// In tr, this message translates to:
+  /// **'{block}. bloğun içindeki {number}. lamba bloğu'**
+  String patternInnerName(Object block, Object number);
+
+  /// No description provided for @patternLightLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{color} lamba yakma bloğu ekle'**
+  String patternLightLabel(String color);
+
+  /// No description provided for @patternEmptyStrip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Renk düğmelerine dokunarak blok ekle'**
+  String get patternEmptyStrip;
+
+  /// No description provided for @patternIntroEasy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lambalar bir desenle yanıyor. Soru işaretli lambanın rengini aşağıdan seç.'**
+  String get patternIntroEasy;
+
+  /// No description provided for @patternIntroMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kez birden çok parça eksik. Renklere ve şekillere bak, eksikleri sırayla doldur.'**
+  String get patternIntroMedium;
+
+  /// No description provided for @patternIntroHard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu desenler büyüyor ya da sayılarla ilerliyor. Doğru parçayı aşağıdaki seçeneklerden seç.'**
+  String get patternIntroHard;
+
+  /// No description provided for @patternIntroExpert.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lambaları sen yak! Renk düğmeleriyle blok ekle; renkler tekrar ediyorsa Tekrarla bloğunu kullan.'**
+  String get patternIntroExpert;
+
+  /// No description provided for @patternHintRepeat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar eden parçaya bak. Desen hangi renklerle yeniden başlıyor?'**
+  String get patternHintRepeat;
+
+  /// No description provided for @patternHintShape.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hem renge hem şekle bak. Tekrar eden parçada ikisi de aynı sırayla gelir.'**
+  String get patternHintShape;
+
+  /// No description provided for @patternHintGrowing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Desen her seferinde büyüyor. Mavi lambaları say: her turda bir tane artıyor.'**
+  String get patternHintGrowing;
+
+  /// No description provided for @patternHintNumbers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayılar arasındaki farka bak. Her seferinde aynı sayı ekleniyor.'**
+  String get patternHintNumbers;
+
+  /// No description provided for @patternHintGrowingNumbers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayılar arasındaki farka bak. Fark her seferinde bir artıyor: 1, 2, 3…'**
+  String get patternHintGrowingNumbers;
+
+  /// No description provided for @patternHintProgram.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar eden lamba grubunu bul. O renkleri Tekrarla bloğunun içine koy ve tekrar sayısını ayarla.'**
+  String get patternHintProgram;
+
+  /// No description provided for @patternHintProgramTail.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar eden grup bitince sonda bir lamba kalıyor. Onu Tekrarla bloğunun dışına ekle.'**
+  String get patternHintProgramTail;
+
+  /// No description provided for @patternHintProgramTwo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şeritte iki farklı desen var. Her biri için ayrı bir Tekrarla bloğu kullan.'**
+  String get patternHintProgramTwo;
+
+  /// No description provided for @patternWrongLamp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu parça desene uymuyor. Tekrar eden parçaya bak ve yeniden dene.'**
+  String get patternWrongLamp;
+
+  /// No description provided for @patternRightLamp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru! Şimdi sıradaki soru işaretini doldur.'**
+  String get patternRightLamp;
+
+  /// No description provided for @patternSolved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika! Desen tamamlandı.'**
+  String get patternSolved;
+
+  /// No description provided for @patternLampsDark.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bazı lambalar hâlâ sönük. Daha fazla renk bloğu ekle ya da tekrar sayısını artır.'**
+  String get patternLampsDark;
+
+  /// No description provided for @patternTooManyLights.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lambalardan fazla blok var. Bir bloğu sil ya da tekrar sayısını azalt.'**
+  String get patternTooManyLights;
+
+  /// No description provided for @patternWrongColor.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu lamba {color} yandı ama desene uymuyor. Burada hangi renk olmalıydı?'**
+  String patternWrongColor(String color);
+
+  /// No description provided for @patternProgramEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce renk düğmeleriyle blok ekle.'**
+  String get patternProgramEmpty;
+
+  /// No description provided for @patternProgramHintWrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçtiğim blok lambayı yanlış renkte yakıyor. Orada {color} lamba yanmalı.'**
+  String patternProgramHintWrong(String color);
+
+  /// No description provided for @patternInsideRepeat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi eklediğin renkler turuncu bloğun içine girecek. Bitince lacivert Bloktan çık düğmesine dokun.'**
+  String get patternInsideRepeat;
+
+  /// No description provided for @patternOutsideRepeat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi eklediğin renkler bloğun dışına, sona eklenecek.'**
+  String get patternOutsideRepeat;
+
+  /// No description provided for @patternMovedOut.
+  ///
+  /// In tr, this message translates to:
+  /// **'Renk bloğun dışına çıktı. Şimdi eklediğin renkler de dışarıya, sona eklenecek.'**
+  String get patternMovedOut;
+
+  /// No description provided for @patternEmptyRepeat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Turuncu bloğun içi boş. Onu seçtim; şimdi içine bir renk ekle.'**
+  String get patternEmptyRepeat;
+
+  /// No description provided for @patternLeaveRepeatLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bloktan çık; sonraki renkler dışarıya eklensin'**
+  String get patternLeaveRepeatLabel;
+
+  /// No description provided for @patternDropHere.
+  ///
+  /// In tr, this message translates to:
+  /// **'Renkleri buraya ekle'**
+  String get patternDropHere;
 
   /// No description provided for @ifThenL1Intro.
   ///

@@ -14,6 +14,7 @@ import 'engine/repeat_engine.dart';
 import 'engine/repeat_level.dart';
 import 'engine/repeat_program.dart';
 import 'engine/starting_program.dart';
+import 'program_editing.dart';
 import 'program_editor.dart';
 import 'program_models.dart';
 import 'program_runner.dart';
@@ -22,7 +23,7 @@ import 'repeat_texts.dart';
 /// Bir seviyenin oynanış durumu: bloklar, açık tekrar bloğu, seçim, ipucu ve robotun yolculuğu.
 /// Ekrandan bağımsızdır; bu yüzden widget olmadan test edilebilir.
 final class RepeatController extends ChangeNotifier
-    with LevelLifecycle, BoardRunScene, ProgramRunner
+    with LevelLifecycle, BoardRunScene, ProgramRunner, ProgramEditing
     implements ProgramStripModel, ProgramControlsModel {
   RepeatController({
     required this.level,
@@ -38,7 +39,7 @@ final class RepeatController extends ChangeNotifier
          intro: _introOf(level, usesBox: usesBox),
        ),
        _solution = RepeatEngine.parseSolution(level.solution),
-       _editor = ProgramEditor(startingProgram?.blocks ?? const []);
+       editor = ProgramEditor(startingProgram?.blocks ?? const []);
 
   final RepeatLevel level;
   @override
@@ -69,7 +70,8 @@ final class RepeatController extends ChangeNotifier
 
   /// Önerilen çözüm; düzeltme kurallarında ipucu bozuk kodun ondan ayrıldığı yeri gösterir.
   final List<ProgramBlock> _solution;
-  final ProgramEditor _editor;
+  @override
+  final ProgramEditor editor;
   ProgramStep? _activeStep;
 
   /// Son çalıştırmanın hareketleri; robot yürürken etkin hareketi göstermek için tutulur.
@@ -84,20 +86,7 @@ final class RepeatController extends ChangeNotifier
   int get box => _box;
 
   @override
-  List<ProgramBlock> get program => _editor.program;
-  @override
-  int get blockCount => _editor.blockCount;
-  @override
   int get maxBlocks => level.maxBlocks;
-  @override
-  bool get isFull => blockCount >= maxBlocks;
-
-  @override
-  int? get target => _editor.target;
-  @override
-  bool get isInsideRepeat => target != null;
-  @override
-  ProgramPlace? get selected => _editor.selected;
 
   @override
   ProgramStep? get activeStep => _activeStep;
@@ -135,13 +124,13 @@ final class RepeatController extends ChangeNotifier
       startingProgram?.allowsRepeat ?? (!usesBox || _solution.any((block) => block is RepeatBlock));
 
   @override
-  bool get isInserting => _editor.isInserting;
+  bool get isInserting => editor.isInserting;
 
   @override
   bool get canInsert => fixesProgram && !isRunning && selected != null && !isFull;
 
   /// Yön tuşu seçili oku değiştirir mi.
-  bool get _replacesSelection => fixesProgram && !isInserting && _editor.selectedMove != null;
+  bool get _replacesSelection => fixesProgram && !isInserting && editor.selectedMove != null;
 
   /// Ok değiştirmek blok sayısını artırmadığı için sınır doluyken de yapılabilir.
   @override
@@ -156,27 +145,13 @@ final class RepeatController extends ChangeNotifier
     }
     final replace = _replacesSelection;
     final insert = isInserting && selected != null;
-    _changeProgram(() {
+    changeProgram(() {
       if (replace || insert) {
-        _editor.putMove(direction, replace: replace);
+        editor.putMove(direction, replace: replace);
       } else {
-        _editor.appendMove(direction);
+        editor.appendMove(direction);
       }
     });
-    if (isFull) {
-      voice.say((t) => t.repeatFull);
-    }
-    notifyListeners();
-  }
-
-  bool get canAddBox => !isRunning && !isFull;
-
-  /// Kutu bloğunu açık tekrar bloğunun içine, yoksa programın sonuna ekler.
-  void addBox(InnerBlock block) {
-    if (!canAddBox) {
-      return;
-    }
-    _changeProgram(() => _editor.appendInner(block));
     if (isFull) {
       voice.say((t) => t.repeatFull);
     }
@@ -187,7 +162,7 @@ final class RepeatController extends ChangeNotifier
   @override
   void changeBoxValue(ProgramPlace place, int offset) {
     if (!isRunning) {
-      _changeProgram(() => _editor.changeBoxValue(place, offset));
+      changeProgram(() => editor.changeBoxValue(place, offset));
       notifyListeners();
     }
   }
@@ -198,45 +173,8 @@ final class RepeatController extends ChangeNotifier
     if (!canInsert) {
       return;
     }
-    _editor.toggleInserting();
+    editor.toggleInserting();
     voice.say((t) => isInserting ? t.bugHunterPickInsert : t.bugHunterSelected);
-    notifyListeners();
-  }
-
-  /// Tekrarla düğmesi: blok açıksa bloktan çıkar, değilse yeni bir tekrar bloğu ekleyip açar.
-  @override
-  void pressRepeatButton() {
-    if (!canUseRepeatButton) {
-      return;
-    }
-    if (target != null) {
-      _editor.closeTarget();
-      voice.say((t) => t.repeatOutsideRepeat);
-      notifyListeners();
-      return;
-    }
-    _changeProgram(() => _editor.appendBlock(const RepeatBlock(RepeatBlock.defaultTimes, [])));
-    voice.say((t) => isFull ? t.repeatFull : t.repeatInsideRepeat);
-    notifyListeners();
-  }
-
-  /// Tekrar sayısını bir azaltır (-1) ya da artırır (+1); sayı sınırlar içinde kalır.
-  @override
-  void changeTimes(int index, int offset) {
-    if (!isRunning && program[index] is RepeatBlock) {
-      _changeProgram(() => _editor.changeTimes(index, offset));
-      notifyListeners();
-    }
-  }
-
-  /// Tekrar bloğunun etiketine dokunulunca blok açılır (oklar içine eklenir) ya da kapanır.
-  @override
-  void toggleTarget(int index) {
-    if (isRunning) {
-      return;
-    }
-    final leaving = _editor.toggleTarget(index);
-    voice.say((t) => leaving ? t.repeatOutsideRepeat : t.repeatInsideRepeat);
     notifyListeners();
   }
 
@@ -245,37 +183,10 @@ final class RepeatController extends ChangeNotifier
     if (isRunning) {
       return;
     }
-    _editor.toggleSelection(place);
+    editor.toggleSelection(place);
     if (fixesProgram && selected != null) {
       voice.say((t) => t.bugHunterSelected);
     }
-    notifyListeners();
-  }
-
-  @override
-  void clearSelection() {
-    if (_editor.clearSelection()) {
-      notifyListeners();
-    }
-  }
-
-  @override
-  void deleteSelected() {
-    if (!isRunning && selected != null) {
-      _changeProgram(_editor.deleteSelected);
-      notifyListeners();
-    }
-  }
-
-  /// Bloğun içindeki seçili oku bloğun hemen arkasına taşır; sonraki oklar da dışarıya eklenir.
-  @override
-  void moveSelectedOut() {
-    final place = selected;
-    if (isRunning || place == null || !Places.isInner(place)) {
-      return;
-    }
-    _changeProgram(_editor.moveSelectedOut);
-    voice.say((t) => t.repeatMovedOut);
     notifyListeners();
   }
 
@@ -285,7 +196,7 @@ final class RepeatController extends ChangeNotifier
     if (isRunning) {
       return;
     }
-    _changeProgram(() => _editor.reset(startingProgram?.blocks ?? const []));
+    changeProgram(() => editor.reset(startingProgram?.blocks ?? const []));
     voice.say(_introOf(level, usesBox: usesBox));
     notifyListeners();
   }
@@ -300,14 +211,14 @@ final class RepeatController extends ChangeNotifier
     final solution = fixesProgram || usesBox ? _solution : null;
     switch (RepeatEngine.hint(board, program, solution: solution, openBlock: target)) {
       case EmptyRepeatHint(:final block):
-        _editor.openTarget(block);
+        editor.openTarget(block);
         voice.say((t) => t.repeatEmptyRepeat);
       case FixPlaceHint(:final step):
         _markWrong(Places.of(step));
         voice.say(RepeatTexts.withBox(RepeatTexts.fixHint(step), step.box));
       case DifferenceHint(:final difference):
         _markWrong(difference.place);
-        voice.say(RepeatTexts.differenceHint(difference, _editor.blockAt(difference.place)));
+        voice.say(RepeatTexts.differenceHint(difference, editor.blockAt(difference.place)));
       case NextStepHint(:final move):
         // Blok sınırı doluysa yön tuşları basılamaz; o zaman sıradaki yön yerine deseni değiştirmesi önerilir.
         if (isFull) {
@@ -323,7 +234,7 @@ final class RepeatController extends ChangeNotifier
   }
 
   void _markWrong(ProgramPlace place) {
-    _editor.select(place);
+    editor.select(place);
     _wrongPlace = place;
   }
 
@@ -333,12 +244,12 @@ final class RepeatController extends ChangeNotifier
 
   @override
   bool readyToRun() {
-    if (_editor.isEmpty) {
+    if (editor.isEmpty) {
       voice.say((t) => usesBox ? t.variableBoxEmpty : t.repeatEmpty);
       return false;
     }
     if (RepeatEngine.findEmptyRepeat(program) case final empty?) {
-      _editor.openTarget(empty);
+      editor.openTarget(empty);
       voice.say((t) => t.repeatEmptyRepeat);
       return false;
     }
@@ -346,7 +257,7 @@ final class RepeatController extends ChangeNotifier
   }
 
   @override
-  void prepareRun() => _editor
+  void prepareRun() => editor
     ..closeTarget()
     ..clearSelection();
 
@@ -382,13 +293,6 @@ final class RepeatController extends ChangeNotifier
   void showBlocked(RunResult result, ProgramStep step, int index) {
     _wrongPlace = Places.of(step);
     voice.say(RepeatTexts.withBox(RepeatTexts.blocked(result.obstacle!, step), step.box), RobotMood.sad);
-  }
-
-  /// Bloklar değişince robot başa döner, eski ipucu ve işaretler silinir.
-  void _changeProgram(VoidCallback update) {
-    update();
-    _editor.clearSelection();
-    resetBoard();
   }
 
   @override

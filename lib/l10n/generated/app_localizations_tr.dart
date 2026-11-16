@@ -230,6 +230,20 @@ class AppLocalizationsTr extends AppLocalizations {
       'Kutudaki sayıyla en uzun yolları kısalttın!';
 
   @override
+  String get gamePatternPuzzleTitle => 'Desen Bulmacası';
+
+  @override
+  String get gamePatternPuzzleDescription =>
+      'Tekrar eden deseni bul, eksik lambaları tamamla.';
+
+  @override
+  String get gamePatternPuzzleTrophy => 'Desen Ustası';
+
+  @override
+  String get gamePatternPuzzleTrophyDescription =>
+      'Bütün desenleri çözdün, lambaları doğru renklerle yaktın!';
+
+  @override
   String get characterTitle => 'Karakterini seç';
 
   @override
@@ -1643,6 +1657,155 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get variableBoxL20Hint =>
       'Her ok bir öncekinden bir kare uzun. Sağ ok, +1, aşağı ok, +1 desenini 2 kez tekrarla.';
+
+  @override
+  String get patternColorRed => 'kırmızı';
+
+  @override
+  String get patternColorBlue => 'mavi';
+
+  @override
+  String get patternColorYellow => 'sarı';
+
+  @override
+  String get patternColorGreen => 'yeşil';
+
+  @override
+  String get patternShapeCircle => 'daire';
+
+  @override
+  String get patternShapeSquare => 'kare';
+
+  @override
+  String get patternShapeTriangle => 'üçgen';
+
+  @override
+  String patternLampLabel(String color, String shape) {
+    return '$color $shape lamba';
+  }
+
+  @override
+  String get patternMissingSlot => 'Eksik parça';
+
+  @override
+  String patternLightChip(String name, String color) {
+    return '$name: $color lamba yak';
+  }
+
+  @override
+  String patternInnerName(Object block, Object number) {
+    return '$block. bloğun içindeki $number. lamba bloğu';
+  }
+
+  @override
+  String patternLightLabel(String color) {
+    return '$color lamba yakma bloğu ekle';
+  }
+
+  @override
+  String get patternEmptyStrip => 'Renk düğmelerine dokunarak blok ekle';
+
+  @override
+  String get patternIntroEasy =>
+      'Lambalar bir desenle yanıyor. Soru işaretli lambanın rengini aşağıdan seç.';
+
+  @override
+  String get patternIntroMedium =>
+      'Bu kez birden çok parça eksik. Renklere ve şekillere bak, eksikleri sırayla doldur.';
+
+  @override
+  String get patternIntroHard =>
+      'Bu desenler büyüyor ya da sayılarla ilerliyor. Doğru parçayı aşağıdaki seçeneklerden seç.';
+
+  @override
+  String get patternIntroExpert =>
+      'Lambaları sen yak! Renk düğmeleriyle blok ekle; renkler tekrar ediyorsa Tekrarla bloğunu kullan.';
+
+  @override
+  String get patternHintRepeat =>
+      'Tekrar eden parçaya bak. Desen hangi renklerle yeniden başlıyor?';
+
+  @override
+  String get patternHintShape =>
+      'Hem renge hem şekle bak. Tekrar eden parçada ikisi de aynı sırayla gelir.';
+
+  @override
+  String get patternHintGrowing =>
+      'Desen her seferinde büyüyor. Mavi lambaları say: her turda bir tane artıyor.';
+
+  @override
+  String get patternHintNumbers =>
+      'Sayılar arasındaki farka bak. Her seferinde aynı sayı ekleniyor.';
+
+  @override
+  String get patternHintGrowingNumbers =>
+      'Sayılar arasındaki farka bak. Fark her seferinde bir artıyor: 1, 2, 3…';
+
+  @override
+  String get patternHintProgram =>
+      'Tekrar eden lamba grubunu bul. O renkleri Tekrarla bloğunun içine koy ve tekrar sayısını ayarla.';
+
+  @override
+  String get patternHintProgramTail =>
+      'Tekrar eden grup bitince sonda bir lamba kalıyor. Onu Tekrarla bloğunun dışına ekle.';
+
+  @override
+  String get patternHintProgramTwo =>
+      'Şeritte iki farklı desen var. Her biri için ayrı bir Tekrarla bloğu kullan.';
+
+  @override
+  String get patternWrongLamp =>
+      'Bu parça desene uymuyor. Tekrar eden parçaya bak ve yeniden dene.';
+
+  @override
+  String get patternRightLamp => 'Doğru! Şimdi sıradaki soru işaretini doldur.';
+
+  @override
+  String get patternSolved => 'Harika! Desen tamamlandı.';
+
+  @override
+  String get patternLampsDark =>
+      'Bazı lambalar hâlâ sönük. Daha fazla renk bloğu ekle ya da tekrar sayısını artır.';
+
+  @override
+  String get patternTooManyLights =>
+      'Lambalardan fazla blok var. Bir bloğu sil ya da tekrar sayısını azalt.';
+
+  @override
+  String patternWrongColor(String color) {
+    return 'Bu lamba $color yandı ama desene uymuyor. Burada hangi renk olmalıydı?';
+  }
+
+  @override
+  String get patternProgramEmpty => 'Önce renk düğmeleriyle blok ekle.';
+
+  @override
+  String patternProgramHintWrong(String color) {
+    return 'Seçtiğim blok lambayı yanlış renkte yakıyor. Orada $color lamba yanmalı.';
+  }
+
+  @override
+  String get patternInsideRepeat =>
+      'Şimdi eklediğin renkler turuncu bloğun içine girecek. Bitince lacivert Bloktan çık düğmesine dokun.';
+
+  @override
+  String get patternOutsideRepeat =>
+      'Şimdi eklediğin renkler bloğun dışına, sona eklenecek.';
+
+  @override
+  String get patternMovedOut =>
+      'Renk bloğun dışına çıktı. Şimdi eklediğin renkler de dışarıya, sona eklenecek.';
+
+  @override
+  String get patternEmptyRepeat =>
+      'Turuncu bloğun içi boş. Onu seçtim; şimdi içine bir renk ekle.';
+
+  @override
+  String get patternLeaveRepeatLabel =>
+      'Bloktan çık; sonraki renkler dışarıya eklensin';
+
+  @override
+  String get patternDropHere => 'Renkleri buraya ekle';
 
   @override
   String get ifThenL1Intro =>

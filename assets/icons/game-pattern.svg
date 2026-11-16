@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Desen Bulmacası</title>
+  <desc>Oyun ikonu. Lacivert bir kabloya bağlı kırmızı, mavi, soru işaretli sönük, mavi ve kırmızı lambalar.</desc>
+  <ellipse cx="64" cy="118" rx="44" ry="6" fill="#1F2D4F" opacity="0.12"/>
+  <!-- Askılar: her biri kablonun o noktadaki yüksekliğinden başlar, ucu lambanın altında kalır -->
+  <path d="M22 35 V62 M43 25.7 V96 M64 30 V62 M85 34.3 V96 M106 25.1 V62" stroke="#1F2D4F" stroke-width="4"/>
+  <!-- Kablo: askıların üst uçlarını örter -->
+  <path d="M6 30 Q22 40 34 30 Q48 20 64 30 Q80 40 94 30 Q108 20 122 30" fill="none" stroke="#1F2D4F"
+        stroke-width="5" stroke-linecap="round"/>
+  <!-- Üst sıra: uçlarda kırmızı lambalar, ortada soru işaretli sönük lamba -->
+  <g stroke-width="5">
+    <circle cx="22" cy="62" r="15" fill="#FF6E6E" stroke="#D94848"/>
+    <circle cx="106" cy="62" r="15" fill="#FF6E6E" stroke="#D94848"/>
+    <!-- pathLength ile kesikler çemberi tam 8 eşit parçaya böler; birleşim yerinde boşluk kaymaz -->
+    <circle cx="64" cy="62" r="15" fill="#E4E8F0" stroke="#3A4D7A" pathLength="96" stroke-dasharray="7 5"/>
+  </g>
+  <!-- Alt sıra: mavi lambalar -->
+  <g stroke-width="5">
+    <circle cx="43" cy="96" r="15" fill="#4DA6FF" stroke="#2B7BD9"/>
+    <circle cx="85" cy="96" r="15" fill="#4DA6FF" stroke="#2B7BD9"/>
+  </g>
+  <!-- Parlamalar -->
+  <g fill="#FFFFFF" opacity="0.55">
+    <circle cx="16" cy="56" r="4"/>
+    <circle cx="100" cy="56" r="4"/>
+    <circle cx="37" cy="90" r="4"/>
+    <circle cx="79" cy="90" r="4"/>
+  </g>
+  <text x="64" y="71" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26"
+        font-weight="900" fill="#3A4D7A">?</text>
+</svg>

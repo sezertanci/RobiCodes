@@ -19,6 +19,7 @@ final class ProgramStrip extends StatefulWidget {
     required this.chipSize,
     required this.compact,
     this.emptyText,
+    this.dropText,
     this.showCounter = true,
     this.active = false,
     this.onActivate,
@@ -34,6 +35,9 @@ final class ProgramStrip extends StatefulWidget {
 
   /// Şerit boşken yazan metin; verilmezse "Tekrar Et" metni kullanılır.
   final String? emptyText;
+
+  /// Açık tekrar bloğunun içinde yazan metin; verilmezse "Tekrar Et" metni ("Okları buraya ekle") kullanılır.
+  final String? dropText;
 
   /// Sağ sütunda blok sayacı gösterilir mi.
   final bool showCounter;
@@ -180,6 +184,7 @@ final class _ProgramStripState extends State<ProgramStrip> {
         chipSize: widget.chipSize,
         compact: widget.compact,
         keyOf: _keyOf,
+        dropText: widget.dropText,
       ),
       CallBlock() => CallChip(
         key: _keyOf(place),

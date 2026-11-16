@@ -144,7 +144,7 @@ final class _RepeatViewState extends State<RepeatView> {
               },
               width: cell - inset * 2,
               height: height,
-              onPressed: controller.canAddBox ? () => controller.addBox(block) : null,
+              onPressed: controller.canAddInner ? () => controller.addInner(block) : null,
             ),
         ],
       ),

@@ -236,6 +236,20 @@ class AppLocalizationsEs extends AppLocalizations {
       '¡Acortaste los caminos más largos con el número de la caja!';
 
   @override
+  String get gamePatternPuzzleTitle => 'Puzzle de patrones';
+
+  @override
+  String get gamePatternPuzzleDescription =>
+      'Descubre el patrón que se repite y completa las lámparas que faltan.';
+
+  @override
+  String get gamePatternPuzzleTrophy => 'Maestro de patrones';
+
+  @override
+  String get gamePatternPuzzleTrophyDescription =>
+      '¡Resolviste todos los patrones y encendiste las lámparas con los colores correctos!';
+
+  @override
   String get characterTitle => 'Elige tu personaje';
 
   @override
@@ -1692,6 +1706,158 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get variableBoxL20Hint =>
       'Cada flecha es una casilla más larga que la anterior. Repite 2 veces el patrón flecha derecha, +1, flecha abajo, +1.';
+
+  @override
+  String get patternColorRed => 'rojo';
+
+  @override
+  String get patternColorBlue => 'azul';
+
+  @override
+  String get patternColorYellow => 'amarillo';
+
+  @override
+  String get patternColorGreen => 'verde';
+
+  @override
+  String get patternShapeCircle => 'círculo';
+
+  @override
+  String get patternShapeSquare => 'cuadrado';
+
+  @override
+  String get patternShapeTriangle => 'triángulo';
+
+  @override
+  String patternLampLabel(String color, String shape) {
+    return 'Lámpara $shape de color $color';
+  }
+
+  @override
+  String get patternMissingSlot => 'Pieza que falta';
+
+  @override
+  String patternLightChip(String name, String color) {
+    return '$name: encender una lámpara de color $color';
+  }
+
+  @override
+  String patternInnerName(Object block, Object number) {
+    return 'El bloque de lámpara $number dentro del bloque $block';
+  }
+
+  @override
+  String patternLightLabel(String color) {
+    return 'Añadir un bloque que enciende una lámpara de color $color';
+  }
+
+  @override
+  String get patternEmptyStrip =>
+      'Toca los botones de color para añadir bloques';
+
+  @override
+  String get patternIntroEasy =>
+      'Las lámparas se encienden siguiendo un patrón. Elige abajo el color de la lámpara con el signo de interrogación.';
+
+  @override
+  String get patternIntroMedium =>
+      'Esta vez faltan varias piezas. Mira los colores y las formas y completa las que faltan, una por una.';
+
+  @override
+  String get patternIntroHard =>
+      'Estos patrones crecen o avanzan con números. Elige la pieza correcta entre las opciones de abajo.';
+
+  @override
+  String get patternIntroExpert =>
+      '¡Enciende tú las lámparas! Añade bloques con los botones de color; si los colores se repiten, usa el bloque Repetir.';
+
+  @override
+  String get patternHintRepeat =>
+      'Fíjate en la parte que se repite. ¿Con qué colores vuelve a empezar el patrón?';
+
+  @override
+  String get patternHintShape =>
+      'Mira el color y también la forma. En la parte que se repite, los dos van en el mismo orden.';
+
+  @override
+  String get patternHintGrowing =>
+      'El patrón crece cada vez. Cuenta las lámparas azules: en cada vuelta hay una más.';
+
+  @override
+  String get patternHintNumbers =>
+      'Mira la diferencia entre los números. Cada vez se suma el mismo número.';
+
+  @override
+  String get patternHintGrowingNumbers =>
+      'Mira la diferencia entre los números. La diferencia aumenta en uno cada vez: 1, 2, 3…';
+
+  @override
+  String get patternHintProgram =>
+      'Busca el grupo de lámparas que se repite. Pon esos colores dentro del bloque Repetir y ajusta cuántas veces se repite.';
+
+  @override
+  String get patternHintProgramTail =>
+      'Cuando termina el grupo que se repite, sobra una lámpara al final. Añádela fuera del bloque Repetir.';
+
+  @override
+  String get patternHintProgramTwo =>
+      'En la tira hay dos patrones distintos. Usa un bloque Repetir para cada uno.';
+
+  @override
+  String get patternWrongLamp =>
+      'Esta pieza no encaja en el patrón. Mira la parte que se repite e inténtalo de nuevo.';
+
+  @override
+  String get patternRightLamp =>
+      '¡Correcto! Ahora completa el siguiente signo de interrogación.';
+
+  @override
+  String get patternSolved => '¡Genial! Completaste el patrón.';
+
+  @override
+  String get patternLampsDark =>
+      'Algunas lámparas siguen apagadas. Añade más bloques de color o aumenta las repeticiones.';
+
+  @override
+  String get patternTooManyLights =>
+      'Hay más bloques que lámparas. Borra un bloque o reduce las repeticiones.';
+
+  @override
+  String patternWrongColor(String color) {
+    return 'Esta lámpara se encendió en $color, pero no encaja en el patrón. ¿Qué color debía ir aquí?';
+  }
+
+  @override
+  String get patternProgramEmpty =>
+      'Primero añade bloques con los botones de color.';
+
+  @override
+  String patternProgramHintWrong(String color) {
+    return 'El bloque que elegí enciende la lámpara con otro color. Ahí debe encenderse una lámpara de color $color.';
+  }
+
+  @override
+  String get patternInsideRepeat =>
+      'Los colores que añadas ahora irán dentro del bloque naranja. Cuando termines, toca el botón azul oscuro Salir del bloque.';
+
+  @override
+  String get patternOutsideRepeat =>
+      'Los colores que añadas ahora irán fuera del bloque, al final.';
+
+  @override
+  String get patternMovedOut =>
+      'El color salió del bloque. Los colores que añadas ahora también irán fuera, al final.';
+
+  @override
+  String get patternEmptyRepeat =>
+      'El bloque naranja está vacío. Lo he seleccionado; ahora añade un color dentro.';
+
+  @override
+  String get patternLeaveRepeatLabel =>
+      'Salir del bloque; los siguientes colores irán fuera';
+
+  @override
+  String get patternDropHere => 'Añade colores aquí';
 
   @override
   String get ifThenL1Intro =>

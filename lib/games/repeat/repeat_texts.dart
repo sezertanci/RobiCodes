@@ -1,4 +1,5 @@
 import '../../l10n/l10n.dart';
+import '../path_finder/engine/lamp.dart';
 import '../path_finder/engine/path_finder_board.dart';
 import '../path_finder/path_finder_texts.dart';
 import 'engine/repeat_engine.dart';
@@ -28,12 +29,27 @@ abstract final class RepeatTexts {
     };
   }
 
+  /// "Renk yak" bloğunun ekran okuyucu etiketi.
+  static String lightChip(AppLocalizations t, ProgramPlace place, LampColor color) {
+    final name = Places.isInner(place)
+        ? t.patternInnerName(place.block + 1, place.inner + 1)
+        : t.repeatBlockName(place.block + 1);
+    return t.patternLightChip(name, lampColor(t, color));
+  }
+
+  static String lampColor(AppLocalizations t, LampColor color) => switch (color) {
+    LampColor.red => t.patternColorRed,
+    LampColor.blue => t.patternColorBlue,
+    LampColor.yellow => t.patternColorYellow,
+    LampColor.green => t.patternColorGreen,
+  };
+
   /// Kutu bloğunun üstünde yazan kısa işaret ("= 3", "+1", "−1"); her dilde aynıdır.
   static String boxSign(InnerBlock block) => switch (block) {
     SetBoxBlock(:final value) => '= $value',
     AddBoxBlock(:final amount) when amount > 0 => '+$amount',
     AddBoxBlock(:final amount) => '−${-amount}',
-    MoveBlock() => '',
+    MoveBlock() || LightBlock() => '',
   };
 
   static String repeatLabel(AppLocalizations t, int index, int times) => t.repeatBlockLabel(index + 1, times);

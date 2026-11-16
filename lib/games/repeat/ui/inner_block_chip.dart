@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../app/app_theme.dart';
 import '../../../l10n/l10n.dart';
 import '../../path_finder/engine/path_finder_board.dart';
+import '../../path_finder/engine/lamp.dart';
 import '../../path_finder/ui/command_chip.dart';
+import '../../path_finder/ui/lamp_bulb.dart';
 import '../engine/repeat_program.dart';
 import '../program_models.dart';
 import '../repeat_texts.dart';
@@ -12,7 +14,7 @@ import 'repeat_assets.dart';
 import 'stepper_button.dart';
 import '../../../features/sound/tap_sound.dart';
 
-/// Tekrar bloğunun içine de konabilen blok: ok ([CommandChip]) ya da kutu bloğu ([BoxChip]). Seçim, çalışma
+/// Tekrar bloğunun içine de konabilen blok: ok ([CommandChip]), "renk yak" bloğu ([LightChip]) ya da kutu bloğu ([BoxChip]). Seçim, çalışma
 /// ve hata durumunu [controller]dan okur. [number] verilirse sıra rozeti görünür (üst düzey bloklar).
 final class InnerBlockChip extends StatelessWidget {
   const InnerBlockChip({
@@ -40,6 +42,16 @@ final class InnerBlockChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) => switch (block) {
     MoveBlock(:final direction) => _arrow(context, direction, controller.arrowSteps(place)),
+    LightBlock(:final color) => LightChip(
+      color: color,
+      label: RepeatTexts.lightChip(context.l10n, place, color),
+      size: size,
+      number: number,
+      selected: controller.selected == place,
+      active: _active,
+      wrong: controller.wrongPlace == place,
+      onTap: _onTap,
+    ),
     _ => BoxChip(
       controller: controller,
       place: place,
@@ -215,5 +227,71 @@ final class BoxBadge extends StatelessWidget {
         ],
       ),
     ),
+  );
+}
+
+/// "Renk yak" bloğu: beyaz zeminde yanan lamba. Seçiliyse lacivert, hatalıysa kırmızı çerçeve alır; çalışırken
+/// sarı zeminle parlar.
+final class LightChip extends StatelessWidget {
+  const LightChip({
+    required this.color,
+    required this.label,
+    required this.size,
+    required this.selected,
+    required this.active,
+    required this.wrong,
+    required this.onTap,
+    this.number,
+    super.key,
+  });
+
+  final LampColor color;
+  final String label;
+  final double size;
+  final bool selected;
+  final bool active;
+  final bool wrong;
+  final VoidCallback? onTap;
+  final int? number;
+
+  static const _radius = 14.0;
+  static const _border = 3.0;
+  static const _lampRatio = 0.78;
+
+  Color get _borderColor {
+    if (wrong) {
+      return AppColors.red;
+    }
+    return selected ? AppColors.navy : LampBulb.toneOf(color).dark;
+  }
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    clipBehavior: Clip.none,
+    children: [
+      Semantics(
+        button: true,
+        selected: selected,
+        label: label,
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: context.withTapSound(onTap),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: active ? AppColors.yellow : Colors.white,
+              borderRadius: BorderRadius.circular(_radius),
+              border: Border.all(color: _borderColor, width: _border),
+            ),
+            child: Center(
+              child: LampBulb(color: color, size: size * _lampRatio),
+            ),
+          ),
+        ),
+      ),
+      if (number case final number?) Positioned(left: -6, top: -8, child: NumberBadge(number)),
+    ],
   );
 }

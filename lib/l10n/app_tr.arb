@@ -139,6 +139,10 @@
   "gameVariableBoxDescription": "Kutuya sayı koy, robot o kadar adım atsın.",
   "gameVariableBoxTrophy": "Değişken Ustası",
   "gameVariableBoxTrophyDescription": "Kutudaki sayıyla en uzun yolları kısalttın!",
+  "gamePatternPuzzleTitle": "Desen Bulmacası",
+  "gamePatternPuzzleDescription": "Tekrar eden deseni bul, eksik lambaları tamamla.",
+  "gamePatternPuzzleTrophy": "Desen Ustası",
+  "gamePatternPuzzleTrophyDescription": "Bütün desenleri çözdün, lambaları doğru renklerle yaktın!",
   "characterTitle": "Karakterini seç",
   "characterName": "{id, select, robi{Robi} fiyo{Fiyo} pervane{Pervane} isil{Işıl} kahraman{Kahraman} pembe{Pembe} sovalye{Şövalye} piril{Pırıl} other{Robi}}",
   "@characterName": {
@@ -1036,6 +1040,96 @@
   "variableBoxL18Hint": "Her turda sağ ok, +1 ve aşağı ok var; 2 turdan sonra son bir sağ ok ekle.",
   "variableBoxL19Hint": "Kutuya 4 koy. Sağ ok, −1 ve aşağı ok desenini 2 kez tekrarla.",
   "variableBoxL20Hint": "Her ok bir öncekinden bir kare uzun. Sağ ok, +1, aşağı ok, +1 desenini 2 kez tekrarla.",
+  "patternColorRed": "kırmızı",
+  "patternColorBlue": "mavi",
+  "patternColorYellow": "sarı",
+  "patternColorGreen": "yeşil",
+  "patternShapeCircle": "daire",
+  "patternShapeSquare": "kare",
+  "patternShapeTriangle": "üçgen",
+  "patternLampLabel": "{color} {shape} lamba",
+  "@patternLampLabel": {
+    "placeholders": {
+      "color": {
+        "type": "String"
+      },
+      "shape": {
+        "type": "String"
+      }
+    }
+  },
+  "patternMissingSlot": "Eksik parça",
+  "patternLightChip": "{name}: {color} lamba yak",
+  "@patternLightChip": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "color": {
+        "type": "String"
+      }
+    }
+  },
+  "patternInnerName": "{block}. bloğun içindeki {number}. lamba bloğu",
+  "@patternInnerName": {
+    "placeholders": {
+      "block": {
+        "type": "Object"
+      },
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "patternLightLabel": "{color} lamba yakma bloğu ekle",
+  "@patternLightLabel": {
+    "placeholders": {
+      "color": {
+        "type": "String"
+      }
+    }
+  },
+  "patternEmptyStrip": "Renk düğmelerine dokunarak blok ekle",
+  "patternIntroEasy": "Lambalar bir desenle yanıyor. Soru işaretli lambanın rengini aşağıdan seç.",
+  "patternIntroMedium": "Bu kez birden çok parça eksik. Renklere ve şekillere bak, eksikleri sırayla doldur.",
+  "patternIntroHard": "Bu desenler büyüyor ya da sayılarla ilerliyor. Doğru parçayı aşağıdaki seçeneklerden seç.",
+  "patternIntroExpert": "Lambaları sen yak! Renk düğmeleriyle blok ekle; renkler tekrar ediyorsa Tekrarla bloğunu kullan.",
+  "patternHintRepeat": "Tekrar eden parçaya bak. Desen hangi renklerle yeniden başlıyor?",
+  "patternHintShape": "Hem renge hem şekle bak. Tekrar eden parçada ikisi de aynı sırayla gelir.",
+  "patternHintGrowing": "Desen her seferinde büyüyor. Mavi lambaları say: her turda bir tane artıyor.",
+  "patternHintNumbers": "Sayılar arasındaki farka bak. Her seferinde aynı sayı ekleniyor.",
+  "patternHintGrowingNumbers": "Sayılar arasındaki farka bak. Fark her seferinde bir artıyor: 1, 2, 3…",
+  "patternHintProgram": "Tekrar eden lamba grubunu bul. O renkleri Tekrarla bloğunun içine koy ve tekrar sayısını ayarla.",
+  "patternHintProgramTail": "Tekrar eden grup bitince sonda bir lamba kalıyor. Onu Tekrarla bloğunun dışına ekle.",
+  "patternHintProgramTwo": "Şeritte iki farklı desen var. Her biri için ayrı bir Tekrarla bloğu kullan.",
+  "patternWrongLamp": "Bu parça desene uymuyor. Tekrar eden parçaya bak ve yeniden dene.",
+  "patternRightLamp": "Doğru! Şimdi sıradaki soru işaretini doldur.",
+  "patternSolved": "Harika! Desen tamamlandı.",
+  "patternLampsDark": "Bazı lambalar hâlâ sönük. Daha fazla renk bloğu ekle ya da tekrar sayısını artır.",
+  "patternTooManyLights": "Lambalardan fazla blok var. Bir bloğu sil ya da tekrar sayısını azalt.",
+  "patternWrongColor": "Bu lamba {color} yandı ama desene uymuyor. Burada hangi renk olmalıydı?",
+  "@patternWrongColor": {
+    "placeholders": {
+      "color": {
+        "type": "String"
+      }
+    }
+  },
+  "patternProgramEmpty": "Önce renk düğmeleriyle blok ekle.",
+  "patternProgramHintWrong": "Seçtiğim blok lambayı yanlış renkte yakıyor. Orada {color} lamba yanmalı.",
+  "@patternProgramHintWrong": {
+    "placeholders": {
+      "color": {
+        "type": "String"
+      }
+    }
+  },
+  "patternInsideRepeat": "Şimdi eklediğin renkler turuncu bloğun içine girecek. Bitince lacivert Bloktan çık düğmesine dokun.",
+  "patternOutsideRepeat": "Şimdi eklediğin renkler bloğun dışına, sona eklenecek.",
+  "patternMovedOut": "Renk bloğun dışına çıktı. Şimdi eklediğin renkler de dışarıya, sona eklenecek.",
+  "patternEmptyRepeat": "Turuncu bloğun içi boş. Onu seçtim; şimdi içine bir renk ekle.",
+  "patternLeaveRepeatLabel": "Bloktan çık; sonraki renkler dışarıya eklensin",
+  "patternDropHere": "Renkleri buraya ekle",
   "ifThenL1Intro": "Önünde taş varsa robot ne yapmalı? Boş kutuya bir hareket koy.",
   "ifThenL2Intro": "Robot yüzemez. Önünde su varsa ne yapmalı?",
   "ifThenL3Intro": "Yolda kapalı bir kapı var. Kapının önüne gelince ne yapmalı?",

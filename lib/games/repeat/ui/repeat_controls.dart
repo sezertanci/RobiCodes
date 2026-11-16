@@ -18,12 +18,15 @@ import '../../../features/sound/tap_sound.dart';
 /// Geniş ekranda düğmeler yön tuşlarının altında durur: üstte tam satır Tekrarla, altında üç düğme.
 /// Dar ekranda yön tuşlarının sağında Tekrarla üstte, Başlat ile İpucu ortada, Temizle altta durur.
 /// [commandButton] verilirse (ör. "Komut") Tekrarla'nın üstünde aynı genişlikte bir satır daha olur.
+/// [customPad] verilirse yön tuşlarının yerinde, aynı boyutta bir kutuda o düğmeler durur (ör. renk düğmeleri).
 final class RepeatControls extends StatelessWidget {
   const RepeatControls({
     required this.controller,
     required this.buttonSize,
     required this.stacked,
     this.commandButton,
+    this.customPad,
+    this.leaveLabel,
     super.key,
   });
 
@@ -35,6 +38,12 @@ final class RepeatControls extends StatelessWidget {
 
   /// Verilen genişlik ve yükseklikte geniş bir düğme çizer.
   final Widget Function(double width, double height)? commandButton;
+
+  /// Yön tuşlarının yerine verilen kenar uzunluğunda kare düğme grubu çizer.
+  final Widget Function(double extent)? customPad;
+
+  /// "Bloktan çık" düğmesinin ekran okuyucu etiketi; verilmezse oklardan söz eden "Tekrar Et" etiketi.
+  final String? leaveLabel;
 
   static const _stackedGap = 16.0;
   static const _rowGap = 24.0;
@@ -72,13 +81,19 @@ final class RepeatControls extends StatelessWidget {
     final t = context.l10n;
     final pad = TapRegion(
       groupId: ProgramStrip.tapGroup,
-      child: DirectionPad(
-        buttonSize: buttonSize,
-        enabled: controller.canAddMove,
-        highlighted: controller.hint?.direction,
-        label: (direction) => RepeatTexts.addMove(t, direction),
-        onPressed: controller.addMove,
-      ),
+      child: switch (customPad) {
+        final build? => SizedBox.square(
+          dimension: DirectionPad.extent(buttonSize),
+          child: build(DirectionPad.extent(buttonSize)),
+        ),
+        null => DirectionPad(
+          buttonSize: buttonSize,
+          enabled: controller.canAddMove,
+          highlighted: controller.hint?.direction,
+          label: (direction) => RepeatTexts.addMove(t, direction),
+          onPressed: controller.addMove,
+        ),
+      },
     );
     final run = _action(AppAssets.runButton, t.commonRun, controller.run);
     final hint = _action(AppAssets.hintButton, t.commonHint, controller.showHint);
@@ -120,6 +135,7 @@ final class RepeatControls extends StatelessWidget {
   Widget _repeatButton({required int columns}) => _wideButton(
     (width, height) => RepeatButton(
       leaving: controller.isInsideRepeat,
+      leaveLabel: leaveLabel,
       width: width,
       height: height,
       onPressed: controller.canUseRepeatButton ? controller.pressRepeatButton : null,
@@ -141,10 +157,14 @@ final class RepeatButton extends StatelessWidget {
     required this.width,
     required this.height,
     required this.onPressed,
+    this.leaveLabel,
     super.key,
   });
 
   final bool leaving;
+
+  /// Blok açıkken ekran okuyucunun okuduğu etiket; verilmezse "Tekrar Et" etiketi.
+  final String? leaveLabel;
   final double width;
   final double height;
   final VoidCallback? onPressed;
@@ -158,7 +178,7 @@ final class RepeatButton extends StatelessWidget {
       tone: leaving ? const ColorTone(AppColors.navy, _navyDark) : AppTones.orange,
       icon: leaving ? null : RepeatIcon(size: height * WideActionButton.iconRatio),
       text: leaving ? t.repeatLeaveRepeat : t.repeatAddRepeat,
-      label: leaving ? t.repeatLeaveRepeatLabel : t.repeatAddRepeatLabel,
+      label: leaving ? leaveLabel ?? t.repeatLeaveRepeatLabel : t.repeatAddRepeatLabel,
       width: width,
       height: height,
       onPressed: onPressed,

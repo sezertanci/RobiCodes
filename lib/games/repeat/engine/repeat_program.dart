@@ -1,3 +1,4 @@
+import '../../path_finder/engine/lamp.dart';
 import '../../path_finder/engine/path_finder_board.dart';
 
 /// Programın bir bloğu: tek bir yön oku, kutu bloğu, "N kez tekrarla" bloğu ya da tanımlanan komutu
@@ -70,6 +71,23 @@ final class AddBoxBlock extends InnerBlock {
 
   @override
   int get hashCode => Object.hash(AddBoxBlock, amount);
+}
+
+/// "Desen Bulmacası" Uzman grubunun "renk yak" bloğu: robot bulunduğu yerdeki lambayı [color] renginde yakar ve
+/// bir kare ilerler ([direction]).
+final class LightBlock extends InnerBlock {
+  const LightBlock(this.color);
+
+  /// Lambalar düz bir şerittir; robot her lambadan sonra sağa geçer.
+  static const direction = Direction.right;
+
+  final LampColor color;
+
+  @override
+  bool operator ==(Object other) => other is LightBlock && other.color == color;
+
+  @override
+  int get hashCode => Object.hash(LightBlock, color);
 }
 
 final class RepeatBlock extends ProgramBlock {

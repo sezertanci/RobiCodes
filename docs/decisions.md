@@ -80,6 +80,25 @@
 - Ürün kimliği `pack.variable_box.base`; fiyat diğer ücretli oyunlarla aynı (müşteri 29,99 TL, yurt dışı
   1,99 USD). Şimdilik bundle'a eklenmedi.
 
+### Dördüncü ücretli oyun: Desen Bulmacası (16.11.2026)
+
+- Robi'nin önünde bir lamba şeridi durur; şeritteki desen tamamlanınca kapı açılır. 20 seviye, 4 zorluk grubu.
+  Deneme diğer ücretli oyunlarla aynı: her grubun ilk seviyesi ücretsiz (toplam 4).
+- Kolay: renk deseninde tek eksik lamba. Orta: birden çok eksik, renk ve şekil birlikte. Zor: büyüyen desenler
+  ve sayı dizileri; eksik sayı altta çıkan 3–4 seçenekten seçilir. Eksik lambalar paletten dokunarak doldurulur.
+- Uzman grup programlamadır: harita tek sıra lamba şerididir; Robi düz yürür ve her "renk yak" bloğunda bir
+  lamba yakıp sonraki kareye geçer. Program "renk yak" blokları ve Tekrarla ile yazılır, blok sınırı tekrar
+  kullanmayı zorunlu kılar. Ortak program motoru (`lib/games/repeat/`) yeniden kullanılır.
+- Sonradan eklenecek ekstra seviyeler için düşünülenler: kıvrımlı yol, ayrı yön okları ve "yak" blokları, rengi
+  ve yönü birlikte taşıyan renkli oklar. İlk sürümde ilerleme diğer ücretli oyunlar gibidir (20 seviye).
+- Yanlış lamba kırmızı yanıp söner; ipucu "tekrar eden parçaya bak" der.
+- Görünüm: lacivert oyun rengi; ikonda renkli lamba şeridi (kırmızı-mavi-kırmızı-mavi) ve sonunda soru işaretli
+  sönük bir lamba.
+- Adlar: Desen Bulmacası (tr), Pattern Puzzle (en), Musterrätsel (de), Puzzle de patrones (es), Puzzle de motifs
+  (fr), Quebra-cabeça de padrões (pt), Puzzle di sequenze (it), Teka-teki Pola (id).
+- Ürün kimliği `pack.pattern_puzzle.base`; fiyat diğer ücretli oyunlarla aynı (müşteri 29,99 TL, yurt dışı
+  1,99 USD).
+
 ## Ses efektleri
 
 - Web sürümünde sesler kodla üretilir. Flutter sürümünde bu sesler **dosya olarak** hazırlanır ve

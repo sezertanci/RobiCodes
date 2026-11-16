@@ -141,6 +141,9 @@ abstract final class RepeatEngine {
         return BoxRules.clamp(value);
       case AddBoxBlock(:final amount):
         return BoxRules.clamp(box + amount);
+      case LightBlock():
+        steps.add((direction: LightBlock.direction, block: at.block, inner: at.inner, round: at.round, box: box));
+        return box;
     }
   }
 
