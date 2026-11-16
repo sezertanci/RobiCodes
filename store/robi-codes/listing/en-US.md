@@ -38,6 +38,7 @@ Privacy policy: https://sezertanci.github.io/robi-codes/privacy.html
 
 - New game: Variable Box. Children put a number in the box and the robot walks that many squares; by raising and lowering the number they discover what a variable is.
 - New game: Pattern Puzzle. Children find the repeating pattern in the lamps and fill in the missing ones; in the last group they program the pattern themselves with a Repeat block.
+- New bundles: Advanced Set (Variable Box and Pattern Puzzle) and the Four-Game Set with all four paid games, at a lower price.
 - The first level of each difficulty group can be tried for free. All 20 levels unlock with a one-time purchase.
 - Buttons now make a click sound and the robot makes a step sound as it walks. Sound can be turned off in Settings.
 

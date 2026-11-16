@@ -50,7 +50,31 @@ void main() {
       expect(bundle.packIds, [basePackId(GameIds.bugHunter), basePackId(GameIds.myCommand)]);
       expect(catalog.purchaseFor(basePackId(GameIds.myCommand))?.id, ProductIds.myCommandBase);
     });
-    test('buildContentCatalog_VariableBox_SoldOnlyByOwnProductWithFreeGroupStarts', () {
+    test('buildContentCatalog_AdvancedBundle_UnlocksTwoNewestPaidGames', () {
+      // Arrange
+      final catalog = buildContentCatalog();
+
+      // Act
+      final bundle = catalog.products.singleWhere((product) => product.id == ProductIds.advancedBundle);
+
+      // Assert
+      expect(bundle.isBundle, isTrue);
+      expect(bundle.packIds, [basePackId(GameIds.variableBox), basePackId(GameIds.patternPuzzle)]);
+    });
+
+    test('buildContentCatalog_FourGameBundle_UnlocksEveryPaidGame', () {
+      // Arrange
+      final catalog = buildContentCatalog();
+      final paidPacks = catalog.packs.where((pack) => !catalog.isFree(pack.id)).map((pack) => pack.id);
+
+      // Act
+      final bundle = catalog.products.singleWhere((product) => product.id == ProductIds.fourGameBundle);
+
+      // Assert
+      expect(bundle.packIds, paidPacks);
+    });
+
+    test('buildContentCatalog_VariableBox_SoldByOwnProductAndBundlesWithFreeGroupStarts', () {
       // Arrange
       final catalog = buildContentCatalog();
       final packId = basePackId(GameIds.variableBox);
@@ -60,7 +84,8 @@ void main() {
       final pack = catalog.packs.singleWhere((pack) => pack.id == packId);
 
       // Assert
-      expect(products, [ProductIds.variableBoxBase]);
+      expect(products, [ProductIds.variableBoxBase, ProductIds.advancedBundle, ProductIds.fourGameBundle]);
+      expect(catalog.purchaseFor(packId)?.id, ProductIds.variableBoxBase);
       expect(pack.levelCount, 20);
       expect(pack.previewLevels, [1, 6, 11, 16]);
     });

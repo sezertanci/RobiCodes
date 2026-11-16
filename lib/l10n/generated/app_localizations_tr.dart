@@ -508,7 +508,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get storeTitle => 'Paketler';
+  String get storeTitle => 'Mağaza';
 
   @override
   String get storeIntro =>
@@ -528,6 +528,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get storeStarterBundleTitle => 'Başlangıç Seti';
+
+  @override
+  String get storeAdvancedBundleTitle => 'İleri Seviye Seti';
+
+  @override
+  String get storeFourGameBundleTitle => 'Dörtlü Set';
 
   @override
   String get storeOwned => 'Sahipsiniz';

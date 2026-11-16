@@ -911,7 +911,7 @@ abstract class AppLocalizations {
   /// No description provided for @storeTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Paketler'**
+  /// **'Mağaza'**
   String get storeTitle;
 
   /// No description provided for @storeIntro.
@@ -949,6 +949,18 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Başlangıç Seti'**
   String get storeStarterBundleTitle;
+
+  /// Değişken Kutusu ve Desen Bulmacası oyunlarını birlikte açan avantajlı paketin adı.
+  ///
+  /// In tr, this message translates to:
+  /// **'İleri Seviye Seti'**
+  String get storeAdvancedBundleTitle;
+
+  /// Dört ücretli oyunun hepsini birlikte açan avantajlı paketin adı.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dörtlü Set'**
+  String get storeFourGameBundleTitle;
 
   /// No description provided for @storeOwned.
   ///

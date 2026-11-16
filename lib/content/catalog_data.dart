@@ -27,6 +27,12 @@ abstract final class ProductIds {
 
   /// Başlangıç Seti: açıldığı gün var olan iki ücretli oyunu (Hata Avcısı, Kendi Komutunu Oluştur) birlikte açar.
   static const starterBundle = 'bundle.starter';
+
+  /// İleri Seviye Seti: açıldığı gün eklenen iki yeni ücretli oyunu (Değişken Kutusu, Desen Bulmacası) birlikte açar.
+  static const advancedBundle = 'bundle.advanced';
+
+  /// Dörtlü Set: açıldığı gün var olan dört ücretli oyunun hepsini birlikte açar.
+  static const fourGameBundle = 'bundle.four_games';
 }
 
 /// Mevcut oyunlardaki seviye düzeni: her zorluk grubunda 5 seviye.
@@ -159,6 +165,21 @@ ContentCatalog buildContentCatalog() => ContentCatalog(
       id: ProductIds.starterBundle,
       title: (t) => t.storeStarterBundleTitle,
       packIds: [basePackId(GameIds.bugHunter), basePackId(GameIds.myCommand)],
+    ),
+    StoreProduct(
+      id: ProductIds.advancedBundle,
+      title: (t) => t.storeAdvancedBundleTitle,
+      packIds: [basePackId(GameIds.variableBox), basePackId(GameIds.patternPuzzle)],
+    ),
+    StoreProduct(
+      id: ProductIds.fourGameBundle,
+      title: (t) => t.storeFourGameBundleTitle,
+      packIds: [
+        basePackId(GameIds.bugHunter),
+        basePackId(GameIds.myCommand),
+        basePackId(GameIds.variableBox),
+        basePackId(GameIds.patternPuzzle),
+      ],
     ),
   ],
 );

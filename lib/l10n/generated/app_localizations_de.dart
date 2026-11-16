@@ -527,7 +527,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get storeTitle => 'Pakete';
+  String get storeTitle => 'Shop';
 
   @override
   String get storeIntro =>
@@ -547,6 +547,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get storeStarterBundleTitle => 'Starter-Set';
+
+  @override
+  String get storeAdvancedBundleTitle => 'Fortgeschrittenen-Set';
+
+  @override
+  String get storeFourGameBundleTitle => 'Vierer-Set';
 
   @override
   String get storeOwned => 'Gekauft';

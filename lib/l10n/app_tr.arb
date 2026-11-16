@@ -322,7 +322,7 @@
       }
     }
   },
-  "storeTitle": "Paketler",
+  "storeTitle": "Mağaza",
   "storeIntro": "Satın almalar Google Play üzerinden yapılır ve her satın almadan önce ebeveyn onayı istenir. Google Play promosyon kodunu ödeme ekranındaki \"Kodu kullan\" bağlantısından veya Play Store uygulamasından kullanabilirsiniz; kodla alınan paket de burada sahip olunan olarak görünür.",
   "storePaidSection": "Satın alınabilir paketler",
   "storeFreeSection": "Ücretsiz paketler",
@@ -331,6 +331,14 @@
   "storeStarterBundleTitle": "Başlangıç Seti",
   "@storeStarterBundleTitle": {
     "description": "Hata Avcısı ve Kendi Komutunu Oluştur oyunlarını birlikte açan avantajlı paketin adı."
+  },
+  "storeAdvancedBundleTitle": "İleri Seviye Seti",
+  "@storeAdvancedBundleTitle": {
+    "description": "Değişken Kutusu ve Desen Bulmacası oyunlarını birlikte açan avantajlı paketin adı."
+  },
+  "storeFourGameBundleTitle": "Dörtlü Set",
+  "@storeFourGameBundleTitle": {
+    "description": "Dört ücretli oyunun hepsini birlikte açan avantajlı paketin adı."
   },
   "storeOwned": "Sahipsiniz",
   "storeUnlocks": "Satın alındığında açılanlar:",

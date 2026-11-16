@@ -525,7 +525,7 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get storeTitle => 'Paket';
+  String get storeTitle => 'Toko';
 
   @override
   String get storeIntro =>
@@ -545,6 +545,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get storeStarterBundleTitle => 'Paket Pemula';
+
+  @override
+  String get storeAdvancedBundleTitle => 'Paket Lanjutan';
+
+  @override
+  String get storeFourGameBundleTitle => 'Paket Isi Empat';
 
   @override
   String get storeOwned => 'Dimiliki';

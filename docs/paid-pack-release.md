@@ -88,5 +88,12 @@ etiketi var. Bu etiket olmadan `in_app_purchase` ürünü bulamaz.
   Play'de sıradan bir tek seferlik üründür; hangi paketleri açtığı katalogdaki `StoreProduct.packIds` ile bilinir.
 - Fiyat: tek tek alınınca 59,98 TL olan iki oyun 49,99 TL. Türkiye'ye vergisiz 41,66 TRY, diğer ülkelere
   aynı oranla 3,29 USD girilir. Simge `store/robi-codes/products/starter-bundle-512.png`.
+- İkinci ve üçüncü bundle (16.11.2026):
+  - **İleri Seviye Seti** (`bundle.advanced`): Değişken Kutusu ve Desen Bulmacası. 49,99 TL (vergisiz 41,66 TRY),
+    yurt dışı 3,29 USD. Simge `store/robi-codes/products/advanced-bundle-512.png`.
+  - **Dörtlü Set** (`bundle.four_games`): dört ücretli oyunun hepsi. Tek tek 119,96 TL olan dört oyun 99,99 TL
+    (vergisiz 83,33 TRY), yurt dışı 6,59 USD. Simge `store/robi-codes/products/four-game-bundle-512.png`.
+  - Bundle simgesi oyun simgelerinden üretilir: SVG'ler 512×512 bir HTML'de yan yana (dört oyunda 2×2) konur,
+    Chrome headless ile çizilir, sonra şeffaf kenarlar kırpılıp ortalanır; içerik yaklaşık 358 piksel genişliktedir.
 - Oyunlardan birine sahip olan kullanıcıya bundle satılmaz; eksik oyun tek başına önerilir (`OfferPolicy`).
 - Fiyat kuralı (vergisiz giriş, Türkiye ve yurt dışı için ayrı fiyat) bundle için de geçerlidir.
