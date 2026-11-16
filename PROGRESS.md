@@ -228,7 +228,7 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   `GameIconBadge` ana ekrandaki oyun kartıyla paylaşılıyor. Tablete bir sonraki Play sürümüyle gelecek.
 - Mağaza metinlerinde "Türkçe ve İngilizce oynanabilir" ifadesi eskidi (8 dil var); güncellenmedi.
 - Üretime başvuru için kapalı testte 12 test kullanıcısı ve 14 gün gerekiyor (şu an 11 kullanıcı).
-- **Kendi Komutunu Oluştur kodlandı, commit edilmedi (15.11.2026).** `lib/games/my_command/`, ortak program
+- **Kendi Komutunu Oluştur kodlandı (15.11.2026, commit `d466b89`).** `lib/games/my_command/`, ortak program
   düzeni `lib/games/repeat/` altında (`ProgramGameLayout`, `CallChip`, `program_models`, `program_editor`).
   20 seviye, ürün `pack.my_command.base`, turkuaz tema, ikon `assets/icons/game-command.svg`, 8 dilde metinler.
   `flutter analyze` temiz, 636 test geçiyor; emülatörde 1. seviye 3 yıldızla bitirildi. Kalanlar: pubspec
@@ -241,8 +241,9 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   20 seviye, ürün `pack.variable_box.base`, karton kahvesi teması (`AppTones.brown`), ikon
   `assets/icons/game-box.svg`, kutu düğmeleri koyu altın (`AppTones.amber`), 8 dilde metinler. Tablette denendi.
   Debug'da ayarlarda "Tüm kilitleri aç" anahtarı var (yalnızca bellekte). `flutter analyze` temiz, 774 test geçiyor.
-  Kalanlar: pubspec sürüm yükseltme, ürün simgesi `store/robi-codes/products/variable-box-512.png` (kahverengi
-  oyun simgesinden), Play Console'da ürün ve sürüm.
+  Sürüm 1.5.0+7, sürüm notları (tr-TR, en-US) ve ürün simgesi `store/robi-codes/products/variable-box-512.png`
+  hazır (16.11.2026). Kalanlar: release AAB, Play Console'da ürün (`pack.variable_box.base`) ve kapalı test sürümü.
+  Değişken Kutusu Başlangıç Seti'ne eklenmedi, tek başına satılır.
 - **Tuş ve adım sesleri eklendi (16.11.2026, commit `a0599e4`).** Bütün tuşlar tıklama sesi, robot her
   karede adım sesi çalar; ayrıntı docs/decisions.md "Ses efektleri".
 - **Değişken Kutusu'nda oklara kutu rozeti eklendi (16.11.2026).** Her okun sağ alt köşesindeki

@@ -34,6 +34,12 @@ AİLELER İÇİN
 
 Gizlilik politikası: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.5.0)
+
+- Yeni oyun: Değişken Kutusu. Çocuk kutuya bir sayı koyar, robot o kadar kare yürür; kutudaki sayıyı artırıp azaltarak değişken kavramını tanır.
+- Her zorluk grubunun ilk seviyesi ücretsiz denenebilir. 20 seviyenin tamamı tek seferlik satın alımla açılır.
+- Tuşlara basınca tıklama sesi, robot yürürken adım sesi çıkar. Ses Ayarlar'dan kapatılabilir.
+
 ## Sürüm notu (1.4.1)
 
 - Yeni avantajlı paket: Başlangıç Seti. Hata Avcısı ve Kendi Komutunu Oluştur birlikte, daha uygun fiyata alınabilir.

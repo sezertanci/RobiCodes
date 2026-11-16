@@ -34,6 +34,12 @@ FOR FAMILIES
 
 Privacy policy: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.5.0)
+
+- New game: Variable Box. Children put a number in the box and the robot walks that many squares; by raising and lowering the number they discover what a variable is.
+- The first level of each difficulty group can be tried for free. All 20 levels unlock with a one-time purchase.
+- Buttons now make a click sound and the robot makes a step sound as it walks. Sound can be turned off in Settings.
+
 ## Sürüm notu (1.4.1)
 
 - New bundle: Starter Set. Get Bug Hunter and Make Your Own Command together at a lower price.
