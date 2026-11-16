@@ -34,6 +34,12 @@ FOR FAMILIES
 
 Privacy policy: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.5.1)
+
+- Bundles in the Store now stand out with their own colour, a corner ribbon and a glowing border.
+- In Variable Box, the hint now points to the right box button.
+- Small fixes: the map no longer moves when the program strip is tapped, and the speech bubble keeps a steady size.
+
 ## Sürüm notu (1.5.0)
 
 - New game: Variable Box. Children put a number in the box and the robot walks that many squares; by raising and lowering the number they discover what a variable is.

@@ -34,6 +34,12 @@ AİLELER İÇİN
 
 Gizlilik politikası: https://sezertanci.github.io/robi-codes/privacy.html
 
+## Sürüm notu (1.5.1)
+
+- Mağazada avantajlı paketler artık kendi renkleri, köşedeki şerit ve parlayan kenarlarıyla kolayca fark ediliyor.
+- Değişken Kutusu'nda ipucu, doğru kutu düğmesini gösteriyor.
+- Küçük düzeltmeler: program şeridine dokununca harita yerinden oynamıyor, konuşma balonu sabit boyutta kalıyor.
+
 ## Sürüm notu (1.5.0)
 
 - Yeni oyun: Değişken Kutusu. Çocuk kutuya bir sayı koyar, robot o kadar kare yürür; kutudaki sayıyı artırıp azaltarak değişken kavramını tanır.
