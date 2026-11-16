@@ -91,8 +91,10 @@ etiketi var. Bu etiket olmadan `in_app_purchase` ürünü bulamaz.
 - İkinci ve üçüncü bundle (16.11.2026):
   - **İleri Seviye Seti** (`bundle.advanced`): Değişken Kutusu ve Desen Bulmacası. 49,99 TL (vergisiz 41,66 TRY),
     yurt dışı 3,29 USD. Simge `store/robi-codes/products/advanced-bundle-512.png`.
-  - **Dörtlü Set** (`bundle.four_games`): dört ücretli oyunun hepsi. Tek tek 119,96 TL olan dört oyun 99,99 TL
-    (vergisiz 83,33 TRY), yurt dışı 6,59 USD. Simge `store/robi-codes/products/four-game-bundle-512.png`.
+  - **Dörtlü Set** (`bundle.four_games`): dört ücretli oyunun hepsi. Tek tek 119,96 TL olan dört oyun 84,99 TL
+    (vergisiz 70,83 TRY), yurt dışı 5,49 USD. İkili setin indirim oranı (49,99 / 59,98 ≈ 0,833) iki ikili setin
+    toplamına bir kez daha uygulanır: 99,98 × 0,833 ≈ 83,30 → 84,99 TL; yurt dışında 6,58 × 0,827 ≈ 5,44 →
+    5,49 USD. Böylece dörtlü set, iki ikili setten de ucuz olur. Simge `store/robi-codes/products/four-game-bundle-512.png`.
   - Bundle simgesi oyun simgelerinden üretilir: SVG'ler 512×512 bir HTML'de yan yana (dört oyunda 2×2) konur,
     Chrome headless ile çizilir, sonra şeffaf kenarlar kırpılıp ortalanır; içerik yaklaşık 358 piksel genişliktedir.
 - Oyunlardan birine sahip olan kullanıcıya bundle satılmaz; eksik oyun tek başına önerilir (`OfferPolicy`).
