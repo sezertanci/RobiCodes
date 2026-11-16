@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:robi_codes/games/path_finder/engine/path_finder_board.dart';
 import 'package:robi_codes/games/path_finder/ui/board_view.dart';
+import 'package:robi_codes/games/path_finder/ui/command_chip.dart';
 import 'package:robi_codes/games/repeat/engine/repeat_level.dart';
 import 'package:robi_codes/games/repeat/engine/repeat_program.dart';
 import 'package:robi_codes/games/repeat/repeat_texts.dart';
@@ -77,5 +79,20 @@ void main() {
     await tapVisible(tester, findButton(texts.variableBoxIncreaseLabel));
 
     expect(_boxChip(AddBoxBlock.increment), findsOneWidget);
+  });
+
+  testWidgets('VariableBoxView_ArrowAfterBox_ShowsBoxValueOnArrow', (tester) async {
+    // Arrange
+    await _pumpLevel(tester, variableBoxBaseLevels.first);
+    const arrow = (block: 1, inner: Places.topLevel);
+
+    // Act
+    await tapVisible(tester, findButton(texts.variableBoxSetLabel));
+    await tapVisible(tester, findButton(RepeatTexts.addMove(texts, Direction.right)));
+
+    // Assert
+    const steps = SetBoxBlock.defaultValue;
+    expect(find.descendant(of: find.byType(StepsBadge), matching: find.text('$steps')), findsOneWidget);
+    expect(find.bySemanticsLabel(RepeatTexts.moveChip(texts, arrow, Direction.right, steps: steps)), findsOneWidget);
   });
 }

@@ -373,6 +373,7 @@
   "variableBoxIncreaseLabel": "Aggiungi un blocco che aggiunge 1 alla scatola",
   "variableBoxDecreaseLabel": "Aggiungi un blocco che toglie 1 dalla scatola",
   "variableBoxBadge": "Adesso nella scatola c’è {value}.",
+  "variableBoxArrowSteps": "{count, plural, =1{{label}. Fa camminare il robot di 1 casella.} other{{label}. Fa camminare il robot di {count} caselle.}}",
   "variableBoxL1Intro": "La bandiera è 6 caselle più in là, ma puoi usare solo 2 blocchi. Prima metti 6 nella scatola, poi tocca la freccia a destra.",
   "variableBoxL1Hint": "Con il blocco scatola = metti 6 nella scatola; poi una sola freccia a destra fa camminare il robot di 6 caselle.",
   "variableBoxL2Hint": "Il robot deve andare 3 a destra e 3 in basso. Metti 3 nella scatola; poi ogni freccia fa 3 caselle.",

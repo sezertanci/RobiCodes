@@ -11,9 +11,11 @@ abstract final class RepeatTexts {
   static String addMove(AppLocalizations t, Direction direction) =>
       t.repeatAddMove(PathFinderTexts.direction(t, direction));
 
-  static String moveChip(AppLocalizations t, ProgramPlace place, Direction direction) {
+  /// Okun ekran okuyucu etiketi; [steps] verilirse okun kaç kare yürüteceği de söylenir.
+  static String moveChip(AppLocalizations t, ProgramPlace place, Direction direction, {int? steps}) {
     final name = Places.isInner(place) ? t.repeatArrowName(place.inner + 1) : t.repeatBlockName(place.block + 1);
-    return t.repeatMoveChip(name, PathFinderTexts.direction(t, direction));
+    final label = t.repeatMoveChip(name, PathFinderTexts.direction(t, direction));
+    return steps == null ? label : t.variableBoxArrowSteps(label, steps);
   }
 
   /// Kutu bloğunun ekran okuyucu etiketi.

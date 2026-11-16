@@ -1537,6 +1537,16 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Robotu $count kare yürütür.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.';
 

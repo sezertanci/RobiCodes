@@ -1591,6 +1591,17 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Lässt den Roboter $count Felder gehen.',
+      one: '$label. Lässt den Roboter 1 Feld gehen.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'Die Flagge ist 6 Felder entfernt, aber du darfst nur 2 Blöcke benutzen. Leg zuerst 6 in die Box und tippe dann auf den Rechtspfeil.';
 

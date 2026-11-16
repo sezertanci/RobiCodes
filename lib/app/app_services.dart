@@ -39,7 +39,9 @@ final class AppServices {
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
     ParentalGate parentalGate = const LockedParentalGate(),
     SoundPlayer soundPlayer = const SilentSoundPlayer(),
-  }) : progress = ProgressRepository(store),
+    bool unlocksAllInDebug = false,
+  }) : developerUnlock = DeveloperUnlock(enabled: unlocksAllInDebug),
+       progress = ProgressRepository(store),
        sound = SoundService(store: store, player: soundPlayer),
        character = CharacterService(store),
        language = LanguageService(store),
@@ -60,11 +62,13 @@ final class AppServices {
   /// Uygulamanın gerçek kurulumu. Oyun modülleri, oyunlar aktarıldıkça buraya eklenir.
   /// Korumalı işlemler, her seferinde yeni bir matematik sorusu soran ebeveyn kapısından geçer.
   /// Testlerde ses çalınmaz ve Google Play'e bağlanılmaz; uygulama gerçek ses altyapısını
-  /// [soundPlayer], Google Play Billing'i [purchaseGateway] ile verir.
+  /// [soundPlayer], Google Play Billing'i [purchaseGateway] ile verir. [unlocksAllInDebug] geliştirici kilit
+  /// anahtarının ([DeveloperUnlock]) açık başlayıp başlamayacağıdır; release'te etkisi yoktur.
   factory AppServices.production(
     KeyValueStore store, {
     SoundPlayer soundPlayer = const SilentSoundPlayer(),
     PurchaseGateway purchaseGateway = const UnavailablePurchaseGateway(),
+    bool unlocksAllInDebug = false,
   }) => AppServices(
     catalog: buildContentCatalog(),
     games: GameRegistry([
@@ -80,6 +84,7 @@ final class AppServices {
     parentalGate: DialogParentalGate(ParentalQuestionGenerator(Random.secure())),
     soundPlayer: soundPlayer,
     purchaseGateway: purchaseGateway,
+    unlocksAllInDebug: unlocksAllInDebug,
   );
 
   final ContentCatalog catalog;
@@ -91,7 +96,7 @@ final class AppServices {
   final ProtectedActionRunner protectedActions;
 
   /// Debug'da bütün kilitleri açan geliştirici anahtarının durumu (bkz. [DeveloperUnlock]).
-  final developerUnlock = DeveloperUnlock();
+  final DeveloperUnlock developerUnlock;
   late final UnlockPolicy unlockPolicy;
   late final EntitlementService entitlements;
   late final ListingService listings;

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../l10n/l10n.dart';
+import '../../path_finder/engine/path_finder_board.dart';
 import '../../path_finder/ui/command_chip.dart';
 import '../engine/repeat_program.dart';
 import '../program_models.dart';
@@ -38,16 +39,7 @@ final class InnerBlockChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (block) {
-    MoveBlock(:final direction) => CommandChip(
-      label: RepeatTexts.moveChip(context.l10n, place, direction),
-      number: number,
-      direction: direction,
-      size: size,
-      selected: controller.selected == place,
-      active: _active,
-      wrong: controller.wrongPlace == place,
-      onTap: _onTap,
-    ),
+    MoveBlock(:final direction) => _arrow(context, direction, controller.arrowSteps(place)),
     _ => BoxChip(
       controller: controller,
       place: place,
@@ -58,6 +50,18 @@ final class InnerBlockChip extends StatelessWidget {
       onTap: _onTap,
     ),
   };
+
+  Widget _arrow(BuildContext context, Direction direction, int? steps) => CommandChip(
+    label: RepeatTexts.moveChip(context.l10n, place, direction, steps: steps),
+    number: number,
+    steps: steps,
+    direction: direction,
+    size: size,
+    selected: controller.selected == place,
+    active: _active,
+    wrong: controller.wrongPlace == place,
+    onTap: _onTap,
+  );
 }
 
 /// Altın renkli kutu bloğu: küçük kutu simgesi ve "= 3", "+1" ya da "−1" işareti. "kutu = N" bloğunda iki yanda
@@ -168,23 +172,35 @@ final class BoxChip extends StatelessWidget {
 }
 
 /// Şeridin solunda kutunun o anki sayısını gösteren büyük kutu rozeti. Sayı kahverengi gövdede okunsun diye beyazdır.
+/// [active] ise (robot kutudaki sayı kadar yürürken) arkasında sarı bir parıltı yanar.
 final class BoxBadge extends StatelessWidget {
-  const BoxBadge({required this.value, required this.size, super.key});
+  const BoxBadge({required this.value, required this.size, this.active = false, super.key});
 
   final int value;
   final double size;
+  final bool active;
 
   static const _textRatio = 0.4;
 
   /// Sayı kutunun gövdesine otursun diye ortadan bu oranda aşağı kayar.
   static const _bodyOffset = 0.3;
+  static const _glowRatio = 0.25;
 
   @override
   Widget build(BuildContext context) => Semantics(
     label: context.l10n.variableBoxBadge(value),
     excludeSemantics: true,
-    child: SizedBox.square(
-      dimension: size,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          if (active)
+            BoxShadow(color: AppColors.yellow, blurRadius: size * _glowRatio, spreadRadius: size * _glowRatio / 2),
+        ],
+      ),
       child: Stack(
         alignment: Alignment.center,
         children: [

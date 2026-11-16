@@ -1584,6 +1584,17 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Fa camminare il robot di $count caselle.',
+      one: '$label. Fa camminare il robot di 1 casella.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'La bandiera è 6 caselle più in là, ma puoi usare solo 2 blocchi. Prima metti 6 nella scatola, poi tocca la freccia a destra.';
 

@@ -373,6 +373,7 @@
   "variableBoxIncreaseLabel": "Block hinzufügen, der 1 zur Box addiert",
   "variableBoxDecreaseLabel": "Block hinzufügen, der 1 aus der Box nimmt",
   "variableBoxBadge": "In der Box ist jetzt {value}.",
+  "variableBoxArrowSteps": "{count, plural, =1{{label}. Lässt den Roboter 1 Feld gehen.} other{{label}. Lässt den Roboter {count} Felder gehen.}}",
   "variableBoxL1Intro": "Die Flagge ist 6 Felder entfernt, aber du darfst nur 2 Blöcke benutzen. Leg zuerst 6 in die Box und tippe dann auf den Rechtspfeil.",
   "variableBoxL1Hint": "Leg mit dem Block Box = die 6 in die Box; dann lässt ein einziger Rechtspfeil den Roboter 6 Felder gehen.",
   "variableBoxL2Hint": "Der Roboter muss 3 nach rechts und 3 nach unten. Leg 3 in die Box; dann geht jeder Pfeil 3 Felder.",

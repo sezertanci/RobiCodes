@@ -432,6 +432,10 @@ final class _LaneStrip implements ProgramStripModel {
   ProgramPlace? get selected => _editor.selected;
   @override
   ProgramStep? get activeStep => _controller._activeSteps[_lane];
+
+  /// Bu oyunda kutu yoktur.
+  @override
+  int? arrowSteps(ProgramPlace place) => null;
   @override
   ProgramPlace? get wrongPlace => _controller._wrongPlaces[_lane];
   @override

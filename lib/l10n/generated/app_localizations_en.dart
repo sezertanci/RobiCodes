@@ -1565,6 +1565,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Moves the robot $count squares.',
+      one: '$label. Moves the robot 1 square.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'The flag is 6 squares away, but you can only use 2 blocks. First put 6 in the box, then tap the right arrow.';
 

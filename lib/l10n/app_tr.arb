@@ -1000,6 +1000,17 @@
       }
     }
   },
+  "variableBoxArrowSteps": "{count, plural, other{{label}. Robotu {count} kare yürütür.}}",
+  "@variableBoxArrowSteps": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "variableBoxL1Intro": "Bayrak 6 kare ötede ama yalnızca 2 blok koyabilirsin. Önce kutuya 6 koy, sonra sağ oka bas.",
   "variableBoxL1Hint": "Kutu = bloğuyla kutuya 6 koy; sonra tek bir sağ ok robotu 6 kare yürütür.",
   "variableBoxL2Hint": "Robot 3 sağa, 3 aşağı gitmeli. Kutuya 3 koy; sonra her ok 3 kare yürütür.",

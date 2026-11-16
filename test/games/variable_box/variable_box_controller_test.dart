@@ -16,6 +16,9 @@ const _line = RepeatLevel(map: ['S..G'], solution: '=3 R', maxBlocks: 2, hint: _
 /// Basamaklı yol; çözümde Tekrarla var.
 const _stairs = RepeatLevel(map: ['S.#', '#..', '##G'], solution: '2(RD)', maxBlocks: 3, hint: _levelHint);
 
+/// Basamaklar her turda bir kare uzar; çözümde tekrar içinde +1 var.
+const _growing = RepeatLevel(map: ['S.##', '#...', '###.', '###G'], solution: '2(RD+)', maxBlocks: 4, hint: _levelHint);
+
 const _right = Direction.right;
 const _down = Direction.down;
 const _first = (block: 0, inner: Places.topLevel);
@@ -118,5 +121,62 @@ void main() {
 
     expect(stars, isEmpty);
     expect(controller.message(texts), texts.variableBoxMissedGoal);
+  });
+
+  test('arrowSteps_WithoutBox_IsNull', () {
+    final controller = RepeatController(level: _line, onCompleted: (_) {});
+    controller.addMove(_right);
+
+    expect(controller.arrowSteps(_first), isNull);
+  });
+
+  test('arrowSteps_Editing_ShowsBoxValueBeforeArrow', () {
+    final controller = _controller([]);
+    controller.addBox(const SetBoxBlock(SetBoxBlock.defaultValue));
+    controller.changeBoxValue(_first, 1);
+    controller.addMove(_right);
+
+    expect(controller.arrowSteps((block: 1, inner: Places.topLevel)), 3);
+  });
+
+  test('arrowSteps_Running_CountsDownRemainingSquares', () async {
+    final controller = _controller([]);
+    controller.addBox(const SetBoxBlock(SetBoxBlock.defaultValue));
+    controller.changeBoxValue(_first, 1);
+    controller.addMove(_right);
+    const arrow = (block: 1, inner: Places.topLevel);
+    final seen = <int?>[];
+    controller.addListener(() {
+      if (controller.activeStep != null) {
+        seen.add(controller.arrowSteps(arrow));
+      }
+    });
+
+    await controller.run();
+
+    expect(seen, [2, 1, 0]);
+    expect(controller.arrowSteps(arrow), 3);
+  });
+
+  test('arrowSteps_RepeatWithIncrement_ShowsCurrentRoundValue', () async {
+    final controller = _controller([], level: _growing);
+    controller.pressRepeatButton();
+    controller.addMove(_right);
+    controller.addMove(_down);
+    controller.addBox(AddBoxBlock.increment);
+    const down = (block: 0, inner: 1);
+    final secondRound = <int?>{};
+    controller.addListener(() {
+      if (controller.activeStep case (inner: 0, round: 1, direction: _, block: _, box: _)) {
+        secondRound.add(controller.arrowSteps(down));
+      }
+    });
+
+    expect(controller.arrowSteps(down), 1);
+    await controller.run();
+
+    expect(controller.robot, controller.board.goal);
+    expect(secondRound, {2});
+    expect(controller.arrowSteps(down), 1);
   });
 }

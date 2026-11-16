@@ -2348,6 +2348,12 @@ abstract class AppLocalizations {
   /// **'Kutuda şimdi {value} var.'**
   String variableBoxBadge(Object value);
 
+  /// No description provided for @variableBoxArrowSteps.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count, plural, other{{label}. Robotu {count} kare yürütür.}}'**
+  String variableBoxArrowSteps(String label, int count);
+
   /// No description provided for @variableBoxL1Intro.
   ///
   /// In tr, this message translates to:

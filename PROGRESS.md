@@ -243,8 +243,12 @@ Commit edildi (`f2c91f5`, eksik testler `e06870c`).
   Debug'da ayarlarda "Tüm kilitleri aç" anahtarı var (yalnızca bellekte). `flutter analyze` temiz, 774 test geçiyor.
   Kalanlar: pubspec sürüm yükseltme, ürün simgesi `store/robi-codes/products/variable-box-512.png` (kahverengi
   oyun simgesinden), Play Console'da ürün ve sürüm.
-- **Tuş ve adım sesleri eklendi (16.11.2026, commit edilmedi).** Bütün tuşlar tıklama sesi, robot her
+- **Tuş ve adım sesleri eklendi (16.11.2026, commit `a0599e4`).** Bütün tuşlar tıklama sesi, robot her
   karede adım sesi çalar; ayrıntı docs/decisions.md "Ses efektleri".
+- **Değişken Kutusu'nda oklara kutu rozeti eklendi (16.11.2026).** Her okun sağ alt köşesindeki
+  kahverengi rozet okun kaç kare yürüteceğini gösterir (tekrar içinde ilk turun değeri). Robot yürürken çalışan
+  okun rozeti kalan kareyi geri sayar, diğer oklar o turun değerini gösterir ve kutu rozeti sarı parlar.
+- **Debug'da "Tüm kilitleri aç" varsayılan olarak açık (16.11.2026).** `main.dart`, `AppServices.production(unlocksAllInDebug: true)` ile kurar; anahtar ayarlardan kapatılabilir. Testlerde varsayılan kapalı kalır. Release'te `kDebugMode` nedeniyle etkisi yoktur.
 
 ## Kararlar
 

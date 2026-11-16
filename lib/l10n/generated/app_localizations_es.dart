@@ -1583,6 +1583,17 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Mueve al robot $count casillas.',
+      one: '$label. Mueve al robot 1 casilla.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'La bandera está 6 casillas más allá, pero solo puedes poner 2 bloques. Primero mete 6 en la caja y luego toca la flecha derecha.';
 

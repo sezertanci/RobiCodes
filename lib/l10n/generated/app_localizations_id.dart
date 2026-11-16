@@ -1581,6 +1581,16 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Membuat robot berjalan $count petak.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'Bendera ada 6 petak jauhnya, tapi kamu hanya boleh memakai 2 blok. Taruh 6 di kotak dulu, lalu ketuk panah kanan.';
 

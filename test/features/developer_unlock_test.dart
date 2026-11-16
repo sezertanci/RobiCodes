@@ -85,6 +85,11 @@ void main() {
     });
   });
 
+  test('isEnabled_CreatedEnabled_StartsUnlocked', () {
+    expect(DeveloperUnlock(enabled: true).isEnabled, isTrue);
+    expect(DeveloperUnlock().isEnabled, isFalse);
+  });
+
   group('DeveloperUnlockTile', () {
     testWidgets('SettingsDialog_SwitchTapped_EnablesDeveloperUnlock', (tester) async {
       // Arrange

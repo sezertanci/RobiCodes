@@ -14,6 +14,8 @@ Future<void> main() async {
     await SharedPreferencesStore.open(),
     soundPlayer: await AudioplayersSoundPlayer.create(),
     purchaseGateway: PlayPurchaseGateway.create(),
+    // Debug derlemesinde kilitler açık başlar; ayarlardaki anahtarla kapatılabilir. Release'te etkisi yoktur.
+    unlocksAllInDebug: true,
   );
   // Sahiplik arka planda yenilenir; mağazaya ulaşılamazsa önbellekteki haklar geçerli kalır.
   // Promosyon kodu Play Store'da, uygulama dışında da kullanılabildiği için ön plana her dönüşte

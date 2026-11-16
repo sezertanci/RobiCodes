@@ -1581,6 +1581,17 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String variableBoxArrowSteps(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$label. Leva o robô $count quadrados.',
+      one: '$label. Leva o robô 1 quadrado.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get variableBoxL1Intro =>
       'A bandeira está 6 quadrados adiante, mas você só pode usar 2 blocos. Primeiro coloque 6 na caixa, depois toque na seta para a direita.';
 

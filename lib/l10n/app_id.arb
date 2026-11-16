@@ -373,6 +373,7 @@
   "variableBoxIncreaseLabel": "Tambahkan blok yang menambah 1 ke kotak",
   "variableBoxDecreaseLabel": "Tambahkan blok yang mengurangi 1 dari kotak",
   "variableBoxBadge": "Sekarang di kotak ada {value}.",
+  "variableBoxArrowSteps": "{count, plural, other{{label}. Membuat robot berjalan {count} petak.}}",
   "variableBoxL1Intro": "Bendera ada 6 petak jauhnya, tapi kamu hanya boleh memakai 2 blok. Taruh 6 di kotak dulu, lalu ketuk panah kanan.",
   "variableBoxL1Hint": "Taruh 6 di kotak dengan blok kotak =; lalu satu panah kanan membuat robot berjalan 6 petak.",
   "variableBoxL2Hint": "Robot harus 3 petak ke kanan, 3 petak ke bawah. Taruh 3 di kotak; lalu setiap panah berjalan 3 petak.",

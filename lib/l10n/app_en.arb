@@ -373,6 +373,7 @@
   "variableBoxIncreaseLabel": "Add a block that adds 1 to the box",
   "variableBoxDecreaseLabel": "Add a block that takes 1 out of the box",
   "variableBoxBadge": "The box now has {value}.",
+  "variableBoxArrowSteps": "{count, plural, =1{{label}. Moves the robot 1 square.} other{{label}. Moves the robot {count} squares.}}",
   "variableBoxL1Intro": "The flag is 6 squares away, but you can only use 2 blocks. First put 6 in the box, then tap the right arrow.",
   "variableBoxL1Hint": "Put 6 in the box with the box = block; then a single right arrow moves the robot 6 squares.",
   "variableBoxL2Hint": "The robot must go 3 right and 3 down. Put 3 in the box; then each arrow moves 3 squares.",

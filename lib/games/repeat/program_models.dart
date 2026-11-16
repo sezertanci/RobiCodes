@@ -18,6 +18,10 @@ abstract interface class ProgramStripModel {
   /// Çalışırken bu şeritteki o anki hareketin yeri ve turu.
   ProgramStep? get activeStep;
 
+  /// "Değişken Kutusu"nda [place]taki okun robotu kaç kare yürüteceği; kutu yoksa `null`. Çalışan okta
+  /// kalan kare sayısıdır.
+  int? arrowSteps(ProgramPlace place);
+
   /// Robotu yoldan çıkaran yer (kırmızıyla gösterilir).
   ProgramPlace? get wrongPlace;
 

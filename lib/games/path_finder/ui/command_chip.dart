@@ -7,7 +7,8 @@ import 'path_finder_assets.dart';
 import '../../../features/sound/tap_sound.dart';
 
 /// Komut şeridindeki yön kutusu. Seçiliyse lacivert, hatalıysa kırmızı çerçeve alır; çalışırken
-/// sarı zeminle parlar. [number] verilirse sol üst köşede sıra rozeti görünür.
+/// sarı zeminle parlar. [number] verilirse sol üst köşede sıra rozeti, [steps] verilirse sağ alt köşede okun
+/// kaç kare yürüteceğini gösteren kutu rengi rozet ([StepsBadge]) görünür.
 /// "Robotun Yolunu Bul" ve "Tekrar Et" ortak kullanır.
 final class CommandChip extends StatelessWidget {
   const CommandChip({
@@ -16,6 +17,7 @@ final class CommandChip extends StatelessWidget {
     required this.size,
     required this.onTap,
     this.number,
+    this.steps,
     this.selected = false,
     this.active = false,
     this.wrong = false,
@@ -28,6 +30,7 @@ final class CommandChip extends StatelessWidget {
   final double size;
   final VoidCallback? onTap;
   final int? number;
+  final int? steps;
   final bool selected;
   final bool active;
   final bool wrong;
@@ -64,6 +67,7 @@ final class CommandChip extends StatelessWidget {
             child: SvgPicture.asset(PathFinderAssets.arrow(direction)),
           ),
           if (number case final number?) Positioned(left: -6, top: -8, child: NumberBadge(number)),
+          if (steps case final steps?) Positioned(right: -6, bottom: -8, child: StepsBadge(steps)),
         ],
       ),
     ),
@@ -81,5 +85,23 @@ final class NumberBadge extends StatelessWidget {
     radius: 10,
     backgroundColor: AppColors.navy,
     child: Text('$number', style: const TextStyle(fontSize: 11, color: Colors.white)),
+  );
+}
+
+/// "Değişken Kutusu"nda okun sağ alt köşesindeki rozet: ok robotu kaç kare yürütecek. Kutuyla aynı renktedir;
+/// böylece sayının kutudan geldiği görülür.
+final class StepsBadge extends StatelessWidget {
+  const StepsBadge(this.steps, {super.key});
+
+  final int steps;
+
+  @override
+  Widget build(BuildContext context) => CircleAvatar(
+    radius: 11,
+    backgroundColor: AppColors.cardboard,
+    child: Text(
+      '$steps',
+      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: Colors.white),
+    ),
   );
 }

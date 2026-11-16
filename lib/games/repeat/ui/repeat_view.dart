@@ -96,7 +96,9 @@ final class _RepeatViewState extends State<RepeatView> {
               controller: controller,
               chipSize: chipSize,
               compact: compact,
-              leading: usesBox ? BoxBadge(value: controller.box, size: chipSize) : null,
+              leading: usesBox
+                  ? BoxBadge(value: controller.box, size: chipSize, active: controller.activeStep != null)
+                  : null,
               emptyText: usesBox ? context.l10n.variableBoxEmptyStrip : null,
             ),
           ],

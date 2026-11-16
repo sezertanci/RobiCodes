@@ -373,6 +373,7 @@
   "variableBoxIncreaseLabel": "Ajouter un bloc qui ajoute 1 à la boîte",
   "variableBoxDecreaseLabel": "Ajouter un bloc qui enlève 1 de la boîte",
   "variableBoxBadge": "La boîte contient maintenant {value}.",
+  "variableBoxArrowSteps": "{count, plural, =1{{label}. Fait avancer le robot d’1 case.} other{{label}. Fait avancer le robot de {count} cases.}}",
   "variableBoxL1Intro": "Le drapeau est 6 cases plus loin, mais tu ne peux mettre que 2 blocs. Mets d’abord 6 dans la boîte, puis touche la flèche droite.",
   "variableBoxL1Hint": "Avec le bloc boîte =, mets 6 dans la boîte ; ensuite, une seule flèche droite fait avancer le robot de 6 cases.",
   "variableBoxL2Hint": "Le robot doit aller 3 cases à droite et 3 cases en bas. Mets 3 dans la boîte ; ensuite, chaque flèche fait avancer de 3 cases.",

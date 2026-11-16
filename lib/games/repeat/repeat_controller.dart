@@ -77,6 +77,9 @@ final class RepeatController extends ChangeNotifier
   ProgramPlace? _wrongPlace;
   int _box = BoxRules.start;
 
+  /// Çalışan okun bu turda robotu daha kaç kare yürüteceği.
+  int _remainingSteps = 0;
+
   /// Kutudaki sayı: robot yürürken o anki hareketin kutusu, aksi halde başlangıç değeri.
   int get box => _box;
 
@@ -98,6 +101,27 @@ final class RepeatController extends ChangeNotifier
 
   @override
   ProgramStep? get activeStep => _activeStep;
+
+  /// Okun değeri o anki turun kutusudur: çalışan tekrar bloğunda o tur, değilse ilk tur. Kutu bloğu kutuyu en az
+  /// [BoxRules.minValue] yaptığı için her ok en az bir hareket olur; değer açılmış hareketlerden okunur.
+  @override
+  int? arrowSteps(ProgramPlace place) {
+    if (!usesBox) {
+      return null;
+    }
+    final active = _activeStep;
+    if (active != null && Places.of(active) == place) {
+      return _remainingSteps;
+    }
+    final round = active != null && active.block == place.block ? active.round : 0;
+    final trace = isRunning ? _trace : RepeatEngine.expand(program);
+    for (final step in trace) {
+      if (Places.of(step) == place && step.round == round) {
+        return step.box;
+      }
+    }
+    return null;
+  }
 
   @override
   ProgramPlace? get wrongPlace => _wrongPlace;
@@ -338,6 +362,17 @@ final class RepeatController extends ChangeNotifier
     final step = _trace[index];
     _activeStep = step;
     _box = step.box;
+    _remainingSteps = _countRemaining(index);
+  }
+
+  /// [index]teki hareketten sonra aynı okun aynı turda yapacağı hareket sayısı; okun hareketleri ardışıktır.
+  int _countRemaining(int index) {
+    final step = _trace[index];
+    var next = index + 1;
+    while (next < _trace.length && Places.of(_trace[next]) == Places.of(step) && _trace[next].round == step.round) {
+      next++;
+    }
+    return next - index - 1;
   }
 
   @override
