@@ -37,6 +37,7 @@ Gizlilik politikası: https://sezertanci.github.io/robi-codes/privacy.html
 ## Sürüm notu (1.5.0)
 
 - Yeni oyun: Değişken Kutusu. Çocuk kutuya bir sayı koyar, robot o kadar kare yürür; kutudaki sayıyı artırıp azaltarak değişken kavramını tanır.
+- Yeni oyun: Desen Bulmacası. Çocuk lambalardaki tekrar eden deseni bulur, eksik lambaları tamamlar; son grupta deseni Tekrarla bloğuyla kendisi programlar.
 - Her zorluk grubunun ilk seviyesi ücretsiz denenebilir. 20 seviyenin tamamı tek seferlik satın alımla açılır.
 - Tuşlara basınca tıklama sesi, robot yürürken adım sesi çıkar. Ses Ayarlar'dan kapatılabilir.
 
